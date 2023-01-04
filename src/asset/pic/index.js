@@ -1,1 +1,8 @@
 export {default as mainLogo} from './main-logo.svg'
+export {default as account} from './account.svg'
+export {default as follows} from './follows.svg'
+export {default as message} from './message.svg'
+export {default as notifications} from './notifications.svg'
+export {default as search} from './search.svg'
+export {default as settings} from './settings.svg'
+export {default as upload} from './upload.svg'

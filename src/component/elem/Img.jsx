@@ -9,7 +9,7 @@ function Img(props) {
   };
 
   const Img = props.type ? IMG[props.type] : StImg;
-  return <Img {...props} children={props.children} />;
+  return <Img {...props}/>;
 }
 
 export default Img;
