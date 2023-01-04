@@ -17,7 +17,6 @@ import Input from "../elem/Input";
 const Header = () => {
   const iconSize = "4rem";
   return (
-    <Flex type="rowStart" align="center">
       <Grid>
         <Flex justify="space-between">
           <Img wd="20rem" src={mainLogo} />
@@ -39,7 +38,6 @@ const Header = () => {
           <Img wd={iconSize} src={account} />
         </Flex>
       </Grid>
-    </Flex>
   );
 };
 

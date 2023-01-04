@@ -5,11 +5,12 @@ function Img(props) {
   const IMG = {
     circle: Circle,
     shadowCircle: ShadowCircle,
-    shadowProfile : ShadowProfile
+    shadowProfile: ShadowProfile,
+    postImg : PostImg
   };
 
   const Img = props.type ? IMG[props.type] : StImg;
-  return <Img {...props}/>;
+  return <Img {...props} />;
 }
 
 export default Img;
@@ -26,4 +27,9 @@ const ShadowCircle = styled(Circle)`
 `;
 const ShadowProfile = styled(ShadowCircle)`
   width: ${({ wd }) => wd || "3.5rem"};
-  height: ${({ hg }) => hg || "3rem"};`;
+  height: ${({ hg }) => hg || "3rem"};
+`;
+const PostImg = styled(StImg)`
+  border-radius: 15px;
+  width: 100%;
+`;
