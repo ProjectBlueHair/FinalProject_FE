@@ -3,12 +3,12 @@ import styled from "styled-components";
 
 function Flex(props) {
   const FLEX_CONTAINER = {
-    rowCenter: RowCenter,
-    columnCenter: ColumnCenter,
-    rowStart: RowStart,
-    columnStart: ColumnStart,
-    rowFull: RowFullHeight,
-    columnFull: ColumnFullHeight,
+    rowCenter: FlexRow,
+    columnCenter: FlexColumn,
+    rowStart: FlexRowStart,
+    columnStart: FlexColumnStart,
+    rowFull: FlexRowFullHeight,
+    columnFull: FlexColumnFullHeight,
   };
 
   const Flex = props.type ? FLEX_CONTAINER[props.type] : StFlex;
@@ -25,23 +25,23 @@ const StFlex = styled.div`
   width: ${({ wd }) => wd || "none"};
   height: ${({ hg }) => hg || "none"};
 `;
-const RowCenter = styled(StFlex)`
+const FlexRow = styled(StFlex)`
   flex-direction: row;
 `;
-const ColumnCenter = styled(StFlex)`
+const FlexColumn = styled(StFlex)`
   flex-direction: column;
 `;
-const RowStart = styled(StFlex)`
+const FlexRowStart = styled(FlexRow)`
   justify-content: flex-start;
   align-items: flex-start;
 `;
-const ColumnStart = styled(StFlex)`
+const FlexColumnStart = styled(FlexColumn)`
   justify-content: flex-start;
   align-items: flex-start;
 `;
-const RowFullHeight = styled(RowCenter)`
+const FlexRowFullHeight = styled(FlexRow)`
   height: 100%;
 `;
-const ColumnFullHeight = styled(ColumnCenter)`
+const FlexColumnFullHeight = styled(FlexColumn)`
   height: 100%;
 `;
