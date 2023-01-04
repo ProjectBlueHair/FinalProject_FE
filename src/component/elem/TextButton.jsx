@@ -23,20 +23,20 @@ const CursorPointer = styled.button`
   border: none;
   background-color: transparent;
   font-size: 1.4rem;
-  color:var(--ig-primary-text);
+  color:var(--ec-primary-text);
   cursor: pointer;
 `;
 const Primary = styled(CursorPointer)`
   color: var(--color-primary);
   &:hover {
-    color: var(--ig-primary-text);
+    color: var(--ec-primary-text);
   }
 `;
 const AddComment = styled(CursorPointer)`
   color: var(--color-primary);
 
   &:hover {
-    color: var(--ig-primary-text);
+    color: var(--ec-primary-text);
   }
   &:hover:not([disabled]) {
     color: var(--color-primary-invalid);

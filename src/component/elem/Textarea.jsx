@@ -20,23 +20,21 @@ const Textarea = (props) => {
 
 export default Textarea;
 const StTextarea = styled.textarea.attrs({ maxLength: TEXTAREA_MAX_LENGTH })`
-  background-color: var(--ig-elevated-background);
   border: none;
   width: 100%;
   min-height: 15rem;
   resize: none;
   font-size: 1.5rem;
-  color: var(--ig-primary-text);
+  color: var(--ec-primary-text);
   &:focus {
     outline: none;
   }
   &::placeholder {
-    color: var(--ig-third-text);
+    color: var(--ec-secondary-text);
   }
 `;
 
 const CommentArea = styled(StTextarea)`
-  background-color: var(--ig-primary-background);
   min-height: 1rem;
   flex: 1;
 `;
