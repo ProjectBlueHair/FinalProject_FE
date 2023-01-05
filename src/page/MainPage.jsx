@@ -6,13 +6,11 @@ import MainMusicBar from "../component/main/MainMusicBar";
 import MainPostList from "../component/main/MainPostList";
 const MainPage = () => {
   return (
-    <Flex type="columnStart" hg="100vh">
-      {/* <Flex type="columnStart" flex="1" pd="1.5rem 2rem" gap='3rem'> */}
+    <Flex direction='column' justify='flex-start' hg="100vh" gap='0'>
       <MainContainer>
         <Header />
-        <MainPostList/>
-        </MainContainer>
-      {/* </Flex> */}
+        <MainPostList />
+      </MainContainer>
       <MainMusicBar />
     </Flex>
   );
@@ -21,14 +19,12 @@ const MainPage = () => {
 export default MainPage;
 
 const MainContainer = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   flex: 1;
   overflow: hidden;
-  padding: 1.5rem 2rem 0;
-  gap: 3rem;
-
-
+  padding: 0 2rem;
 `;

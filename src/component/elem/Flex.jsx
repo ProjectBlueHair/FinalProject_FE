@@ -3,11 +3,7 @@ import styled from "styled-components";
 
 function Flex(props) {
   const FLEX_CONTAINER = {
-    rowCenter: FlexRow,
-    columnCenter: FlexColumn,
-    rowStart: FlexRowStart,
-    columnStart: FlexColumnStart,
-    card:FlexCard,
+    card: FlexCard,
   };
 
   const Flex = props.type ? FLEX_CONTAINER[props.type] : StFlex;
@@ -23,24 +19,23 @@ const StFlex = styled.div`
   gap: ${({ gap }) => gap || "0"};
   width: ${({ wd }) => wd || "100%"};
   height: ${({ hg }) => hg || "none"};
+  min-height: ${({ mhg }) => mhg || "none"};
   padding: ${({ pd }) => pd || "none"};
   flex: ${({ flex }) => flex || "none"};
+  overflow: ${({ overflow }) => overflow || "none"};
+  flex-wrap: ${({ flexWrap }) => flexWrap || "none"};
+  flex-grow: ${({ flexGrow }) => flexGrow || "none"};
+  background-color: ${({ bg }) => bg || "none"};
+  border-radius: ${({ radius }) => radius || "none"};
+  border: ${({ border }) => border || "none"};
+  border-bottom: ${({ borderBottom }) => borderBottom || "none"};
+  border-top: ${({ borderTop }) => borderTop || "none"};
+  border-right: ${({ borderRight }) => borderRight || "none"};
+  border-left: ${({ borderLeft }) => borderLeft || "none"};
 `;
-const FlexRow = styled(StFlex)`
-  flex-direction: row;
-`;
-const FlexColumn = styled(StFlex)`
-  flex-direction: column;
-`;
-const FlexRowStart = styled(FlexRow)`
-  justify-content: ${({ justify }) => justify || "flex-start"};
-  align-items: ${({ align }) => align || "flex-start"};
-`;
-const FlexColumnStart = styled(FlexColumn)`
-  justify-content: ${({ justify }) => justify || "flex-start"};
-  align-items: ${({ align }) => align || "flex-start"};
-`;
+
 const FlexCard = styled(StFlex)`
   background-color: ${({ bg }) => bg || "rgba(0,0,0,0.12)"};
   border-radius: ${({ radius }) => radius || "20px"};
 `;
+

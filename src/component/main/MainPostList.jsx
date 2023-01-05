@@ -1,59 +1,56 @@
 import React from "react";
 import styled from "styled-components";
 import Img from "../elem/Img";
-import { mockText } from "./mockText";
+import { mockData, mockText } from "./MockData";
+import Flex from "../elem/Flex";
+import { like, playButton, view } from "../../asset/pic";
 const MainPostList = () => {
-  function rand(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-  const mockTextArr = mockText.split(" ", 100);
-  const textRan1 = rand(1, 100);
-  const textRan2 = rand(1, 100);
-  const textRan3 = rand(1, 100);
-  const ranText =
-    mockTextArr[textRan1] + mockTextArr[textRan2] + mockTextArr[textRan3];
-
-  const nickRan1 = rand(1, 100);
-  const nickRan2 = rand(1, 100);
-  const nickRan3 = rand(1, 100);
-  const nickRan4 = rand(1, 100);
-  const arr = new Array(100).fill("");
-  const arr2 = [];
-
-  arr.map((_, index) => {
-    const ran = rand(1, 22);
-    console.log("ran", ran);
-    const bigRan = rand(100, 5000);
-    arr2.push({
-      postImg: `testRandomPost/${ran}.jpg`,
-      title: { ranText },
-      collabo: [
-        {
-          profile: `testRandomPost/${ran}.jpg`,
-          nickname: mockTextArr[nickRan1],
-        },
-        {
-          profile: `testRandomPost/${ran}.jpg`,
-          nickname: mockTextArr[nickRan2],
-        },
-        {
-          profile: `testRandomPost/${ran}.jpg`,
-          nickname: mockTextArr[nickRan3],
-        },
-        {
-          profile: `testRandomPost/${ran}.jpg`,
-          nickname: mockTextArr[nickRan4],
-        },
-      ],
-      view: { bigRan },
-      like: { bigRan },
-    });
-  });
-
+  const profile_margin='0 0 0 -1rem'
   return (
     <Grid>
-      {arr2.map((obj) => (
-        <Img type="postImg" src={obj.postImg} />
+      {mockData().map((obj) => (
+        // <GridWrapper>
+        <Flex direction="column" align="flex-start" gap='1rem'>
+          <Img hg="20rem" type="radius" src={obj.postImg} />
+          <Flex direction="row" justify="flex-start" gap='1rem'>
+            <Img mg='1rem' wd="15%" src={playButton} />
+            <Flex flex="1" direction="column" align="flex-start" gap="1rem">
+              <div>{obj.title}</div>
+              <GridWrapper>
+                <Flex align='center' justify='flex-start'>
+                  <Img
+                    z="3"
+                    type="shadowProfile"
+                    wd="3rem"
+                    src={obj.collabo[0].profile}
+                  />
+                  <Img
+                    z="2"
+                    type="shadowProfile"
+                    wd="3rem"
+                    mg={profile_margin}
+                    src={obj.collabo[1].profile}
+                  />
+                  <Img
+                    z="1"
+                    type="shadowProfile"
+                    wd="3rem"
+                    mg={profile_margin}
+                    src={obj.collabo[2].profile}
+                  />
+                </Flex>
+                <Flex justify='flex-start' gap='0.5rem'>
+                  <Img wd='1.8rem' src={view} />
+                  <span style={{color:'var(--ec-secondary-text', fontSize:'1.2rem'}}>{obj.view}</span>
+                </Flex>
+                <Flex justify='flex-start' gap='0.5rem'>
+                  <Img wd='1.5rem' src={like} />
+                  <span style={{color:'var(--ec-secondary-text', fontSize:'1.2rem'}}>{obj.like}</span>
+                </Flex>
+              </GridWrapper>
+            </Flex>
+          </Flex>
+        </Flex>
       ))}
     </Grid>
   );
@@ -65,5 +62,11 @@ const Grid = styled.div`
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  gap: 1rem;
+  gap: 1.5rem;
+  padding: 0 0 2rem;
+`;
+const GridWrapper = styled.div`
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1.5fr 1fr 1fr;
 `;

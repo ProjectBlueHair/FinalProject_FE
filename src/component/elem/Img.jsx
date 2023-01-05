@@ -6,7 +6,8 @@ function Img(props) {
     circle: Circle,
     shadowCircle: ShadowCircle,
     shadowProfile: ShadowProfile,
-    postImg : PostImg
+    radius : Radius
+    
   };
 
   const Img = props.type ? IMG[props.type] : StImg;
@@ -18,6 +19,11 @@ const StImg = styled.img`
   width: ${({ wd }) => wd || "none"};
   height: ${({ hg }) => hg || "none"};
   box-shadow: ${({ shadow }) => shadow || "none"};
+  min-height: ${({ mhg }) => mhg || "none"};
+  margin: ${({ mg }) => mg || "0"};
+  z-index: ${({ z }) => z || "none"};
+  
+
 `;
 const Circle = styled(StImg)`
   border-radius: 50%;
@@ -29,7 +35,7 @@ const ShadowProfile = styled(ShadowCircle)`
   width: ${({ wd }) => wd || "3.5rem"};
   height: ${({ hg }) => hg || "3rem"};
 `;
-const PostImg = styled(StImg)`
-  border-radius: 15px;
-  width: 100%;
+const Radius = styled(StImg)`
+  border-radius: ${({ radius }) => radius || "15px"};
+  width: ${({ wd }) => wd || "100%"};
 `;

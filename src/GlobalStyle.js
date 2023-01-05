@@ -1,6 +1,7 @@
 import { createGlobalStyle } from "styled-components";
 export const supportDeviceSize = 768;
 export const supportDeviceSize_ = 1100;
+export const iconSize = '4rem'
 
 const GlobalStyle = createGlobalStyle`
 
@@ -23,6 +24,10 @@ const GlobalStyle = createGlobalStyle`
     --color-white:#FFFFFF;
     --color-red:#F04438;
     --color-subtle-gray:#CCCCCC;
+
+
+    --ec-gap1 : 0.5rem;
+    --ec-gap2 : 1rem;
 
 
   }

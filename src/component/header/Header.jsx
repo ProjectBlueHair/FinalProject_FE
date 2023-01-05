@@ -43,6 +43,7 @@ const Header = () => {
 
 export default Header;
 const Grid = styled.div`
+  padding: 2rem 0;
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
