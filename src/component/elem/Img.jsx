@@ -6,8 +6,8 @@ function Img(props) {
     circle: Circle,
     shadowCircle: ShadowCircle,
     shadowProfile: ShadowProfile,
-    radius : Radius
-    
+    radius: Radius,
+    icon: IconButton,
   };
 
   const Img = props.type ? IMG[props.type] : StImg;
@@ -22,8 +22,7 @@ const StImg = styled.img`
   min-height: ${({ mhg }) => mhg || "none"};
   margin: ${({ mg }) => mg || "0"};
   z-index: ${({ z }) => z || "none"};
-  
-
+  cursor: ${({ cursor }) => cursor || "default"};
 `;
 const Circle = styled(StImg)`
   border-radius: 50%;
@@ -38,4 +37,11 @@ const ShadowProfile = styled(ShadowCircle)`
 const Radius = styled(StImg)`
   border-radius: ${({ radius }) => radius || "15px"};
   width: ${({ wd }) => wd || "100%"};
+`;
+const IconButton = styled(StImg)`
+  &:hover {
+    background-color: ${({ bg }) => bg || "rgba(0, 0, 0, 0.04)"};
+    border-radius: 50%;
+    cursor: pointer;
+  }
 `;

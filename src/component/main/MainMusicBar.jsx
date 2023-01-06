@@ -46,23 +46,23 @@ const MainMusicBar = () => {
               <div>nickname</div>
             </Flex>
           </Flex>
-          <Img wd="4rem" src={more} />
+          <Img type='icon' wd={iconSize} src={more} />
         </Flex>
 
         {/* flex row second grid [music btns, music bar] */}
         <Flex>
-          <Img wd={iconSize} src={skipPrev} />
-          <Img wd={iconSize} src={playPrimary} />
-          <Img wd={iconSize} src={skipNext} />
-          <Img wd="100%" src={mockPlaybar} />
+          <Img type='icon' wd={iconSize} src={skipPrev} />
+          <Img type='icon' wd={iconSize} src={playPrimary} />
+          <Img type='icon' wd={iconSize} src={skipNext} />
+          <Img type='icon' wd="100%" src={mockPlaybar} />
         </Flex>
 
         {/* flex row third grid [some btns] */}
-        <Flex justify='flex-end'>
-          <Img wd={iconSize} src={repeat} />
-          <Img wd={iconSize} src={shuffle} />
-          <Img wd={iconSize} src={volume} />
-          <Img wd={iconSize} src={mockSoundbar} />
+        <Flex justify="flex-end">
+          <Img type='icon' wd={iconSize} src={repeat} />
+          <Img type='icon' wd={iconSize} src={shuffle} />
+          <Img type='icon' wd={iconSize} src={volume} />
+          <Img type='icon' wd={iconSize} src={mockSoundbar} />
         </Flex>
       </Grid>
     </Flex>

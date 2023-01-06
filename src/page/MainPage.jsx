@@ -6,11 +6,14 @@ import MainMusicBar from "../component/main/MainMusicBar";
 import MainPostList from "../component/main/MainPostList";
 const MainPage = () => {
   return (
-    <Flex direction='column' justify='flex-start' hg="100vh" gap='0'>
+    <Flex direction="column" justify="flex-start" hg="100vh" gap="0">
       <MainContainer>
         <Header />
         <MainPostList />
       </MainContainer>
+      {/* <MusicBarContainer>
+        <MusicBar />
+      </MusicBarContainer> */}
       <MainMusicBar />
     </Flex>
   );
@@ -28,3 +31,17 @@ const MainContainer = styled.div`
   overflow: hidden;
   padding: 0 2rem;
 `;
+// const MusicBar = styled.div`
+//   margin-left: 0;
+//   width: 50%;
+//   z-index: 2;
+//   margin-bottom: -0.1rem;
+//   border: 1px solid var(--ec-main-color);
+// `;
+// const MusicBarContainer = styled.div`
+//   background-color: var(--ec-secondary-text);
+//   width: 100%;
+//   display: flex;
+//   align-items: center;
+//   justify-content: flex-start;
+// `;

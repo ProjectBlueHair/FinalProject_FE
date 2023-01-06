@@ -13,7 +13,7 @@ const MainPostList = () => {
         <Flex direction="column" align="flex-start" gap='1rem'>
           <Img hg="20rem" type="radius" src={obj.postImg} />
           <Flex direction="row" justify="flex-start" gap='1rem'>
-            <Img mg='1rem' wd="15%" src={playButton} />
+            <Img type='icon' mg='1rem' wd="15%" src={playButton} />
             <Flex flex="1" direction="column" align="flex-start" gap="1rem">
               <div>{obj.title}</div>
               <GridWrapper>

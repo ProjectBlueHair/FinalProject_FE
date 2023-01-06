@@ -17,27 +17,27 @@ import Input from "../elem/Input";
 const Header = () => {
   const iconSize = "4rem";
   return (
-      <Grid>
-        <Flex justify="space-between">
-          <Img wd="20rem" src={mainLogo} />
-          <Img wd={iconSize} src={follows} />
-        </Flex>
+    <Grid>
+      <Flex justify="space-between">
+        <Img cursor='pointer' wd="20rem" src={mainLogo} />
+        <Img type="icon" wd={iconSize} src={follows} />
+      </Flex>
 
-        <Flex>
-          <Flex type="card" justify="flex-start" pd="0 0.5rem 0 2rem">
-            <Input placeholder="검색" />
-            <Img wd={iconSize} src={search} />
-          </Flex>
+      <Flex>
+        <Flex type="card" justify="flex-start" pd="0 0.5rem 0 2rem">
+          <Input placeholder="검색" />
+          <Img wd={iconSize} src={search} />
         </Flex>
-        
-        <Flex justify="flex-end" gap="1.5rem">
-          <Img wd={iconSize} src={message} />
-          <Img wd={iconSize} src={notifications} />
-          <Img wd={iconSize} src={upload} />
-          <Img wd={iconSize} src={settings} />
-          <Img wd={iconSize} src={account} />
-        </Flex>
-      </Grid>
+      </Flex>
+
+      <Flex justify="flex-end" gap="1.5rem">
+        <Img type="icon" wd={iconSize} src={message} />
+        <Img type="icon" wd={iconSize} src={notifications} />
+        <Img type="icon" wd={iconSize} src={upload} />
+        <Img type="icon" wd={iconSize} src={settings} />
+        <Img type="icon" wd={iconSize} src={account} />
+      </Flex>
+    </Grid>
   );
 };
 
