@@ -2,6 +2,7 @@ import { createGlobalStyle } from "styled-components";
 export const supportDeviceSize = 768;
 export const supportDeviceSize_ = 1100;
 export const iconSize = '4rem'
+export const vectorSize = '1rem'
 
 const GlobalStyle = createGlobalStyle`
 

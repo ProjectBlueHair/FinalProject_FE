@@ -1,9 +1,10 @@
-import React, { Children } from "react";
+import React from "react";
 import Flex from "../component/elem/Flex";
 import Header from "../component/header/Header";
 import styled from "styled-components";
-import MainMusicBar from "../component/main/MainMusicBar";
+// import MainMusicBar from "../component/main/MainMusicBar";
 import MainPostList from "../component/main/MainPostList";
+import MainMusicBarTest from "../component/main/MainMusicBarTest";
 const MainPage = () => {
   return (
     <Flex direction="column" justify="flex-start" hg="100vh" gap="0">
@@ -14,7 +15,7 @@ const MainPage = () => {
       {/* <MusicBarContainer>
         <MusicBar />
       </MusicBarContainer> */}
-      <MainMusicBar />
+      <MainMusicBarTest />
     </Flex>
   );
 };
