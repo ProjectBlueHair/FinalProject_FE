@@ -26,6 +26,7 @@ const StFlex = styled.div`
   flex-wrap: ${({ flexWrap }) => flexWrap || "none"};
   flex-grow: ${({ flexGrow }) => flexGrow || "none"};
   background-color: ${({ bg }) => bg || "none"};
+  box-shadow: ${({ shadow }) => shadow || "none"};
   border-radius: ${({ radius }) => radius || "none"};
   border: ${({ border }) => border || "none"};
   border-bottom: ${({ borderBottom }) => borderBottom || "none"};
@@ -37,5 +38,5 @@ const StFlex = styled.div`
 const FlexCard = styled(StFlex)`
   background-color: ${({ bg }) => bg || "rgba(0,0,0,0.12)"};
   border-radius: ${({ radius }) => radius || "20px"};
+  box-shadow: ${({ shadow }) => shadow || "0px 2px 10px rgba(0, 0, 0, 0.1)"};
 `;
-

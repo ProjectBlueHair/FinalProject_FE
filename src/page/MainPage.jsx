@@ -1,19 +1,17 @@
-import React, { Children } from "react";
+import React from "react";
 import Flex from "../component/elem/Flex";
 import Header from "../component/header/Header";
 import styled from "styled-components";
-import MainMusicBar from "../component/main/MainMusicBar";
 import MainPostList from "../component/main/MainPostList";
+import MainMusicBar from "../component/main/MainMusicBar";
 const MainPage = () => {
   return (
     <Flex direction="column" justify="flex-start" hg="100vh" gap="0">
+      {/* header, main 패딩 같아서 main container 로 감싸줌 */}
       <MainContainer>
         <Header />
         <MainPostList />
       </MainContainer>
-      {/* <MusicBarContainer>
-        <MusicBar />
-      </MusicBarContainer> */}
       <MainMusicBar />
     </Flex>
   );
@@ -31,17 +29,3 @@ const MainContainer = styled.div`
   overflow: hidden;
   padding: 0 2rem;
 `;
-// const MusicBar = styled.div`
-//   margin-left: 0;
-//   width: 50%;
-//   z-index: 2;
-//   margin-bottom: -0.1rem;
-//   border: 1px solid var(--ec-main-color);
-// `;
-// const MusicBarContainer = styled.div`
-//   background-color: var(--ec-secondary-text);
-//   width: 100%;
-//   display: flex;
-//   align-items: center;
-//   justify-content: flex-start;
-// `;

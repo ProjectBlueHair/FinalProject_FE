@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 function Img(props) {
   const IMG = {
@@ -8,6 +8,7 @@ function Img(props) {
     shadowProfile: ShadowProfile,
     radius: Radius,
     icon: IconButton,
+    iconSmall: IconSmall,
   };
 
   const Img = props.type ? IMG[props.type] : StImg;
@@ -42,6 +43,12 @@ const IconButton = styled(StImg)`
   &:hover {
     background-color: ${({ bg }) => bg || "rgba(0, 0, 0, 0.04)"};
     border-radius: 50%;
+    cursor: pointer;
+  }
+`;
+const IconSmall = styled(StImg)`
+  &:hover {
+    filter: ${({ bg }) => bg || css`var(--ec-secondary-filter)`};
     cursor: pointer;
   }
 `;

@@ -1,7 +1,8 @@
 import { createGlobalStyle } from "styled-components";
 export const supportDeviceSize = 768;
 export const supportDeviceSize_ = 1100;
-export const iconSize = '4rem'
+export const iconSize = "4rem";
+export const vectorSize = "1rem";
 
 const GlobalStyle = createGlobalStyle`
 
@@ -15,6 +16,8 @@ const GlobalStyle = createGlobalStyle`
     --ec-primary-background : #FFFFFF;
     --ec-secondary-background : #8E8E8E;
 
+    --ec-secondary-filter : invert(62%) sepia(7%) saturate(28%) hue-rotate(315deg) brightness(91%) contrast(79%);
+
     --color-yellow: #F8D706;
     --color-gray: #B2B2B2;
     --color-primary: #0095F6;
@@ -25,12 +28,9 @@ const GlobalStyle = createGlobalStyle`
     --color-red:#F04438;
     --color-subtle-gray:#CCCCCC;
 
-
     --ec-gap1 : 0.5rem;
     --ec-gap2 : 1rem;
-
-
-  }
+ }
 
   html {
     font-size: 62.5%; // 1rem = 10px 로 변경 한 것
