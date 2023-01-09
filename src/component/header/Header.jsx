@@ -24,7 +24,7 @@ const Header = () => {
       </Flex>
 
       <Flex>
-        <Flex type="card" justify="flex-start" pd="0 0.5rem 0 2rem">
+        <Flex type="card" shadow='none' justify="flex-start" pd="0 0.5rem 0 2rem">
           <Input placeholder="검색" />
           <Img wd={iconSize} src={search} />
         </Flex>
