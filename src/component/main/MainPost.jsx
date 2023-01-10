@@ -1,11 +1,25 @@
 import React from "react";
 import Img from "../elem/Img";
 import Flex from "../elem/Flex";
-import { like, playButton, playButtonSecond, view } from "../../asset/pic";
+import {
+  like,
+  pause,
+  playButton,
+  playButtonSecond,
+  view,
+} from "../../asset/pic";
 import styled from "styled-components";
 import StLink from "../elem/Link";
-const MainPost = ({ post }) => {
+import { CiPause1 } from "react-icons/ci";
+import { useDispatch, useSelector } from "react-redux";
+import { __togglePlay } from "../../redux/slice/mainSlice";
+const MainPost = ({ post, playingId, isPlaying }) => {
   const profile_margin = "0 0 0 -1rem";
+  const dispatch = useDispatch();
+  const currentMusic = useSelector((state) => state.main.currentMusic);
+  console.log("currentMusic.post.postId", currentMusic.post.postId);
+  console.log("post.postId", post.postId);
+  console.log("currentMusic.isPlaying", currentMusic.isPlaying);
 
   return (
     // <GridWrapper>
@@ -19,7 +33,24 @@ const MainPost = ({ post }) => {
       <Img hg="20rem" type="radius" src={post.postImg} />
       {/* play box */}
       <Flex direction="row" justify="flex-start" gap="1rem" pd="0 1rem">
-        <Img type="icon" wd="15%" src={playButtonSecond} />
+        <Img
+          onClick={() => dispatch(__togglePlay(post.postId))}
+          type="icon"
+          wd="15%"
+          // src={
+          //   playingId === post.postId ? isPlaying
+          //     ? pause
+          //     : playButtonSecond : playButtonSecond
+          // }
+          src={
+            currentMusic.post.postId === post.postId
+              ? currentMusic.isPlaying
+                ? pause
+                : playButtonSecond
+              : playButtonSecond
+          }
+        />
+
         <Flex flex="1" direction="column" align="flex-start" gap="1rem">
           <div>{post.title}</div>
           {/* grid */}

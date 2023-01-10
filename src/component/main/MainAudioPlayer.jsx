@@ -1,10 +1,11 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Flex from "../elem/Flex";
 import styled from "styled-components";
 import Img from "../elem/Img";
 import AudioPlayer, { RHAP_UI } from "react-h5-audio-player";
 import "./MainAudioPlayer.css";
 import {
+  pause,
   playPrimary,
   repeat,
   shuffle,
@@ -13,20 +14,30 @@ import {
   volume,
 } from "../../asset/pic";
 import { iconSize } from "../../GlobalStyle";
+import { useDispatch, useSelector } from "react-redux";
+import { __togglePlay } from "../../redux/slice/mainSlice";
 const MainAudioPlayer = () => {
   const audioPlayer = useRef(null);
+  const [audioSrc, setAudioSrc] = useState();
+  const { post, isPlaying } = useSelector((state) => state.main.currentMusic);
+  const dispatch = useDispatch();
+  const audio = () => {
+    return audioPlayer.current.audio.current;
+  };
 
   const onListenHandler = (e) => {
     // console.log('e',e)
   };
-
   useEffect(() => {
-    const audio = audioPlayer.current.audio.current;
+    if (isPlaying) {
+      audioPlayer.current.audio.current.play();
+      // dispatch(__togglePlay(post.postId));
+    } else {
+      audioPlayer.current.audio.current.pause()
+      // audio.pause()
+    }
+  }, [isPlaying]);
 
-    audio.onloadedmetadata = () => {
-      // console.log('DURATION', audio.duration)
-    };
-  }, []);
   return (
     // musicbar wrap
     <Flex
@@ -42,7 +53,7 @@ const MainAudioPlayer = () => {
             radius="10px"
             wd="6rem"
             hg="5rem"
-            src="testRandomPost/3.jpg"
+            src={post.postImg}
           />
           {/* flexColumn [title, profile] */}
           <Flex
@@ -51,12 +62,16 @@ const MainAudioPlayer = () => {
             gap="var(--ec-gap1)"
             wd="none"
           >
-            <div>Voluptate recusanc</div>
+            <div>{post.title}</div>
             {/* flexRow [profile img, nickname]*/}
             <Flex justify="flex-start" gap="var(--ec-gap2)" wd="none">
-              <Img onClick={()=>{
-
-              }} type="shadowProfile" wd="3rem" src="testRandomPost/2.jpg" />
+              <Img
+                type="shadowProfile"
+                wd="3rem"
+                src={
+                  post.collabo && post.collabo.length && post.collabo[0].profile
+                }
+              />
               <div>nickname</div>
             </Flex>
           </Flex>
@@ -64,10 +79,11 @@ const MainAudioPlayer = () => {
 
         {/* flex row right grid [music btns, music bar, volume control] */}
         <AudioPlayer
+          autoPlay={false}
           onListen={onListenHandler}
           ref={audioPlayer}
           layout="horizontal"
-          src="https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/piano.wav"
+          src={post.audio}
           showJumpControls={false}
           showSkipControls={true}
           timeFormat="auto"
@@ -84,6 +100,7 @@ const MainAudioPlayer = () => {
             previous: <Img type="icon" wd={iconSize} src={skipPrev} />,
             next: <Img type="icon" wd={iconSize} src={skipNext} />,
             volume: <Img type="icon" wd={iconSize} src={volume} />,
+            pause: <Img type="icon" wd={iconSize} src={pause} />,
           }}
           customControlsSection={[
             <div>

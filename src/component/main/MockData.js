@@ -1,5 +1,5 @@
 import nextId from "react-id-generator";
-import { mockText, mockMusics } from "./MockResource";
+import { mockText, mockAudios } from "./MockResource";
 function rand(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -30,12 +30,12 @@ export const mockData = () => {
     });
 
     mockArr.push({
-      id: nextId(),
+      postId: nextId(),
       postImg: `testRandomPost/${rand(1, 22)}.jpg`,
       title: ranText,
-      music: mockMusics[rand(0, 3)],
-      collabo: [...nickArr],
-      tags: [...tagArr],
+      audio: mockAudios[rand(0, 3)],
+      collabo: nickArr,
+      tags: tagArr,
       view: rand(100, 5000),
       like: rand(100, 5000),
     });

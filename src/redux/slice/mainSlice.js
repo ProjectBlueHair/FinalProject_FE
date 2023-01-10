@@ -19,12 +19,28 @@ export const mainSlice = createSlice({
   initialState: {
     posts: [],
     nextPage: 0,
-    isLastPage : false,
-    currentMusic: {},
+    isLastPage: false,
+    currentMusic: { post: {}, isPlaying: false },
     isLoading: false,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    __togglePlay: (state, action) => {
+      state.currentMusic.isPlaying = !state.currentMusic.isPlaying
+      // if (state.currentMusic.postId === action.payload) {
+      //   console.log('hi')
+      //   state.currentMusic.isPlaying = !state.currentMusic.isPlaying;
+      // } else {
+      //   const index = state.posts.findIndex(
+      //     (post) => post.postId === action.payload
+      //   );
+      //   state.currentMusic = {
+      //     ...state.currentMusic,
+      //     post: state.posts[index],
+      //   };
+      // }
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(__getPostList.pending, (state) => {
@@ -32,13 +48,18 @@ export const mainSlice = createSlice({
       })
       .addCase(__getPostList.fulfilled, (state, { payload }) => {
         state.isLoading = false;
+        if (state.nextPage === 0) {
+          console.log('slice', payload.posts[0])
+          state.currentMusic = { ...state.currentMusic, post: payload.posts[0] };
+        }
         state.nextPage = state.nextPage + 1;
-        state.isLastPage = payload.isLastPage
+
+        state.isLastPage = payload.isLastPage;
         state.posts = state.posts.concat(payload.posts);
         // state.posts = [...state.posts, ...payload.posts]
         // state.posts = payload.posts
       });
   },
 });
-
+export const { __togglePlay } = mainSlice.actions;
 export default mainSlice.reducer;

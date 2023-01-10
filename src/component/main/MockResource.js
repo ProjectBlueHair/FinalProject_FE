@@ -3,7 +3,7 @@ Vel quam elementum pulvinar etiam non quam lacus suspendisse faucibus. Arcu risu
 Ut sem viverra aliquet eget. Gravida rutrum quisque non tellus orci ac auctor. Vehicula ipsum a arcu cursus. Varius quam quisque id diam vel quam. Viverra maecenas accumsan lacus vel facilisis volutpat est. Iaculis nunc sed augue lacus. Turpis egestas maecenas pharetra convallis posuere morbi leo urna molestie. Diam maecenas ultricies mi eget mauris. Tellus mauris a diam maecenas sed enim ut. Neque ornare aenean euismod elementum nisi quis eleifend quam. In massa tempor nec feugiat. Orci ac auctor augue mauris augue neque gravida. Netus et malesuada fames ac turpis egestas integer. Nulla facilisi cras fermentum odio eu. Arcu cursus vitae congue mauris rhoncus. Nibh cras pulvinar mattis nunc sed blandit libero volutpat. Aliquet sagittis id consectetur purus ut faucibus.
 Turpis egestas sed tempus urna. Elementum integer enim neque volutpat. Lorem sed risus ultricies tristique nulla aliquet. Pellentesque nec nam aliquam sem. Malesuada bibendum arcu vitae elementum curabitur vitae nunc. Tellus in hac habitasse platea dictumst vestibulum. Tincidunt lobortis feugiat vivamus at. Orci eu lobortis elementum nibh tellus. Nam aliquam sem et tortor consequat. Bibendum ut tristique et egestas quis ipsum. Massa tincidunt nunc pulvinar sapien et ligula ullamcorper malesuada.
 `;
-export const mockMusics = [
+export const mockAudios = [
   "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/vocal.m4a",
   "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/piano.wav",
   "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/guitar.mp3",
