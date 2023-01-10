@@ -19,7 +19,7 @@ const MainPage = () => {
 
 export default MainPage;
 
-const MainContainer = styled.div`
+export const MainContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
