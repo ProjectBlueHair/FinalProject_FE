@@ -1,48 +1,49 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import MainPost from "./MainPost";
-import useFetch from "../../dataManager/useFetch";
+import { useDispatch, useSelector } from "react-redux";
+import { __getPostList } from "../../redux/slice/mainSlice";
 const MainPostList = () => {
   const target = useRef(null);
   const scrollArea = useRef(null);
-  const [pageNum, setPageNum] = useState(0);
-  const { list, hasMore, isLoading, isLastPage } = useFetch(pageNum);
-  console.log('list',list.length,'hasMore',hasMore,'isLoading',isLoading)
+  const [trigger, setTrigger] = useState(false);
+  const dispatch = useDispatch();
+  const { posts, nextPage, isLoading } = useSelector((state) => state.main);
+
   let options = {
     root: scrollArea.current,
     rootMargin: "20px",
     threshold: 1,
   };
+
+  useEffect(() => {
+    if (!isLoading) {
+      console.log("LOG4 dispatch ", nextPage);
+      dispatch(__getPostList(nextPage));
+    }
+  }, [trigger]);
+
   const callback = (entries, io) => {
     entries.forEach((entry) => {
-      console.log("entry target isinersecting",entry.isIntersecting);
-      console.log("entry hasmore",hasMore);
-      console.log("entry isLoading",isLoading);
-      console.log("entry.isIntersecting && isLoading===false",entry.isIntersecting && isLoading===false);
-
       if (entry.isIntersecting) {
-        // io.unobserve(entry.target);
-        console.log('NEXT PAGE REQUEST', pageNum+1)
-        setPageNum((page) => page + 1);
+        setTrigger((prev) => !prev);
       }
     });
-    // if (isLastPage) io.unobserve(target);
   };
 
   useEffect(() => {
-    console.log('MAIN MOUNT')
     const io = new IntersectionObserver(callback, options);
     io.observe(target.current);
   }, []);
-
-  useEffect(() => {}, []);
+  
   return (
     <ScrollContainer ref={scrollArea}>
       <PostListContainer>
-        {list?.map((post) => (
+        {posts?.map((post) => (
+          // <MainPost playingId={currentMusic.postId} isPlaying ={currentMusic.isPlaying} key={post.id} post={post} />
           <MainPost key={post.id} post={post} />
         ))}
-        <div ref={target} />
+        <div name="target" ref={target}></div>
       </PostListContainer>
       {isLoading && <Loading />}
     </ScrollContainer>

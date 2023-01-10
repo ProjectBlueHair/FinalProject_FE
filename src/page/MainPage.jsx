@@ -3,7 +3,7 @@ import Flex from "../component/elem/Flex";
 import Header from "../component/header/Header";
 import styled from "styled-components";
 import MainPostList from "../component/main/MainPostList";
-import MainMusicBar from "../component/main/MainMusicBar";
+import MainAudioPlayer from "../component/main/MainAudioPlayer";
 const MainPage = () => {
   return (
     <Flex direction="column" justify="flex-start" hg="100vh" gap="0">
@@ -12,7 +12,7 @@ const MainPage = () => {
         <Header />
         <MainPostList />
       </MainContainer>
-      <MainMusicBar />
+      <MainAudioPlayer />
     </Flex>
   );
 };

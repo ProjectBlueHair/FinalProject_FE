@@ -6,6 +6,7 @@ export const handlers = [
   rest.get("/post", (req, res, ctx) => {
     const { searchParams } = req.url;
     const size = 20;
+    console.log('params',searchParams.get('page'))
     const page = Number(searchParams.get("page"));
     const totalCount = postList.length;
     const totalPages = Math.round(totalCount / size);
@@ -16,9 +17,5 @@ export const handlers = [
         isLastPage: totalPages < page,
       })
     );
-  }),
-  rest.post("/post", (req, res, ctx) => {
-    postList.push(req.json());
-    return res(ctx.status(201));
   }),
 ];

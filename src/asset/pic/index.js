@@ -22,7 +22,10 @@ export { default as shuffle } from "./shuffle.svg";
 export { default as volume } from "./volume.svg";
 
 //vector (without margin)
-export { default as skipPrevVector } from "./skip-prev-vector.svg";
-export { default as playVector } from "./play-vector.svg";
-export { default as skipNextVector } from "./skip-next-vector.svg";
-export { default as volumeVector } from "./volume-vector.svg";
+export {default as skipPrevVector} from './skip-prev-vector.svg'
+export {default as playVector} from './play-vector.svg'
+export {default as skipNextVector} from './skip-next-vector.svg'
+export {default as volumeVector} from './volume-vector.svg'
+export {default as mute} from './mute.svg'
+export {default as pause} from './pause.svg'
+
