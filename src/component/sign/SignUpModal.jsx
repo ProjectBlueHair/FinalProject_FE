@@ -3,10 +3,9 @@ import Modal from "../modal/Modal";
 import styled from "styled-components";
 import useModal from "../modal/useModal";
 import { instanceAxios } from "../../dataManager/apiConfig";
-import AWS from "aws-sdk";
-import uuid from "react-uuid";
 import Img from "../elem/Img";
 import { log } from "../../asset/pic";
+import { uploadFiles } from "../../dataManager/imageS3";
 
 const SignUpModal = ({ onClose }) => {
   const { closeModal } = useModal();
@@ -34,11 +33,6 @@ const SignUpModal = ({ onClose }) => {
   const [isPwStr, setIsPwStr] = useState(false);
   const [isPwNum, setIsPwNum] = useState(false);
 
-  // 이미지 업로드 로직
-  const AK = process.env.REACT_APP_AK;
-  const BK = process.env.REACT_APP_BK;
-  const SK = process.env.REACT_APP_SK;
-
   const SignUpImg = (e) => {
     const file = e.target.files[0];
     setS3image(file);
@@ -48,28 +42,6 @@ const SignUpModal = ({ onClose }) => {
     reader.onloadend = () => {
       setPreviewImg(reader.result);
     };
-  };
-
-  // 이미지 s3 업로드 로직
-  const uploadFiles = (s3) => {
-    if (s3 === undefined) {
-      s3 = { Location: "" };
-      return Promise.resolve(s3);
-    } else {
-      const KEY = uuid();
-      const TYPE = s3.type.split("/")[1];
-      AWS.config.update({
-        accessKeyId: AK,
-        secretAccessKey: SK,
-      });
-      return new AWS.S3.ManagedUpload({
-        params: {
-          Bucket: BK,
-          Key: `${KEY}.${TYPE}`,
-          Body: s3,
-        },
-      }).promise();
-    }
   };
 
   // 이메일과 비밀번호 정규식
@@ -205,6 +177,7 @@ const SignUpModal = ({ onClose }) => {
 
   // 회원가입 버튼 클릭시 실행
   const postSignUp = async (post) => {
+    console.log(post);
     try {
       const { data } = await instanceAxios.post("member/signup", post);
       if (data.customHttpStatus === 2000) {
@@ -217,6 +190,7 @@ const SignUpModal = ({ onClose }) => {
   // 회원가입 버튼 클릭시 실행
   const onSignUpBtn = () => {
     uploadFiles(s3image).then((res) => {
+      console.log("res", res);
       const profileImg = res.Location;
       postSignUp({
         nickname,
