@@ -1,25 +1,25 @@
-export {default as mainLogo} from './main-logo.svg'
-export {default as account} from './account.svg'
-export {default as follows} from './follows.svg'
-export {default as message} from './message.svg'
-export {default as notifications} from './notifications.svg'
-export {default as search} from './search.svg'
-export {default as settings} from './settings.svg'
-export {default as upload} from './upload.svg'
-export {default as playButton} from './play_button.svg'
-export {default as playButtonSecond} from './play_button-2.svg'
-export {default as view} from './view.svg'
-export {default as like} from './like.svg'
-export {default as skipPrev} from './skip-prev.svg'
-export {default as skipNext} from './skip-next.svg'
-export {default as playPrimary} from './play-primary.svg'
-export {default as more} from './more.svg'
-export {default as mockPlaybar} from './mock-playbar.svg'
-export {default as mockSoundbar} from './mock-soundbar.svg'
-export {default as repeat} from './repeat.svg'
-export {default as shuffle} from './shuffle.svg'
-export {default as volume} from './volume.svg'
-
+export { default as mainLogo } from "./main-logo.svg";
+export { default as log } from "./log.svg";
+export { default as account } from "./account.svg";
+export { default as follows } from "./follows.svg";
+export { default as message } from "./message.svg";
+export { default as notifications } from "./notifications.svg";
+export { default as search } from "./search.svg";
+export { default as settings } from "./settings.svg";
+export { default as upload } from "./upload.svg";
+export { default as playButton } from "./play_button.svg";
+export { default as playButtonSecond } from "./play_button-2.svg";
+export { default as view } from "./view.svg";
+export { default as like } from "./like.svg";
+export { default as skipPrev } from "./skip-prev.svg";
+export { default as skipNext } from "./skip-next.svg";
+export { default as playPrimary } from "./play-primary.svg";
+export { default as more } from "./more.svg";
+export { default as mockPlaybar } from "./mock-playbar.svg";
+export { default as mockSoundbar } from "./mock-soundbar.svg";
+export { default as repeat } from "./repeat.svg";
+export { default as shuffle } from "./shuffle.svg";
+export { default as volume } from "./volume.svg";
 
 //vector (without margin)
 export {default as skipPrevVector} from './skip-prev-vector.svg'
@@ -28,3 +28,4 @@ export {default as skipNextVector} from './skip-next-vector.svg'
 export {default as volumeVector} from './volume-vector.svg'
 export {default as mute} from './mute.svg'
 export {default as pause} from './pause.svg'
+

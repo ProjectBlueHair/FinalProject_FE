@@ -1,10 +1,15 @@
-import { configureStore } from "@reduxjs/toolkit";
-import main from '../slice/mainSlice'
+
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { modalSlice } from "../slice/modalSlice";
+
+const rootReducer = combineReducers({
+  modal: modalSlice.reducer,
+  main
+  
+});
 
 const store = configureStore({
-  reducer: {
-    main
-  },
+  reducer: rootReducer,
 });
 
 export default store;
