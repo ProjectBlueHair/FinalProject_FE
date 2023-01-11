@@ -5,6 +5,7 @@ import Img from "../elem/Img";
 import AudioPlayer, { RHAP_UI } from "react-h5-audio-player";
 import "./MainAudioPlayer.css";
 import {
+  mute,
   pause,
   playPrimary,
   repeat,
@@ -15,28 +16,43 @@ import {
 } from "../../asset/pic";
 import { iconSize } from "../../GlobalStyle";
 import { useDispatch, useSelector } from "react-redux";
-import { __togglePlay } from "../../redux/slice/mainSlice";
+import {
+  __PlayerTogglePlay,
+  __playNext,
+  __PlayPrevious,
+  __togglePlay,
+} from "../../redux/slice/mainSlice";
 const MainAudioPlayer = () => {
   const audioPlayer = useRef(null);
   const [audioSrc, setAudioSrc] = useState();
-  const { post, isPlaying } = useSelector((state) => state.main.currentMusic);
+  const { post, isPlayingMain } = useSelector(
+    (state) => state.main.currentMusic
+  );
   const dispatch = useDispatch();
   const audio = () => {
     return audioPlayer.current.audio.current;
   };
 
-  const onListenHandler = (e) => {
-    // console.log('e',e)
+  const onListenHandler = (e) => {};
+  const onPlayHandler = () => {
+    dispatch(__PlayerTogglePlay(true));
+  };
+  const onPauseHandler = () => {
+    dispatch(__PlayerTogglePlay(false));
+  };
+  const onClickPrevious = () => {
+    dispatch(__PlayPrevious(post.postId));
+  };
+  const onClickNext = () => {
+    dispatch(__playNext(post.postId));
   };
   useEffect(() => {
-    if (isPlaying) {
+    if (isPlayingMain) {
       audioPlayer.current.audio.current.play();
-      // dispatch(__togglePlay(post.postId));
     } else {
-      audioPlayer.current.audio.current.pause()
-      // audio.pause()
+      audioPlayer.current.audio.current.pause();
     }
-  }, [isPlaying]);
+  }, [isPlayingMain]);
 
   return (
     // musicbar wrap
@@ -72,13 +88,22 @@ const MainAudioPlayer = () => {
                   post.collabo && post.collabo.length && post.collabo[0].profile
                 }
               />
-              <div>nickname</div>
+              <div>
+                {post.collabo &&
+                  post.collabo.length &&
+                  post.collabo[0].nickname}
+              </div>
             </Flex>
           </Flex>
         </Flex>
 
         {/* flex row right grid [music btns, music bar, volume control] */}
         <AudioPlayer
+          // autoPlayAfterSrcChange={false}
+          onPlay={onPlayHandler}
+          onPause={onPauseHandler}
+          onClickPrevious={onClickPrevious}
+          onClickNext={onClickNext}
           autoPlay={false}
           onListen={onListenHandler}
           ref={audioPlayer}
@@ -100,6 +125,7 @@ const MainAudioPlayer = () => {
             previous: <Img type="icon" wd={iconSize} src={skipPrev} />,
             next: <Img type="icon" wd={iconSize} src={skipNext} />,
             volume: <Img type="icon" wd={iconSize} src={volume} />,
+            volumeMute: <Img type="icon" wd={iconSize} src={mute} />,
             pause: <Img type="icon" wd={iconSize} src={pause} />,
           }}
           customControlsSection={[
