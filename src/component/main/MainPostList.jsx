@@ -18,7 +18,6 @@ const MainPostList = () => {
 
   useEffect(() => {
     if (!isLoading) {
-      console.log("LOG4 dispatch ", nextPage);
       dispatch(__getPostList(nextPage));
     }
   }, [trigger]);

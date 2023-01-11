@@ -1,26 +1,23 @@
 import React from "react";
 import Img from "../elem/Img";
 import Flex from "../elem/Flex";
-import {
-  like,
-  pause,
-  playButton,
-  playButtonSecond,
-  view,
-} from "../../asset/pic";
+import { like, pause, playButtonSecond, view } from "../../asset/pic";
 import styled from "styled-components";
 import StLink from "../elem/Link";
-import { CiPause1 } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
-import { __togglePlay } from "../../redux/slice/mainSlice";
-const MainPost = ({ post, playingId, isPlaying }) => {
+import {
+  __playDifferentSrc,
+  __MainTogglePlay,
+} from "../../redux/slice/mainSlice";
+const MainPost = ({ post }) => {
   const profile_margin = "0 0 0 -1rem";
   const dispatch = useDispatch();
   const currentMusic = useSelector((state) => state.main.currentMusic);
-  console.log("currentMusic.post.postId", currentMusic.post.postId);
-  console.log("post.postId", post.postId);
-  console.log("currentMusic.isPlaying", currentMusic.isPlaying);
-
+  const onClickPlayHandler = () => {
+    currentMusic.post.postId === post.postId
+      ? dispatch(__MainTogglePlay(!currentMusic.isPlayingPlayer))
+      : dispatch(__playDifferentSrc(post.postId));
+  };
   return (
     // <GridWrapper>
     <Flex
@@ -34,23 +31,17 @@ const MainPost = ({ post, playingId, isPlaying }) => {
       {/* play box */}
       <Flex direction="row" justify="flex-start" gap="1rem" pd="0 1rem">
         <Img
-          onClick={() => dispatch(__togglePlay(post.postId))}
+          onClick={onClickPlayHandler}
           type="icon"
           wd="15%"
-          // src={
-          //   playingId === post.postId ? isPlaying
-          //     ? pause
-          //     : playButtonSecond : playButtonSecond
-          // }
           src={
             currentMusic.post.postId === post.postId
-              ? currentMusic.isPlaying
+              ? currentMusic.isPlayingPlayer
                 ? pause
                 : playButtonSecond
               : playButtonSecond
           }
         />
-
         <Flex flex="1" direction="column" align="flex-start" gap="1rem">
           <div>{post.title}</div>
           {/* grid */}
@@ -91,7 +82,6 @@ const MainPost = ({ post, playingId, isPlaying }) => {
         pd="0 1rem"
       >
         {post.tags.map((tag, index) => (
-          // console.log(tag)
           <StLink key={index} to={`/tag/${tag}`}>
             <TagCard># {tag}</TagCard>
           </StLink>
