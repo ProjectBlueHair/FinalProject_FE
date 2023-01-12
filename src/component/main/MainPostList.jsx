@@ -9,6 +9,7 @@ const MainPostList = () => {
   const [trigger, setTrigger] = useState(false);
   const dispatch = useDispatch();
   const { posts, nextPage, isLoading } = useSelector((state) => state.main);
+  console.log('posts',posts)
 
   let options = {
     root: scrollArea.current,
@@ -18,6 +19,7 @@ const MainPostList = () => {
 
   useEffect(() => {
     if (!isLoading) {
+      console.log('dispatch')
       dispatch(__getPostList(nextPage));
     }
   }, [trigger]);
@@ -29,7 +31,6 @@ const MainPostList = () => {
       }
     });
   };
-
   useEffect(() => {
     const io = new IntersectionObserver(callback, options);
     io.observe(target.current);

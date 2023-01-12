@@ -4,8 +4,10 @@ Ut sem viverra aliquet eget. Gravida rutrum quisque non tellus orci ac auctor. V
 Turpis egestas sed tempus urna. Elementum integer enim neque volutpat. Lorem sed risus ultricies tristique nulla aliquet. Pellentesque nec nam aliquam sem. Malesuada bibendum arcu vitae elementum curabitur vitae nunc. Tellus in hac habitasse platea dictumst vestibulum. Tincidunt lobortis feugiat vivamus at. Orci eu lobortis elementum nibh tellus. Nam aliquam sem et tortor consequat. Bibendum ut tristique et egestas quis ipsum. Massa tincidunt nunc pulvinar sapien et ligula ullamcorper malesuada.
 `;
 export const mockAudios = [
-  "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/vocal.m4a",
-  "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/piano.wav",
-  "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/guitar.mp3",
-  "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/bass.wav",
+  "https://jeeklee-soundsample-bucket.s3.ap-northeast-2.amazonaws.com/c2ed3c76-3328-4d92-89ef-9c73409006d5-temp_7987712027676666077.wav",
+  "https://jeeklee-soundsample-bucket.s3.ap-northeast-2.amazonaws.com/c2ed3c76-3328-4d92-89ef-9c73409006d5-temp_7987712027676666077.wav",
+  // "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/vocal.m4a",
+  // "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/piano.wav",
+  // "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/guitar.mp3",
+  // "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/bass.wav",
 ];

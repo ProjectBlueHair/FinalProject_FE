@@ -41,10 +41,10 @@ const MainAudioPlayer = () => {
     dispatch(__PlayerTogglePlay(false));
   };
   const onClickPrevious = () => {
-    dispatch(__PlayPrevious(post.postId));
+    dispatch(__PlayPrevious(post.id));
   };
   const onClickNext = () => {
-    dispatch(__playNext(post.postId));
+    dispatch(__playNext(post.id));
   };
   useEffect(() => {
     if (isPlayingMain) {
@@ -85,13 +85,13 @@ const MainAudioPlayer = () => {
                 type="shadowProfile"
                 wd="3rem"
                 src={
-                  post.collabo && post.collabo.length && post.collabo[0].profile
+                  post.mainProfileList && post.mainProfileList.length && post.mainProfileList[0].profileImg
                 }
               />
               <div>
-                {post.collabo &&
-                  post.collabo.length &&
-                  post.collabo[0].nickname}
+                {post.mainProfileList &&
+                  post.mainProfileList.length &&
+                  post.mainProfileList[0].nickname}
               </div>
             </Flex>
           </Flex>
@@ -108,7 +108,7 @@ const MainAudioPlayer = () => {
           onListen={onListenHandler}
           ref={audioPlayer}
           layout="horizontal"
-          src={post.audio}
+          src={post.musicFile}
           showJumpControls={false}
           showSkipControls={true}
           timeFormat="auto"

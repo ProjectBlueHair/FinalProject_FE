@@ -1,11 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { instanceAxios } from "../../dataManager/apiConfig";
 export const __getPostList = createAsyncThunk(
   "__getPostList",
   async (payload, thunkAPI) => {
     try {
-      const res = await axios.get(`/post?page=${Number(payload)}`);
-      return res.data;
+      // const res = await axios.get(`/post?page=${Number(payload)}`);
+      const {data} = await instanceAxios.get(`/post?page=${Number(payload)}`);
+      console.log('data',data.data)
+      return data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -67,17 +70,18 @@ export const mainSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(__getPostList.fulfilled, (state, { payload }) => {
-        state.isLoading = false;
-        if (state.nextPage === 0) {
-          state.currentMusic = {
-            ...state.currentMusic,
-            post: payload.posts[0],
-          };
-        }
-        state.nextPage = state.nextPage + 1;
+        console.log('payload',payload)
 
+        state.isLoading = false;
+        // if (state.nextPage === 0) {
+        //   state.currentMusic = {
+        //     ...state.currentMusic,
+        //     post: payload.posts[0],
+        //   };
+        // }
+        state.nextPage = state.nextPage + 1;
         state.isLastPage = payload.isLastPage;
-        state.posts = state.posts.concat(payload.posts);
+        state.posts = state.posts.concat(payload);
       });
   },
 });
