@@ -1,15 +1,18 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import MainPost from "./MainPost";
-import { useDispatch, useSelector } from "react-redux";
-import { __getPostList } from "../../redux/slice/mainSlice";
+import { MainState, __getPostList } from "../../redux/slice/mainSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/config";
 const MainPostList = () => {
-  const target = useRef(null);
+  const target = useRef<HTMLDivElement>(null);
   const scrollArea = useRef(null);
+
   const [trigger, setTrigger] = useState(false);
-  const dispatch = useDispatch();
-  const { posts, nextPage, isLoading } = useSelector((state) => state.main);
-  console.log('posts',posts)
+
+  const dispatch = useAppDispatch();
+  const { posts, nextPage, isLoading } = useAppSelector<MainState>(
+    (state) => state.main
+  );
 
   let options = {
     root: scrollArea.current,
@@ -19,12 +22,11 @@ const MainPostList = () => {
 
   useEffect(() => {
     if (!isLoading) {
-      console.log('dispatch')
       dispatch(__getPostList(nextPage));
     }
   }, [trigger]);
 
-  const callback = (entries, io) => {
+  const callback: IntersectionObserverCallback = (entries, io) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         setTrigger((prev) => !prev);
@@ -33,17 +35,16 @@ const MainPostList = () => {
   };
   useEffect(() => {
     const io = new IntersectionObserver(callback, options);
-    io.observe(target.current);
+    io.observe(target.current!);
   }, []);
-  
+
   return (
     <ScrollContainer ref={scrollArea}>
       <PostListContainer>
         {posts?.map((post) => (
-          // <MainPost playingId={currentMusic.postId} isPlaying ={currentMusic.isPlaying} key={post.id} post={post} />
           <MainPost key={post.id} post={post} />
         ))}
-        <div name="target" ref={target}></div>
+        <div data-name="target" ref={target}></div>
       </PostListContainer>
       {isLoading && <Loading />}
     </ScrollContainer>

@@ -11,10 +11,7 @@ export const handlers = [
     const totalPages = Math.round(totalCount / size);
     return res(
       ctx.status(200),
-      ctx.json({
-        posts: postList.slice(page * size, (page + 1) * size),
-        isLastPage: totalPages < page,
-      })
+      ctx.json(postList.slice(page * size, (page + 1) * size))
     );
   }),
 ];

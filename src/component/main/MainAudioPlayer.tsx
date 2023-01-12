@@ -15,25 +15,21 @@ import {
   volume,
 } from "../../asset/pic";
 import { iconSize } from "../../GlobalStyle";
-import { useDispatch, useSelector } from "react-redux";
 import {
   __PlayerTogglePlay,
   __playNext,
   __PlayPrevious,
-  __togglePlay,
 } from "../../redux/slice/mainSlice";
-const MainAudioPlayer = () => {
-  const audioPlayer = useRef(null);
-  const [audioSrc, setAudioSrc] = useState();
-  const { post, isPlayingMain } = useSelector(
-    (state) => state.main.currentMusic
-  );
-  const dispatch = useDispatch();
-  const audio = () => {
-    return audioPlayer.current.audio.current;
-  };
+import { CurrentMusic } from "../../type/PostModel";
 
-  const onListenHandler = (e) => {};
+import { useAppDispatch, useAppSelector } from "../../redux/config";
+const MainAudioPlayer = () => {
+  const audioPlayer = useRef<AudioPlayer>(null);
+  const { post, isPlayingMain } =
+    useAppSelector < CurrentMusic > ((state) => state.main.currentMusic);
+  const dispatch = useAppDispatch();
+
+  const onListenHandler = (e : Event) => {};
   const onPlayHandler = () => {
     dispatch(__PlayerTogglePlay(true));
   };
@@ -48,9 +44,9 @@ const MainAudioPlayer = () => {
   };
   useEffect(() => {
     if (isPlayingMain) {
-      audioPlayer.current.audio.current.play();
+      audioPlayer.current!.audio.current!.play();
     } else {
-      audioPlayer.current.audio.current.pause();
+      audioPlayer.current!.audio.current!.pause();
     }
   }, [isPlayingMain]);
 
@@ -85,7 +81,9 @@ const MainAudioPlayer = () => {
                 type="shadowProfile"
                 wd="3rem"
                 src={
-                  post.mainProfileList && post.mainProfileList.length && post.mainProfileList[0].profileImg
+                  post.mainProfileList &&
+                  post.mainProfileList.length &&
+                  post.mainProfileList[0].profileImg
                 }
               />
               <div>
@@ -99,7 +97,8 @@ const MainAudioPlayer = () => {
 
         {/* flex row right grid [music btns, music bar, volume control] */}
         <AudioPlayer
-          // autoPlayAfterSrcChange={false}
+          autoPlayAfterSrcChange={true}
+          src={post.musicFile}
           onPlay={onPlayHandler}
           onPause={onPauseHandler}
           onClickPrevious={onClickPrevious}
@@ -108,7 +107,6 @@ const MainAudioPlayer = () => {
           onListen={onListenHandler}
           ref={audioPlayer}
           layout="horizontal"
-          src={post.musicFile}
           showJumpControls={false}
           showSkipControls={true}
           timeFormat="auto"

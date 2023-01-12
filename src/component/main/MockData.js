@@ -18,8 +18,10 @@ export const mockData = () => {
     //nick
     const nickArr = new Array(rand(2, 5)).fill("").map((nick) => {
       return {
-        profile: `testRandomPost/${rand(1, 22)}.jpg`,
+        profileImg: `testRandomPost/${rand(1, 22)}.jpg`,
         nickname: mockTextArr[rand(101, 200)],
+        musicPartList : ['bass','piano']
+
       };
     });
 
@@ -30,14 +32,14 @@ export const mockData = () => {
     });
 
     mockArr.push({
-      postId: nextId(),
+      id: nextId(),
       postImg: `testRandomPost/${rand(1, 22)}.jpg`,
       title: ranText,
-      audio: mockAudios[rand(0, 3)],
-      collabo: nickArr,
-      tags: tagArr,
-      view: rand(100, 5000),
-      like: rand(100, 5000),
+      musicFile: mockAudios[rand(0, 3)],
+      mainProfileList: nickArr,
+      tagList: tagArr,
+      viewCount: rand(100, 5000),
+      likeCount: rand(100, 5000),
     });
   });
   return mockArr;

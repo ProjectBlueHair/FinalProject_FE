@@ -9,6 +9,7 @@ function Img(props) {
     radius: Radius,
     icon: IconButton,
     iconSmall: IconSmall,
+    profileCount:ProfileCount
   };
 
   const Img = props.type ? IMG[props.type] : StImg;
@@ -51,4 +52,19 @@ const IconSmall = styled(StImg)`
     filter: ${({ bg }) => bg || css`var(--ec-secondary-filter)`};
     cursor: pointer;
   }
+`;
+const ProfileCount = styled.div`
+  width: ${({ wd }) => wd || "3rem"};
+  height: ${({ hg }) => hg || "3rem"};
+  box-shadow: ${({ shadow }) => shadow || "0px 2px 10px rgba(0, 0, 0, 0.26)"};
+  border-radius: 50%;
+  margin: ${({ mg }) => mg || "0 0 0 -1rem"};
+  z-index: -3;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  color: var(--ec-primary-text);
+  font-size: 1rem;
+  padding: 0 0.4rem 0 0;
+  background-color: rgba(0, 0, 0, 0.1);
 `;
