@@ -14,9 +14,9 @@ const MainPost = ({ post }) => {
   const dispatch = useDispatch();
   const currentMusic = useSelector((state) => state.main.currentMusic);
   const onClickPlayHandler = () => {
-    currentMusic.post.postId === post.postId
+    currentMusic.post.id === post.id
       ? dispatch(__MainTogglePlay(!currentMusic.isPlayingPlayer))
-      : dispatch(__playDifferentSrc(post.postId));
+      : dispatch(__playDifferentSrc(post.id));
   };
   return (
     // <GridWrapper>
@@ -35,7 +35,7 @@ const MainPost = ({ post }) => {
           type="icon"
           wd="15%"
           src={
-            currentMusic.post.postId === post.postId
+            currentMusic.post.id === post.id
               ? currentMusic.isPlayingPlayer
                 ? pause
                 : playButtonSecond
@@ -47,7 +47,7 @@ const MainPost = ({ post }) => {
           {/* grid */}
           <PostBottomContainer>
             <Flex align="center" justify="flex-start">
-              {post.collabo.map((member, index) =>
+              {post.mainProfileList.map((member, index) =>
                 index <= 2 ? (
                   <Img
                     key={index}
@@ -55,20 +55,20 @@ const MainPost = ({ post }) => {
                     type="shadowProfile"
                     wd="3rem"
                     mg={index === 0 ? 0 : profile_margin}
-                    src={member.profile}
+                    src={member.profileImg}
                   />
-                ) : index === post.collabo.length - 1 ? (
+                ) : index === post.mainProfileList.length - 1 ? (
                   <ProfileCount key={index}>+{index - 2}</ProfileCount>
                 ) : null
               )}
             </Flex>
             <Flex justify="flex-start" gap="0.4rem">
               <Img wd="1.8rem" src={view} />
-              <IconSpan>{post.view}</IconSpan>
+              <IconSpan>{post.viewCount}</IconSpan>
             </Flex>
             <Flex justify="flex-start" gap="0.4rem">
               <Img type="iconSmall" wd="1.5rem" src={like} />
-              <IconSpan>{post.like}</IconSpan>
+              <IconSpan>{post.likeCount}</IconSpan>
             </Flex>
           </PostBottomContainer>
         </Flex>
@@ -81,11 +81,11 @@ const MainPost = ({ post }) => {
         gap="0.5rem"
         pd="0 1rem"
       >
-        {post.tags.map((tag, index) => (
+        {/* {post.tags.map((tag, index) => (
           <StLink key={index} to={`/tag/${tag}`}>
             <TagCard># {tag}</TagCard>
           </StLink>
-        ))}
+        ))} */}
       </Flex>
     </Flex>
   );
