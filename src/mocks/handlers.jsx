@@ -17,8 +17,4 @@ export const handlers = [
       })
     );
   }),
-  rest.post("/post", (req, res, ctx) => {
-    postList.push(req.json());
-    return res(ctx.status(201));
-  }),
 ];

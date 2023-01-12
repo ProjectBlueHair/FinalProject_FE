@@ -11,7 +11,6 @@ const useFetch = (page) => {
   const [hasMore, setHasMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isLastPage, setIsLastPage] = useState(false);
-  console.log('usefetch ? ')
 
   //query API 요청 보내기
   const sendQuery = useCallback(async () => {
@@ -19,13 +18,11 @@ const useFetch = (page) => {
 
     try {
       setIsLoading(true);
-      console.log('FETCH REQUEST PAGE',page)
       const response = await axios.get(URL);
       if (!response) {
         throw new Error(`서버에 오류가 있습니다.`);
       }
       setList((prev) => [...prev, ...response.data.posts]);
-      console.log('response.data.posts.length',response.data.posts.length)
       setHasMore(response.data.posts.length > 0);
       setIsLoading(false);
       // setIsLastPage(response.data.isLastPage)
