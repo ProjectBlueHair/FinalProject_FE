@@ -24,7 +24,6 @@ const SignUpModal = ({ onClose }) => {
   // 모두 true 되야 회원가입이 되게함
   const [isNickname, setIsNickname] = useState(false);
   const [isEmail, setIsEmail] = useState(false);
-  const [isPassword, setIsPassword] = useState(false);
   const [onCheckNickname, setOnCheckNickname] = useState(false);
   const [onCheckEmail, setOnCheckEmail] = useState(false);
   // 비밀번호 4가지 상태값
@@ -35,27 +34,25 @@ const SignUpModal = ({ onClose }) => {
 
   const SignUpImg = (e) => {
     const file = e.target.files[0];
-    setS3image(file);
+    // 용량 5MB제한
+    const fileSize = 5 * 1024 * 1024;
     // 이미지 미리보기 로직
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setPreviewImg(reader.result);
-    };
+
+    if (fileSize < file.size) {
+      alert("업로드 가능한 최대 용량은 5MB입니다");
+    } else {
+      setS3image(file);
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setPreviewImg(reader.result);
+      };
+    }
   };
 
   // 이메일과 비밀번호 정규식
   const emailRegex =
     /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
-  // 정규식 : 비밀번호 길이
-  const passwordLengthRegex = /^.{8,15}$/;
-  // 정규식 : 특수기호
-  const passwordSymbolRegex = /.*[!@#$%^&*]/;
-  // 정규식 : 숫자
-  const passwordNumRegex = /.*[0-9]/;
-  // 정규식 : 문자
-  const passwordStrRegex = /.*[a-zA-Z]/;
-
   // 닉네임
   const onChangeNickname = useCallback((e) => {
     const nicknameValue = e.target.value;
@@ -82,6 +79,15 @@ const SignUpModal = ({ onClose }) => {
   const onChangePassword = useCallback((e) => {
     const passwordValue = e.target.value;
     setPassword(passwordValue);
+    // 정규식 : 비밀번호 길이
+    const passwordLengthRegex = /^.{8,15}$/;
+    // 정규식 : 특수기호
+    const passwordSymbolRegex = /.*[!@#$%^&*]/;
+    // 정규식 : 숫자
+    const passwordNumRegex = /.*[0-9]/;
+    // 정규식 : 문자
+    const passwordStrRegex = /.*[a-zA-Z]/;
+
     // 8자리에서 15자리 정규식
     if (!passwordLengthRegex.test(passwordValue)) {
       setIsPwLength(false);
@@ -212,7 +218,13 @@ const SignUpModal = ({ onClose }) => {
     <Modal onClose={onClose}>
       <SignUpTotal>
         <SignUpImgDiv>
-          <input type="file" id="upload" ref={imgRef} onChange={SignUpImg} />
+          <input
+            type="file"
+            id="upload"
+            ref={imgRef}
+            onChange={SignUpImg}
+            accept="image/*"
+          />
           <label htmlFor="upload">+</label>
           <img src={previewImg} onClick={() => imgRef.current.click()} />
         </SignUpImgDiv>

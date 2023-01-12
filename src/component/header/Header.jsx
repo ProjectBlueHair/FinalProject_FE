@@ -62,8 +62,7 @@ const Header = () => {
         <ToggleDiv>
           <button onClick={onClickSignBtn}>로그인</button>
           <button>마이페이지</button>
-          <button>작성페이지</button>
-          <hr />
+          <button>계정설정</button>
         </ToggleDiv>
       ) : (
         ""
@@ -85,7 +84,7 @@ const ToggleDiv = styled.div`
   position: absolute;
   right: 0;
   top: 0;
-  width: 130px;
+  width: 110px;
   height: 120px;
   margin-top: 25px;
   margin-right: 65px;
@@ -93,21 +92,17 @@ const ToggleDiv = styled.div`
   border: 2px solid #ff4d00;
   border-radius: 10px;
   z-index: 1;
+  padding: 10px 10px 0 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: flex-end;
-  padding-right: 2rem;
   button {
     margin-top: 10px;
     background-color: white;
     border: white;
     font-size: 15px;
     :hover {
-      background-color: #ff4d00;
-      color: white;
-      border-radius: 5px;
-      padding: 1px 0;
+      border-bottom: 1px solid #ff4d00;
     }
   }
 `;

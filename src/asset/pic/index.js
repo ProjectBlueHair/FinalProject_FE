@@ -1,5 +1,6 @@
 export { default as mainLogo } from "./main-logo.svg";
 export { default as log } from "./log.svg";
+export { default as volumedown } from "./volumedown.svg";
 export { default as account } from "./account.svg";
 export { default as follows } from "./follows.svg";
 export { default as message } from "./message.svg";
@@ -20,6 +21,8 @@ export { default as mockSoundbar } from "./mock-soundbar.svg";
 export { default as repeat } from "./repeat.svg";
 export { default as shuffle } from "./shuffle.svg";
 export { default as volume } from "./volume.svg";
+export { default as save } from "./save.svg";
+export { default as share } from "./share.svg";
 
 //vector (without margin)
 export { default as skipPrevVector } from "./skip-prev-vector.svg";
