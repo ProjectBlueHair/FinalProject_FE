@@ -1,30 +1,36 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { instanceAxios } from "../../dataManager/apiConfig";
+import { CurrentMusic, Post, Response } from "../../type/PostModel";
 export const __getPostList = createAsyncThunk(
   "__getPostList",
-  async (payload, thunkAPI) => {
+  async (payload:number, thunkAPI) => {
     try {
-      // const res = await axios.get(`/post?page=${Number(payload)}`);
-      const {data} = await instanceAxios.get(`/post?page=${Number(payload)}`);
-      console.log('data',data.data)
-      return data.data;
+      const res:Response = await axios.get(`/post?page=${Number(payload)}`);
+      // const res:Response = await instanceAxios.get(`/post?page=${Number(payload)}`);
+      return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
   }
 );
-
+export interface MainState {
+  posts: Post[];
+  nextPage: number;
+  currentMusic: CurrentMusic;
+  isLoading: boolean;
+}
+const findPostIndex = (posts: Post[], payload : string | number)=>{
+  return posts.findIndex((post) => post.id === payload);
+}
 export const mainSlice = createSlice({
   name: "main",
   initialState: {
-    posts: [],
+    posts: [] as Post[],
     nextPage: 0,
-    isLastPage: false,
     currentMusic: { post: {}, isPlayingMain: false, isPlayingPlayer: false },
     isLoading: false,
-    error: null,
-  },
+  } as MainState ,
   reducers: {
     __MainTogglePlay: (state, action) => {
       state.currentMusic.isPlayingMain = action.payload;
@@ -33,16 +39,16 @@ export const mainSlice = createSlice({
       state.currentMusic.isPlayingPlayer = action.payload;
     },
     __playDifferentSrc: (state, action) => {
-      const index = state.posts.findIndex(
-        (post) => post.postId === action.payload
-      );
-      state.currentMusic.post = state.posts[index];
-      state.currentMusic.isPlayingMain = true;
+      const index = findPostIndex(state.posts, action.payload )
+      console.log("index", index);
+      state.currentMusic = {
+        ...state.currentMusic,
+        post: state.posts[index],
+        isPlayingMain: true,
+      };
     },
     __playNext: (state, action) => {
-      const index = state.posts.findIndex(
-        (post) => post.postId === action.payload
-      );
+      const index = findPostIndex(state.posts, action.payload )
       if (index !== state.posts.length - 1) {
         state.currentMusic = {
           ...state.currentMusic,
@@ -52,9 +58,7 @@ export const mainSlice = createSlice({
       }
     },
     __PlayPrevious: (state, action) => {
-      const index = state.posts.findIndex(
-        (post) => post.postId === action.payload
-      );
+      const index = findPostIndex(state.posts, action.payload )
       if (index !== 0) {
         state.currentMusic = {
           ...state.currentMusic,
@@ -70,18 +74,16 @@ export const mainSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(__getPostList.fulfilled, (state, { payload }) => {
-        console.log('payload',payload)
 
         state.isLoading = false;
-        // if (state.nextPage === 0) {
-        //   state.currentMusic = {
-        //     ...state.currentMusic,
-        //     post: payload.posts[0],
-        //   };
-        // }
+        if (state.nextPage === 0) {
+          state.currentMusic = {
+            ...state.currentMusic,
+            post: payload[0],
+          };
+        }
+        state.posts = state.nextPage===0 ? payload : state.posts.concat(payload);
         state.nextPage = state.nextPage + 1;
-        state.isLastPage = payload.isLastPage;
-        state.posts = state.posts.concat(payload);
       });
   },
 });

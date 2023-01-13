@@ -8,7 +8,7 @@ import { worker } from "./mocks/worker";
 import ModalContainer from "./component/modal/ModalContainer";
 
 if (process.env.NODE_ENV === "development") {
-  // worker.start({ onUnhandledRequest: "bypass" });
+  worker.start({ onUnhandledRequest: "bypass" });
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

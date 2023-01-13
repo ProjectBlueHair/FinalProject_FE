@@ -4,19 +4,22 @@ import Flex from "../elem/Flex";
 import { like, pause, playButtonSecond, view } from "../../asset/pic";
 import styled from "styled-components";
 import StLink from "../elem/Link";
-import { useDispatch, useSelector } from "react-redux";
 import {
   __playDifferentSrc,
   __MainTogglePlay,
 } from "../../redux/slice/mainSlice";
-const MainPost = ({ post }) => {
+import { CurrentMusic, Post } from "../../type/PostModel";
+import { useAppDispatch, useAppSelector } from "../../redux/config";
+const MainPost: React.FC<{ post: Post }> = (props) => {
   const profile_margin = "0 0 0 -1rem";
-  const dispatch = useDispatch();
-  const currentMusic = useSelector((state) => state.main.currentMusic);
+  const dispatch = useAppDispatch();
+  const currentMusic = useAppSelector<CurrentMusic>(
+    (state) => state.main.currentMusic
+  );
   const onClickPlayHandler = () => {
-    currentMusic.post.id === post.id
+    currentMusic.post.id === props.post.id
       ? dispatch(__MainTogglePlay(!currentMusic.isPlayingPlayer))
-      : dispatch(__playDifferentSrc(post.id));
+      : dispatch(__playDifferentSrc(props.post.id));
   };
   return (
     // <GridWrapper>
@@ -27,7 +30,7 @@ const MainPost = ({ post }) => {
       align="flex-start"
       gap="1.5rem"
     >
-      <Img hg="20rem" type="radius" src={post.postImg} />
+      <Img hg="20rem" type="radius" src={props.post.postImg} />
       {/* play box */}
       <Flex direction="row" justify="flex-start" gap="1rem" pd="0 1rem">
         <Img
@@ -35,7 +38,7 @@ const MainPost = ({ post }) => {
           type="icon"
           wd="15%"
           src={
-            currentMusic.post.id === post.id
+            currentMusic.post.id === props.post.id
               ? currentMusic.isPlayingPlayer
                 ? pause
                 : playButtonSecond
@@ -43,11 +46,11 @@ const MainPost = ({ post }) => {
           }
         />
         <Flex flex="1" direction="column" align="flex-start" gap="1rem">
-          <div>{post.title}</div>
+          <div>{props.post.title}</div>
           {/* grid */}
           <PostBottomContainer>
             <Flex align="center" justify="flex-start">
-              {post.mainProfileList.map((member, index) =>
+              {props.post.mainProfileList?.map((member, index) =>
                 index <= 2 ? (
                   <Img
                     key={index}
@@ -57,18 +60,20 @@ const MainPost = ({ post }) => {
                     mg={index === 0 ? 0 : profile_margin}
                     src={member.profileImg}
                   />
-                ) : index === post.mainProfileList.length - 1 ? (
-                  <ProfileCount key={index}>+{index - 2}</ProfileCount>
+                ) : index === props.post.mainProfileList.length - 1 ? (
+                  <Img type="profileCount" key={index}>
+                    +{index - 2}
+                  </Img>
                 ) : null
               )}
             </Flex>
             <Flex justify="flex-start" gap="0.4rem">
               <Img wd="1.8rem" src={view} />
-              <IconSpan>{post.viewCount}</IconSpan>
+              <IconSpan>{props.post.viewCount}</IconSpan>
             </Flex>
             <Flex justify="flex-start" gap="0.4rem">
               <Img type="iconSmall" wd="1.5rem" src={like} />
-              <IconSpan>{post.likeCount}</IconSpan>
+              <IconSpan>{props.post.likeCount}</IconSpan>
             </Flex>
           </PostBottomContainer>
         </Flex>
@@ -81,11 +86,11 @@ const MainPost = ({ post }) => {
         gap="0.5rem"
         pd="0 1rem"
       >
-        {/* {post.tags.map((tag, index) => (
+        {props.post.tagList?.map((tag, index) => (
           <StLink key={index} to={`/tag/${tag}`}>
             <TagCard># {tag}</TagCard>
           </StLink>
-        ))} */}
+        ))}
       </Flex>
     </Flex>
   );
@@ -97,21 +102,6 @@ const PostBottomContainer = styled.div`
   width: 100%;
   grid-template-columns: 2fr 1fr 1fr;
   gap: 0.5rem;
-`;
-const ProfileCount = styled.div`
-  width: ${({ wd }) => wd || "3rem"};
-  height: ${({ hg }) => hg || "3rem"};
-  box-shadow: ${({ shadow }) => shadow || "0px 2px 10px rgba(0, 0, 0, 0.26)"};
-  border-radius: 50%;
-  margin: ${({ mg }) => mg || "0 0 0 -1rem"};
-  z-index: -3;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  color: var(--ec-primary-text);
-  font-size: 1rem;
-  padding: 0 0.4rem 0 0;
-  background-color: rgba(0, 0, 0, 0.1);
 `;
 const IconSpan = styled.span`
   color: var(--ec-secondary-text);
