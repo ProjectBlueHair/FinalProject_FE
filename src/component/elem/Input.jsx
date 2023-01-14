@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 
-export const INPUT_MAX_LENGTH = 30;
 const Input = (props) => {
 const INPUT = {
 
@@ -16,7 +15,7 @@ const INPUT = {
 
 
 export default Input;
-const StInput = styled.input.attrs({ maxLength: INPUT_MAX_LENGTH })`
+export const StInput = styled.input`
   border: none;
   width: 100%;
   background-color: transparent;

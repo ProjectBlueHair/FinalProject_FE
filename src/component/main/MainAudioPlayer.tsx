@@ -20,7 +20,7 @@ import {
   __playNext,
   __PlayPrevious,
 } from "../../redux/slice/mainSlice";
-import { CurrentMusic } from "../../type/PostModel";
+import { CurrentMusic } from "../../model/PostModel";
 
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 const MainAudioPlayer = () => {

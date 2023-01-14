@@ -54,7 +54,7 @@ const GlobalStyle = createGlobalStyle`
     background-color: var(--ec-primary-background);
     width: 100vw;
     height: 100vh;
-    font-weight: 600;
+    font-weight: 500;
     h1{
       font-size: 2.2rem;
     }

@@ -8,8 +8,8 @@ export const mockAudios = [
   // "https://jeeklee-soundsample-bucket.s3.ap-northeast-2.amazonaws.com/c2ed3c76-3328-4d92-89ef-9c73409006d5-temp_7987712027676666077.wav",
   "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/vocal.m4a",
   "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/piano.wav",
-  "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/piano.wav",
-  "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/piano.wav",
-  // "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/guitar.mp3",
-  // "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/bass.wav",
+  // "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/piano.wav",
+  // "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/piano.wav",
+  "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/guitar.mp3",
+  "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/bass.wav",
 ];
