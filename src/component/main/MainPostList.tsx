@@ -41,7 +41,7 @@ const MainPostList = () => {
   return (
     <ScrollContainer ref={scrollArea}>
       <PostListContainer>
-        {posts?.map((post) => (
+        {posts && posts.length && posts?.map((post) => (
           <MainPost key={post.id} post={post} />
         ))}
         <div data-name="target" ref={target}></div>

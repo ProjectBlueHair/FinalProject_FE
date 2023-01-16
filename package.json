@@ -38,8 +38,7 @@
   },
   "eslintConfig": {
     "extends": [
-      "react-app",
-      "react-app/jest"
+      "react-app"
     ]
   },
   "browserslist": {
@@ -55,6 +54,7 @@
     ]
   },
   "devDependencies": {
+    "@types/wavesurfer.js": "^6.0.3",
     "msw": "^0.49.2"
   },
   "msw": {

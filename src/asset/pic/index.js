@@ -23,6 +23,12 @@ export { default as shuffle } from "./shuffle.svg";
 export { default as volume } from "./volume.svg";
 export { default as save } from "./save.svg";
 export { default as share } from "./share.svg";
+export { default as audioPartBg } from "./audio-part-bg.svg";
+export { default as collaboButton } from "./collaboButton.svg";
+export { default as muteButton } from "./muteButton.svg";
+export { default as unMuteButton } from "./unMuteButton.svg";
+export { default as soloButton } from "./soloButton.svg";
+export { default as imgAdd } from "./imgAdd.svg";
 
 //vector (without margin)
 export {default as skipPrevVector} from './skip-prev-vector.svg'

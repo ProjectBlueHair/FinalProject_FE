@@ -8,8 +8,54 @@ export const mockAudios = [
   // "https://jeeklee-soundsample-bucket.s3.ap-northeast-2.amazonaws.com/c2ed3c76-3328-4d92-89ef-9c73409006d5-temp_7987712027676666077.wav",
   "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/vocal.m4a",
   "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/piano.wav",
-  "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/piano.wav",
-  "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/piano.wav",
-  // "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/guitar.mp3",
-  // "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/bass.wav",
+  // "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/piano.wav",
+  // "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/piano.wav",
+  "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/guitar.mp3",
+  "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/bass.wav",
+];
+export const testAudios = [
+  {
+    audioData: {
+      // nickname: "nickname",
+      // part: "vocal",
+      src: "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/vocal.m4a",
+    },
+
+    isMute: false,
+    isNewAudio: true,
+    volume: 0.5,
+  },
+  {
+    audioData: {
+      // nickname: "nickname",
+      // part: "piano",
+      src: "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/piano.wav",
+    },
+
+    isMute: false,
+    isNewAudio: true,
+    volume: 0.5,
+  },
+  {
+    audioData: {
+      // nickname: "nickname",
+      // part: "guitar",
+      src: "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/guitar.mp3",
+    },
+
+    isMute: false,
+    isNewAudio: true,
+    volume: 0.5,
+  },
+  {
+    audioData: {
+      // nickname: "nickname",
+      // part: "bass",
+      src: "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/bass.wav",
+    },
+
+    isMute: false,
+    isNewAudio: true,
+    volume: 0.5,
+  },
 ];

@@ -20,16 +20,17 @@ import {
   __playNext,
   __PlayPrevious,
 } from "../../redux/slice/mainSlice";
-import { CurrentMusic } from "../../type/PostModel";
+import { CurrentMusic } from "../../model/PostModel";
 
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 const MainAudioPlayer = () => {
   const audioPlayer = useRef<AudioPlayer>(null);
-  const { post, isPlayingMain } =
-    useAppSelector < CurrentMusic > ((state) => state.main.currentMusic);
+  const { post, isPlayingMain } = useAppSelector<CurrentMusic>(
+    (state) => state.main.currentMusic
+  );
   const dispatch = useAppDispatch();
 
-  const onListenHandler = (e : Event) => {};
+  const onListenHandler = (e: Event) => {};
   const onPlayHandler = () => {
     dispatch(__PlayerTogglePlay(true));
   };
@@ -96,6 +97,7 @@ const MainAudioPlayer = () => {
         </Flex>
 
         {/* flex row right grid [music btns, music bar, volume control] */}
+
         <AudioPlayer
           autoPlayAfterSrcChange={true}
           src={post.musicFile}
@@ -145,4 +147,189 @@ const Grid = styled.div`
   display: grid;
   grid-template-columns: 0.5fr 2fr;
   gap: var(--ec-gap2);
+
+  // audio player classes
+  .rhap_container {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    line-height: 1;
+    font-family: inherit;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    background-color: #fff;
+  }
+  .rhap_container:focus:not(:focus-visible) {
+    outline: 0;
+  }
+  .rhap_main {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    grid-template-columns: 2.5fr 1fr;
+  }
+
+  .rhap_progress-section .rhap_main-controls {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .rhap_progress-section {
+    display: flex;
+    height: 100%;
+    flex: 3 1 auto;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+  }
+  .rhap_progress-container {
+    display: flex;
+    align-items: center;
+    height: 20px;
+    flex: 1 0 100px;
+    align-self: center;
+    margin: 0 calc(10px + 1%);
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .rhap_progress-container:focus:not(:focus-visible) {
+    outline: 0;
+  }
+  .rhap_progress-bar {
+    box-sizing: border-box;
+    position: relative;
+    z-index: 0;
+    width: 100%;
+    height: 4px;
+    background-color: #dddddd;
+    border-radius: 2px;
+  }
+
+  .rhap_progress-filled {
+    height: 100%;
+    position: absolute;
+    z-index: 2;
+    background-color: #000000;
+    border-radius: 2px;
+  }
+
+  .rhap_progress-indicator {
+    box-sizing: border-box;
+    position: absolute;
+    z-index: 3;
+    width: 10px;
+    height: 10px;
+
+    margin-left: -5px;
+    top: -3px;
+
+    background: #000000;
+    border-radius: 50px;
+  }
+  .rhap_time {
+    color: #333;
+    /* font-size: 16px; */
+    font-size: 1.4rem;
+    font-weight: 400;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .rhap_controls-section {
+    width: 100%;
+    display: flex;
+    flex: 0 0 auto;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .rhap_volume-controls {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex: 0 0 auto;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .rhap_volume-button {
+    flex: 1 0 40px;
+  }
+
+  .rhap_volume-container {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    flex: 0 1 100px;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .rhap_volume-bar-area {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 14px;
+    cursor: pointer;
+  }
+  .rhap_volume-bar-area:focus:not(:focus-visible) {
+    outline: 0;
+  }
+
+  .rhap_volume-bar {
+    box-sizing: border-box;
+    position: relative;
+    width: 100%;
+    height: 4px;
+    background: #dddddd;
+    border-radius: 2px;
+  }
+
+  .rhap_volume-indicator {
+    box-sizing: border-box;
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    margin-left: -4px;
+    left: 0;
+    top: -3px;
+    background: #000;
+    opacity: 0.9;
+    border-radius: 50px;
+    cursor: pointer;
+  }
+  .rhap_volume-indicator:hover {
+    opacity: 0.9;
+  }
+
+  .rhap_volume-filled {
+    height: 100%;
+    position: absolute;
+    z-index: 99;
+    background-color: #000000;
+    border-radius: 2px;
+  }
+
+  /* Utils */
+  .rhap_button-clear {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    line-height: 0;
+  }
+  .rhap_button-clear:hover {
+    opacity: 0.9;
+    transition-duration: 0.2s;
+  }
+  .rhap_button-clear:active {
+    opacity: 0.95;
+  }
+  .rhap_button-clear:focus:not(:focus-visible) {
+    outline: 0;
+  }
 `;

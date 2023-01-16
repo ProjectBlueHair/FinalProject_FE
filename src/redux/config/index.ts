@@ -1,11 +1,15 @@
 import { AnyAction, combineReducers, configureStore } from "@reduxjs/toolkit";
-import { modalSlice } from "../slice/modalSlice";
-import main from "../slice/mainSlice";
 import { TypedUseSelectorHook, useDispatch } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
+
+import { modalSlice } from "../slice/modalSlice";
+import main from "../slice/mainSlice";
+import posting from '../slice/postingSlice'
+
 const rootReducer = combineReducers({
   modal: modalSlice.reducer,
+  posting,
   main,
 });
 export type AppState = ReturnType<typeof rootReducer>;
