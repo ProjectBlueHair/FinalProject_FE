@@ -3,6 +3,7 @@ import styled from "styled-components";
 import WaveSurfer from "wavesurfer.js";
 import Img from "../elem/Img";
 import { volumeVector, volumedown } from "../../asset/pic";
+import Emitter from "../detail/EventEmitter";
 
 const formWaveSurferOptions = (ref) => ({
   // 재생 속도
@@ -26,34 +27,96 @@ const formWaveSurferOptions = (ref) => ({
   // 렌더링 속도를 개선
   partialRender: true,
   // 각음악 부분 클릭에 대해 막음
-  interact: false,
+  // interact: false,
   // 반응형 웨이브폼 여부
   responsive: true,
 });
 
 const DetailAudio = (props) => {
-  const playPause = props.totalPlay;
-  const { url } = props.url;
+  const totalPlay = props.totalPlay;
+  const url = props.url;
+
   const wavesurfer = useRef(null);
   const waveformRef = useRef(null);
-  const [volume, setVolume] = useState(0.5);
-  const [volView, setVolView] = useState(true);
+  const [volume, setVolume] = useState(0.1);
+  const [volView, setVolView] = useState(false);
+  const [solo, setSolo] = useState(false);
 
   useEffect(() => {
     // option은 formWaveSurferOprions에 있는 값들은 가져옴
     const options = formWaveSurferOptions(waveformRef.current);
     wavesurfer.current = WaveSurfer.create(options);
     wavesurfer.current.load(url);
-    // wavesurfer.current.playPause();
+    // 웨이브 서퍼 객체안에 solo를 만들어 주고 false 값을 넣어줌
+    wavesurfer.current.solo = false;
+    // 웨이브 서퍼 구독했을때
     wavesurfer.current.on("ready", function () {
       if (wavesurfer.current) {
         wavesurfer.current.setVolume(volume);
         setVolume(volume);
       }
     });
+    // 웨이브 서퍼 플레이
+    wavesurfer.current.on("play", () => {
+      props.setTotalPlay(true);
+    });
+    // 웨브서 서퍼 중지 했을때
+    wavesurfer.current.on("pause", () => {
+      props.setTotalPlay(false);
+    });
 
-    return () => wavesurfer.current.destroy();
+    // 음악 재생 종료시 전체 실행 버튼이 중지상태 시작상태로 변경됨
+    wavesurfer.current.on("finish", () => {
+      props.setTotalPlay(false);
+    });
+
+    // wavesurfer.current.getMute() - true일땐 음소거된상태 / false일땐 음소거해제
+
+    Emitter.on("soloON", () => {
+      //   // 만약 wavesurfer.current.solo가(false)/ wavesurfer.current.getMute()가 (false)
+      if (!wavesurfer.current.solo && !wavesurfer.current.getMute()) {
+        // 위 조건 만족이 음소거상태 만듬
+        wavesurfer.current.setMute(true);
+        setVolView(true);
+        // 만약 wavesurfer.current.solo (false) / wavesurfer.current.getMute()가 (true)
+      } else if (!wavesurfer.current.solo && wavesurfer.current.getMute()) {
+        wavesurfer.current.setMute(false);
+        setVolView(false);
+      } else if (wavesurfer.current.solo) {
+        wavesurfer.current.setMute(false);
+        setVolView(false);
+      }
+    });
+    // Emitter.on("soloOFF", () => {
+    //   wavesurfer.current.solo = false;
+    //   setSolo(false);
+    //   if (!wavesurfer.current.wasMuted) {
+    //     wavesurfer.current.setMute(false);
+    //     setVolView(false);
+    //   } else {
+    //     wavesurfer.current.setMute(true);
+    //     setVolView(true);
+    //   }
+    // });
+
+    return () => {
+      wavesurfer.current.unAll();
+      wavesurfer.current.destroy();
+    };
   }, [url]);
+
+  //  전체 실행이 됩니다!!! 무조건 맞음
+  useEffect(() => {
+    // true일땐 전체 재생
+    if (totalPlay === true) {
+      wavesurfer.current.play();
+    }
+    // false일땐 전체 멈추기
+    else {
+      wavesurfer.current.pause();
+    }
+  }, [totalPlay]);
+
   // 볼륨 조절 로직
   const onVolumeChange = (e) => {
     const { target } = e;
@@ -62,27 +125,46 @@ const DetailAudio = (props) => {
     if (newVolume) {
       setVolume(newVolume);
       wavesurfer.current.setVolume(newVolume || 1);
-      setVolView(true);
+      setVolView(false);
     }
   };
-  // true일땐 전체 플레이
-  if (playPause === true) {
-    wavesurfer.current.play();
-  }
-  // false일땐 전체 멈추기
-  if (playPause === false) {
-    wavesurfer.current?.pause();
-  }
   // 음소거 버튼 클릭시 음소거 가능!
   const volumeClick = () => {
     setVolView(!volView);
   };
-  // volView 버튼 클릭시 false 상태일땐 음소거 true 일땐 음소거 해제
-  if (volView === false) {
-    wavesurfer.current?.setMute(true);
-  } else {
-    wavesurfer.current?.setMute(false);
-  }
+
+  useEffect(() => {
+    if (volView == true) {
+      wavesurfer.current.setMute(true);
+    } else {
+      wavesurfer.current.setMute(false);
+    }
+  }, [volView]);
+
+  /// 클릭시 각각의 버튼 솔로버튼 상태값
+  const soloClick = () => {
+    setSolo(!solo);
+    // 만약 wavesurfer.current.solo(false) && volView가 true 일때
+    if (!wavesurfer.current.solo) {
+      // 솔로 상태를 true로 바꿈
+      wavesurfer.current.solo = true;
+      //만약 wavesurfer.current.solo(false) && volView(false)
+    } else if (!wavesurfer.current.solo && !volView) {
+      // wavesurfer.current.solo를 true로 바꿈
+      wavesurfer.current.solo = true;
+      // 위에꺼 만족못하고 솔로값이 false일때
+    } else if (wavesurfer.current.solo) {
+      wavesurfer.current.solo = false;
+    }
+  };
+  // console.log("currnetSolo", wavesurfer.current?.solo);
+  // console.log("volview", volView);
+
+  // useEffect(() => {
+  //   // solo boolean값이 참이면 soloON 실행, 거짓이면 soloOFF
+  //   Emitter.emit(`${solo ? "soloON" : "soloOFF"}`);
+  // }, [solo]);
+
   return (
     <WaveTotal>
       <WaveLeft>
@@ -94,13 +176,15 @@ const DetailAudio = (props) => {
           <div>
             <button onClick={volumeClick}>
               {volView ? (
-                <Img wd="1.5rem" src={volumeVector} />
-              ) : (
                 <Img wd="4rem" src={volumedown} />
+              ) : (
+                <Img wd="1.5rem" src={volumeVector} />
               )}
             </button>
           </div>
-          <div>솔로</div>
+          <button onClick={soloClick} id="solobtnA">
+            {solo ? "onsolo" : "solo"}
+          </button>
           <input
             type="range"
             id="volume"

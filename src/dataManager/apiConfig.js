@@ -45,7 +45,30 @@ instanceAxios.interceptors.request.use((config) => {
   if (config === undefined) return;
   const acc = getCookies("accesstoken");
   const ref = getCookies("refreshtoken");
-  config.headers["Authorization"] = `${acc},${ref}`;
+  config.headers["AccessToken"] = `${acc}`;
+  config.headers["RefreshToken"] = `${ref}`;
   config.headers["Access-Control-Allow-Origin"] = "*";
   return config;
 });
+
+instanceAxios.interceptors.response.use(
+  (res) => res,
+  async (error) => {
+    const {
+      config,
+      response: { status },
+    } = error;
+    if (status === 401) {
+      if (error.response.data.message === "만료된 Access Token입니다.") {
+        const orginalRequest = config;
+        const RefreshToken = getCookies("refreshtoken");
+        const AccessToken = getCookies("accesstoken");
+        // const { data } = await instanceAxios.post("member/reissuance", {
+        //   AccessToken: AccessToken,
+        //   RefreshToken: RefreshToken,
+        // });
+        // console.log(data);
+      }
+    }
+  }
+);

@@ -4,7 +4,7 @@ import { AiOutlineUp, AiOutlineDown } from "react-icons/ai";
 import DetailFollow from "./DetailFollow";
 import DetailComment from "./detailcomment/DetailComment";
 
-const DetailDayAndFollow = () => {
+const DetailDayAndFollow = ({ detail }) => {
   const [upDown, setUpDown] = useState(false);
 
   const onUpDown = () => {
@@ -14,12 +14,7 @@ const DetailDayAndFollow = () => {
   return (
     <DetailLeftLine>
       <div>2023-01-11</div>
-      <div>
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nobis deserunt
-        ea laborum tempora officiis suscipit dicta necessitatibus assumenda
-        dolorem, cupiditate itaque voluptatum omnis, quo explicabo hic voluptate
-        maxime, voluptas obcaecati.
-      </div>
+      <div>{detail?.contents}</div>
       <FollowMore>
         <button onClick={onUpDown}>
           {upDown ? <AiOutlineDown /> : <AiOutlineUp />}

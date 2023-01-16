@@ -9,6 +9,22 @@ const DetailRecomment = () => {
       id: 0,
       url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsiIHX_L4Iy-eHEBImI46cxFgNGF0UuJkSIg&usqp=CAU",
     },
+    {
+      id: 1,
+      url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsiIHX_L4Iy-eHEBImI46cxFgNGF0UuJkSIg&usqp=CAU",
+    },
+    {
+      id: 2,
+      url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsiIHX_L4Iy-eHEBImI46cxFgNGF0UuJkSIg&usqp=CAU",
+    },
+    {
+      id: 3,
+      url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsiIHX_L4Iy-eHEBImI46cxFgNGF0UuJkSIg&usqp=CAU",
+    },
+    {
+      id: 4,
+      url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsiIHX_L4Iy-eHEBImI46cxFgNGF0UuJkSIg&usqp=CAU",
+    },
   ];
 
   return (
@@ -45,7 +61,7 @@ const DetailRecomment = () => {
                     />
                   );
                 } else if (imgurl.id < 4) {
-                  return <div>+</div>;
+                  return <div key={imgurl.id}>+</div>;
                 }
               })}
             </RecommentProfile>
