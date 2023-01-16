@@ -7,9 +7,9 @@ import React, {
 } from "react";
 import styled from "styled-components";
 import { useAppDispatch } from "../../redux/config";
-import { AudioInfo, Form, __addNewAudio } from "../../redux/slice/postingSlice";
+import { __addNewAudio } from "../../redux/slice/postingSlice";
+import { AudioData } from "../../model/PostingModel";
 import Flex, { StFlex } from "../elem/Flex";
-import Img from "../elem/Img";
 import PostingFormAudioControlBox from "./PostingAudioControlBox";
 import { AUDIO_BAR_HEIGHT, AUDIO_BAR_RADIUS } from "./PostingAudioBars";
 
@@ -25,26 +25,41 @@ const PostingFormAudio = () => {
     console.log("drop?");
     if (event.dataTransfer.files) {
       console.log("drop", event.dataTransfer.files);
-      const file = event.dataTransfer.files[0];
-      setFile(file);
+      // const file = event.dataTransfer.files[0];
+      // setFile(file);
+      const files = event.dataTransfer.files;
+      for (let i = 0; i < files.length; i++) {
+        setFiles((prevFiles) => prevFiles?.concat(files[i]));
+      }
     }
   }, []);
 
   const handleFileChange = useCallback(() => {
-    if (file) {
+    if (files) {
       console.log("file", file);
-      const url = URL.createObjectURL(file);
-      const newAudio: AudioInfo = {
-        nickname: "nickname",
-        part: "part",
-        src: url,
-        file : file
-      };
-      dispatch(__addNewAudio(newAudio));
+      const arr = [];
+      for (let i = 0; i < files.length; i++) {
+        const newAudio: AudioData = {
+          src: URL.createObjectURL(files[i]),
+          file: files[i],
+        };
+        arr.push(newAudio);
+      }
+
+      dispatch(__addNewAudio(arr));
+      // if (file) {
+      //   console.log("file", file);
+      //   const newAudio: AudioInfo = {
+      //     nickname: "nickname",
+      //     part: "part",
+      //     src: URL.createObjectURL(file),
+      //     file: file,
+      //   };
+      //   dispatch(__addNewAudio(newAudio));
 
       setText("드래그 앤 드랍으로 음악을 추가하세요");
     }
-  }, [file]);
+  }, [file, files]);
 
   useEffect(() => {
     handleFileChange();
@@ -53,7 +68,6 @@ const PostingFormAudio = () => {
   useEffect(() => {
     if (file) {
       //redux로 관리
-      setFiles((prevFiles) => prevFiles?.concat(file));
     }
   }, [file]);
   return (
@@ -71,7 +85,7 @@ const PostingFormAudio = () => {
       }}
     >
       <Flex type="audioBar" radius={AUDIO_BAR_RADIUS} hg={AUDIO_BAR_HEIGHT}>
-        <PostingFormAudioControlBox isNew={true} isFormAudio={true} />
+        {/* <PostingFormAudioControlBox isNew={true} isFormAudio={true} /> */}
         <Flex flex="1">
           <input
             hidden

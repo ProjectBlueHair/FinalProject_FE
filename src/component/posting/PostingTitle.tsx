@@ -1,10 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useAppSelector } from '../../redux/config'
+import {titleSelector } from '../../redux/slice/postingSlice'
 
 const PostingTitle = () => {
+
+  const title = useAppSelector(titleSelector)
+  const defaultTitle = 'Your Music Title'
   return (
     <Title>
-      title
+      {!title ? defaultTitle : title}
     </Title>
   )
 }

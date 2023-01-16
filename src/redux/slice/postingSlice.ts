@@ -1,74 +1,67 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { App } from "aws-sdk/clients/opsworks";
 import { testAudios } from "../../component/main/MockResource";
 import { AppState } from "../config";
+import {
+  ProgressControl,
+  Audio,
+  Form,
+  AudioData,
+  CollaboAudio,
+} from "../../model/PostingModel";
+import { instanceAxios } from "../../dataManager/apiConfig";
 
-export interface ProgressControl {
-  isPlaying: boolean;
-  seekTo: number;
-}
-export interface AudioInfo {
-  nickname: string;
-  part: string;
-  src: string;
-  file : File
-}
-export interface Audio {
-  audioInfo: AudioInfo;
-  isMute: boolean;
-  isNewAudio: boolean;
-  isSolo: boolean;
-  volume: number;
-}
-
-export interface Form {
-  contents: string;
-  postImg: string
-  title: string;
-}
-export interface CollaboRequest { 
-  contents : string, 
-  musicPartList : string [],
-  audios : File[]
-}
+export const audiosSelector = (state: AppState) => state.posting.audios;
+export const audioControlSelector = (state: AppState) =>
+  state.posting.progressControl;
+export const titleSelector = (state: AppState) => state.posting.title;
+//todo: 대표곡 받는 부분 어떻게 할 것인지 정해야함
+export const hasAudioSelector = (state: AppState) => state.posting.hasAudio;
+export const collaboAudioSelector = (state: AppState) =>
+  state.posting.collaboAudios;
 export interface PostingState {
-  //   paging: Paging;
-  form: Form;
+  title: "";
+  hasAudio: boolean;
   audios: Audio[];
   progressControl: ProgressControl;
+  newAudio: Audio;
+  collaboAudios: CollaboAudio[];
 }
-export interface Paging {
-  isNew: boolean;
-  isEdit: boolean;
-  isCollabo: boolean;
-}
-export const audiosSelector = (state: AppState) => state.posting.audios;
-export const audioControl = (state: AppState) => state.posting.progressControl;
-
 export const postingSlice = createSlice({
   name: "posting",
   initialState: {
-    form: {},
+    title: "",
+    hasAudio: false,
     audios: testAudios,
     progressControl: {},
+    newAudio: {
+      audioData: {},
+      isMute: false,
+      isNewAudio: true,
+      volume: 0.5,
+      isSolo: false,
+      part: "",
+    },
+    collaboAudios: [] as CollaboAudio[],
   } as PostingState,
   reducers: {
     __addNewAudio: (state, { payload }) => {
-      state.audios = state.audios.concat({
-        audioInfo: payload,
-        isMute: false,
-        isNewAudio: true,
-        volume: 0.5,
-        isSolo: false,
+      const arr: Audio[] = [];
+      const arr2: CollaboAudio[] = [];
+      payload.map((audioData: AudioData) => {
+        arr.push({ ...state.newAudio, audioData: audioData });
+        arr2.push({ file: audioData.file, part: "" });
       });
+      state.audios = state.audios.concat(arr);
+      state.collaboAudios = state.collaboAudios.concat(arr2);
+    },
+    __typeTitle: (state, { payload }) => {
+      state.title = payload;
     },
     __togglePlay: (state, { payload }) => {
-      console.log("toggle play", payload);
-
       state.progressControl.isPlaying = payload;
     },
     __seekTo: (state, { payload }) => {
-      console.log("seek to", payload);
       state.progressControl.seekTo = payload;
     },
     __setMute: (state, { payload }) => {
@@ -76,7 +69,6 @@ export const postingSlice = createSlice({
       state.audios[payload].isMute = !state.audios[payload].isMute;
     },
     __setSolo: (state, { payload }) => {
-      console.log("setSolo to", payload);
       const arr = [...state.audios];
       const soloIndex = payload;
       //start solo
@@ -104,6 +96,12 @@ export const postingSlice = createSlice({
   },
 });
 
+export const uploadPost = async (data: Form) => {
+  return await instanceAxios.post(`/post`,data);
+};
+export const collaboRequest = async (data : any, postId: string | number) => {
+  return await instanceAxios.post(`/post/${postId}/collabo`, data);
+};
 export const {
   __addNewAudio,
   __togglePlay,
@@ -111,5 +109,6 @@ export const {
   __setMute,
   __setSolo,
   __setVolume,
+  __typeTitle,
 } = postingSlice.actions;
 export default postingSlice.reducer;

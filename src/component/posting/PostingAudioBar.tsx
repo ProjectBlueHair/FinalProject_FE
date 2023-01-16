@@ -1,11 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
-import {
-  Audio,
-  audioControl,
-  ProgressControl,
-} from "../../redux/slice/postingSlice";
+import React, { useEffect, useRef } from "react";
+import { audioControlSelector } from "../../redux/slice/postingSlice";
+import { Audio, ProgressControl } from "../../model/PostingModel";
 import WaveSurfer from "wavesurfer.js";
-import Flex from "../elem/Flex";
 import { useAppSelector } from "../../redux/config";
 
 const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
@@ -41,15 +37,15 @@ const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
   const wavesurfer = useRef<WaveSurfer | null>(null);
   const waveformRef = useRef<HTMLDivElement>(null);
 
-  const playControl = useAppSelector(audioControl);
+  const playControl = useAppSelector(audioControlSelector);
 
   useEffect(() => {
     const options = formWaveSurferOptions(
       waveformRef.current as HTMLDivElement
     );
     wavesurfer.current = WaveSurfer.create(options);
-    console.log("props.audioInfo.src", props.audioInfo.src);
-    wavesurfer.current.load(props.audioInfo.src);
+    console.log("props.audioInfo.src", props.audioData.src);
+    wavesurfer.current.load(props.audioData.src);
     wavesurfer.current.on("ready", function () {
       if (wavesurfer.current) {
         wavesurfer.current.setVolume(props.volume);
@@ -57,14 +53,13 @@ const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
     });
 
     return () => wavesurfer.current?.destroy();
-  }, [props.audioInfo.src]);
+  }, [props.audioData.src]);
 
   useEffect(() => {
     wavesurfer.current?.setVolume(props.volume);
   }, [props.volume]);
 
   useEffect(() => {
-    console.log("playcontrol ispaying");
     playControl.isPlaying
       ? wavesurfer.current?.play()
       : wavesurfer.current?.pause();
@@ -72,7 +67,6 @@ const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
 
   useEffect(() => {
     if (playControl.seekTo) {
-      console.log("playControl.seekTo", props.index, playControl.seekTo);
       wavesurfer.current?.setCurrentTime(playControl.seekTo);
     }
   }, [playControl.seekTo]);

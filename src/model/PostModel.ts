@@ -1,5 +1,4 @@
 
-  
   export interface Member {
     nickname: string;
     musicPartList: string[];

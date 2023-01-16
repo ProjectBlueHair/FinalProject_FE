@@ -1,4 +1,3 @@
-import { Part } from "aws-sdk/clients/s3";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import styled from "styled-components";
 import {
@@ -7,9 +6,8 @@ import {
   soloButton,
   unMuteButton,
 } from "../../asset/pic";
-import { useAppDispatch, useAppSelector } from "../../redux/config";
+import { useAppDispatch } from "../../redux/config";
 import {
-  AudioInfo,
   __setMute,
   __setSolo,
   __setVolume,
@@ -55,7 +53,6 @@ const PostingAudioControlBox: React.FC<{
   };
 
   useEffect(() => {
-    console.log("volume ", props.volume);
     setVolume(props.volume || 0.5);
     // props.volume === 0.01 ? 
   }, [props.volume]);

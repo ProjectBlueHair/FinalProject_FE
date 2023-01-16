@@ -22,7 +22,7 @@ const PostingPage = () => {
   const COLLABOPAGE = PATH.collabo.split("/")[1] === CURRENT_PATH;
 
   return (
-    <Flex direction="column" justify="flex-start" hg="100vh">
+    <Flex  direction="column" justify="flex-start" hg="100vh">
       <Header />
       <AudioBarsBackground gap={AUDIO_BAR_GAP}>
         <PostingTitle />
@@ -30,8 +30,10 @@ const PostingPage = () => {
         <PostingAudioBars />
         <PostingFormAudio />
       </AudioBarsBackground>
+      <Flex pd="4rem 4rem 6rem" >
       {POSTPAGE && <PostingFormNew />}
       {COLLABOPAGE && <PostingFormCollabo />}
+      </Flex>
     </Flex>
   );
 };

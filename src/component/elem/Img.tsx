@@ -1,8 +1,35 @@
 import React from "react";
-import styled, { css } from "styled-components";
+import styled, { css, StyledComponent } from "styled-components";
+interface ImgProps {
+  wd?: string;
+  hg?: string;
+  mhg?: string;
+  pd?: string;
+  mg?: string | number;
+  overFlow?: string;
+  bg?: string;
+  shadow?: string;
+  radius?: string;
+  border?: string;
+  borderBottom?: string;
+  borderTop?: string;
+  borderRight?: string;
+  borderLeft?: string;
+  type?: string;
+  z?:string | number;
+  cursor?:string
+  id?:string;
+  src?:any;
+  onClick?:any
+  key?: string | number
+  children?: React.ReactNode;
 
-function Img(props) {
-  const IMG = {
+}
+interface ImgWrapper {
+  [key: string]: StyledComponent<"img", any, ImgProps, never> | StyledComponent<"div", any, ImgProps, never> ;
+}
+const Img: React.FC<ImgProps> = (props)=> {
+  const IMG :ImgWrapper = {
     circle: Circle,
     shadowCircle: ShadowCircle,
     shadowProfile: ShadowProfile,
@@ -17,13 +44,15 @@ function Img(props) {
 }
 
 export default Img;
-const StImg = styled.img`
+const StImg = styled.img<ImgProps>`
   width: ${({ wd }) => wd || "none"};
   height: ${({ hg }) => hg || "none"};
   box-shadow: ${({ shadow }) => shadow || "none"};
   min-height: ${({ mhg }) => mhg || "none"};
   margin: ${({ mg }) => mg || "0"};
   z-index: ${({ z }) => z || "none"};
+  border-radius: ${({ radius }) => radius || "none"};
+
   cursor: ${({ cursor }) => cursor || "default"};
 `;
 const Circle = styled(StImg)`
@@ -53,7 +82,7 @@ const IconSmall = styled(StImg)`
     cursor: pointer;
   }
 `;
-const ProfileCount = styled.div`
+const ProfileCount = styled.div<ImgProps>`
   width: ${({ wd }) => wd || "3rem"};
   height: ${({ hg }) => hg || "3rem"};
   box-shadow: ${({ shadow }) => shadow || "0px 2px 10px rgba(0, 0, 0, 0.26)"};
