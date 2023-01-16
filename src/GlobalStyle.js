@@ -18,6 +18,7 @@ const GlobalStyle = createGlobalStyle`
 
     --ec-secondary-filter : invert(62%) sepia(7%) saturate(28%) hue-rotate(315deg) brightness(91%) contrast(79%);
 
+
     --color-yellow: #F8D706;
     --color-gray: #B2B2B2;
     --color-primary: #0095F6;

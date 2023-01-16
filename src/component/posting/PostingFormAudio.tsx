@@ -6,16 +6,19 @@ import React, {
   useState,
 } from "react";
 import styled from "styled-components";
+import { useAppDispatch } from "../../redux/config";
+import { AudioInfo, Form, __addNewAudio } from "../../redux/slice/postingSlice";
 import Flex, { StFlex } from "../elem/Flex";
 import Img from "../elem/Img";
 import PostingFormAudioControlBox from "./PostingAudioControlBox";
+import { AUDIO_BAR_HEIGHT, AUDIO_BAR_RADIUS } from "./PostingAudioBars";
 
 const PostingFormAudio = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [files, setFiles] = useState<File[]>([]);
   const [text, setText] = useState("드래그 앤 드랍으로 음악을 추가하세요");
-
+  const dispatch = useAppDispatch();
   const handleDrop = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
@@ -31,7 +34,15 @@ const PostingFormAudio = () => {
     if (file) {
       console.log("file", file);
       const url = URL.createObjectURL(file);
-      setText(file.name);
+      const newAudio: AudioInfo = {
+        nickname: "nickname",
+        part: "part",
+        src: url,
+        file : file
+      };
+      dispatch(__addNewAudio(newAudio));
+
+      setText("드래그 앤 드랍으로 음악을 추가하세요");
     }
   }, [file]);
 
@@ -55,14 +66,13 @@ const PostingFormAudio = () => {
       }}
       onDragLeave={(event: React.DragEvent<HTMLDivElement>) => {
         // event.preventDefault()
-
         console.log("bye");
         setText("드래그 앤 드랍으로 음악을 추가하세요");
       }}
     >
-      <Flex type="audioBar">
-        <PostingFormAudioControlBox isNew={true} />
-        <Flex flex="1" wd="none">
+      <Flex type="audioBar" radius={AUDIO_BAR_RADIUS} hg={AUDIO_BAR_HEIGHT}>
+        <PostingFormAudioControlBox isNew={true} isFormAudio={true} />
+        <Flex flex="1">
           <input
             hidden
             ref={fileInputRef}

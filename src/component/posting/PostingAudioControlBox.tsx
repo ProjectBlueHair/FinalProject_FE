@@ -1,11 +1,24 @@
 import { Part } from "aws-sdk/clients/s3";
-import React, { useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import styled from "styled-components";
-import { muteButton, soloButton } from "../../asset/pic";
+import {
+  collaboButton,
+  muteButton,
+  soloButton,
+  unMuteButton,
+} from "../../asset/pic";
+import { useAppDispatch, useAppSelector } from "../../redux/config";
+import {
+  AudioInfo,
+  __setMute,
+  __setSolo,
+  __setVolume,
+} from "../../redux/slice/postingSlice";
 import Flex from "../elem/Flex";
 import Img from "../elem/Img";
 import { StInput } from "../elem/Input";
 import Span from "../elem/Span";
+import { AUDIO_BAR_RADIUS } from "./PostingAudioBars";
 export interface Props {
   fs: string;
   wd: string;
@@ -18,18 +31,41 @@ export const part: Props = {
   hg: "1.8rem",
   radius: "10px",
 };
-const PostingAudioControlBox: React.FC<{ isNew: boolean }> = (props) => {
+
+const PostingAudioControlBox: React.FC<{
+  isMute?: boolean;
+  isSolo?: boolean;
+  volume?: number;
+  isNew: boolean;
+  index?: number;
+  isFormAudio?: boolean;
+}> = (props) => {
   const BOX_NICK_FS = "1.4rem";
   const BOX_ICON_WD = "2.2rem";
-
+  const dispatch = useAppDispatch();
   const [value, setValue] = useState("");
+  const [volume, setVolume] = useState(0.5);
+  const onVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVolume = +e.target.value;
 
+    if (newVolume) {
+      setVolume(newVolume);
+      dispatch(__setVolume({ index: props.index, volume: newVolume }));
+    }
+  };
+
+  useEffect(() => {
+    console.log("volume ", props.volume);
+    setVolume(props.volume || 0.5);
+    // props.volume === 0.01 ? 
+  }, [props.volume]);
+  
   return (
     <Flex
-      radius="5rem"
+      radius={AUDIO_BAR_RADIUS}
       pd="1rem 2rem"
       bg="var(--ec-main-color)"
-      wd="none"
+      flex="0 0 20rem"
       hg="100%"
       direction="column"
       gap="0.5rem"
@@ -40,6 +76,7 @@ const PostingAudioControlBox: React.FC<{ isNew: boolean }> = (props) => {
             {...part}
             value={value}
             onChange={(e) => setValue(e.target.value)}
+            placeholder="part"
           />
         ) : (
           <PartDiv {...part}>Bass</PartDiv>
@@ -48,10 +85,34 @@ const PostingAudioControlBox: React.FC<{ isNew: boolean }> = (props) => {
           nickname
         </Span>
       </Flex>
-      <Flex gap="1rem">
-        <Img wd={BOX_ICON_WD} src={muteButton} />
-        <Img wd={BOX_ICON_WD} src={soloButton} />
-      </Flex>
+      {props.isFormAudio ? null : (
+        <Flex align="center" gap="1rem">
+          <Img
+            onClick={() => dispatch(__setMute(props.index))}
+            wd={BOX_ICON_WD}
+            src={props.isMute ? muteButton : unMuteButton}
+          />
+          <Img
+            onClick={() => dispatch(__setSolo(props.index))}
+            wd={BOX_ICON_WD}
+            src={props.isSolo ? soloButton : collaboButton}
+          />
+          <input
+            style={{ width: "9rem" }}
+            type="range"
+            id="volume"
+            name="volume"
+            // waveSurfer recognize value of `0` same as `1`
+            //  so we need to set some zero-ish value for silence
+            min="0.01"
+            max="0.985"
+            step=".025"
+            onChange={onVolumeChange}
+            // defaultValue={volume}
+            value={volume}
+          />
+        </Flex>
+      )}
     </Flex>
   );
 };
@@ -69,7 +130,6 @@ const PartInput = styled(StInput).attrs({ maxLength: 6 })<Props>`
     color: var(--ec-secondary-text);
     font-weight: 300;
     font-size: ${({ fs }) => fs};
-    color: white;
   }
 `;
 const PartDiv = styled(Flex)<Props>`

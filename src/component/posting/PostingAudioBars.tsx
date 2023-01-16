@@ -12,24 +12,28 @@ import { useAppSelector } from "../../redux/config";
 import { MainState } from "../../redux/slice/mainSlice";
 import {
   Audio,
+  audioControl,
   audiosSelector,
   PostingState,
 } from "../../redux/slice/postingSlice";
+import PostingAudioControlBox from "./PostingAudioControlBox";
+import { AUDIO_BAR_GAP } from "../../page/PostingPage";
+export const AUDIO_BAR_RADIUS = '4rem'
+export const AUDIO_BAR_HEIGHT = '8rem'
 
-const musics = [
-  {
-    id: 0,
-    url: "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/vocal.m4a",
-  },
-];
 const PostingAudioBars = () => {
-  const audios  = useAppSelector(audiosSelector);
+  const audios = useAppSelector(audiosSelector);
+  const progressControl = useAppSelector(audioControl);
 
   return (
-    <Flex direction="column">
-      {audios.map((audio) => (
-        // <PostingAudioBar />
-        <div></div>
+    <Flex direction="column" gap={AUDIO_BAR_GAP}>
+      {audios.map((audio, index) => (
+        <Flex type="audioBar"  hg={AUDIO_BAR_HEIGHT} radius={AUDIO_BAR_RADIUS}>
+          <PostingAudioControlBox isNew={audio.isNewAudio} index={index} {...audio}/>
+          <Flex type="audioBarRight">
+            <PostingAudioBar {...audio} {...progressControl} index={index} />
+          </Flex>
+        </Flex>
       ))}
     </Flex>
   );

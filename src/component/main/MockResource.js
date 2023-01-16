@@ -13,3 +13,49 @@ export const mockAudios = [
   "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/guitar.mp3",
   "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/bass.wav",
 ];
+export const testAudios = [
+  {
+    audioInfo: {
+      nickname: "nickname",
+      part: "vocal",
+      src: "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/vocal.m4a",
+    },
+
+    isMute: false,
+    isNewAudio: true,
+    volume: 0.5,
+  },
+  {
+    audioInfo: {
+      nickname: "nickname",
+      part: "piano",
+      src: "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/piano.wav",
+    },
+
+    isMute: false,
+    isNewAudio: true,
+    volume: 0.5,
+  },
+  {
+    audioInfo: {
+      nickname: "nickname",
+      part: "guitar",
+      src: "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/guitar.mp3",
+    },
+
+    isMute: false,
+    isNewAudio: true,
+    volume: 0.5,
+  },
+  {
+    audioInfo: {
+      nickname: "nickname",
+      part: "bass",
+      src: "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/bass.wav",
+    },
+
+    isMute: false,
+    isNewAudio: true,
+    volume: 0.5,
+  },
+];

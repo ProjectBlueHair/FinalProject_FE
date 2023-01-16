@@ -52,6 +52,7 @@ const MainPost: React.FC<{ post: Post }> = (props) => {
               : playButtonSecond
           }
         />
+     
         <Flex flex="1" direction="column" align="flex-start" gap="1rem">
           <div>{props.post.title}</div>
           {/* grid */}
