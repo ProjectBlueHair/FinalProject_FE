@@ -15,6 +15,7 @@
     "@types/styled-components": "^5.1.26",
     "aws-sdk": "^2.1290.0",
     "axios": "^1.2.2",
+    "eventemitter3": "^5.0.0",
     "react": "^18.2.0",
     "react-cookie": "^4.1.1",
     "react-dom": "^18.2.0",

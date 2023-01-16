@@ -4,9 +4,12 @@ import main from "../slice/mainSlice";
 import { TypedUseSelectorHook, useDispatch } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
+import detail from "../slice/detailSlice";
+
 const rootReducer = combineReducers({
   modal: modalSlice.reducer,
   main,
+  detail,
 });
 export type AppState = ReturnType<typeof rootReducer>;
 
