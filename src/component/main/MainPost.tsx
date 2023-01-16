@@ -8,8 +8,9 @@ import {
   __playDifferentSrc,
   __MainTogglePlay,
 } from "../../redux/slice/mainSlice";
-import { CurrentMusic, Post } from "../../type/PostModel";
+import { CurrentMusic, Post } from "../../model/PostModel";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
+import { useNavigate } from "react-router-dom";
 const MainPost: React.FC<{ post: Post }> = (props) => {
   const profile_margin = "0 0 0 -1rem";
   const dispatch = useAppDispatch();
@@ -21,6 +22,7 @@ const MainPost: React.FC<{ post: Post }> = (props) => {
       ? dispatch(__MainTogglePlay(!currentMusic.isPlayingPlayer))
       : dispatch(__playDifferentSrc(props.post.id));
   };
+  const navigate = useNavigate();
   return (
     // <GridWrapper>
     <Flex
@@ -30,7 +32,12 @@ const MainPost: React.FC<{ post: Post }> = (props) => {
       align="flex-start"
       gap="1.5rem"
     >
-      <Img hg="20rem" type="radius" src={props.post.postImg} />
+      <Img
+        onClick={() => navigate(`/detail/${props.post.id}`)}
+        hg="20rem"
+        type="radius"
+        src={props.post.postImg}
+      />
       {/* play box */}
       <Flex direction="row" justify="flex-start" gap="1rem" pd="0 1rem">
         <Img
@@ -45,6 +52,7 @@ const MainPost: React.FC<{ post: Post }> = (props) => {
               : playButtonSecond
           }
         />
+     
         <Flex flex="1" direction="column" align="flex-start" gap="1rem">
           <div>{props.post.title}</div>
           {/* grid */}

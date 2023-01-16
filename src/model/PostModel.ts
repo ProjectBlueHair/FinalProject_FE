@@ -1,6 +1,5 @@
 
-  
-  interface Member {
+  export interface Member {
     nickname: string;
     musicPartList: string[];
     profileImg: string;

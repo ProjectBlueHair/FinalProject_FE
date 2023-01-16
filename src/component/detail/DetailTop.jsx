@@ -115,7 +115,7 @@ const PlayTop = styled.div`
   }
 `;
 
-const PlayBackIMG = styled.div`
+export const PlayBackIMG = styled.div`
   width: 100%;
   background-image: linear-gradient(
       rgba(240, 240, 240, 0.7),
