@@ -32,7 +32,7 @@ export const postingSlice = createSlice({
   initialState: {
     title: "",
     hasAudio: false,
-    audios: testAudios,
+    audios: [] as Audio[],
     progressControl: {},
     newAudio: {
       audioData: {},
@@ -95,12 +95,14 @@ export const postingSlice = createSlice({
     },
   },
 });
+const config = { headers: { "Content-Type": "multipart/form-data" } };
+// const config = { headers: { "Content-Type": "multipart/form-data" } };
 
 export const uploadPost = async (data: Form) => {
-  return await instanceAxios.post(`/post`,data);
+  return await instanceAxios.post(`/post`, data);
 };
-export const collaboRequest = async (data : any, postId: string | number) => {
-  return await instanceAxios.post(`/post/${postId}/collabo`, data);
+export const collaboRequest = async (data: any, postId: string | number) => {
+  return await instanceAxios.post(`/post/${postId}/collabo`, data, config);
 };
 export const {
   __addNewAudio,

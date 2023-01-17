@@ -35,7 +35,7 @@
 // export default client;
 
 import axios from "axios";
-import { getCookies } from "./cookie";
+import { getCookies, setCookie } from "./cookie";
 
 const serverURL = process.env.REACT_APP_SERVER;
 
@@ -60,15 +60,24 @@ instanceAxios.interceptors.response.use(
     } = error;
     if (status === 401) {
       if (error.response.data.message === "만료된 Access Token입니다.") {
-        const orginalRequest = config;
-        const RefreshToken = getCookies("refreshtoken");
-        const AccessToken = getCookies("accesstoken");
-        // const { data } = await instanceAxios.post("member/reissuance", {
-        //   AccessToken: AccessToken,
-        //   RefreshToken: RefreshToken,
-        // });
-        // console.log(data);
+        const originalRequest = config;
+
+        const { headers } = await instanceAxios.post("member/reissuance");
+        const { accesstoken: newAccessToken, refreshtoken: newRefreshToken } =
+          headers;
+
+        setCookie("accesstoken", newAccessToken, {
+          path: "/",
+        });
+        setCookie("refreshtoken", newRefreshToken, {
+          path: "/",
+        });
+
+        originalRequest.headers.AccessToken = `${newAccessToken}`;
+        originalRequest.headers.RefreshToken = `${newRefreshToken}`;
+        return instanceAxios(originalRequest);
       }
     }
+    return Promise.reject(error);
   }
 );

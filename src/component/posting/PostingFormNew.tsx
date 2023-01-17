@@ -30,6 +30,7 @@ const PostingFormNew = () => {
   const IMG_RADIUS = "13px";
   const title = useAppSelector(titleSelector);
   const collaboAudios = useAppSelector(collaboAudioSelector);
+  console.log("collaboAudios", collaboAudios);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -42,8 +43,21 @@ const PostingFormNew = () => {
 
     //콜라보요청
     const formData = new FormData();
-    formData.append("jsonData", JSON.stringify({ contents: "콜라보해요" }));
+    const jsonToString = JSON.stringify({
+      contents: "콜라보해요",
+      musicPartList: ["string"],
+    });
+    formData.append(
+      "jsonData",
+      new Blob([jsonToString], { type: "application/json" })
+    );
+
+    formData.append(
+      "jsonData",
+      JSON.stringify({ contents: "콜라보해요", musicPartList: ["string"] })
+    );
     for (let i = 0; i < collaboAudios.length; i++) {
+      console.log("file -> ", collaboAudios[i].file);
       formData.append("musicFile", collaboAudios[i].file);
     }
 
@@ -54,19 +68,20 @@ const PostingFormNew = () => {
             return data.Location;
           })
           .then((data) => {
-            uploadPost({ ...form, postImg: data }).then((data) => {
-              console.log("data1", data);
-            });
+            return uploadPost({ ...form, postImg: data });
           })
-          // .then((data) => {
-          //   console.log("data2", data);
-          //   // collaboRequest(formData, 1);
-          // })
+          .then((data) => {
+            console.log("data2", data);
+            return collaboRequest(formData, 2);
+          }).then((data)=>{
+            console.log("data3", data);
+
+          })
           .catch((err) => console.log(err))
       : uploadPost(form)
           .then((data) => {
             console.log("data3", data);
-            // collaboRequest(formData, 1);
+            return collaboRequest(formData, 1);
           })
           .then((data) => {
             console.log("data4", data);
