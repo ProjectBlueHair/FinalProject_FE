@@ -7,24 +7,10 @@ import DetailDayAndFollow from "./DetailDayAndFollow";
 import DetailRecomment from "./DetailRecomment";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import {
-  __getDetail,
-  __getDetailCollabo,
-  __getDetailMusic,
-} from "../../redux/slice/detailSlice";
+import { __getDetail, __getDetailMusic } from "../../redux/slice/detailSlice";
 import AudioPlayer, { RHAP_UI } from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 
-const url = [
-  {
-    id: 0,
-    url: "https://www.mfiles.co.uk/mp3-downloads/brahms-st-anthony-chorale-theme-two-pianos.mp3",
-  },
-  {
-    id: 1,
-    url: "https://staudio315610.s3.eu-west-1.amazonaws.com/Coins.mp3",
-  },
-];
 const DetailTop = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -35,18 +21,16 @@ const DetailTop = () => {
 
   useEffect(() => {
     dispatch(__getDetail(id));
-    dispatch(__getDetailCollabo(id));
     dispatch(__getDetailMusic(id));
   }, []);
-
-  const detail = useSelector((state) => state.detail.detail);
-  const detailColabo = useSelector((state) => state.detail.collabo);
+  // 뷰숫자, 좋아요 숫자, 제목, 내용, 배경이미지파일 (+ 작성일 추가)
+  const detail = useSelector((state) => state.detail.detail.data);
+  // 각 페이지 음악파일(props작업 끝)
   const detailMusic = useSelector((state) => state.detail.music.data);
 
-  // console.log(detailMusic);
   return (
     <PlayTop>
-      <PlayBackIMG src="detailVie">
+      <PlayBackIMG imgs={detail?.postImg}>
         <PlayHeader>
           <h1 style={{ marginTop: "3rem" }}>{detail?.title}</h1>
           <TotalPlayDiv>
@@ -83,19 +67,21 @@ const DetailTop = () => {
           </TotalPlayDiv>
           <AudioPlay>
             {detailMusic &&
-              detailMusic?.map((u) => (
+              detailMusic?.map((u, index) => (
                 <DetailAudio
-                  key={u.id}
+                  key={index}
                   totalPlay={totalPlay}
                   setTotalPlay={setTotalPlay}
                   url={u.musicFile}
+                  part={u.musicPart}
+                  userName={u.nickname}
                   id={u.id}
                 />
               ))}
           </AudioPlay>
         </PlayHeader>
       </PlayBackIMG>
-      <DetailViewLikeShare />
+      <DetailViewLikeShare detail={detail} />
       <DetailBottom>
         <DetailDayAndFollow detail={detail} />
         <DetailRecomment />
@@ -121,9 +107,10 @@ export const PlayBackIMG = styled.div`
       rgba(240, 240, 240, 0.7),
       rgba(255, 255, 255, 1)
     ),
-    url("http://cdn.edujin.co.kr/news/photo/202008/33539_61666_1423.jpg");
+    url(${(props) => props.imgs});
   background-repeat: no-repeat;
   background-size: cover;
+  background-position: 50%, 50%;
   z-index: -1;
 `;
 
@@ -171,3 +158,5 @@ const DetailBottom = styled.div`
   display: flex;
   justify-content: flex-start;
 `;
+
+// style={{ backgroundImage: `url(${detail.postImg})` }}

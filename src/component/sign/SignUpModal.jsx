@@ -183,7 +183,6 @@ const SignUpModal = ({ onClose }) => {
 
   // 회원가입 버튼 클릭시 실행
   const postSignUp = async (post) => {
-    console.log(post);
     try {
       const { data } = await instanceAxios.post("member/signup", post);
       if (data.customHttpStatus === 2000) {
@@ -196,7 +195,6 @@ const SignUpModal = ({ onClose }) => {
   // 회원가입 버튼 클릭시 실행
   const onSignUpBtn = () => {
     uploadFiles(s3image).then((res) => {
-      console.log("res", res);
       const profileImg = res.Location;
       postSignUp({
         nickname,

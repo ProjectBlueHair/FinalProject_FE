@@ -29,12 +29,13 @@ export { default as muteButton } from "./muteButton.svg";
 export { default as unMuteButton } from "./unMuteButton.svg";
 export { default as soloButton } from "./soloButton.svg";
 export { default as imgAdd } from "./imgAdd.svg";
+export { default as collaboPlus } from "./Collabo.svg";
+export { default as report } from "./report.svg";
 
 //vector (without margin)
-export {default as skipPrevVector} from './skip-prev-vector.svg'
-export {default as playVector} from './play-vector.svg'
-export {default as skipNextVector} from './skip-next-vector.svg'
-export {default as volumeVector} from './volume-vector.svg'
-export {default as mute} from './mute.svg'
-export {default as pause} from './pause.svg'
-
+export { default as skipPrevVector } from "./skip-prev-vector.svg";
+export { default as playVector } from "./play-vector.svg";
+export { default as skipNextVector } from "./skip-next-vector.svg";
+export { default as volumeVector } from "./volume-vector.svg";
+export { default as mute } from "./mute.svg";
+export { default as pause } from "./pause.svg";

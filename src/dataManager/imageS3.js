@@ -8,7 +8,7 @@ const SK = process.env.REACT_APP_SK;
 
 export const uploadFiles = (file) => {
   if (file === undefined) {
-    file = { Location: "" };
+    file = { Location: null };
     return Promise.resolve(file);
   } else {
     const KEY = uuid();

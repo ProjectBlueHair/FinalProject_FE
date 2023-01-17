@@ -39,6 +39,17 @@ import { getCookies, setCookie } from "./cookie";
 
 const serverURL = process.env.REACT_APP_SERVER;
 
+let isTokenRefreshing = false;
+let refreshSubscribers = [];
+
+const onTokenRefreshed = (accessToken) => {
+  refreshSubscribers.map((callback) => callback(accessToken));
+};
+
+const addRefreshSubscriber = (callback) => {
+  refreshSubscribers.push(callback);
+};
+
 export const instanceAxios = axios.create({ baseURL: serverURL });
 
 instanceAxios.interceptors.request.use((config) => {
@@ -58,10 +69,10 @@ instanceAxios.interceptors.response.use(
       config,
       response: { status },
     } = error;
+    const originalRequest = config;
     if (status === 401) {
-      if (error.response.data.message === "만료된 Access Token입니다.") {
-        const originalRequest = config;
-
+      if (!isTokenRefreshing) {
+        isTokenRefreshing = true;
         const { headers } = await instanceAxios.post("member/reissuance");
         const { accesstoken: newAccessToken, refreshtoken: newRefreshToken } =
           headers;
@@ -72,11 +83,19 @@ instanceAxios.interceptors.response.use(
         setCookie("refreshtoken", newRefreshToken, {
           path: "/",
         });
+        isTokenRefreshing = false;
 
-        originalRequest.headers.AccessToken = `${newAccessToken}`;
         originalRequest.headers.RefreshToken = `${newRefreshToken}`;
-        return instanceAxios(originalRequest);
+
+        onTokenRefreshed(newAccessToken);
       }
+      const retryOriginalRequest = new Promise((resolve) => {
+        addRefreshSubscriber((accessToken) => {
+          originalRequest.headers.AccessToken = `${accessToken}`;
+          resolve(instanceAxios(originalRequest));
+        });
+      });
+      return retryOriginalRequest;
     }
     return Promise.reject(error);
   }

@@ -11,7 +11,7 @@ export const __getDetail = createAsyncThunk(
   "get/Detail",
   async (payload, thunkAPI) => {
     try {
-      const { data } = await instanceAxios.get(`post/${payload}`);
+      const { data } = await instanceAxios.get(`post/details/${payload}`);
       return thunkAPI.fulfillWithValue(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -37,6 +37,28 @@ export const __getDetailMusic = createAsyncThunk(
     try {
       const { data } = await instanceAxios.get(`post/${payload}/music`);
       return thunkAPI.fulfillWithValue(data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const __putDetailFollow = createAsyncThunk(
+  "put/DetailFollow",
+  async (payload, thunkAPI) => {
+    try {
+      await instanceAxios.put("member/follow", payload);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const __postLike = createAsyncThunk(
+  "post/DetailPostLike",
+  async (payload, thunkAPI) => {
+    try {
+      await instanceAxios.post(`post/like/${payload}`);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
