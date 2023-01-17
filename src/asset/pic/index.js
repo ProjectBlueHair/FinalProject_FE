@@ -29,6 +29,8 @@ export { default as muteButton } from "./muteButton.svg";
 export { default as unMuteButton } from "./unMuteButton.svg";
 export { default as soloButton } from "./soloButton.svg";
 export { default as imgAdd } from "./imgAdd.svg";
+export { default as alarmDot } from "./alarmDot.svg";
+export { default as arrowRight } from "./arrowRight.svg";
 
 //vector (without margin)
 export {default as skipPrevVector} from './skip-prev-vector.svg'

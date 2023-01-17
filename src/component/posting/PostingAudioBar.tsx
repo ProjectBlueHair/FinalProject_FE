@@ -7,6 +7,7 @@ import { useAppSelector } from "../../redux/config";
 const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
   props
 ) => {
+
   const formWaveSurferOptions = (ref: HTMLDivElement) => ({
     // 재생 속도
     audioRate: 1,

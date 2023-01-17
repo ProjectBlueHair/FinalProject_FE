@@ -19,6 +19,7 @@ export const titleSelector = (state: AppState) => state.posting.title;
 export const hasAudioSelector = (state: AppState) => state.posting.hasAudio;
 export const collaboAudioSelector = (state: AppState) =>
   state.posting.collaboAudios;
+
 export interface PostingState {
   title: "";
   hasAudio: boolean;
@@ -32,8 +33,9 @@ export const postingSlice = createSlice({
   initialState: {
     title: "",
     hasAudio: false,
+    // audios: testAudios,
     audios: [] as Audio[],
-    progressControl: {},
+    progressControl: { isPlaying: false, seekTo: 0, src: undefined },
     newAudio: {
       audioData: {},
       isMute: false,
@@ -46,11 +48,13 @@ export const postingSlice = createSlice({
   } as PostingState,
   reducers: {
     __addNewAudio: (state, { payload }) => {
+      state.progressControl.src = state.progressControl.src || payload[0]?.src;
       const arr: Audio[] = [];
       const arr2: CollaboAudio[] = [];
       payload.map((audioData: AudioData) => {
         arr.push({ ...state.newAudio, audioData: audioData });
-        arr2.push({ file: audioData.file, part: "" });
+        // arr2.push({ file: audioData.file, part: "" });
+        arr2.push({ src: audioData.src, part: "" });
       });
       state.audios = state.audios.concat(arr);
       state.collaboAudios = state.collaboAudios.concat(arr2);
@@ -96,13 +100,14 @@ export const postingSlice = createSlice({
   },
 });
 const config = { headers: { "Content-Type": "multipart/form-data" } };
-// const config = { headers: { "Content-Type": "multipart/form-data" } };
-
 export const uploadPost = async (data: Form) => {
   return await instanceAxios.post(`/post`, data);
 };
 export const collaboRequest = async (data: any, postId: string | number) => {
   return await instanceAxios.post(`/post/${postId}/collabo`, data, config);
+};
+export const collaboApprove = async (collaboId: string | number) => {
+  return await instanceAxios.post(`/collabo/${collaboId}`);
 };
 export const {
   __addNewAudio,
