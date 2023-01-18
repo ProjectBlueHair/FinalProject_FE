@@ -25,9 +25,10 @@ interface DivProps {
   borderRight?: string;
   borderLeft?: string;
   type?: string;
-  id?:string;
+  id?: string;
   children?: React.ReactNode;
-  ref?:MutableRefObject<any>
+  ref?: MutableRefObject<any>;
+  cursor?: string;
 }
 interface FlexContainer {
   [key: string]: StyledComponent<"div", any, DivProps, never>;
@@ -36,8 +37,8 @@ interface FlexContainer {
 const Flex: React.FC<DivProps> = (props) => {
   const FLEX_CONTAINER: FlexContainer = {
     card: FlexCard,
-    audioBar : AudioBarWrapper,
-    audioBarRight : AudioBarRightWrapper
+    audioBar: AudioBarWrapper,
+    audioBarRight: AudioBarRightWrapper,
   };
 
   const Flex = props.type ? FLEX_CONTAINER[props.type] : StFlex;
@@ -67,6 +68,7 @@ export const StFlex = styled.div<DivProps>`
   border-bottom: ${({ borderBottom }) => borderBottom || ""};
   border-top: ${({ borderTop }) => borderTop || ""};
   border-right: ${({ borderRight }) => borderRight || ""};
+  cursor: ${({ cursor }) => cursor || ""};
 `;
 
 const FlexCard = styled(StFlex)`
@@ -80,4 +82,4 @@ const AudioBarWrapper = styled(StFlex)`
 `;
 const AudioBarRightWrapper = styled(StFlex)`
   flex: 1;
-`
+`;

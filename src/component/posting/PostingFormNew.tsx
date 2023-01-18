@@ -3,8 +3,9 @@ import styled from "styled-components";
 import { imgAdd } from "../../asset/pic";
 import useInput from "../../hook/useInput";
 import { useAppDispatch } from "../../redux/config";
-import { Form, AudioData } from "../../model/PostingModel";
+import { Form } from "../../model/PostingModel";
 import {
+  collaboApprove,
   collaboAudioSelector,
   collaboRequest,
   uploadPost,
@@ -12,10 +13,10 @@ import {
 } from "../../redux/slice/postingSlice";
 import Flex, { StFlex } from "../elem/Flex";
 import Img from "../elem/Img";
-import Span from "../elem/Span";
 import { useAppSelector } from "../../redux/config";
 import { titleSelector } from "../../redux/slice/postingSlice";
 import { uploadFiles } from "../../dataManager/imageS3";
+import axios from "axios";
 const PostingFormNew = () => {
   const descriptionInput = useInput("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -30,50 +31,62 @@ const PostingFormNew = () => {
   const IMG_RADIUS = "13px";
   const title = useAppSelector(titleSelector);
   const collaboAudios = useAppSelector(collaboAudioSelector);
+  console.log("collaboAudios", collaboAudios);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     //게시글 작성 요청
     const form: Form = {
       contents: descriptionInput.value,
       title: title,
-      postImg: "",
+      postImg: null,
     };
 
     //콜라보요청
     const formData = new FormData();
-    formData.append("jsonData", JSON.stringify({ contents: "콜라보해요" }));
-    for (let i = 0; i < collaboAudios.length; i++) {
-      formData.append("musicFile", collaboAudios[i].file);
+    const jsonToString = JSON.stringify({
+      contents: "lets collabo",
+      musicPartList: ["string"],
+    });
+    formData.append(
+      "jsonData",
+      new Blob([jsonToString], { type: "application/json" })
+    );
+
+    const blobs = await Promise.all(
+      collaboAudios.map(async (collabo) => {
+        const response = await axios.get(collabo.src, { responseType: "blob" });
+        return response.data;
+      })
+    );
+
+    for (let i = 0; i < blobs.length; i++) {
+      console.log("file -> ", blobs[i]);
+      formData.append("musicFile", blobs[i]);
     }
 
-    image.file
-      ? uploadFiles(image.file)
-          .then((data) => {
-            console.log("data location", data.Location);
-            return data.Location;
-          })
-          .then((data) => {
-            uploadPost({ ...form, postImg: data }).then((data) => {
-              console.log("data1", data);
-            });
-          })
-          // .then((data) => {
-          //   console.log("data2", data);
-          //   // collaboRequest(formData, 1);
-          // })
-          .catch((err) => console.log(err))
-      : uploadPost(form)
-          .then((data) => {
-            console.log("data3", data);
-            // collaboRequest(formData, 1);
-          })
-          .then((data) => {
-            console.log("data4", data);
-          })
-          .catch((err) => console.log(err));
+    uploadFiles(image.file)
+      .then((data) => {
+        console.log("data location", data);
+        return data === null || undefined ? null : data.Location;
+      })
+      .then((data) => {
+        console.log("data1", data);
 
-    //1. 이미지 s3에 업로드 2. 게시글 업로드 3. 콜라보리퀘스트 post 4. navigatef to main
+        return uploadPost({ ...form, postImg: data });
+      })
+      .then(({ data }) => {
+        console.log("data2", data.data);
+        return collaboRequest(formData, data.data);
+      })
+      .then(({ data }) => {
+        console.log("data3", data);
+        return collaboApprove(data.data);
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => console.log(err));
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

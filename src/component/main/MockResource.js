@@ -18,7 +18,9 @@ export const testAudios = [
     audioData: {
       // nickname: "nickname",
       // part: "vocal",
-      src: "https://mybucket-mcho.s3.ap-northeast-2.amazonaws.com/music-test/vocal.m4a",
+      src: "https://jeeklee-soundsample-bucket.s3.ap-northeast-2.amazonaws.com/842efb34-a375-4068-bf4b-6ec263174500-temp_2359126634202261122.wav"
+      // src: "https://jeeklee-soundsample-bucket.s3.ap-northeast-2.amazonaws.com/16a29e0c-9b3e-4215-806c-054b7836e3ca-temp_7910055864750638613.wav"
+      ,
     },
 
     isMute: false,

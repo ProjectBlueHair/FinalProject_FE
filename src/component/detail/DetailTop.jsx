@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { __getDetail, __getDetailMusic } from "../../redux/slice/detailSlice";
 import AudioPlayer, { RHAP_UI } from "react-h5-audio-player";
-import "react-h5-audio-player/lib/styles.css";
+// import "react-h5-audio-player/lib/styles.css";
 
 const DetailTop = () => {
   const dispatch = useDispatch();

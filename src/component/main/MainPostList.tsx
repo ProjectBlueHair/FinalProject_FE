@@ -41,7 +41,7 @@ const MainPostList = () => {
   return (
     <ScrollContainer ref={scrollArea}>
       <PostListContainer>
-        {posts && posts.length && posts?.map((post) => (
+        {posts?.map((post) => (
           <MainPost key={post.id} post={post} />
         ))}
         <div data-name="target" ref={target}></div>
@@ -57,6 +57,22 @@ const PostListContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   gap: 1.5rem;
+
+  @media (max-width: 1100px){
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+  @media (max-width: 900px){
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  @media (max-width: 700px){
+    grid-template-columns: 1fr 1fr ;
+  }
+  @media (max-width: 500px){
+    grid-template-columns: 1fr ;
+    padding: 0 5rem;
+
+  }
+ 
 `;
 const ScrollContainer = styled.div`
   display: flex;
