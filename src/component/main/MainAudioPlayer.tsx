@@ -99,7 +99,8 @@ const MainAudioPlayer = () => {
         {/* flex row right grid [music btns, music bar, volume control] */}
 
         <AudioPlayer
-          autoPlayAfterSrcChange={true}
+          crossOrigin="anonymous"
+          autoPlayAfterSrcChange={false}
           src={post.musicFile}
           onPlay={onPlayHandler}
           onPause={onPauseHandler}
@@ -121,17 +122,36 @@ const MainAudioPlayer = () => {
           ]}
           // customAdditionalControls={[]}
           customIcons={{
-            play: <Img type="icon" wd={iconSize} src={playPrimary} />,
-            previous: <Img type="icon" wd={iconSize} src={skipPrev} />,
-            next: <Img type="icon" wd={iconSize} src={skipNext} />,
+            play: <Img className="playButton" type="icon" wd={iconSize} src={playPrimary} />,
+            previous: (
+              <Img
+                className="subIcon"
+                type="icon"
+                wd={iconSize}
+                src={skipPrev}
+              />
+            ),
+            next: (
+              <Img
+                className="subIcon"
+                type="icon"
+                wd={iconSize}
+                src={skipNext}
+              />
+            ),
             volume: <Img type="icon" wd={iconSize} src={volume} />,
             volumeMute: <Img type="icon" wd={iconSize} src={mute} />,
             pause: <Img type="icon" wd={iconSize} src={pause} />,
           }}
           customControlsSection={[
             <div>
-              <Img type="icon" wd={iconSize} src={shuffle} />
-              <Img type="icon" wd={iconSize} src={repeat} />
+              <Img
+                className="subIcon"
+                type="icon"
+                wd={iconSize}
+                src={shuffle}
+              />
+              <Img className="subIcon" wd={iconSize} src={repeat} />
             </div>,
             RHAP_UI.VOLUME,
           ]}
@@ -147,6 +167,19 @@ const Grid = styled.div`
   display: grid;
   grid-template-columns: 0.5fr 2fr;
   gap: var(--ec-gap2);
+  @media (max-width: 880px) {
+    .subIcon {
+      display: none;
+    }
+    .playButton {
+      margin-right: 2rem;
+    }
+    .rhap_time{
+      display: none;
+    }
+ 
+   
+  }
 
   // audio player classes
   .rhap_container {

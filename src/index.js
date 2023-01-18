@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 
 import { worker } from "./mocks/worker";
 import ModalContainer from "./component/modal/ModalContainer";
+import TypeModalContainer from "./modal/TypeModalContainer";
 
 if (process.env.NODE_ENV === "development") {
   // worker.start({ onUnhandledRequest: "bypass" });
@@ -16,5 +17,6 @@ root.render(
   <Provider store={store}>
     <App />
     <ModalContainer />
+    <TypeModalContainer/>
   </Provider>
 );

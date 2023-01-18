@@ -58,6 +58,18 @@
   background-color: var(--ec-main-color);
   border-radius: 2px;
 }
+.rhap_progress-bar-show-download {
+  /* background-color: rgba(221, 221, 221, 0.5); */
+}
+
+.rhap_download-progress {
+  height: 100%;
+  position: absolute;
+  z-index: 1;
+  background-color: #dddddd;
+  border-radius: 2px;
+}
+
 
 .rhap_progress-indicator {
   box-sizing: border-box;
