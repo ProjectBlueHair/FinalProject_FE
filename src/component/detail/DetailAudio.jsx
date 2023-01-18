@@ -27,7 +27,7 @@ const formWaveSurferOptions = (ref) => ({
   // 렌더링 속도를 개선
   partialRender: true,
   // 각음악 부분 클릭에 대해 막음
-  // interact: false,
+  interact: false,
   // 반응형 웨이브폼 여부
   responsive: true,
 });
@@ -35,10 +35,11 @@ const formWaveSurferOptions = (ref) => ({
 const DetailAudio = (props) => {
   const totalPlay = props.totalPlay;
   const url = props.url;
-
+  const part = props.part;
+  const userName = props.userName;
   const wavesurfer = useRef(null);
   const waveformRef = useRef(null);
-  const [volume, setVolume] = useState(0.1);
+  const [volume, setVolume] = useState(0.5);
   const [volView, setVolView] = useState(false);
   const [solo, setSolo] = useState(false);
 
@@ -169,8 +170,8 @@ const DetailAudio = (props) => {
     <WaveTotal>
       <WaveLeft>
         <WaveCreate>
-          <div>악기 종류</div>
-          <span>작곡가</span>
+          <div>{part}</div>
+          <span>{userName}</span>
         </WaveCreate>
         <WaveSound>
           <div>
