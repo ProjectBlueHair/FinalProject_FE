@@ -1,3 +1,4 @@
+import React from "react";
 import Flex from "../elem/Flex";
 import PostingAudioBar from "./PostingAudioBar";
 import { useAppSelector } from "../../redux/config";

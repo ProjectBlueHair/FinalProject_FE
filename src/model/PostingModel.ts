@@ -5,7 +5,6 @@ export interface ProgressControl {
 }
 export interface AudioData {
   src: string;
-  // file: File;
 }
 export interface Audio {
   audioData: AudioData;
@@ -20,9 +19,11 @@ export interface Form {
   postImg: string | null;
   title: string;
 }
-
+export interface CollaboForm {
+  contents: string;
+  musicPartList: string[];
+}
 export interface CollaboAudio {
-  // file: File;
   src: string;
   part: string;
 }

@@ -3,7 +3,7 @@ import TypeModalWrapper from "../TypeModalWrapper";
 import TextButton from "../../component/elem/TextButton";
 import Flex, { StFlex } from "../../component/elem/Flex";
 import styled from "styled-components";
-import AlarmDot from "../../component/elem/AlarmDot";
+import AlarmDot from "../../asset/icon/AlarmDot";
 import Span from "../../component/elem/Span";
 import Img from "../../component/elem/Img";
 import { arrowRight } from "../../asset/pic";

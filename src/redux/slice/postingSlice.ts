@@ -48,6 +48,7 @@ export const postingSlice = createSlice({
   } as PostingState,
   reducers: {
     __addNewAudio: (state, { payload }) => {
+      console.log('__addNewAudio payload',payload)
       state.progressControl.src = state.progressControl.src || payload[0]?.src;
       const arr: Audio[] = [];
       const arr2: CollaboAudio[] = [];

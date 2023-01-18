@@ -5,7 +5,7 @@ import Header from "../component/header/Header";
 import PostingAudioBars from "../component/posting/PostingAudioBars";
 import PostingFormAudio from "../component/posting/PostingFormAudio";
 import PostingFormCollabo from "../component/posting/PostingFormCollabo";
-import PostingFormNew from "../component/posting/PostingFormNew";
+import PostingForm from "../component/posting/PostingForm";
 import PostingTitle from "../component/posting/PostingTitle";
 import PostingTotalPlay from "../component/posting/PostingTotalPlay";
 import { useAppSelector } from "../redux/config";
@@ -31,8 +31,8 @@ const PostingPage = () => {
         <PostingAudioBars />
         <PostingFormAudio />
       </AudioBarsBackground>
-      <Flex pd="4rem 4rem 6rem" >
-      {POSTPAGE && <PostingFormNew />}
+      <Flex mg="4rem 0" >
+      {POSTPAGE && <PostingForm isEdit={EDITPAGE} />}
       {COLLABOPAGE && <PostingFormCollabo />}
       </Flex>
     </Flex>
@@ -46,7 +46,7 @@ const AudioBarsBackground = styled.div<{ gap: string }>`
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  padding: 2rem 4rem;
+  padding: 3.5rem 4rem 2rem;
   gap: ${({gap})=> gap};
   background-image: linear-gradient(
       rgba(240, 240, 240, 0.5),

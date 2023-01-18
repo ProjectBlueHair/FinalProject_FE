@@ -38,7 +38,6 @@ const PostingFormAudio = () => {
       for (let i = 0; i < files.length; i++) {
         const newAudio: AudioData = {
           src: URL.createObjectURL(files[i]),
-          // file: files[i],
         };
         arr.push(newAudio);
       }

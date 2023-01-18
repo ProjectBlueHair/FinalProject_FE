@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { imgAdd } from "../../asset/pic";
 import useInput from "../../hook/useInput";
 import { useAppDispatch } from "../../redux/config";
-import { Form } from "../../model/PostingModel";
+import { CollaboForm, Form } from "../../model/PostingModel";
 import {
   collaboApprove,
   collaboAudioSelector,
@@ -17,74 +17,87 @@ import { useAppSelector } from "../../redux/config";
 import { titleSelector } from "../../redux/slice/postingSlice";
 import { uploadFiles } from "../../dataManager/imageS3";
 import axios from "axios";
-const PostingFormNew = () => {
-  const descriptionInput = useInput("");
-  const inputRef = useRef<HTMLInputElement>(null);
-  const dispatch = useAppDispatch();
+import Input from "../elem/Input";
+import Span from "../elem/Span";
+import TextArea from "../elem/Textarea";
+import TextButton from "../elem/TextButton";
+import CollaboSquare from "../../asset/icon/CollaboSquare";
+import { blob } from "stream/consumers";
+export const formStyle = {
+  border: "1px solid rgba(0,0,0,0.1)",
+  borderRadius: "10px",
+  width: "50rem",
+  height: "none",
+  maxHeight: "none",
+  fontSize: "1.4rem",
+  padding: "6px 12px",
+  marginTop: "1rem",
+};
+const IMG_BOX_RADIUS = "15px";
+const IMG_RADIUS = "13px";
 
+const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
   const [image, setImage] = useState<{ file: File | null; url: string }>({
     file: null,
     url: "",
   });
+  const inputRef = useRef<HTMLInputElement>(null);
+  const descriptionInput = useInput("");
+  const collaboInput = useInput("");
 
-  const IMG_BOX_RADIUS = "15px";
-  const IMG_RADIUS = "13px";
   const title = useAppSelector(titleSelector);
   const collaboAudios = useAppSelector(collaboAudioSelector);
-  console.log("collaboAudios", collaboAudios);
+  const dispatch = useAppDispatch();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    //게시글 작성 요청
-    const form: Form = {
-      contents: descriptionInput.value,
-      title: title,
-      postImg: null,
-    };
-
-    //콜라보요청
     const formData = new FormData();
-    const jsonToString = JSON.stringify({
-      contents: "lets collabo",
+
+    const collaboForm: CollaboForm = {
+      contents: "string",
       musicPartList: ["string"],
-    });
+    };
     formData.append(
       "jsonData",
-      new Blob([jsonToString], { type: "application/json" })
+      new Blob([JSON.stringify(collaboForm)], { type: "application/json" })
     );
 
     const blobs = await Promise.all(
       collaboAudios.map(async (collabo) => {
-        const response = await axios.get(collabo.src, { responseType: "blob" });
+        const response = await axios.get(collabo.src, {
+          responseType: "blob",
+        });
         return response.data;
       })
     );
-
+    console.log("collabo Request blobs", blobs);
     for (let i = 0; i < blobs.length; i++) {
-      console.log("file -> ", blobs[i]);
       formData.append("musicFile", blobs[i]);
     }
-
     uploadFiles(image.file)
       .then((data) => {
-        console.log("data location", data);
+        console.log("aws s3 upload response", data);
         return data === null || undefined ? null : data.Location;
       })
       .then((data) => {
-        console.log("data1", data);
-
-        return uploadPost({ ...form, postImg: data });
+        const form: Form = {
+          contents: descriptionInput.value,
+          title: title,
+          postImg: data,
+        };
+        console.log("form payload for  ", form);
+        return uploadPost(form);
       })
       .then(({ data }) => {
-        console.log("data2", data.data);
+        console.log("response from post uploading", data);
         return collaboRequest(formData, data.data);
       })
       .then(({ data }) => {
-        console.log("data3", data);
+        console.log("response from collabo request", data.data);
         return collaboApprove(data.data);
       })
       .then((data) => {
-        console.log(data);
+        console.log("collabo approve response", data);
       })
       .catch((err) => console.log(err));
   };
@@ -97,9 +110,10 @@ const PostingFormNew = () => {
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(__typeTitle(e.target.value));
   };
+
   return (
     <form onSubmit={handleSubmit}>
-      <Flex direction="row">
+      <Flex gap="2.5rem" align="flex-start">
         <ImageUploadBox
           radius={IMG_BOX_RADIUS}
           onClick={() => {
@@ -127,27 +141,53 @@ const PostingFormNew = () => {
             onChange={handleFileChange}
           />
         </ImageUploadBox>
-        <Flex direction="column" gap="2rem">
+        <Flex wd="none" direction="column" gap="2rem" align="flex-start">
           <label>
-            <div>제목</div>
-            <input
+            <Flex justify="flex-start" gap="0.5rem">
+              <Span fc="var(--ec-main-color)">*</Span>제목
+            </Flex>
+            <Input
+              style={formStyle}
               value={title}
-              placeholder="Type here"
+              placeholder="your music title"
               onChange={handleTitleChange}
             />
           </label>
           <label>
             <div>설명</div>
-            <input {...descriptionInput} />
+            <TextArea
+              style={{ ...formStyle, height: "8rem" }}
+              placeholder={"describe your music\n# for hash tag (eg. #rock)"}
+              {...descriptionInput}
+            />
           </label>
-          <button type="submit">Submit</button>
+          <label>
+            <Flex justify="flex-start" gap="0.5rem">
+              <CollaboSquare wd="1.5rem"></CollaboSquare>콜라보 요청
+            </Flex>
+            <TextArea
+              style={{ ...formStyle, height: "8rem" }}
+              placeholder={"request to collaborators"}
+              {...collaboInput}
+            />
+          </label>
+          <Flex justify="flex-end">
+            <TextButton
+              btnType="basic"
+              disabled={title === "" ? true : false}
+              type="submit"
+            >
+              올리기
+            </TextButton>
+            <button type="button"></button>
+          </Flex>
         </Flex>
       </Flex>
     </form>
   );
 };
 
-export default PostingFormNew;
+export default PostingForm;
 const ImageUploadBox = styled(StFlex)<{ radius: string }>`
   cursor: pointer;
   width: 15rem;

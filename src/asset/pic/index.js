@@ -31,6 +31,7 @@ export { default as soloButton } from "./soloButton.svg";
 export { default as imgAdd } from "./imgAdd.svg";
 export { default as alarmDot } from "./alarmDot.svg";
 export { default as arrowRight } from "./arrowRight.svg";
+export { default as collaboIcon } from "./collaboIcon.svg";
 
 //vector (without margin)
 export {default as skipPrevVector} from './skip-prev-vector.svg'
