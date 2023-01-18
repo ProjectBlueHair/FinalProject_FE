@@ -14,23 +14,38 @@ import {
 import styled from "styled-components";
 import Input from "../elem/Input";
 import useModal from "../modal/useModal";
+import { useNavigate } from "react-router-dom";
+import useTypeModal from "../../modal/hooks/useTypeModal";
+import AlarmDot from "../../asset/icon/AlarmDot";
+import { PATH } from "../../Router";
 
 const Header = () => {
+  const navigate = useNavigate();
   const iconSize = "4rem";
   // 토글창 상태관리
   const [isOpen, setIsOpen] = useState(false);
   const { openModal } = useModal();
+  const { $openModal, $closeModal } = useTypeModal();
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+
   // 모달창(로그인)
   const onClickSignBtn = () => {
     openModal({ type: "signIn" });
   };
+
+  const [isClicked, setIsClicked] = useState({ alarm: false });
+
   return (
     <Grid>
       <Flex justify="space-between">
-        <Img cursor="pointer" wd="20rem" src={mainLogo} />
+        <Img
+          onClick={() => navigate(PATH.main)}
+          cursor="pointer"
+          wd="20rem"
+          src={mainLogo}
+        />
         <Img type="icon" wd={iconSize} src={follows} />
       </Flex>
 
@@ -48,8 +63,26 @@ const Header = () => {
 
       <Flex justify="flex-end" gap="1.5rem">
         <Img type="icon" wd={iconSize} src={message} />
-        <Img type="icon" wd={iconSize} src={notifications} />
-        <Img type="icon" wd={iconSize} src={upload} />
+        <Flex direction="row" wd="none">
+          <Img
+            onClick={() => {
+              !isClicked.alarm
+                ? $openModal({ type: "alarm" })
+                : $closeModal({ type: "alarm" });
+              setIsClicked({ ...isClicked, alarm: !isClicked.alarm });
+            }}
+            type="icon"
+            wd={iconSize}
+            src={notifications}
+          />
+          <AlarmDot mg="-2rem 0 0 -1.5rem" />
+        </Flex>
+        <Img
+          onClick={() => navigate("/post")}
+          type="icon"
+          wd={iconSize}
+          src={upload}
+        />
         <Img type="icon" wd={iconSize} src={settings} />
         <Img
           type="icon"

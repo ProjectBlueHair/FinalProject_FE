@@ -1,12 +1,10 @@
 export interface ProgressControl {
   isPlaying: boolean;
   seekTo: number;
+  src: string | undefined;
 }
 export interface AudioData {
-  // nickname: string;
-  // part: string;
   src: string;
-  file: File;
 }
 export interface Audio {
   audioData: AudioData;
@@ -16,18 +14,16 @@ export interface Audio {
   volume: number;
   part: string;
 }
-
 export interface Form {
   contents: string;
-  postImg: string;
+  postImg: string | null;
   title: string;
 }
-// export interface CollaboForm {
-//   // musicPartList: string[];
-//   // audios: File[];
-//   audios: CollaboFormAudio[];
-// }
+export interface CollaboForm {
+  contents: string;
+  musicPartList: string[];
+}
 export interface CollaboAudio {
-  file: File;
+  src: string;
   part: string;
 }

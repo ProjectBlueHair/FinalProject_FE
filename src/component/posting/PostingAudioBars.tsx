@@ -1,3 +1,4 @@
+import React from "react";
 import Flex from "../elem/Flex";
 import PostingAudioBar from "./PostingAudioBar";
 import { useAppSelector } from "../../redux/config";
@@ -17,7 +18,7 @@ const PostingAudioBars = () => {
   return (
     <Flex direction="column" gap={AUDIO_BAR_GAP}>
       {audios.map((audio, index) => (
-        <Flex type="audioBar" hg={AUDIO_BAR_HEIGHT} radius={AUDIO_BAR_RADIUS}>
+        <Flex key={index} type="audioBar" hg={AUDIO_BAR_HEIGHT} radius={AUDIO_BAR_RADIUS}>
           <PostingAudioControlBox
             isNew={audio.isNewAudio}
             index={index}

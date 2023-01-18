@@ -23,6 +23,7 @@ interface ImgProps {
   onClick?:any
   key?: string | number
   children?: React.ReactNode;
+  className?: string
 
 }
 interface ImgWrapper {
