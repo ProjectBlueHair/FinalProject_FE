@@ -5,13 +5,14 @@ const initialState = {
   detail: [],
   collabo: [],
   music: [],
+  userInfo: [],
 };
 
 export const __getDetail = createAsyncThunk(
   "get/Detail",
   async (payload, thunkAPI) => {
     try {
-      const { data } = await instanceAxios.get(`post/${payload}`);
+      const { data } = await instanceAxios.get(`post/details/${payload}`);
       return thunkAPI.fulfillWithValue(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -43,6 +44,40 @@ export const __getDetailMusic = createAsyncThunk(
   }
 );
 
+export const __getUserInfo = createAsyncThunk(
+  "get/UserInfo",
+  async (payload, thunkAPI) => {
+    try {
+      const { data } = await instanceAxios.get(`member/info`);
+      return thunkAPI.fulfillWithValue(data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const __putDetailFollow = createAsyncThunk(
+  "put/DetailFollow",
+  async (payload, thunkAPI) => {
+    try {
+      await instanceAxios.put("member/follow", payload);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const __postLike = createAsyncThunk(
+  "post/DetailPostLike",
+  async (payload, thunkAPI) => {
+    try {
+      await instanceAxios.post(`post/like/${payload}`);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 export const detailSlice = createSlice({
   name: "detail",
   initialState,
@@ -55,6 +90,9 @@ export const detailSlice = createSlice({
     },
     [__getDetailMusic.fulfilled]: (state, action) => {
       state.music = action.payload;
+    },
+    [__getUserInfo.fulfilled]: (state, action) => {
+      state.userInfo = action.payload;
     },
   },
 });

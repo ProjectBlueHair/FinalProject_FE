@@ -3,17 +3,20 @@ import { TypedUseSelectorHook, useDispatch } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
 import detail from "../slice/detailSlice";
-
+import comment from "../slice/comment";
 import { modalSlice } from "../slice/modalSlice";
 import main from "../slice/mainSlice";
 import posting from "../slice/postingSlice";
 import { typeModalSlice } from "../../modal/typeModalSlice";
+
 const rootReducer = combineReducers({
   modal: modalSlice.reducer,
   posting,
   main,
   detail,
+  comment,
   typeModal: typeModalSlice.reducer,
+
 });
 export type AppState = ReturnType<typeof rootReducer>;
 
