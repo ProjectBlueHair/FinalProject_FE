@@ -5,6 +5,7 @@ const initialState = {
   detail: [],
   collabo: [],
   music: [],
+  userInfo: [],
 };
 
 export const __getDetail = createAsyncThunk(
@@ -36,6 +37,18 @@ export const __getDetailMusic = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const { data } = await instanceAxios.get(`post/${payload}/music`);
+      return thunkAPI.fulfillWithValue(data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const __getUserInfo = createAsyncThunk(
+  "get/UserInfo",
+  async (payload, thunkAPI) => {
+    try {
+      const { data } = await instanceAxios.get(`member/info`);
       return thunkAPI.fulfillWithValue(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -77,6 +90,9 @@ export const detailSlice = createSlice({
     },
     [__getDetailMusic.fulfilled]: (state, action) => {
       state.music = action.payload;
+    },
+    [__getUserInfo.fulfilled]: (state, action) => {
+      state.userInfo = action.payload;
     },
   },
 });

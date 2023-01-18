@@ -1,16 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import {
   __getDetailCollabo,
+  __getUserInfo,
   __putDetailFollow,
 } from "../../redux/slice/detailSlice";
 
 const DetailFollow = ({ detailCollabo }) => {
   const dispatch = useDispatch();
   const { id } = useParams();
-  console.log(detailCollabo);
+
+  useEffect(() => {
+    dispatch(__getUserInfo());
+  }, []);
+  const userInformation = useSelector((state) => state.detail.userInfo.data);
+
   const FollowClick = async (fol) => {
     const follow = {
       isFollowed: fol.isFollowed,
@@ -38,9 +45,13 @@ const DetailFollow = ({ detailCollabo }) => {
               </div>
             </FollowMiddle>
             <FollowBtn>
-              <button onClick={() => FollowClick(collabo)}>
-                {collabo?.isFollowed ? "팔로우 취소" : "팔로우"}
-              </button>
+              {userInformation === undefined ? (
+                ""
+              ) : (
+                <button onClick={() => FollowClick(collabo)}>
+                  {collabo?.isFollowed ? "팔로우 취소" : "팔로우"}
+                </button>
+              )}
             </FollowBtn>
           </FollowTop>
           <FollowTitle>연주 설명부분</FollowTitle>
