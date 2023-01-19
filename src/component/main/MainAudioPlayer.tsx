@@ -66,7 +66,7 @@ const MainAudioPlayer = () => {
             radius="10px"
             wd="6rem"
             hg="5rem"
-            src={post.postImg}
+            src={post?.postImg}
           />
           {/* flexColumn [title, profile] */}
           <Flex
@@ -75,20 +75,20 @@ const MainAudioPlayer = () => {
             gap="var(--ec-gap1)"
             wd="none"
           >
-            <div>{post.title}</div>
+            <div>{post?.title}</div>
             {/* flexRow [profile img, nickname]*/}
             <Flex justify="flex-start" gap="var(--ec-gap2)" wd="none">
               <Img
                 type="shadowProfile"
                 wd="3rem"
                 src={
-                  post.mainProfileList &&
+                  post?.mainProfileList &&
                   post.mainProfileList.length &&
                   post.mainProfileList[0].profileImg
                 }
               />
               <div>
-                {post.mainProfileList &&
+                {post?.mainProfileList &&
                   post.mainProfileList.length &&
                   post.mainProfileList[0].nickname}
               </div>
@@ -101,7 +101,7 @@ const MainAudioPlayer = () => {
         <AudioPlayer
           crossOrigin="anonymous"
           autoPlayAfterSrcChange={false}
-          src={post.musicFile}
+          src={post?.musicFile}
           onPlay={onPlayHandler}
           onPause={onPauseHandler}
           onClickPrevious={onClickPrevious}
