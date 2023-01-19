@@ -20,8 +20,3 @@
     isPlayingMain: boolean;
     isPlayingPlayer: boolean;
   }
-  export interface Response { 
-    customHttpStatus : number | string
-    msg : string
-    data : Post []
-  }

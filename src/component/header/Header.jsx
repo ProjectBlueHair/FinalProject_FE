@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Flex from "../elem/Flex";
 import Img from "../elem/Img";
 import {
@@ -20,6 +20,14 @@ import AlarmDot from "../../asset/icon/AlarmDot";
 import { PATH } from "../../Router";
 import { getCookies, removeCookies } from "../../dataManager/cookie";
 import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
+import { useAppDispatch, useAppSelector } from "../../redux/config";
+import { __getUserInfo } from "../../redux/slice/detailSlice";
+import {
+  userErrorSelector,
+  userSelector,
+  __getGeneralUserInfo,
+} from "../../redux/slice/userSlice";
+import Span from "../elem/Span";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -29,6 +37,7 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { openModal } = useModal();
   const { $openModal, $closeModal } = useTypeModal();
+  
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -48,6 +57,15 @@ const Header = () => {
   const acToken = getCookies("accesstoken");
   useToggleOutSideClick(Sign, setIsOpen);
   const [isClicked, setIsClicked] = useState({ alarm: false });
+
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(userSelector);
+  const error = useAppSelector(userErrorSelector);
+  // if(error) alert(error)
+  console.log("user", user);
+  useEffect(() => {
+    dispatch(__getGeneralUserInfo());
+  }, [acToken,]);
 
   return (
     <Grid>
@@ -96,17 +114,30 @@ const Header = () => {
           src={upload}
         />
         <Img type="icon" wd={iconSize} src={settings} />
-        <Img
-          type="icon"
-          wd={iconSize}
-          src={account}
-          onClick={() => toggleMenu()}
-        />
+        {user.profileImg ? (
+          <Img
+            cursor="pointer"
+            onClick={() => toggleMenu()}
+            type="shadowProfile"
+            src={user.profileImg}
+            hg='3.5rem'
+          />
+        ) : (
+          <Img
+            type="icon"
+            wd={iconSize}
+            src={account}
+            onClick={() => toggleMenu()}
+          />
+        )}
       </Flex>
       {acToken ? (
         <>
           {isOpen ? (
             <ToggleDiv ref={Sign}>
+              <Span fc="var(--ec-main-color)" fw="700">
+                {user.nickname}
+              </Span>
               <button onClick={onClickLogOut}>로그아웃</button>
               <button>마이페이지</button>
               <button>계정설정</button>

@@ -24,7 +24,7 @@ import Span from "../elem/Span";
 import TextArea from "../elem/Textarea";
 import TextButton from "../elem/TextButton";
 import CollaboSquare from "../../asset/icon/CollaboSquare";
-import { res } from "../../model/ResponseModel";
+import { Response } from "../../model/ResponseModel";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "../../Router";
 export const formStyle = {
@@ -51,7 +51,7 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
 
   const title = useAppSelector(titleSelector);
   const collaboRequestData = useAppSelector(collaboRequestDataSelector);
-  console.log("collaboRequestData", collaboRequestData.audios);
+  console.log("collaboRequestData", collaboRequestData);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -72,7 +72,7 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
     const formData = new FormData();
 
     const collaboForm: CollaboForm = {
-      contents: descriptionInput.value,
+      contents: 'collabo request from original author',
       musicPartList: collaboRequestData.audios.map((audio) => audio.part),
     };
     formData.append(
@@ -114,7 +114,7 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
         console.log("response from collabo request", data.data);
         return collaboApprove(data.data);
       })
-      .then(({ data }: { data: res }) => {
+      .then(({ data }: { data: Response }) => {
         if (data.customHttpStatus === 2000) {
           alert("게시글이 작성되었습니다.");
           navigate(PATH.main);
@@ -198,7 +198,7 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
           <Flex justify="flex-end">
             <TextButton
               btnType="basic"
-              disabled={title === ""  ? true : false}
+              disabled={title === "" || !collaboRequestData.isValid ? true : false}
               type="submit"
             >
               올리기

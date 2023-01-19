@@ -13,7 +13,8 @@ import {
 } from "../../model/PostingModel";
 import { instanceAxios } from "../../dataManager/apiConfig";
 import { title } from "process";
-import { res } from "../../model/ResponseModel";
+import { Response } from "../../model/ResponseModel";
+import { handleError } from "../../dataManager/errorHandler";
 
 export const audiosSelector = (state: AppState) => state.posting.audios;
 export const audioControlSelector = (state: AppState) =>
@@ -119,6 +120,7 @@ export const postingSlice = createSlice({
       const hasEmpty = state.collaboRequestData.audios
         .map((audio) => audio.part)
         .indexOf("");
+      console.log("__setCollaboPart hasEmpty", hasEmpty);
       state.collaboRequestData.isValid = hasEmpty === -1;
     },
     __cleanUp: (state) => {
@@ -175,13 +177,9 @@ export const __getAudios = createAsyncThunk(
   "__getAudios",
   async (payload: number, thunkAPI) => {
     try {
-      const {data} = await instanceAxios.get(`/post/${payload}/music`);
-      console.log('__getAudios customHttpStatus', data.data.customHttpStatus)
-      if (data.customHttpStatus === 2000 ||data.customHttpStatus === 4015 ) {
-        return data.data;
-      }  else {
-        throw new Error(data.message);
-      }
+      const { data } = await instanceAxios.get(`/post/${payload}/music`);
+      console.log("__getAudios customHttpStatus", data.data.customHttpStatus);
+      return handleError(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -192,11 +190,7 @@ export const __getPostInfo = createAsyncThunk(
   async (payload: number, thunkAPI) => {
     try {
       const { data } = await instanceAxios.get(`/post/details/${payload}`);
-      if (data.customHttpStatus === 2000||data.customHttpStatus === 4015) {
-        return data.data;
-      } else {
-        throw new Error(data.message);
-      }
+      return handleError(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -206,16 +200,11 @@ export const __getCollaboRequested = createAsyncThunk(
   "__getCollaboRequested",
   async (payload: number, thunkAPI) => {
     try {
-      const { data }: { data: res } = await instanceAxios.get(
+      const { data }: { data: Response } = await instanceAxios.get(
         `/collabo/${payload}`
       );
-      if (data.customHttpStatus === 2000||data.customHttpStatus === 4015) {
-        return data.data;
-      } else {
-        throw new Error(data.message);
-      }
+      return handleError(data);
     } catch (error) {
-
       return thunkAPI.rejectWithValue(error);
     }
   }

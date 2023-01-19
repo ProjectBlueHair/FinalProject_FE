@@ -94,7 +94,7 @@ const PostingFormCollabo = () => {
               btnType="basic"
               disabled={
                 descriptionInput.value !== "" &&
-                collaboRequestData.audios.length !== 0
+                collaboRequestData.audios.length !== 0 && collaboRequestData.isValid
                   ? false
                   : true
               }

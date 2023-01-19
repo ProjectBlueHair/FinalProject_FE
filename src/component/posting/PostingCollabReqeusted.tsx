@@ -13,7 +13,7 @@ import { formStyle } from "./PostingForm";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 
 import { useNavigate, useParams } from "react-router-dom";
-import { res } from "../../model/ResponseModel";
+import { Response } from "../../model/ResponseModel";
 import { PATH } from "../../Router";
 
 const PostingCollaboRequested = () => {
@@ -37,7 +37,7 @@ const PostingCollaboRequested = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     collaboApprove(Number(id))
-      .then(({ data }: { data: res }) => {
+      .then(({ data }: { data: Response }) => {
         if (data.customHttpStatus === 2000) {
           alert(data.message);
           navigate(`${PATH.detail}/${id}`);

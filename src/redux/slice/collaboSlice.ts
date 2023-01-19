@@ -1,7 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
 import { instanceAxios } from "../../dataManager/apiConfig";
-import { CurrentMusic, Post, Response } from "../../model/PostModel";
 export const __getCollaboList = createAsyncThunk(
   "__getCollaboList",
   async (payload: number, thunkAPI) => {

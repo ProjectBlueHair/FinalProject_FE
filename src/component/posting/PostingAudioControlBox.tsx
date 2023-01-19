@@ -7,13 +7,14 @@ import {
   unMuteButton,
 } from "../../asset/pic";
 import { Audio } from "../../model/PostingModel";
-import { useAppDispatch } from "../../redux/config";
+import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
   __setCollaboPart,
   __setMute,
   __setSolo,
   __setVolume,
 } from "../../redux/slice/postingSlice";
+import { userSelector } from "../../redux/slice/userSlice";
 import Flex from "../elem/Flex";
 import Img from "../elem/Img";
 import { StInput } from "../elem/Input";
@@ -40,8 +41,10 @@ const PostingAudioControlBox: React.FC<
   const BOX_NICK_FS = "1.4rem";
   const BOX_ICON_WD = "2.2rem";
   const dispatch = useAppDispatch();
-  const [value, setValue] = useState("");
   const [volume, setVolume] = useState(0.5);
+
+  const user = useAppSelector(userSelector) 
+
   const onVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = +e.target.value;
 
@@ -55,11 +58,6 @@ const PostingAudioControlBox: React.FC<
     setVolume(props.volume || 0.5);
   }, [props.volume]);
 
-  useEffect(() => {
-    // console.log('index')
-    // props.isNewAudio &&
-      // dispatch(__setCollaboPart({ part: value, index: props.index }));
-  }, [value]);
 
   return (
     <Flex
@@ -83,7 +81,7 @@ const PostingAudioControlBox: React.FC<
           <PartDiv {...partStyle}>{props.audioData.part}</PartDiv>
         )}
         <Span fw="300" fc="white" fs={BOX_NICK_FS}>
-          {props.audioData.nickname}
+          {props.audioData.nickname || user.nickname }
         </Span>
       </Flex>
 
