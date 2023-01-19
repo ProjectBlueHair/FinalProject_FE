@@ -1,3 +1,4 @@
+import React from "react";
 import { useRef } from "react";
 import Flex from "../elem/Flex";
 import Img from "../elem/Img";

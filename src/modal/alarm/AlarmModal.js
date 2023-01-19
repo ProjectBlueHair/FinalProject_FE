@@ -3,7 +3,7 @@ import TypeModalWrapper from "../TypeModalWrapper";
 import TextButton from "../../component/elem/TextButton";
 import Flex, { StFlex } from "../../component/elem/Flex";
 import styled from "styled-components";
-import AlarmDot from "../../component/elem/AlarmDot";
+import AlarmDot from "../../asset/icon/AlarmDot";
 import Span from "../../component/elem/Span";
 import Img from "../../component/elem/Img";
 import { arrowRight } from "../../asset/pic";
@@ -29,8 +29,8 @@ function AlarmModal() {
   return (
     <TypeModalWrapper type="alarm">
       <AlarmContainer hg="100%" direction="column">
-        {arr.map((obj) => (
-          <Flex direction="column">
+        {arr.map((obj, index) => (
+          <Flex key={index} direction="column">
             <Flex direction="column" cursor="pointer" gap={alarmGap}>
               <Flex justify="flex-start" gap={alarmGap}>
                 <AlarmDot />{" "}

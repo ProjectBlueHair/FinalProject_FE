@@ -1,13 +1,7 @@
-import React, {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useAppDispatch } from "../../redux/config";
 import { __addNewAudio } from "../../redux/slice/postingSlice";
-import { AudioData } from "../../model/PostingModel";
 import Flex, { StFlex } from "../elem/Flex";
 import { AUDIO_BAR_HEIGHT, AUDIO_BAR_RADIUS } from "./PostingAudioBars";
 
@@ -36,13 +30,8 @@ const PostingFormAudio = () => {
       console.log("file", files);
       const arr = [];
       for (let i = 0; i < files.length; i++) {
-        const newAudio: AudioData = {
-          src: URL.createObjectURL(files[i]),
-          // file: files[i],
-        };
-        arr.push(newAudio);
+        arr.push(URL.createObjectURL(files[i]));
       }
-
       dispatch(__addNewAudio(arr));
 
       setText("드래그 앤 드랍으로 음악을 추가하세요");
@@ -67,8 +56,12 @@ const PostingFormAudio = () => {
         setText("드래그 앤 드랍으로 음악을 추가하세요");
       }}
     >
-      <Flex type="audioBar" radius={AUDIO_BAR_RADIUS} hg={AUDIO_BAR_HEIGHT}>
-        {/* <PostingFormAudioControlBox isNew={true} isFormAudio={true} /> */}
+      <Flex
+        type="audioBar"
+        isNewAudio={true}
+        radius={AUDIO_BAR_RADIUS}
+        hg={AUDIO_BAR_HEIGHT}
+      >
         <Flex flex="1">
           <input
             hidden

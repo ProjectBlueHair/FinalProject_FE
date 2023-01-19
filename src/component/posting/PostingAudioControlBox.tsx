@@ -6,8 +6,10 @@ import {
   soloButton,
   unMuteButton,
 } from "../../asset/pic";
+import { Audio } from "../../model/PostingModel";
 import { useAppDispatch } from "../../redux/config";
 import {
+  __setCollaboPart,
   __setMute,
   __setSolo,
   __setVolume,
@@ -23,21 +25,17 @@ export interface Props {
   hg: string;
   radius: string;
 }
-export const part: Props = {
+export const partStyle: Props = {
   fs: "1.2rem",
   wd: "5rem",
   hg: "1.8rem",
   radius: "10px",
 };
 
-const PostingAudioControlBox: React.FC<{
-  isMute?: boolean;
-  isSolo?: boolean;
-  volume?: number;
-  isNew: boolean;
+const PostingAudioControlBox: React.FC<Audio & {
   index?: number;
-  isFormAudio?: boolean;
 }> = (props) => {
+  
   const BOX_NICK_FS = "1.4rem";
   const BOX_ICON_WD = "2.2rem";
   const dispatch = useAppDispatch();
@@ -54,9 +52,12 @@ const PostingAudioControlBox: React.FC<{
 
   useEffect(() => {
     setVolume(props.volume || 0.5);
-    // props.volume === 0.01 ? 
   }, [props.volume]);
-  
+
+  useEffect(()=>{
+    dispatch(__setCollaboPart({part:value,index:props.index}))
+  },[value])
+
   return (
     <Flex
       radius={AUDIO_BAR_RADIUS}
@@ -68,48 +69,47 @@ const PostingAudioControlBox: React.FC<{
       gap="0.5rem"
     >
       <Flex gap="1rem">
-        {props.isNew ? (
+        {props.isNewAudio ? (
           <PartInput
-            {...part}
+            {...partStyle}
             value={value}
             onChange={(e) => setValue(e.target.value)}
             placeholder="part"
           />
         ) : (
-          <PartDiv {...part}>Bass</PartDiv>
+          <PartDiv {...partStyle}>{props.audioData.part}</PartDiv>
         )}
         <Span fw="300" fc="white" fs={BOX_NICK_FS}>
-          nickname
+          {props.audioData.nickname}
         </Span>
       </Flex>
-      {props.isFormAudio ? null : (
-        <Flex align="center" gap="1rem">
-          <Img
-            onClick={() => dispatch(__setMute(props.index))}
-            wd={BOX_ICON_WD}
-            src={props.isMute ? muteButton : unMuteButton}
-          />
-          <Img
-            onClick={() => dispatch(__setSolo(props.index))}
-            wd={BOX_ICON_WD}
-            src={props.isSolo ? soloButton : collaboButton}
-          />
-          <input
-            style={{ width: "9rem" }}
-            type="range"
-            id="volume"
-            name="volume"
-            // waveSurfer recognize value of `0` same as `1`
-            //  so we need to set some zero-ish value for silence
-            min="0.01"
-            max="0.985"
-            step=".025"
-            onChange={onVolumeChange}
-            // defaultValue={volume}
-            value={volume}
-          />
-        </Flex>
-      )}
+
+      <Flex align="center" gap="1rem">
+        <Img
+          onClick={() => dispatch(__setMute(props.index))}
+          wd={BOX_ICON_WD}
+          src={props.isMute ? muteButton : unMuteButton}
+        />
+        <Img
+          onClick={() => dispatch(__setSolo(props.index))}
+          wd={BOX_ICON_WD}
+          src={props.isSolo ? soloButton : collaboButton}
+        />
+        <input
+          style={{ width: "9rem" }}
+          type="range"
+          id="volume"
+          name="volume"
+          // waveSurfer recognize value of `0` same as `1`
+          //  so we need to set some zero-ish value for silence
+          min="0.01"
+          max="0.985"
+          step=".025"
+          onChange={onVolumeChange}
+          // defaultValue={volume}
+          value={volume}
+        />
+      </Flex>
     </Flex>
   );
 };

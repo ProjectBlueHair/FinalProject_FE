@@ -5,12 +5,13 @@ import Header from "../component/header/Header";
 import PostingAudioBars from "../component/posting/PostingAudioBars";
 import PostingFormAudio from "../component/posting/PostingFormAudio";
 import PostingFormCollabo from "../component/posting/PostingFormCollabo";
-import PostingFormNew from "../component/posting/PostingFormNew";
+import PostingForm from "../component/posting/PostingForm";
 import PostingTitle from "../component/posting/PostingTitle";
 import PostingTotalPlay from "../component/posting/PostingTotalPlay";
 import { useAppSelector } from "../redux/config";
 import { PATH } from "../Router";
 import { MainContainer } from "./MainPage";
+import PostingCollaboRequested from "../component/posting/PostingCollabReqeusted";
 
 export const AUDIO_BAR_GAP = "1.5rem";
 
@@ -20,25 +21,28 @@ const PostingPage = () => {
   const POSTPAGE = PATH.post.split("/")[1] === CURRENT_PATH;
   const EDITPAGE = PATH.edit.split("/")[1] === CURRENT_PATH;
   const COLLABOPAGE = PATH.collabo.split("/")[1] === CURRENT_PATH;
-  
+  const COLLABOREQUESTED = PATH.collaboRequested.split("/")[1] === CURRENT_PATH;
 
   return (
-    <Flex  direction="column" justify="flex-start" hg="100vh">
+    <Flex direction="column" justify="flex-start" hg="100vh">
       <Header />
       <AudioBarsBackground gap={AUDIO_BAR_GAP}>
-        <PostingTitle />
+        <PostingTitle/>
         <PostingTotalPlay />
         <PostingAudioBars />
         <PostingFormAudio />
       </AudioBarsBackground>
-      <Flex pd="4rem 4rem 6rem" >
-      {POSTPAGE && <PostingFormNew />}
-      {COLLABOPAGE && <PostingFormCollabo />}
+      <Flex mg="4rem 0">
+        {POSTPAGE && <PostingForm isEdit={EDITPAGE} />}
+        {COLLABOPAGE && <PostingFormCollabo />}
+        {COLLABOREQUESTED && <PostingCollaboRequested />}
       </Flex>
     </Flex>
   );
 };
+const origin = window.location.origin + "/audio-bars-bg.png";
 
+console.log("origin", origin);
 export default PostingPage;
 const AudioBarsBackground = styled.div<{ gap: string }>`
   display: flex;
@@ -46,11 +50,11 @@ const AudioBarsBackground = styled.div<{ gap: string }>`
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  padding: 2rem 4rem;
-  gap: ${({gap})=> gap};
+  padding: 3.5rem 4rem 2rem;
+  gap: ${({ gap }) => gap};
   background-image: linear-gradient(
       rgba(240, 240, 240, 0.5),
       rgba(255, 255, 255, 1)
     ),
-    url("audio-bars-bg.png");
-`
+    url(${origin});
+`;

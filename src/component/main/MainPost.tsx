@@ -52,7 +52,7 @@ const MainPost: React.FC<{ post: Post }> = (props) => {
               : playButtonSecond
           }
         />
-     
+
         <Flex flex="1" direction="column" align="flex-start" gap="1rem">
           <div>{props.post.title}</div>
           {/* grid */}
@@ -80,7 +80,12 @@ const MainPost: React.FC<{ post: Post }> = (props) => {
               <IconSpan>{props.post.viewCount}</IconSpan>
             </Flex>
             <Flex justify="flex-start" gap="0.4rem">
-              <Img type="iconSmall" wd="1.5rem" src={like} />
+              <Img
+                onClick={() => navigate(`/collabo/${props.post.id}`)}
+                type="iconSmall"
+                wd="1.5rem"
+                src={like}
+              />
               <IconSpan>{props.post.likeCount}</IconSpan>
             </Flex>
           </PostBottomContainer>

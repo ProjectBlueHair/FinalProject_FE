@@ -1,6 +1,6 @@
 import React from "react";
-import { alarmDot } from "../../asset/pic";
-import Img from "./Img";
+import { alarmDot } from "../pic";
+import Img from "../../component/elem/Img";
 
 interface Props {
   mg?: string;

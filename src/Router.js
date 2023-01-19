@@ -10,8 +10,10 @@ export const PATH = {
   signUp: "/sign-up",
   tag: "/tag",
   post: "/post",
+  detail: "/detail",
   edit: "/edit",
   collabo: "/collabo",
+  collaboRequested:"/collaboRequested"
 };
 
 const Router = () => {
@@ -23,9 +25,10 @@ const Router = () => {
           <Route path="/detail/:id" element={<Detail />} />
           <Route path={`${PATH.tag}/:tag`} element={<Tag />} />
           <Route path={PATH.post} element={<PostingPage />} />
-          <Route path={PATH.edit} element={<PostingPage />} />
-          <Route path={PATH.collabo} element={<PostingPage />} />
-        </Routes>
+          <Route path={`${PATH.edit}/:id`} element={<PostingPage />} />
+          <Route path={`${PATH.collabo}/:id`} element={<PostingPage />} />
+          <Route path={`${PATH.collaboRequested}/:id`} element={<PostingPage />} />
+      </Routes>
       </BrowserRouter>
     </>
   );

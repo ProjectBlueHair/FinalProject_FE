@@ -16,7 +16,7 @@ import Input from "../elem/Input";
 import useModal from "../modal/useModal";
 import { useNavigate } from "react-router-dom";
 import useTypeModal from "../../modal/hooks/useTypeModal";
-import AlarmDot from "../elem/AlarmDot";
+import AlarmDot from "../../asset/icon/AlarmDot";
 import { PATH } from "../../Router";
 
 const Header = () => {
