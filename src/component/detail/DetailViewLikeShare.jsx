@@ -1,29 +1,30 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Img from "../elem/Img";
-import { view, like, save, share, collaboPlus, report } from "../../asset/pic";
-import { AiFillHeart } from "react-icons/ai";
-import { useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import {
-  __getDetail,
-  __getUserInfo,
-  __postLike,
-} from "../../redux/slice/detailSlice";
-import { useSelector } from "react-redux";
+  view,
+  like,
+  save,
+  share,
+  collaboPlus,
+  report,
+  redLike,
+} from "../../asset/pic";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { __getDetail, __postLike } from "../../redux/slice/detailSlice";
+import { getCookies } from "../../dataManager/cookie";
 
 const DetailViewLikeShare = ({ detail }) => {
   const [likeView, setLikeView] = useState(detail?.isLiked);
   const [likeCount, setLikeCount] = useState(detail?.likeCount);
   const { id } = useParams();
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(__getUserInfo());
-  }, []);
-  const userInformation = useSelector((state) => state.detail.userInfo.data);
-
-  console.log(userInformation);
+  const navigate = useNavigate();
+  const acToken = getCookies("accesstoken");
+  const onCollabo = () => {
+    navigate(`/collabo/${id}`);
+  };
   useEffect(() => {
     if (detail?.isLiked === undefined) {
       return;
@@ -39,7 +40,7 @@ const DetailViewLikeShare = ({ detail }) => {
 
   const onLikeClick = () => {
     dispatch(__postLike(id));
-    if (likeView === false || likeCount == 0) {
+    if (likeView === false || likeCount === 0) {
       setLikeCount(Number(likeCount + 1));
     } else {
       setLikeCount(Number(likeCount - 1));
@@ -58,20 +59,23 @@ const DetailViewLikeShare = ({ detail }) => {
         <div>{detail?.viewCount}</div>
       </div>
       <div>
-        {userInformation === undefined ? (
-          <Img wd="2rem" src={like} onClick={onNoSign} />
+        {acToken === undefined ? (
+          <Img wd="2.1rem" src={like} onClick={onNoSign} />
         ) : (
           <button onClick={onLikeClick}>
             {likeView ? (
-              // 임시로 like 쪽 색상 변경 불가능 해서
-              <AiFillHeart style={{ fontSize: "2.3rem", color: "red" }} />
+              <Img
+                wd="2.4rem"
+                src={redLike}
+                style={{ paddingRight: "-1rem" }}
+              />
             ) : (
               <Img wd="2rem" src={like} />
             )}
           </button>
         )}
 
-        <div>{likeCount}</div>
+        <div style={{ width: "1.3rem" }}>{likeCount}</div>
       </div>
       <div>
         <Img wd="3.5rem" src={save} />
@@ -85,9 +89,9 @@ const DetailViewLikeShare = ({ detail }) => {
         <Img wd="3.5rem" src={report} />
         <div>신고</div>
       </div>
-      <div style={{ marginLeft: "54rem" }}>
+      <div style={{ marginLeft: "63rem" }}>
         <Img wd="3.5rem" src={collaboPlus} />
-        <div>콜라보 하기</div>
+        <button onClick={onCollabo}>콜라보 하기</button>
       </div>
     </DetailLikeShareLine>
   );
@@ -110,5 +114,9 @@ const DetailLikeShareLine = styled.div`
   button {
     border: transparent;
     background-color: transparent;
+    /* width: 31px; */
+  }
+  Img {
+    width: 20px;
   }
 `;

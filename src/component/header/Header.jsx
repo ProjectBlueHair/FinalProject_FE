@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Flex from "../elem/Flex";
 import Img from "../elem/Img";
 import {
@@ -18,10 +18,13 @@ import { useNavigate } from "react-router-dom";
 import useTypeModal from "../../modal/hooks/useTypeModal";
 import AlarmDot from "../elem/AlarmDot";
 import { PATH } from "../../Router";
+import { getCookies, removeCookies } from "../../dataManager/cookie";
+import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
 
 const Header = () => {
   const navigate = useNavigate();
   const iconSize = "4rem";
+  const Sign = useRef(null);
   // 토글창 상태관리
   const [isOpen, setIsOpen] = useState(false);
   const { openModal } = useModal();
@@ -33,8 +36,17 @@ const Header = () => {
   // 모달창(로그인)
   const onClickSignBtn = () => {
     openModal({ type: "signIn" });
+    setIsOpen(false);
   };
 
+  const onClickLogOut = () => {
+    removeCookies("accesstoken", { path: "/" });
+    removeCookies("refreshtoken", { path: "/" });
+    setIsOpen(false);
+    navigate("/");
+  };
+  const acToken = getCookies("accesstoken");
+  useToggleOutSideClick(Sign, setIsOpen);
   const [isClicked, setIsClicked] = useState({ alarm: false });
 
   return (
@@ -91,14 +103,28 @@ const Header = () => {
           onClick={() => toggleMenu()}
         />
       </Flex>
-      {isOpen ? (
-        <ToggleDiv>
-          <button onClick={onClickSignBtn}>로그인</button>
-          <button>마이페이지</button>
-          <button>계정설정</button>
-        </ToggleDiv>
+      {acToken ? (
+        <>
+          {isOpen ? (
+            <ToggleDiv ref={Sign}>
+              <button onClick={onClickLogOut}>로그아웃</button>
+              <button>마이페이지</button>
+              <button>계정설정</button>
+            </ToggleDiv>
+          ) : (
+            ""
+          )}
+        </>
       ) : (
-        ""
+        <>
+          {isOpen ? (
+            <ToggleDiv2 ref={Sign}>
+              <button onClick={onClickSignBtn}>로그인</button>
+            </ToggleDiv2>
+          ) : (
+            ""
+          )}
+        </>
       )}
     </Grid>
   );
@@ -117,15 +143,42 @@ const ToggleDiv = styled.div`
   position: absolute;
   right: 0;
   top: 0;
-  width: 110px;
+  width: 100px;
   height: 120px;
   margin-top: 25px;
-  margin-right: 65px;
+  margin-right: 80px;
   background-color: white;
   border: 2px solid #ff4d00;
   border-radius: 10px;
   z-index: 1;
   padding: 10px 10px 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  button {
+    margin-top: 10px;
+    background-color: white;
+    border: white;
+    font-size: 15px;
+    :hover {
+      border-bottom: 1px solid #ff4d00;
+    }
+  }
+`;
+
+const ToggleDiv2 = styled.div`
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100px;
+  height: 50px;
+  margin-top: 25px;
+  margin-right: 80px;
+  background-color: white;
+  border: 2px solid #ff4d00;
+  border-radius: 10px;
+  z-index: 1;
+  padding: 5px 10px 0 0;
   display: flex;
   flex-direction: column;
   align-items: flex-end;

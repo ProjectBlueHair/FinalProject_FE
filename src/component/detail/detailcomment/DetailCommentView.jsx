@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import Img from "../../elem/Img";
-import { more } from "../../../asset/pic";
-
+// import Img from "../../elem/Img";
+// import { more } from "../../../asset/pic";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { __getComment } from "../../../redux/slice/comment";
@@ -28,7 +27,7 @@ const DetailCommentView = () => {
           <DetailComTopImg src={mcv.profileImg} />
           <DetailComTop>
             <DetailDeleteAndUpdate mcv={mcv} />
-            <DetailCommentLike />
+            <DetailCommentLike mcv={mcv} />
             <DetailComUpDown>
               <DetailUpDown mcv={mcv} />
             </DetailComUpDown>

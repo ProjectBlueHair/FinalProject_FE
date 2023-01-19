@@ -20,8 +20,7 @@ const DetailCommentSubDeleteUpdate = ({ re }) => {
     dispatch(__getUserInfo());
   }, []);
   const userInformation = useSelector((state) => state.detail.userInfo.data);
-  console.log(userInformation);
-  console.log(re);
+
   const onChangeSubComment = (e) => {
     const a = e.target.value;
     setComUpdateInput(a);

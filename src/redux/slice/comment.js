@@ -72,6 +72,17 @@ export const __postCommentSub = createAsyncThunk(
   }
 );
 
+export const __likeComment = createAsyncThunk(
+  "like/Comment",
+  async (payload, thunkAPI) => {
+    try {
+      await instanceAxios.post(`comment/like/${payload}`);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 export const commentSlice = createSlice({
   name: "comment",
   initialState,

@@ -1,87 +1,88 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Img from "../elem/Img";
 import { more, like, view } from "../../asset/pic";
+import { instanceAxios } from "../../dataManager/apiConfig";
 
 const DetailRecomment = () => {
-  const imgurl = [
-    {
-      id: 0,
-      url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsiIHX_L4Iy-eHEBImI46cxFgNGF0UuJkSIg&usqp=CAU",
-    },
-    {
-      id: 1,
-      url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsiIHX_L4Iy-eHEBImI46cxFgNGF0UuJkSIg&usqp=CAU",
-    },
-    {
-      id: 2,
-      url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsiIHX_L4Iy-eHEBImI46cxFgNGF0UuJkSIg&usqp=CAU",
-    },
-    {
-      id: 3,
-      url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsiIHX_L4Iy-eHEBImI46cxFgNGF0UuJkSIg&usqp=CAU",
-    },
-    {
-      id: 4,
-      url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsiIHX_L4Iy-eHEBImI46cxFgNGF0UuJkSIg&usqp=CAU",
-    },
-  ];
+  const [ReList, setReList] = useState();
+  const detailReCom = async () => {
+    try {
+      const {
+        data: { data },
+      } = await instanceAxios.get("/post");
+      setReList(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    detailReCom();
+  }, []);
 
   return (
-    <DetailRightLine>
-      <DetailRightIn>
-        <RecommentImg>
-          <img
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaT66t1ipqCvljTdzVL1kacvKDhwHRNpdD3g&usqp=CAU"
-            alt="사진"
-          />
-        </RecommentImg>
-        <RecommentText>
-          <RecommentTitle>
-            <div>제목</div>
-            <Img wd="3rem" src={more} />
-          </RecommentTitle>
-          <RecommentTag>
-            <div>해시태그</div>
-            <div>해시태그</div>
-            <div>해시태그</div>
-            <div>해시태그</div>
-            <div>해시태그</div>
-          </RecommentTag>
-          <RecommentImgViewLike>
-            <RecommentProfile>
-              {imgurl.map((imgurl) => {
-                if (imgurl.id < 3) {
-                  return (
-                    <img
-                      key={imgurl.id}
-                      className={"img" + imgurl.id}
-                      src={imgurl.url}
-                      alt=""
-                    />
-                  );
-                } else if (imgurl.id < 4) {
-                  return <div key={imgurl.id}>+</div>;
-                }
-              })}
-            </RecommentProfile>
-            <div>
-              <Img wd="1.3rem" src={view} />
-              <span>1</span>
-            </div>
-            <div>
-              <Img wd="1rem" src={like} />
-              <span>2</span>
-            </div>
-          </RecommentImgViewLike>
-        </RecommentText>
-      </DetailRightIn>
-    </DetailRightLine>
+    <DetailReComCol>
+      {ReList?.map((List) => (
+        <DetailRightLine key={List.id}>
+          <DetailRightIn>
+            <RecommentImg>
+              <img src={List.postImg} alt="사진" />
+            </RecommentImg>
+            <RecommentText>
+              <RecommentTitle>
+                <div>{List.title}</div>
+                <Img wd="3rem" src={more} />
+              </RecommentTitle>
+              <RecommentTag>
+                <div>해시태그</div>
+                <div>해시태그</div>
+                <div>해시태그</div>
+                <div>해시태그</div>
+                <div>해시태그</div>
+              </RecommentTag>
+              <RecommentImgViewLike>
+                <RecommentProfile>
+                  {List.mainProfileList.map((imgurl, index) => {
+                    if (index < 3) {
+                      return (
+                        <img
+                          key={index}
+                          className={"img" + index}
+                          src={imgurl.profileImg}
+                          alt=""
+                        />
+                      );
+                    } else if (index < 4) {
+                      return <div key={imgurl.id}>+</div>;
+                    }
+                  })}
+                </RecommentProfile>
+                <div>
+                  <Img wd="1.3rem" src={view} />
+                  <span>{List.viewCount}</span>
+                </div>
+                <div>
+                  <Img wd="1rem" src={like} />
+                  <span>{List.likeCount}</span>
+                </div>
+              </RecommentImgViewLike>
+            </RecommentText>
+          </DetailRightIn>
+        </DetailRightLine>
+      ))}
+    </DetailReComCol>
   );
 };
 export default DetailRecomment;
 
+const DetailReComCol = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 const DetailRightLine = styled.div`
+  display: flex;
   width: 38rem;
 `;
 
