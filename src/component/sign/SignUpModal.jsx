@@ -140,7 +140,10 @@ const SignUpModal = ({ onClose }) => {
         "member/validate/nickname",
         post
       );
+      console.log(data);
       if (data.customHttpStatus === 4092) {
+        alert(data.message);
+      } else if (data.customHttpStatus === 4090) {
         alert(data.message);
       } else {
         alert(data.message + "입니다");
@@ -174,6 +177,8 @@ const SignUpModal = ({ onClose }) => {
       const { data } = await instanceAxios.post("member/validate/email", post);
       if (data.customHttpStatus === 4091) {
         alert(data.message);
+      } else if (data.customHttpStatus === 4090) {
+        alert(data.message);
       } else {
         alert(data.message + "입니다");
         return data;
@@ -195,6 +200,7 @@ const SignUpModal = ({ onClose }) => {
   // 회원가입 버튼 클릭시 실행
   const onSignUpBtn = () => {
     uploadFiles(s3image).then((res) => {
+      console.log(res);
       const profileImg = res.Location;
       postSignUp({
         nickname,

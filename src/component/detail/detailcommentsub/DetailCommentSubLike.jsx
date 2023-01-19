@@ -7,14 +7,13 @@ import { __getComment, __likeComment } from "../../../redux/slice/comment";
 import { useParams } from "react-router-dom";
 import { getCookies } from "../../../dataManager/cookie";
 
-const DetailCommentLike = ({ mcv }) => {
+const DetailCommentSubLike = ({ re }) => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const onNoSign = () => {
     alert("로그인이 필요합니다");
   };
   const acToken = getCookies("accesstoken");
-  // 유저 정보
 
   const onLikeClick = async (comId) => {
     await dispatch(__likeComment(comId));
@@ -22,28 +21,28 @@ const DetailCommentLike = ({ mcv }) => {
   };
   return (
     <CommentLikeTouch>
-      {acToken === undefined ? (
-        <Img
-          wd="2rem"
-          src={like}
-          onClick={onNoSign}
-          style={{ marginTop: "-5px" }}
-        />
-      ) : (
-        <button onClick={() => onLikeClick(mcv.id)}>
-          {mcv.liked ? (
-            <Img wd="2.3rem" src={redLike} />
+      {acToken ? (
+        <button onClick={() => onLikeClick(re.id)}>
+          {re.liked ? (
+            <Img wd="2.4rem" src={redLike} />
           ) : (
             <Img wd="2rem" src={like} />
           )}
         </button>
+      ) : (
+        <Img
+          wd="2rem"
+          src={like}
+          onClick={onNoSign}
+          style={{ marginTop: "-5px", marginRight: "10px" }}
+        />
       )}
-      <div style={{ marginLeft: "1rem " }}>{mcv.likeCount}</div>
+      <div>{re.likeCount}</div>
     </CommentLikeTouch>
   );
 };
 
-export default DetailCommentLike;
+export default DetailCommentSubLike;
 
 const CommentLikeTouch = styled.div`
   display: flex;

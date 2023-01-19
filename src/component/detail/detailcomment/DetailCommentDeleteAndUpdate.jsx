@@ -20,13 +20,12 @@ const DetailDeleteAndUpdate = ({ mcv }) => {
     await dispatch(__deleteComment(comId));
     dispatch(__getComment(id));
   };
-
+  // 유저 정보
   useEffect(() => {
     dispatch(__getUserInfo());
   }, []);
   const userInformation = useSelector((state) => state.detail.userInfo.data);
-  // console.log(userInformation.nickname);
-  // console.log(mcv.nickname);
+
   // 수정
   const onChangeComUpdate = (e) => {
     const upInput = e.target.value;

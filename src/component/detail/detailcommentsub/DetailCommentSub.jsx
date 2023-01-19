@@ -8,6 +8,7 @@ import { __getComment, __postCommentSub } from "../../../redux/slice/comment";
 import DetailCommentSubDeleteUpdate from "./DetailCommentSubDeleteUpdate";
 import { useSelector } from "react-redux";
 import { __getUserInfo } from "../../../redux/slice/detailSlice";
+import DetailCommentSubLike from "./DetailCommentSubLike";
 
 const DetailCommentSub = ({ mcv }) => {
   const [comSubV, setComSubV] = useState("");
@@ -40,7 +41,7 @@ const DetailCommentSub = ({ mcv }) => {
           <DetailComTopSubImg src={re.profileImg} />
           <DetailComSubTop>
             <DetailCommentSubDeleteUpdate re={re} />
-            <div>좋아요</div>
+            <DetailCommentSubLike re={re} />
           </DetailComSubTop>
         </DetailComSubTotal>
       ))}
