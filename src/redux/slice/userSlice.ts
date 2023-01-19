@@ -9,7 +9,8 @@ export const __getGeneralUserInfo = createAsyncThunk(
     try {
       // const { data } = await axios.get(`/post?page=${Number(payload)}`);
       const { data } = await instanceAxios.get(`/member/info`);
-      return handleError(data);
+      // return handleError(data);
+      return data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -43,8 +44,7 @@ export const userSlice = createSlice({
       .addCase(
         __getGeneralUserInfo.fulfilled,
         (state, { payload }: { payload: User }) => {
-            
-          state.user = {...payload};
+          state.user = { ...payload };
         }
       )
       .addCase(__getGeneralUserInfo.rejected, (state, { payload }) => {

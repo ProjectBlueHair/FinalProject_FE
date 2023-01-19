@@ -74,7 +74,9 @@ const PostingAudioControlBox: React.FC<
           <PartInput
             {...partStyle}
             // value={value}
-            onChange={(e) => dispatch(__setCollaboPart({ part: e.target.value, index: props.index }))}
+            onChange={(e) => {
+              console.log('e.target.value',e.target.value)
+              dispatch(__setCollaboPart({ part: e.target.value, index: props.index }))}}
             placeholder="part"
           />
         ) : (

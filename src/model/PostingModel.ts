@@ -35,8 +35,13 @@ export interface CollaboRequested {
   contents: string;
   createdAt: string
   modifiedAt: string
-  musicList: string
+  musicList: AudioData []
   nickname: string
+}
+export interface CollaboReqeustedAudioData {
+  musicFile : string
+  musicPart : string
+  nickname : string
 }
 export interface CollaboRequestData {
   audios: CollaboAudio [];

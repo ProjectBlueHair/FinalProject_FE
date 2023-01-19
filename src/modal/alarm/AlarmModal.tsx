@@ -7,15 +7,17 @@ import Span from "../../component/elem/Span";
 import Img from "../../component/elem/Img";
 import { arrowRight } from "../../asset/pic";
 import { instanceAxios } from "../../dataManager/apiConfig";
+import { useNavigate } from "react-router-dom";
+import { PATH } from "../../Router";
 
 interface Alarm {
-  content : string;
-  createdAt : string;
-  isRead : boolean;
-  url : String
-
+  content: string;
+  createdAt: string;
+  isRead: boolean;
+  url: String;
 }
-const AlarmModal= ()=> {
+const AlarmModal = () => {
+  const navigate = useNavigate()
   const alarmGap = "0.7rem";
   const alarmObj = {
     content: "this is test",
@@ -28,20 +30,20 @@ const AlarmModal= ()=> {
   const getAlarm = () => {
     return instanceAxios.get("/notifications");
   };
-  const [alarmState, setAlarmState] = useState<Alarm []>([]);
+  const [alarmState, setAlarmState] = useState<Alarm[]>([]);
   console.log(alarmState);
   useEffect(() => {
-    getAlarm().then(({data}) => 
-      setAlarmState(data.data)
-    );
+    getAlarm().then(({ data }) => setAlarmState(data.data));
   }, []);
 
   return (
     <TypeModalWrapper type="alarm">
       <AlarmContainer hg="100%" direction="column">
-        {alarmState.map((alarm, index) => (
+        {alarmState?.map((alarm, index) => (
           <Flex key={index} direction="column">
-            <Flex direction="column" cursor="pointer" gap={alarmGap}>
+            <Flex onClick={()=>{
+              navigate(PATH.collaboRequested)
+            }} direction="column" cursor="pointer" gap={alarmGap}>
               <Flex justify="flex-start" gap={alarmGap}>
                 <AlarmDot />{" "}
                 <Span fw="400" fs="1.4rem">
@@ -81,7 +83,7 @@ const AlarmModal= ()=> {
       </AlarmContainer>
     </TypeModalWrapper>
   );
-}
+};
 
 export default AlarmModal;
 const AlarmContainer = styled(StFlex)`
@@ -91,4 +93,9 @@ const AlarmContainer = styled(StFlex)`
   flex: 1;
   overflow-y: scroll;
   justify-content: flex-start;
+`;
+const ItemContainer = styled(StFlex)<{ gap: string }>`
+  direction: column;
+  cursor: pointer;
+  gap: ${({ gap }) => gap};
 `;

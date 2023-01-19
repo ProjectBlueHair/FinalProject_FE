@@ -71,9 +71,10 @@ const PostingFormCollabo = () => {
     }
 
     collaboRequest(formData, id!)
-      .then((data) => {alert('콜라보 리퀘스트에 성공하셨습니다')
-      navigate(PATH.main)
-    })
+      .then((data) => {
+        alert("콜라보 리퀘스트에 성공하셨습니다")
+        navigate(PATH.main);
+      })
       .catch((err) => alert(err));
   };
 
@@ -93,10 +94,9 @@ const PostingFormCollabo = () => {
             <TextButton
               btnType="basic"
               disabled={
-                descriptionInput.value !== "" &&
-                collaboRequestData.audios.length !== 0 && collaboRequestData.isValid
-                  ? false
-                  : true
+                descriptionInput.value === "" || !collaboRequestData.isValid
+                  ? true
+                  : false
               }
               type="submit"
             >
