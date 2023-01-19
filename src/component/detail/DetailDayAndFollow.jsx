@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
 const DetailDayAndFollow = ({ detail }) => {
-  const [upDown, setUpDown] = useState(false);
+  const [upDown, setUpDown] = useState(true);
   const { id } = useParams();
   const dispatch = useDispatch();
 

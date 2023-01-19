@@ -33,6 +33,7 @@ export { default as collaboPlus } from "./Collabo.svg";
 export { default as report } from "./report.svg";
 export { default as alarmDot } from "./alarmDot.svg";
 export { default as arrowRight } from "./arrowRight.svg";
+export { default as redLike } from "./redlike.svg";
 export { default as collaboIcon } from "./collaboIcon.svg";
 
 

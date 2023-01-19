@@ -26,7 +26,7 @@ const DetailComment = () => {
       mainContent === undefined ||
       mainContent.trim() === ""
     ) {
-      return;
+      return alert("댓글을 입력해 주세요");
     } else {
       await dispatch(__postComment({ id, mainContent }));
       dispatch(__getComment(id));

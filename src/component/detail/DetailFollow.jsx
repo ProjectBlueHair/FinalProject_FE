@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import { getCookies } from "../../dataManager/cookie";
 import {
   __getDetailCollabo,
-  __getUserInfo,
   __putDetailFollow,
 } from "../../redux/slice/detailSlice";
 
@@ -13,11 +12,7 @@ const DetailFollow = ({ detailCollabo }) => {
   const dispatch = useDispatch();
   const { id } = useParams();
 
-  useEffect(() => {
-    dispatch(__getUserInfo());
-  }, []);
-  const userInformation = useSelector((state) => state.detail.userInfo.data);
-
+  const acToken = getCookies("accesstoken");
   const FollowClick = async (fol) => {
     const follow = {
       isFollowed: fol.isFollowed,
@@ -45,7 +40,7 @@ const DetailFollow = ({ detailCollabo }) => {
               </div>
             </FollowMiddle>
             <FollowBtn>
-              {userInformation === undefined ? (
+              {acToken === undefined ? (
                 ""
               ) : (
                 <button onClick={() => FollowClick(collabo)}>
