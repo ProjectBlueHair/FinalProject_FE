@@ -9,6 +9,8 @@ import { arrowRight } from "../../asset/pic";
 import { instanceAxios } from "../../dataManager/apiConfig";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "../../Router";
+import { url } from "inspector";
+import useTypeModal from "../hooks/useTypeModal";
 
 interface Alarm {
   content: string;
@@ -17,7 +19,7 @@ interface Alarm {
   url: String;
 }
 const AlarmModal = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const alarmGap = "0.7rem";
   const alarmObj = {
     content: "this is test",
@@ -31,6 +33,7 @@ const AlarmModal = () => {
     return instanceAxios.get("/notifications");
   };
   const [alarmState, setAlarmState] = useState<Alarm[]>([]);
+  const {$closeModal} = useTypeModal()
   console.log(alarmState);
   useEffect(() => {
     getAlarm().then(({ data }) => setAlarmState(data.data));
@@ -41,9 +44,17 @@ const AlarmModal = () => {
       <AlarmContainer hg="100%" direction="column">
         {alarmState?.map((alarm, index) => (
           <Flex key={index} direction="column">
-            <Flex onClick={()=>{
-              navigate(PATH.collaboRequested)
-            }} direction="column" cursor="pointer" gap={alarmGap}>
+            <Flex
+              onClick={() => {
+                //todo: 임시
+                const pathArr = alarm.url.split("/");
+                $closeModal({ type: "alarm" })
+                navigate(`${PATH.collaboRequested}/${pathArr[pathArr.length - 1]}`);
+              }}
+              direction="column"
+              cursor="pointer"
+              gap={alarmGap}
+            >
               <Flex justify="flex-start" gap={alarmGap}>
                 <AlarmDot />{" "}
                 <Span fw="400" fs="1.4rem">
