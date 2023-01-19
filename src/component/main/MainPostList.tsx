@@ -10,9 +10,12 @@ const MainPostList = () => {
   const [trigger, setTrigger] = useState(false);
 
   const dispatch = useAppDispatch();
-  const { posts, nextPage, isLoading } = useAppSelector<MainState>(
+  const { posts, nextPage, isLoading, error } = useAppSelector<MainState>(
     (state) => state.main
   );
+    if(error){
+      alert(error)
+    }
 
   let options = {
     root: scrollArea.current,
@@ -70,7 +73,6 @@ const PostListContainer = styled.div`
   @media (max-width: 500px){
     grid-template-columns: 1fr ;
     padding: 0 5rem;
-
   }
  
 `;

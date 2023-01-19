@@ -36,7 +36,7 @@ const MainPost: React.FC<{ post: Post }> = (props) => {
         onClick={() => navigate(`/detail/${props.post.id}`)}
         hg="20rem"
         type="radius"
-        src={props.post.postImg}
+        src={props.post?.postImg}
       />
       {/* play box */}
       <Flex direction="row" justify="flex-start" gap="1rem" pd="0 1rem">

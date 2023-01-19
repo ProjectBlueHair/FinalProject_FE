@@ -32,10 +32,11 @@ export const partStyle: Props = {
   radius: "10px",
 };
 
-const PostingAudioControlBox: React.FC<Audio & {
-  index?: number;
-}> = (props) => {
-  
+const PostingAudioControlBox: React.FC<
+  Audio & {
+    index?: number;
+  }
+> = (props) => {
   const BOX_NICK_FS = "1.4rem";
   const BOX_ICON_WD = "2.2rem";
   const dispatch = useAppDispatch();
@@ -54,9 +55,11 @@ const PostingAudioControlBox: React.FC<Audio & {
     setVolume(props.volume || 0.5);
   }, [props.volume]);
 
-  useEffect(()=>{
-    dispatch(__setCollaboPart({part:value,index:props.index}))
-  },[value])
+  useEffect(() => {
+    // console.log('index')
+    // props.isNewAudio &&
+      // dispatch(__setCollaboPart({ part: value, index: props.index }));
+  }, [value]);
 
   return (
     <Flex
@@ -72,8 +75,8 @@ const PostingAudioControlBox: React.FC<Audio & {
         {props.isNewAudio ? (
           <PartInput
             {...partStyle}
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
+            // value={value}
+            onChange={(e) => dispatch(__setCollaboPart({ part: e.target.value, index: props.index }))}
             placeholder="part"
           />
         ) : (

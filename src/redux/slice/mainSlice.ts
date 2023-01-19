@@ -1,14 +1,17 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { instanceAxios } from "../../dataManager/apiConfig";
-import { CurrentMusic, Post, Response } from "../../model/PostModel";
+import { CurrentMusic, Post } from "../../model/PostModel";
 export const __getPostList = createAsyncThunk(
   "__getPostList",
   async (payload: number, thunkAPI) => {
     try {
-      // const { data } = await axios.get(`/post?page=${Number(payload)}`);
-      const {data} = await instanceAxios.get(`/post?page=${Number(payload)}`);
-      return data.data;
+      const { data } = await instanceAxios.get(`/post?page=${Number(payload)}`);
+      if (data.customHttpStatus === 2000 || data.customHttpStatus === 4015) {
+        return data.data;
+      } else {
+        throw new Error(data.message);
+      }
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -19,6 +22,7 @@ export interface MainState {
   nextPage: number;
   currentMusic: CurrentMusic;
   isLoading: boolean;
+  error: unknown;
 }
 const findPostIndex = (posts: Post[], payload: string | number) => {
   return posts.findIndex((post) => post.id === payload);
@@ -30,6 +34,7 @@ export const mainSlice = createSlice({
     nextPage: 0,
     currentMusic: { post: {}, isPlayingMain: false, isPlayingPlayer: false },
     isLoading: false,
+    error: null,
   } as MainState,
   reducers: {
     __MainTogglePlay: (state, action) => {
@@ -82,9 +87,13 @@ export const mainSlice = createSlice({
             post: payload[0],
           };
         }
-        state.posts = 
+        state.posts =
           state.nextPage === 0 ? payload : state.posts.concat(payload);
         state.nextPage = state.nextPage + 1;
+      })
+      .addCase(__getPostList.rejected, (state, { payload }) => {
+        state.error = payload;
+        state.isLoading = false;
       });
   },
 });

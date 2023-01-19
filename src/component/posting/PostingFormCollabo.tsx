@@ -51,7 +51,7 @@ const PostingFormCollabo = () => {
 
     const collaboForm: CollaboForm = {
       contents: descriptionInput.value,
-      musicPartList: collaboRequestData.audios.map((audio) => audio.part)
+      musicPartList: collaboRequestData.audios.map((audio) => audio.part),
     };
 
     formData.append(
@@ -70,7 +70,11 @@ const PostingFormCollabo = () => {
       formData.append("musicFile", blobs[i]);
     }
 
-    collaboRequest(formData, id!).then((data) => console.log(data));
+    collaboRequest(formData, id!)
+      .then((data) => {alert('콜라보 리퀘스트에 성공하셨습니다')
+      navigate(PATH.main)
+    })
+      .catch((err) => alert(err));
   };
 
   return (

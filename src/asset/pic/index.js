@@ -35,6 +35,8 @@ export { default as alarmDot } from "./alarmDot.svg";
 export { default as arrowRight } from "./arrowRight.svg";
 export { default as redLike } from "./redlike.svg";
 export { default as collaboIcon } from "./collaboIcon.svg";
+export { default as alertInfo } from "./alertInfo.svg";
+export { default as alertBug } from "./alertBug.svg";
 
 
 //vector (without margin)

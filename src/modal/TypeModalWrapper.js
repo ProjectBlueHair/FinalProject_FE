@@ -48,3 +48,30 @@ const AlarmModalWrapper = styled.div`
   right:242px;
   /* transform: translate(-50%, -50%); */
 `;
+
+const AlertBugWrapper = styled.div`
+  width: 32rem;
+  height: 67%;
+  border-radius: 10px;
+  /* padding: 2rem 0 2rem 2rem; */
+
+  background-color: #ffffff;
+  border : 1px solid var(--ec-main-color);
+  position: absolute;
+  top: 16px;
+  right:242px;
+  /* transform: translate(-50%, -50%); */
+`;
+const AlertInfoWrapper = styled.div`
+  width: 32rem;
+  height: 67%;
+  border-radius: 10px;
+  /* padding: 2rem 0 2rem 2rem; */
+
+  background-color: #ffffff;
+  border : 1px solid var(--ec-main-color);
+  position: absolute;
+  top: 16px;
+  right:242px;
+  /* transform: translate(-50%, -50%); */
+`;

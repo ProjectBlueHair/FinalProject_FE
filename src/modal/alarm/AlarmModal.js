@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import TypeModalWrapper from "../TypeModalWrapper";
 import TextButton from "../../component/elem/TextButton";
 import Flex, { StFlex } from "../../component/elem/Flex";
@@ -7,6 +7,7 @@ import AlarmDot from "../../asset/icon/AlarmDot";
 import Span from "../../component/elem/Span";
 import Img from "../../component/elem/Img";
 import { arrowRight } from "../../asset/pic";
+import axios from "axios";
 function AlarmModal() {
   const alarmGap = "0.7rem";
   const alarmObj = {
@@ -17,14 +18,12 @@ function AlarmModal() {
     postImg: "",
   };
   const arr = new Array(20).fill(alarmObj);
-
-  //content
-  // profileImg : nickname, follower?
-  //date
-
-  // arrow button
-
-  // 알림 더 보기 with top border
+  const getAlarm = () => {
+    return axios.get("/notifications");
+  };
+  useEffect(() => {
+    getAlarm().then((data) => console.log("data", data));
+  }, []);
 
   return (
     <TypeModalWrapper type="alarm">
@@ -61,7 +60,11 @@ function AlarmModal() {
                 <Span fc={"var(--ec-secondary-text)"}>Nov.12.2020</Span>
               </Flex>
             </Flex>
-            <Flex hg="0" mg="1rem 0" border="0.3px solid var(--ec-secondary-text)"></Flex>
+            <Flex
+              hg="0"
+              mg="1rem 0"
+              border="0.3px solid var(--ec-secondary-text)"
+            ></Flex>
           </Flex>
         ))}
       </AlarmContainer>
