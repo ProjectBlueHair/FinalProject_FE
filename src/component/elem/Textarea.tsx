@@ -8,6 +8,8 @@ interface TextAreaProps {
   value?: string;
   onChange?: CallableFunction;
   style? : CSSProperties
+  id?: string
+  readonly? :boolean
 }
 interface TextAreaContainer {
   [key: string]: StyledComponent<"textarea", any, TextAreaProps, never>;

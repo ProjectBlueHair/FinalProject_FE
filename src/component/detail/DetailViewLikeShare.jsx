@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Img from "../elem/Img";
 import { view, like, save, share, collaboPlus, report } from "../../asset/pic";
 import { AiFillHeart } from "react-icons/ai";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {
   __getDetail,
@@ -11,12 +11,14 @@ import {
   __postLike,
 } from "../../redux/slice/detailSlice";
 import { useSelector } from "react-redux";
+import { PATH } from "../../Router";
 
 const DetailViewLikeShare = ({ detail }) => {
   const [likeView, setLikeView] = useState(detail?.isLiked);
   const [likeCount, setLikeCount] = useState(detail?.likeCount);
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   useEffect(() => {
     dispatch(__getUserInfo());
@@ -85,7 +87,7 @@ const DetailViewLikeShare = ({ detail }) => {
         <Img wd="3.5rem" src={report} />
         <div>신고</div>
       </div>
-      <div style={{ marginLeft: "54rem" }}>
+      <div onClick={()=>navigate(`${PATH.collabo}/${id}`)} style={{ marginLeft: "54rem" }}>
         <Img wd="3.5rem" src={collaboPlus} />
         <div>콜라보 하기</div>
       </div>

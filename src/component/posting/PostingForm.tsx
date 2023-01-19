@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { imgAdd } from "../../asset/pic";
 import useInput from "../../hook/useInput";
@@ -6,9 +6,11 @@ import { useAppDispatch } from "../../redux/config";
 import { CollaboForm, Form } from "../../model/PostingModel";
 import {
   collaboApprove,
-  collaboAudioSelector,
+  collaboRequestDataSelector,
   collaboRequest,
+  errorSelector,
   uploadPost,
+  __cleanUp,
   __typeTitle,
 } from "../../redux/slice/postingSlice";
 import Flex, { StFlex } from "../elem/Flex";
@@ -22,7 +24,9 @@ import Span from "../elem/Span";
 import TextArea from "../elem/Textarea";
 import TextButton from "../elem/TextButton";
 import CollaboSquare from "../../asset/icon/CollaboSquare";
-import { blob } from "stream/consumers";
+import { res } from "../../model/ResponseModel";
+import { useNavigate } from "react-router-dom";
+import { PATH } from "../../Router";
 export const formStyle = {
   border: "1px solid rgba(0,0,0,0.1)",
   borderRadius: "10px",
@@ -46,16 +50,30 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
   const collaboInput = useInput("");
 
   const title = useAppSelector(titleSelector);
-  const collaboAudios = useAppSelector(collaboAudioSelector);
+  const collaboRequestData = useAppSelector(collaboRequestDataSelector);
+  console.log("collaboRequestData", collaboRequestData.audios);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const error = useAppSelector(errorSelector);
+  if (error) {
+    // alert(error);
+    navigate(PATH.main);
+  }
+  useEffect(() => {
+    return () => {
+      console.log("posting form cleaning");
+      dispatch(__cleanUp());
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData();
 
     const collaboForm: CollaboForm = {
-      contents: "string",
-      musicPartList: ["string"],
+      contents: descriptionInput.value,
+      musicPartList: collaboRequestData.audios.map((audio) => audio.part),
     };
     formData.append(
       "jsonData",
@@ -63,7 +81,7 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
     );
 
     const blobs = await Promise.all(
-      collaboAudios.map(async (collabo) => {
+      collaboRequestData.audios.map(async (collabo) => {
         const response = await axios.get(collabo.src, {
           responseType: "blob",
         });
@@ -96,10 +114,16 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
         console.log("response from collabo request", data.data);
         return collaboApprove(data.data);
       })
-      .then((data) => {
+      .then(({ data }: { data: res }) => {
+        if (data.customHttpStatus === 2000) {
+          alert("게시글이 작성되었습니다.");
+          navigate(PATH.main);
+        } else {
+          alert(data.message);
+        }
         console.log("collabo approve response", data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => alert(err));
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -169,12 +193,12 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
               style={{ ...formStyle, height: "8rem" }}
               placeholder={"request to collaborators"}
               {...collaboInput}
-            />
+            ></TextArea>
           </label>
           <Flex justify="flex-end">
             <TextButton
               btnType="basic"
-              disabled={title === "" ? true : false}
+              disabled={title === ""  ? true : false}
               type="submit"
             >
               올리기

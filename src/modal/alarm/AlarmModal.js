@@ -29,8 +29,8 @@ function AlarmModal() {
   return (
     <TypeModalWrapper type="alarm">
       <AlarmContainer hg="100%" direction="column">
-        {arr.map((obj) => (
-          <Flex direction="column">
+        {arr.map((obj, index) => (
+          <Flex key={index} direction="column">
             <Flex direction="column" cursor="pointer" gap={alarmGap}>
               <Flex justify="flex-start" gap={alarmGap}>
                 <AlarmDot />{" "}
