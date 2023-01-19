@@ -14,6 +14,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { __getDetail, __postLike } from "../../redux/slice/detailSlice";
 import { getCookies } from "../../dataManager/cookie";
+import { PATH } from "../../Router";
 
 
 const DetailViewLikeShare = ({ detail }) => {

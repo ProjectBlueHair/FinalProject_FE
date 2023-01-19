@@ -57,7 +57,7 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
 
   const error = useAppSelector(errorSelector);
   if (error) {
-    // alert(error);
+    alert(error);
     navigate(PATH.main);
   }
   useEffect(() => {

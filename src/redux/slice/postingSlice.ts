@@ -114,11 +114,12 @@ export const postingSlice = createSlice({
       state.audios[payload.index].volume = payload.volume;
     },
     __setCollaboPart: (state, { payload }) => {
+      console.log("part", payload.part);
       state.collaboRequestData.audios[payload.index].part = payload.part;
       const hasEmpty = state.collaboRequestData.audios
         .map((audio) => audio.part)
         .indexOf("");
-      state.collaboRequestData.isValid = hasEmpty === -1 ;
+      state.collaboRequestData.isValid = hasEmpty === -1;
     },
     __cleanUp: (state) => {
       return initialState;
@@ -149,7 +150,6 @@ export const postingSlice = createSlice({
         state.error = payload;
       })
       .addCase(__getPostInfo.fulfilled, (state, { payload }) => {
-        console.log("extra reducer", payload);
         state.title = payload.title;
         state.isLoading = false;
       })
@@ -175,10 +175,11 @@ export const __getAudios = createAsyncThunk(
   "__getAudios",
   async (payload: number, thunkAPI) => {
     try {
-      const { data } = await instanceAxios.get(`/post/${payload}/music`);
-      if (data.customHttpStatus === 2000) {
+      const {data} = await instanceAxios.get(`/post/${payload}/music`);
+      console.log('__getAudios customHttpStatus', data.data.customHttpStatus)
+      if (data.customHttpStatus === 2000 ||data.customHttpStatus === 4015 ) {
         return data.data;
-      } else {
+      }  else {
         throw new Error(data.message);
       }
     } catch (error) {
@@ -191,7 +192,7 @@ export const __getPostInfo = createAsyncThunk(
   async (payload: number, thunkAPI) => {
     try {
       const { data } = await instanceAxios.get(`/post/details/${payload}`);
-      if (data.customHttpStatus === 2000) {
+      if (data.customHttpStatus === 2000||data.customHttpStatus === 4015) {
         return data.data;
       } else {
         throw new Error(data.message);
@@ -208,12 +209,13 @@ export const __getCollaboRequested = createAsyncThunk(
       const { data }: { data: res } = await instanceAxios.get(
         `/collabo/${payload}`
       );
-      if (data.customHttpStatus === 2000) {
+      if (data.customHttpStatus === 2000||data.customHttpStatus === 4015) {
         return data.data;
       } else {
         throw new Error(data.message);
       }
     } catch (error) {
+
       return thunkAPI.rejectWithValue(error);
     }
   }

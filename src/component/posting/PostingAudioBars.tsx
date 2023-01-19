@@ -17,7 +17,8 @@ const PostingAudioBars = () => {
   const progressControl = useAppSelector(audioControlSelector);
   const error = useAppSelector(errorSelector)
   if(error){
-    alert('error at PostingAudioBars : '+error)
+    // alert('error at PostingAudioBars : '+error)
+    console.log('error at PostingAudioBars : '+error)
   }
   return (
     <Flex direction="column" gap={AUDIO_BAR_GAP}>

@@ -29,7 +29,8 @@ const PostingCollaboRequested = () => {
   const collaboDescription = useAppSelector(collaboDescriptionSelector);
   const error = useAppSelector(errorSelector);
   if (error) {
-    alert(error);
+    // alert(error);
+    console.log(error);
     navigate(PATH.main);
   }
 
