@@ -3,26 +3,42 @@ export interface ProgressControl {
   seekTo: number;
   src: string | undefined;
 }
-export interface AudioData {
-  src: string;
-  // file: File;
-}
 export interface Audio {
   audioData: AudioData;
   isMute: boolean;
   isNewAudio: boolean;
   isSolo: boolean;
   volume: number;
-  part: string;
+}
+//what we receive from audio get api
+export interface AudioData { 
+  musicFile : string, 
+  part : string,
+  nickname : string
 }
 export interface Form {
   contents: string;
   postImg: string | null;
   title: string;
 }
-
+export interface CollaboForm {
+  contents: string;
+  musicPartList: string[];
+}
 export interface CollaboAudio {
-  // file: File;
   src: string;
   part: string;
+}
+export interface CollaboRequested {
+  activated: boolean
+  approval: boolean
+  contents: string;
+  createdAt: string
+  modifiedAt: string
+  musicList: string
+  nickname: string
+}
+export interface CollaboRequestData {
+  audios: CollaboAudio [];
+  isValid : boolean
 }

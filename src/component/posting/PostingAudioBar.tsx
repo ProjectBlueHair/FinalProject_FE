@@ -7,7 +7,6 @@ import { useAppSelector } from "../../redux/config";
 const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
   props
 ) => {
-
   const formWaveSurferOptions = (ref: HTMLDivElement) => ({
     // 재생 속도
     audioRate: 1,
@@ -45,8 +44,8 @@ const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
       waveformRef.current as HTMLDivElement
     );
     wavesurfer.current = WaveSurfer.create(options);
-    console.log("props.audioInfo.src", props.audioData.src);
-    wavesurfer.current.load(props.audioData.src);
+    console.log("props.audioInfo.src", props.audioData.musicFile);
+    wavesurfer.current.load(props.audioData.musicFile);
     wavesurfer.current.on("ready", function () {
       if (wavesurfer.current) {
         wavesurfer.current.setVolume(props.volume);
@@ -54,7 +53,7 @@ const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
     });
 
     return () => wavesurfer.current?.destroy();
-  }, [props.audioData.src]);
+  }, [props.audioData.musicFile]);
 
   useEffect(() => {
     wavesurfer.current?.setVolume(props.volume);

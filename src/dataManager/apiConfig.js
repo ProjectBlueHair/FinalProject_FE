@@ -45,9 +45,20 @@ instanceAxios.interceptors.request.use((config) => {
 //         // console.log(data);
 //         const originalRequest = config;
 
+
 //         const { headers } = await instanceAxios.post("member/reissuance");
 //         const { accesstoken: newAccessToken, refreshtoken: newRefreshToken } =
 //           headers;
+
+       // setCookie("accesstoken", newAccessToken, {
+       //   path: "/",
+     //   });
+       // setCookie("refreshtoken", newRefreshToken, {
+      //    path: "/",
+      //  });
+        
+      //  isTokenRefreshing = false;
+
 
 //         setCookie("accesstoken", newAccessToken, {
 //           path: "/",

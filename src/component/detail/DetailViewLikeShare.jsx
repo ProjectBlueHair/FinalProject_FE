@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux";
 import { __getDetail, __postLike } from "../../redux/slice/detailSlice";
 import { getCookies } from "../../dataManager/cookie";
 
+
 const DetailViewLikeShare = ({ detail }) => {
   const [likeView, setLikeView] = useState(detail?.isLiked);
   const [likeCount, setLikeCount] = useState(detail?.likeCount);
@@ -89,7 +90,7 @@ const DetailViewLikeShare = ({ detail }) => {
         <Img wd="3.5rem" src={report} />
         <div>신고</div>
       </div>
-      <div style={{ marginLeft: "63rem" }}>
+      <div onClick={()=>navigate(`${PATH.collabo}/${id}`)} style={{ marginLeft: "54rem" }}>
         <Img wd="3.5rem" src={collaboPlus} />
         <button onClick={onCollabo}>콜라보 하기</button>
       </div>

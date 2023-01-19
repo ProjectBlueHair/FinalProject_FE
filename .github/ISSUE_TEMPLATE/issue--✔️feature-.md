@@ -11,9 +11,11 @@ assignees: ''
 설명을 작성해주세요.
 
 
-## Todo
-- [ ] todo
-- [ ] todo 
+## Task
+- [ ] task 1
+
+## Trouble shooting
+- [ ] trouble 1 
 
 ## Etc
 기타사항

@@ -8,6 +8,7 @@ import { modalSlice } from "../slice/modalSlice";
 import main from "../slice/mainSlice";
 import posting from "../slice/postingSlice";
 import { typeModalSlice } from "../../modal/typeModalSlice";
+import { collaboSlice } from "../slice/collaboSlice";
 
 const rootReducer = combineReducers({
   modal: modalSlice.reducer,
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   detail,
   comment,
   typeModal: typeModalSlice.reducer,
+  collabo : collaboSlice.reducer
 
 });
 export type AppState = ReturnType<typeof rootReducer>;
