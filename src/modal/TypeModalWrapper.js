@@ -46,6 +46,7 @@ const AlarmModalWrapper = styled.div`
   position: absolute;
   top: 16px;
   right:242px;
+  z-index: 9999;
   /* transform: translate(-50%, -50%); */
 `;
 

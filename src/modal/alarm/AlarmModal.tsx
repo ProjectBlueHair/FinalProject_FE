@@ -81,7 +81,7 @@ const AlarmModal = () => {
                 <Img mg={"0 2rem 0 0"} wd="3.5rem" src={arrowRight} />
               </Flex>
               <Flex justify="flex-start">
-                <Span fc={"var(--ec-secondary-text)"}>{alarm.createdAt}</Span>
+                <Span fc={"var(--ec-secondary-text)"} fw='400' fs="1.2rem">{alarm.createdAt}</Span>
               </Flex>
             </Flex>
             <Flex

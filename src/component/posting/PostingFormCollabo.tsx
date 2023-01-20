@@ -72,7 +72,7 @@ const PostingFormCollabo = () => {
 
     collaboRequest(formData, id!)
       .then((data) => {
-        alert("콜라보 리퀘스트에 성공하셨습니다")
+        alert("콜라보 리퀘스트에 성공하셨습니다");
         navigate(PATH.main);
       })
       .catch((err) => alert(err));
@@ -80,7 +80,7 @@ const PostingFormCollabo = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Flex gap="2.5rem" align="flex-start">
+      <Flex gap="2.5rem" align="flex-start" >
         <Flex wd="100%" direction="column" gap="2rem" align="flex-start">
           <label>
             <div>설명</div>
