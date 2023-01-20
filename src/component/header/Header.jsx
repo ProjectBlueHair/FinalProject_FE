@@ -76,7 +76,20 @@ const Header = () => {
           wd="20rem"
           src={mainLogo}
         />
-        <Img type="icon" wd={iconSize} src={follows} />
+        <Img
+          onClick={() => {
+            $openModal({
+              type: "alert",
+              props: {
+                message: "해당 기능은 곧 준비될 예정입니다 !",
+                type: "confirm",
+              },
+            });
+          }}
+          type="icon"
+          wd={iconSize}
+          src={follows}
+        />
       </Flex>
 
       <Flex>
@@ -92,13 +105,26 @@ const Header = () => {
       </Flex>
 
       <Flex justify="flex-end" gap="1.5rem">
-        <Img type="icon" wd={iconSize} src={message} />
+        <Img
+          onClick={() => {
+            $openModal({
+              type: "alert",
+              props: {
+                message: "채팅 기능은 곧 준비될 예정입니다 !",
+                type: "confirm",
+              },
+            });
+          }}
+          type="icon"
+          wd={iconSize}
+          src={message}
+        />
         <Flex direction="row" wd="none">
           <Img
             onClick={() => {
-              !isClicked.alarm
+              !isClicked.alarm && user.nickname
                 ? $openModal({ type: "alarm" })
-                : $closeModal({ type: "alarm" });
+                : $closeModal();
               setIsClicked({ ...isClicked, alarm: !isClicked.alarm });
             }}
             type="icon"
@@ -113,7 +139,20 @@ const Header = () => {
           wd={iconSize}
           src={upload}
         />
-        <Img type="icon" wd={iconSize} src={settings} />
+        <Img
+          onClick={() => {
+            $openModal({
+              type: "alert",
+              props: {
+                message: "설정 기능은 곧 준비될 예정입니다 !",
+                type: "confirm",
+              },
+            });
+          }}
+          type="icon"
+          wd={iconSize}
+          src={settings}
+        />
         {user.profileImg ? (
           <Img
             cursor="pointer"

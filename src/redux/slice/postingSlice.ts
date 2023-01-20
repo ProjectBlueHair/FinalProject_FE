@@ -1,6 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { App } from "aws-sdk/clients/opsworks";
-import { testAudios } from "../../component/main/MockResource";
 import { AppState } from "../config";
 import {
   ProgressControl,
@@ -10,10 +8,8 @@ import {
   AudioData,
   CollaboRequested,
   CollaboRequestData,
-  CollaboReqeustedAudioData,
 } from "../../model/PostingModel";
 import { instanceAxios } from "../../dataManager/apiConfig";
-import { title } from "process";
 import { Response } from "../../model/ResponseModel";
 import { handleError } from "../../dataManager/errorHandler";
 
@@ -21,7 +17,6 @@ export const audiosSelector = (state: AppState) => state.posting.audios;
 export const audioControlSelector = (state: AppState) =>
   state.posting.progressControl;
 export const titleSelector = (state: AppState) => state.posting.title;
-//todo: 대표곡 받는 부분 어떻게 할 것인지 정해야함
 export const collaboRequestDataSelector = (state: AppState) =>
   state.posting.collaboRequestData;
 export const loadingSelector = (state: AppState) => state.posting.isLoading;
@@ -34,7 +29,6 @@ export interface PostingState {
   audios: Audio[];
   progressControl: ProgressControl;
   audio: Audio;
-  // collaboData: CollaboAudio[];
   collaboRequestData: CollaboRequestData;
   isLoading: boolean;
   error: unknown;
@@ -49,6 +43,7 @@ const initialState = {
     isMute: false,
     isNewAudio: false,
     volume: 0.5,
+    isCollabo: false,
     isSolo: false,
   } as Audio,
   // collaboAudios: [] as CollaboAudio[],
@@ -60,25 +55,20 @@ export const postingSlice = createSlice({
   name: "posting",
   initialState,
   reducers: {
-    __addNewAudio: (state, { payload }) => {
-      console.log("__addNewAudio payload", payload);
-      state.progressControl.src = state.progressControl.src || payload[0];
-      const arr: Audio[] = [];
-      const arr2: CollaboAudio[] = [];
-      payload.map((musicFile: string) => {
-        arr.push({
-          ...state.audio,
-          isNewAudio: true,
-          audioData: { ...state.audio.audioData, musicFile: musicFile },
-        });
-        arr2.push({ src: musicFile, part: "" });
-      });
-      state.audios = state.audios.concat(arr);
-      state.collaboRequestData.audios =
-        state.collaboRequestData.audios.concat(arr2);
-    },
     __typeTitle: (state, { payload }) => {
       state.title = payload;
+    },
+    __setCollaboPart: (state, { payload }) => {
+      const originalAudiosLength =
+        state.audios.length - state.collaboRequestData.audios.length;
+      state.collaboRequestData.audios[
+        payload.index - originalAudiosLength
+      ].part = payload.part;
+
+      const hasEmpty = state.collaboRequestData.audios
+        .map((audio) => audio.part)
+        .indexOf("");
+      state.collaboRequestData.isValid = hasEmpty === -1;
     },
     __togglePlay: (state, { payload }) => {
       state.progressControl.isPlaying = payload;
@@ -115,17 +105,22 @@ export const postingSlice = createSlice({
         payload.volume === 0.01 ? true : false;
       state.audios[payload.index].volume = payload.volume;
     },
-    __setCollaboPart: (state, { payload }) => {
-      const originalAudiosLength =
-        state.audios.length - state.collaboRequestData.audios.length;
-      state.collaboRequestData.audios[
-        payload.index - originalAudiosLength
-      ].part = payload.part;
-
-      const hasEmpty = state.collaboRequestData.audios
-        .map((audio) => audio.part)
-        .indexOf("");
-      state.collaboRequestData.isValid = hasEmpty === -1;
+    __addNewAudio: (state, { payload }) => {
+      console.log("__addNewAudio payload", payload);
+      state.progressControl.src = state.progressControl.src || payload[0];
+      const arr: Audio[] = [];
+      const arr2: CollaboAudio[] = [];
+      payload.map((musicFile: string) => {
+        arr.push({
+          ...state.audio,
+          isNewAudio: true,
+          audioData: { ...state.audio.audioData, musicFile: musicFile },
+        });
+        arr2.push({ src: musicFile, part: "" });
+      });
+      state.audios = state.audios.concat(arr);
+      state.collaboRequestData.audios =
+        state.collaboRequestData.audios.concat(arr2);
     },
     __cleanUp: (state) => {
       return initialState;
@@ -133,12 +128,21 @@ export const postingSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(__getPostInfo.rejected, (state, { payload }) => {
+        console.log("__getPostTitle rejected payload", payload);
+        state.error = payload;
+      })
+      .addCase(__getPostInfo.fulfilled, (state, { payload }) => {
+        state.title = payload.title;
+        state.isLoading = false;
+      })
       .addCase(__getAudios.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(
         __getAudios.fulfilled,
         (state, { payload }: { payload: AudioData[] }) => {
+          console.log('__getAudios payload',payload)
           console.log("extra reducer", payload);
           state.isLoading = false;
           payload.map((audio) => {
@@ -155,32 +159,29 @@ export const postingSlice = createSlice({
         console.log("__getAudios rejected payload", payload);
         state.error = payload;
       })
-      .addCase(__getPostInfo.fulfilled, (state, { payload }) => {
-        state.title = payload.title;
-        state.isLoading = false;
-      })
-      .addCase(__getPostInfo.rejected, (state, { payload }) => {
-        console.log("__getPostTitle rejected payload", payload);
-        state.error = payload;
+
+
+      .addCase(__getCollaboRequested.pending, (state) => {
+        state.isLoading = true;
       })
       .addCase(
         __getCollaboRequested.fulfilled,
         (state, { payload }: { payload: CollaboRequested }) => {
+          console.log('__getCollaboRequested payload',payload)
           state.title = payload.nickname + "님의 콜라보 요청";
           state.collaboDescription = payload.contents;
-          const arr = [] as Audio[];
           console.log("payload.musicList[0]", payload.musicList[0]);
           state.progressControl.src =
-            state.progressControl.src || payload.musicList[0].musicFile;
+            state.progressControl.src || payload.musicList[0]?.musicFile;
 
           payload.musicList.map((audio: AudioData) => {
-            arr.push({
+            state.audios = state.audios.concat({
               ...state.audio,
-              isNewAudio: false,
+              isCollabo:true,
+              isNewAudio: true,
               audioData: audio,
             });
           });
-          state.audios = state.audios.concat(arr);
         }
       )
       .addCase(__getCollaboRequested.rejected, (state, { payload }) => {

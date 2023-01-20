@@ -4,6 +4,7 @@ import WaveSurfer from "wavesurfer.js";
 import Img from "../elem/Img";
 import { volumeVector, volumedown } from "../../asset/pic";
 import Emitter from "../detail/EventEmitter";
+import Span from "../elem/Span";
 
 const formWaveSurferOptions = (ref) => ({
   // 재생 속도
@@ -172,6 +173,7 @@ const DetailAudio = (props) => {
         <WaveCreate>
           <div>{part}</div>
           <span>{userName}</span>
+          
         </WaveCreate>
         <WaveSound>
           <div>

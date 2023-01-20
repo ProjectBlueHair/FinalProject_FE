@@ -76,7 +76,12 @@ const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
   return (
     <Flex justify="flex-start" wd="98%">
       <div
-        style={{ width: "100%", padding: "0.3rem 0.3rem", marginLeft: "-1rem" }}
+        style={{
+          width: "100%",
+          padding: "0.3rem 0.3rem",
+          marginLeft: "-1rem",
+          overflow: "hidden",
+        }}
         ref={waveformRef}
       />
     </Flex>

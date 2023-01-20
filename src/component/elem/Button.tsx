@@ -1,5 +1,5 @@
 import { type } from "os";
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import styled, { CSSProperties, StyledComponent } from "styled-components";
 
 interface ButtonProps {
@@ -7,7 +7,10 @@ interface ButtonProps {
   style?: CSSProperties;
   children?: React.ReactNode;
   disabled?: boolean;
+  mg?: string;
+  pd?: string;
   type?: "submit" | "reset" | "button" | undefined;
+  onClick?: MouseEventHandler;
 }
 interface ButtonType {
   [key: string]: StyledComponent<"button", any, ButtonProps, never>;
@@ -26,6 +29,8 @@ const Button: React.FC<ButtonProps> = (props) => {
 
 export default Button;
 const CursorPointer = styled.button<ButtonProps>`
+  margin: ${({ mg }) => mg || "none"};
+  padding: ${({ pd }) => pd || "none"};
   outline: none;
   border: none;
   background-color: transparent;
@@ -37,9 +42,9 @@ const CursorPointer = styled.button<ButtonProps>`
 const BasicButton = styled(CursorPointer)`
   color: #ffffff;
   background-color: var(--ec-main-color);
-  padding: 1.2rem 3.5rem;
+  padding: ${({ pd }) => pd || "1.2rem 3.5rem"};
   border-radius: 20rem;
-  margin-top: 2rem;
+  /* margin-top: 2rem; */
 
   &:hover([disabled]) {
   }
