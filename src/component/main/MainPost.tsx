@@ -1,7 +1,13 @@
 import React from "react";
 import Img from "../elem/Img";
 import Flex from "../elem/Flex";
-import { like, pause, playButtonSecond, view } from "../../asset/pic";
+import {
+  fillHeart,
+  like,
+  pause,
+  playButtonSecond,
+  view,
+} from "../../asset/pic";
 import styled from "styled-components";
 import StLink from "../elem/Link";
 import {
@@ -12,7 +18,7 @@ import {
 import { CurrentMusic, Post } from "../../model/PostModel";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import { useNavigate } from "react-router-dom";
-const MainPost: React.FC<{ post: Post }> = (props) => {
+const MainPost: React.FC<{ post: Post; index: number }> = (props) => {
   const profile_margin = "0 0 0 -1rem";
   const dispatch = useAppDispatch();
   const currentMusic = useAppSelector<CurrentMusic>(
@@ -82,10 +88,17 @@ const MainPost: React.FC<{ post: Post }> = (props) => {
             </Flex>
             <Flex justify="flex-start" gap="0.4rem">
               <Img
-                onClick={() => dispatch(__mainPostLike(props.post.id))}
+                onClick={() =>
+                  dispatch(
+                    __mainPostLike({
+                      postId: props.post.id,
+                      index: props.index,
+                    })
+                  )
+                }
                 type="iconSmall"
                 wd="1.5rem"
-                src={like}
+                src={props.post.isLiked ? fillHeart : like}
               />
               <IconSpan>{props.post.likeCount}</IconSpan>
             </Flex>

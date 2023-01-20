@@ -8,30 +8,37 @@ import {
   __getCollaboRequested,
 } from "../../redux/slice/postingSlice";
 import Flex from "../elem/Flex";
-import TextButton from "../elem/TextButton";
+import TextButton from "../elem/Button";
 import { formStyle } from "./PostingForm";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 
 import { useNavigate, useParams } from "react-router-dom";
 import { Response } from "../../model/ResponseModel";
 import { PATH } from "../../Router";
+import { batch } from "react-redux";
+import useTypeModal from "../../modal/hooks/useTypeModal";
 
 const PostingCollaboRequested = () => {
   const { id, postId } = useParams();
-  console.log('id',id,'postId',postId)
+  console.log("id", id, "postId", postId);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   useEffect(() => {
-    dispatch(__getAudios(Number(postId)))
-    dispatch(__getCollaboRequested(Number(id)));
+    batch(() => {
+      dispatch(__getAudios(Number(postId)))
+        .then((data) => {
+          if (data.type.split("/")[1]) {
+            dispatch(__getCollaboRequested(Number(id)));
+          }
+        })
+        .catch((err) => alert(err));
+    });
+
     return () => {
-      
       dispatch(__cleanUp());
     };
   }, []);
-  useEffect(()=>{
-
-  },[])
+  useEffect(() => {}, []);
   const collaboDescription = useAppSelector(collaboDescriptionSelector);
   const error = useAppSelector(errorSelector);
   if (error) {
@@ -39,19 +46,25 @@ const PostingCollaboRequested = () => {
     // console.log(error);
     navigate(PATH.main);
   }
+  const { $openModal, $closeModal } = useTypeModal();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    $openModal({ type: "loading", props: "" });
     collaboApprove(Number(id))
       .then(({ data }: { data: Response }) => {
         if (data.customHttpStatus === 2000) {
+          $closeModal();
           alert(data.message);
-          navigate(`${PATH.detail}/${id}`);
+          navigate(`${PATH.detail}/${postId}`);
         } else {
           throw new Error(data.message);
         }
       })
-      .catch((err) => alert("err"));
+      .catch((err) => {
+        $closeModal();
+        alert(err);
+      });
   };
 
   return (

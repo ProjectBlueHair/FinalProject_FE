@@ -69,7 +69,7 @@ const AlarmModal = () => {
                   wd="5rem"
                   hg="5rem"
                   radius="10px"
-                  src="/testRandomPost/2.jpg"
+                  src={alarm.senderImg}
                 />
                 <Flex
                   direction="column"
@@ -78,8 +78,8 @@ const AlarmModal = () => {
                   align="flex-start"
                   gap={alarmGap}
                 >
-                  <Span fs="1.4rem">name</Span>
-                  <Span fs="1.2rem">like</Span>
+                  <Span fs="1.4rem">{alarm.sender}</Span>
+                  {/* <Span fs="1.2rem">like</Span> */}
                 </Flex>
                 <Img mg={"0 2rem 0 0"} wd="3.5rem" src={arrowRight} />
               </Flex>

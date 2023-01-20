@@ -7,13 +7,14 @@ export interface Audio {
   audioData: AudioData;
   isMute: boolean;
   isNewAudio: boolean;
+  isCollabo? : boolean
   isSolo: boolean;
   volume: number;
 }
 //what we receive from audio get api
 export interface AudioData {
   musicFile: string;
-  part: string;
+  musicPart: string;
   nickname: string;
 }
 export interface Form {

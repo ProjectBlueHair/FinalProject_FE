@@ -43,6 +43,7 @@ const initialState = {
     isMute: false,
     isNewAudio: false,
     volume: 0.5,
+    isCollabo: false,
     isSolo: false,
   } as Audio,
   // collaboAudios: [] as CollaboAudio[],
@@ -127,12 +128,21 @@ export const postingSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(__getPostInfo.rejected, (state, { payload }) => {
+        console.log("__getPostTitle rejected payload", payload);
+        state.error = payload;
+      })
+      .addCase(__getPostInfo.fulfilled, (state, { payload }) => {
+        state.title = payload.title;
+        state.isLoading = false;
+      })
       .addCase(__getAudios.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(
         __getAudios.fulfilled,
         (state, { payload }: { payload: AudioData[] }) => {
+          console.log('__getAudios payload',payload)
           console.log("extra reducer", payload);
           state.isLoading = false;
           payload.map((audio) => {
@@ -149,32 +159,29 @@ export const postingSlice = createSlice({
         console.log("__getAudios rejected payload", payload);
         state.error = payload;
       })
-      .addCase(__getPostInfo.fulfilled, (state, { payload }) => {
-        state.title = payload.title;
-        state.isLoading = false;
-      })
-      .addCase(__getPostInfo.rejected, (state, { payload }) => {
-        console.log("__getPostTitle rejected payload", payload);
-        state.error = payload;
+
+
+      .addCase(__getCollaboRequested.pending, (state) => {
+        state.isLoading = true;
       })
       .addCase(
         __getCollaboRequested.fulfilled,
         (state, { payload }: { payload: CollaboRequested }) => {
+          console.log('__getCollaboRequested payload',payload)
           state.title = payload.nickname + "님의 콜라보 요청";
           state.collaboDescription = payload.contents;
-          const arr = [] as Audio[];
           console.log("payload.musicList[0]", payload.musicList[0]);
           state.progressControl.src =
             state.progressControl.src || payload.musicList[0]?.musicFile;
 
           payload.musicList.map((audio: AudioData) => {
-            arr.push({
+            state.audios = state.audios.concat({
               ...state.audio,
-              isNewAudio: false,
+              isCollabo:true,
+              isNewAudio: true,
               audioData: audio,
             });
           });
-          state.audios = state.audios.concat(arr);
         }
       )
       .addCase(__getCollaboRequested.rejected, (state, { payload }) => {

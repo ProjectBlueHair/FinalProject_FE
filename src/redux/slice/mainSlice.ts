@@ -16,10 +16,10 @@ export const __getPostList = createAsyncThunk(
 );
 export const __mainPostLike = createAsyncThunk(
   "__mainPostLike",
-  async (payload: string | number, thunkAPI) => {
+  async (payload: { postId: string | number; index: number }, thunkAPI) => {
     try {
-      const { data } = await instanceAxios.post(`post/like/${payload}`);
-      const resData: LikeModel = { ...handleError(data), postId: payload };
+      const { data } = await instanceAxios.post(`post/like/${payload.postId}`);
+      const resData: LikeModel = { ...handleError(data), index: payload.index };
       return resData;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -33,18 +33,20 @@ export interface MainState {
   isLoading: boolean;
   error: unknown;
 }
+const initialState = {
+  posts: [] as Post[],
+  nextPage: 0,
+  currentMusic: { post: {}, isPlayingMain: false, isPlayingPlayer: false },
+  isLoading: false,
+  error: null,
+} as MainState;
+
 const findPostIndex = (posts: Post[], payload: string | number) => {
   return posts.findIndex((post) => post.id === payload);
 };
 export const mainSlice = createSlice({
   name: "main",
-  initialState: {
-    posts: [] as Post[],
-    nextPage: 0,
-    currentMusic: { post: {}, isPlayingMain: false, isPlayingPlayer: false },
-    isLoading: false,
-    error: null,
-  } as MainState,
+  initialState,
   reducers: {
     __MainTogglePlay: (state, action) => {
       state.currentMusic.isPlayingMain = action.payload;
@@ -81,6 +83,9 @@ export const mainSlice = createSlice({
         };
       }
     },
+    __mainCleanUp: (state) => {
+      return initialState;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -106,18 +111,13 @@ export const mainSlice = createSlice({
       .addCase(
         __postLike.fulfilled,
         (state, { payload }: { payload: LikeModel | undefined }) => {
-          const index = findPostIndex(state.posts, payload!.postId);
-          state.posts[index].isLiked = payload!.isLiked;
-          state.posts[index].likeCount = payload!.likeCount;
+          state.posts[payload!.index].isLiked = payload!.isLiked;
+          state.posts[payload!.index].likeCount = payload!.likeCount;
         }
-        
-      ).addCase(
-        __postLike.rejected,
-        (state, { payload }) => {
-          state.error = payload
-        }
-        
       )
+      .addCase(__postLike.rejected, (state, { payload }) => {
+        state.error = payload;
+      });
   },
 });
 export const {
@@ -126,5 +126,6 @@ export const {
   __PlayerTogglePlay,
   __PlayPrevious,
   __playNext,
+  __mainCleanUp,
 } = mainSlice.actions;
 export default mainSlice.reducer;

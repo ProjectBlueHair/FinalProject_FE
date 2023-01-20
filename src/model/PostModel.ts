@@ -23,5 +23,5 @@ export interface CurrentMusic {
 export interface LikeModel {
   isLiked: boolean;
   likeCount: number;
-  postId: string;
+  index: number;
 }

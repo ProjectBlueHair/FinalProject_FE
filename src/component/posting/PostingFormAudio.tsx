@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { useAppDispatch } from "../../redux/config";
-import { __addNewAudio } from "../../redux/slice/postingSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/config";
+import { loadingSelector, __addNewAudio } from "../../redux/slice/postingSlice";
 import Flex, { StFlex } from "../elem/Flex";
 import Span from "../elem/Span";
 import { AUDIO_BAR_HEIGHT, AUDIO_BAR_RADIUS } from "./PostingAudioBars";
 
 const PostingFormAudio = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-
+  const isLoading = useAppSelector(loadingSelector)
   const defaultText = () => {
     return (
       <div>
@@ -39,10 +39,17 @@ const PostingFormAudio = () => {
     event.stopPropagation();
     if (event.dataTransfer.files) {
       const files = event.dataTransfer.files;
+      console.log('files',files)
       const arr = [];
       for (let i = 0; i < files.length; i++) {
         const type = files[i].type.split("/")[1];
-        if (type !== "wav") return alert("유효하지 않은 오디오 형식입니다.");
+        console.log('type',type)
+
+        if (type !== "wav" && type !== "x-wav") {
+          setText(defaultText());
+          return alert("유효하지 않은 오디오 형식입니다.") 
+        }
+
         arr.push(URL.createObjectURL(files[i]));
       }
       dispatch(__addNewAudio(arr));
@@ -68,7 +75,10 @@ const PostingFormAudio = () => {
       const arr = [];
       for (let i = 0; i < files.length; i++) {
         const type = files[i].type.split("/")[1];
-        if (type !== "wav") return alert("유효하지 않은 오디오 형식입니다.");
+        if (type !== "wav" && type !== "x-wav") {
+          setText(defaultText());
+          return alert("유효하지 않은 오디오 형식입니다.") 
+        }
         arr.push(URL.createObjectURL(files[i]));
       }
       dispatch(__addNewAudio(arr));

@@ -22,11 +22,13 @@ import axios from "axios";
 import Input from "../elem/Input";
 import Span from "../elem/Span";
 import TextArea from "../elem/Textarea";
-import TextButton from "../elem/TextButton";
+import TextButton from "../elem/Button";
 import CollaboSquare from "../../asset/icon/CollaboSquare";
 import { Response } from "../../model/ResponseModel";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "../../Router";
+import useTypeModal from "../../modal/hooks/useTypeModal";
+import Button from "../elem/Button";
 export const formStyle = {
   border: "1px solid rgba(0,0,0,0.1)",
   borderRadius: "10px",
@@ -54,6 +56,8 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  const { $openModal, $closeModal } = useTypeModal();
+
   const error = useAppSelector(errorSelector);
   if (error) {
     alert(error);
@@ -68,6 +72,15 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!collaboRequestData.isValid) {
+      $openModal({
+        type: "alert",
+        props: { message: "각 음원의 파트를 입력해 주세요 :)", type: "info" },
+      });
+      return;
+    }
+    $openModal({ type: "loading", props: "" });
     const formData = new FormData();
 
     const collaboForm: CollaboForm = {
@@ -87,7 +100,6 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
         return response.data;
       })
     );
-    console.log("collabo Request blobs", blobs);
     for (let i = 0; i < blobs.length; i++) {
       formData.append("musicFile", blobs[i]);
     }
@@ -118,15 +130,26 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
         return collaboApprove(data.data);
       })
       .then(({ data }: { data: Response }) => {
+        $closeModal();
+
         if (data.customHttpStatus === 2000) {
-          alert("게시글이 작성되었습니다.");
-          navigate(PATH.main);
+          $openModal({
+            type: "alert",
+            props: {
+              message: "게시글이 작성되었습니다!",
+              type: "confirm",
+              to: "/",
+            },
+          });
         } else {
-          alert(data.message);
+          $closeModal();
         }
         console.log("collabo approve response", data);
       })
-      .catch((err) => alert(err));
+      .catch((err) => {
+        $closeModal();
+        $openModal({ type: "alert", props: { message: err, type: "error" } });
+      });
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -202,15 +225,15 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
             <Span fc="var(--ec-main-color)">
               각 음원의 파트를 입력해 주세요 :)
             </Span>
-            <TextButton
+            <Button
               btnType="basic"
               disabled={
-                title === "" || !collaboRequestData.isValid ? true : false
+                title === "" || !collaboRequestData.audios.length ? true : false
               }
               type="submit"
             >
               올리기
-            </TextButton>
+            </Button>
           </Flex>
         </Flex>
       </Flex>
