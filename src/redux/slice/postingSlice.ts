@@ -10,10 +10,12 @@ import {
   AudioData,
   CollaboRequested,
   CollaboRequestData,
+  CollaboReqeustedAudioData,
 } from "../../model/PostingModel";
 import { instanceAxios } from "../../dataManager/apiConfig";
 import { title } from "process";
-import { res } from "../../model/ResponseModel";
+import { Response } from "../../model/ResponseModel";
+import { handleError } from "../../dataManager/errorHandler";
 
 export const audiosSelector = (state: AppState) => state.posting.audios;
 export const audioControlSelector = (state: AppState) =>
@@ -114,8 +116,12 @@ export const postingSlice = createSlice({
       state.audios[payload.index].volume = payload.volume;
     },
     __setCollaboPart: (state, { payload }) => {
-      console.log("part", payload.part);
-      state.collaboRequestData.audios[payload.index].part = payload.part;
+      const originalAudiosLength =
+        state.audios.length - state.collaboRequestData.audios.length;
+      state.collaboRequestData.audios[
+        payload.index - originalAudiosLength
+      ].part = payload.part;
+
       const hasEmpty = state.collaboRequestData.audios
         .map((audio) => audio.part)
         .indexOf("");
@@ -163,6 +169,19 @@ export const postingSlice = createSlice({
           console.log("__getCollaboRequested fullflled payload", payload);
           state.title = payload.nickname + "님의 콜라보 요청";
           state.collaboDescription = payload.contents;
+          const arr = [] as Audio[];
+          console.log("payload.musicList[0]", payload.musicList[0]);
+          state.progressControl.src =
+            state.progressControl.src || payload.musicList[0].musicFile;
+
+          payload.musicList.map((audio: AudioData) => {
+            arr.push({
+              ...state.audio,
+              isNewAudio: false,
+              audioData: audio,
+            });
+          });
+          state.audios = state.audios.concat(arr);
         }
       )
       .addCase(__getCollaboRequested.rejected, (state, { payload }) => {
@@ -175,13 +194,9 @@ export const __getAudios = createAsyncThunk(
   "__getAudios",
   async (payload: number, thunkAPI) => {
     try {
-      const {data} = await instanceAxios.get(`/post/${payload}/music`);
-      console.log('__getAudios customHttpStatus', data.data.customHttpStatus)
-      if (data.customHttpStatus === 2000 ||data.customHttpStatus === 4015 ) {
-        return data.data;
-      }  else {
-        throw new Error(data.message);
-      }
+      const { data } = await instanceAxios.get(`/post/${payload}/music`);
+      console.log("__getAudios customHttpStatus", data.data.customHttpStatus);
+      return handleError(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -192,11 +207,7 @@ export const __getPostInfo = createAsyncThunk(
   async (payload: number, thunkAPI) => {
     try {
       const { data } = await instanceAxios.get(`/post/details/${payload}`);
-      if (data.customHttpStatus === 2000||data.customHttpStatus === 4015) {
-        return data.data;
-      } else {
-        throw new Error(data.message);
-      }
+      return handleError(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -206,16 +217,11 @@ export const __getCollaboRequested = createAsyncThunk(
   "__getCollaboRequested",
   async (payload: number, thunkAPI) => {
     try {
-      const { data }: { data: res } = await instanceAxios.get(
+      const { data }: { data: Response } = await instanceAxios.get(
         `/collabo/${payload}`
       );
-      if (data.customHttpStatus === 2000||data.customHttpStatus === 4015) {
-        return data.data;
-      } else {
-        throw new Error(data.message);
-      }
+      return handleError(data);
     } catch (error) {
-
       return thunkAPI.rejectWithValue(error);
     }
   }

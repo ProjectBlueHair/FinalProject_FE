@@ -1,17 +1,20 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { instanceAxios } from "../../dataManager/apiConfig";
+import { handleError } from "../../dataManager/errorHandler";
 import { CurrentMusic, Post } from "../../model/PostModel";
 export const __getPostList = createAsyncThunk(
   "__getPostList",
   async (payload: number, thunkAPI) => {
     try {
       const { data } = await instanceAxios.get(`/post?page=${Number(payload)}`);
-      if (data.customHttpStatus === 2000 || data.customHttpStatus === 4015) {
-        return data.data;
-      } else {
-        throw new Error(data.message);
-      }
+      return handleError(data);
+
+      // if (data.customHttpStatus === 2000 || data.customHttpStatus === 4015) {
+      //   return data.data;
+      // } else {
+      //   throw new Error(data.message);
+      // }
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -79,7 +82,6 @@ export const mainSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(__getPostList.fulfilled, (state, { payload }) => {
-        console.log("payload", payload);
         state.isLoading = false;
         if (state.nextPage === 0) {
           state.currentMusic = {

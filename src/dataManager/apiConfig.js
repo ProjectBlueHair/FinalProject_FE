@@ -52,12 +52,6 @@ instanceAxios.interceptors.response.use(
           )
           .then((data) => {
             const { accesstoken, refreshtoken } = data.headers;
-            console.log(
-              "accesstoken",
-              accesstoken,
-              "refreshtoken",
-              refreshtoken
-            );
             setCookie("accesstoken", data.headers.accesstoken, {
               path: "/",
             });

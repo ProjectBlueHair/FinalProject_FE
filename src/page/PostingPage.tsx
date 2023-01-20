@@ -44,7 +44,7 @@ const origin = window.location.origin + "/audio-bars-bg.png";
 
 console.log("origin", origin);
 export default PostingPage;
-const AudioBarsBackground = styled.div<{ gap: string }>`
+export const AudioBarsBackground = styled.div<{ gap: string }>`
   display: flex;
   flex-direction: column;
   align-items: center;
