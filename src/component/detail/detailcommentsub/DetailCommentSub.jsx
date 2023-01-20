@@ -58,7 +58,7 @@ const DetailCommentSub = ({ mcv }) => {
               value={comSubV}
               onChange={onChangeCommentSub}
             />
-            <button onClick={onClickComSub}>등록</button>
+            <button onClick={onClickComSub}>댓글</button>
           </div>
         </SubCommentWrite>
       )}
@@ -70,6 +70,7 @@ export default DetailCommentSub;
 const DetailComSubTotal = styled.div`
   display: flex;
   margin-top: 1rem;
+  width: 100%;
 `;
 
 const DetailComTopSubImg = styled.img`
@@ -83,26 +84,25 @@ const DetailComTopSubImg = styled.img`
 const DetailComSubTop = styled.div`
   display: flex;
   flex-direction: column;
-  max-width: 72rem;
+  width: 100%;
 `;
 
 const SubCommentWrite = styled.div`
   display: flex;
   align-items: center;
-  width: 75rem;
+  width: 100%;
   height: 3rem;
-  /* border: 1px solid black; */
   div {
     display: flex;
     align-items: center;
     margin-top: 1rem;
-    width: 75rem;
+    width: 95%;
     height: 3rem;
     border: 1px solid black;
     border-radius: 2rem;
   }
   input {
-    width: 66rem;
+    width: 93%;
     border: transparent;
     padding-left: 1rem;
     margin-left: 1rem;

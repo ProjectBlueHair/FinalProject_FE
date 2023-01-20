@@ -79,11 +79,13 @@ export default DetailRecomment;
 const DetailReComCol = styled.div`
   display: flex;
   flex-direction: column;
+  width: 20%;
 `;
 
 const DetailRightLine = styled.div`
   display: flex;
-  width: 38rem;
+  justify-content: start;
+  width: 100%;
 `;
 
 const DetailRightIn = styled.div`

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { AiOutlinePauseCircle, AiOutlinePlayCircle } from "react-icons/ai";
 import DetailAudio from "./DetailAudio";
 import DetailViewLikeShare from "./DetailViewLikeShare";
 import DetailDayAndFollow from "./DetailDayAndFollow";
@@ -26,9 +25,9 @@ const DetailTop = () => {
     dispatch(__getDetail(id));
     // dispatch(__getDetailMusic(id));
     dispatch(__getAudios(id));
-    return ()=>{
-      
-      dispatch(__cleanUp())}
+    return () => {
+      dispatch(__cleanUp());
+    };
   }, []);
   // 뷰숫자, 좋아요 숫자, 제목, 내용, 배경이미지파일 (+ 작성일 추가)
   const detail = useSelector((state) => state.detail.detail.data)
@@ -38,9 +37,9 @@ const DetailTop = () => {
   return (
     <PlayTop>
       <PlayBackIMG imgs={detail?.postImg}>
-          <h1 >{detail?.title}</h1>
-          <PostingTotalPlay />
-          <PostingAudioBars />
+        <h1>{detail?.title}</h1>
+        <PostingTotalPlay />
+        <PostingAudioBars />
       </PlayBackIMG>
       <DetailViewLikeShare detail={detail} />
       <DetailBottom>
@@ -67,9 +66,9 @@ export const PlayBackIMG = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 3.5rem 4rem 2rem;
+  padding: 35px 40px 20px;
   gap: 1.5rem;
-  
+
   background-image: linear-gradient(
       rgba(240, 240, 240, 0.5),
       rgba(255, 255, 255, 1)
@@ -80,12 +79,9 @@ export const PlayBackIMG = styled.div`
   background-position: 50%, 50%;
 `;
 
-
 const DetailBottom = styled.div`
   margin: 10px auto 0;
-  width: 120rem;
+  width: 100%;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
 `;
-
-// style={{ backgroundImage: `url(${detail.postImg})` }}

@@ -22,6 +22,7 @@ const DetailDayAndFollow = ({ detail }) => {
   }, []);
   //작곡가 프로필/ 이름/ 악기 이름
   const detailCollabo = useSelector((state) => state.detail.collabo.data);
+  console.log("d", detailCollabo);
   return (
     <DetailLeftLine>
       <div>{detail?.createdAt}</div>
@@ -41,9 +42,9 @@ const DetailDayAndFollow = ({ detail }) => {
 export default DetailDayAndFollow;
 
 const DetailLeftLine = styled.div`
-  width: 80rem;
-  /* border: 1px solid black; */
-  margin-right: 1rem;
+  width: 60%;
+  margin-left: -5%;
+  margin-right: 3%;
   div {
     margin-bottom: 1rem;
   }

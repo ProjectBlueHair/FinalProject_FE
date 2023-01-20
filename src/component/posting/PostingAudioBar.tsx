@@ -33,6 +33,8 @@ const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
     interact: false,
     // 반응형 웨이브폼 여부
     responsive: true,
+    // 하단 가로스크롤바
+    hideScrollbar: true,
   });
 
   const wavesurfer = useRef<WaveSurfer | null>(null);
