@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getCookies, setCookie } from "./cookie";
+import { getCookies, removeCookies, setCookie } from "./cookie";
 
 const serverURL = process.env.REACT_APP_SERVER;
 
@@ -52,10 +52,22 @@ instanceAxios.interceptors.response.use(
           )
           .then((data) => {
             const { accesstoken, refreshtoken } = data.headers;
-            setCookie("accesstoken", data.headers.accesstoken, {
+            console.log("TOKEN ACCESS", accesstoken);
+            console.log("TOKEN REFRESH", refreshtoken);
+            if (!accesstoken || !refreshtoken) {
+              removeCookies("accesstoken", { path: "/" });
+              removeCookies("refreshtoken", { path: "/" });
+              alert(
+                "로그인이 만료되었습니다. 다시 로그인 해주세요" +
+                  accesstoken +
+                  refreshtoken
+              );
+              throw new Error("undefined token, removing cookies");
+            }
+            setCookie("accesstoken", accesstoken, {
               path: "/",
             });
-            setCookie("refreshtoken", data.headers.refreshtoken, {
+            setCookie("refreshtoken", refreshtoken, {
               path: "/",
             });
             isTokenRefreshing = false;

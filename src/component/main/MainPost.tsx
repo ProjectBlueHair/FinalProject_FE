@@ -7,6 +7,7 @@ import StLink from "../elem/Link";
 import {
   __playDifferentSrc,
   __MainTogglePlay,
+  __mainPostLike,
 } from "../../redux/slice/mainSlice";
 import { CurrentMusic, Post } from "../../model/PostModel";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
@@ -81,7 +82,7 @@ const MainPost: React.FC<{ post: Post }> = (props) => {
             </Flex>
             <Flex justify="flex-start" gap="0.4rem">
               <Img
-                onClick={() => navigate(`/collabo/${props.post.id}`)}
+                onClick={() => dispatch(__mainPostLike(props.post.id))}
                 type="iconSmall"
                 wd="1.5rem"
                 src={like}

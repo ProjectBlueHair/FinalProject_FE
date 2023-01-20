@@ -72,7 +72,7 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
     const formData = new FormData();
 
     const collaboForm: CollaboForm = {
-      contents: 'collabo request from original author',
+      contents: "collabo request from original author",
       musicPartList: collaboRequestData.audios.map((audio) => audio.part),
     };
     formData.append(
@@ -195,15 +195,17 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
               {...collaboInput}
             ></TextArea>
           </label>
-          <Flex justify="flex-end">
+          <Flex align="center" justify="flex-end" gap="2rem">
+            <Span fc="var(--ec-main-color)">음원 파트를 입력해 주세요 :)</Span>
             <TextButton
               btnType="basic"
-              disabled={title === "" || !collaboRequestData.isValid ? true : false}
+              disabled={
+                title === "" || !collaboRequestData.isValid ? true : false
+              }
               type="submit"
             >
               올리기
             </TextButton>
-            <button type="button"></button>
           </Flex>
         </Flex>
       </Flex>

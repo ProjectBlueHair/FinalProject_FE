@@ -39,7 +39,7 @@ const BasicButton = styled(CursorPointer)`
   background-color: var(--ec-main-color);
   padding: 1.2rem 3.5rem;
   border-radius: 20rem;
-  margin-top: 2rem;
+  /* margin-top: 2rem; */
 
   &:hover([disabled]) {
   }

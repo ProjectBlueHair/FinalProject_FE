@@ -47,9 +47,7 @@ export const userSlice = createSlice({
           state.user = { ...payload };
         }
       )
-      .addCase(__getGeneralUserInfo.rejected, (state, { payload }) => {
-        state.error = payload;
-      });
+
   },
 });
 export const {} = userSlice.actions;

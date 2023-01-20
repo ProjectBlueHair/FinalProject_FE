@@ -27,9 +27,9 @@ export interface Props {
   radius: string;
 }
 export const partStyle: Props = {
-  fs: "1.2rem",
-  wd: "5rem",
-  hg: "1.8rem",
+  fs: "1.1rem",
+  wd: "5.5rem",
+  hg: "2rem",
   radius: "10px",
 };
 
@@ -77,7 +77,7 @@ const PostingAudioControlBox: React.FC<
             onChange={(e) => {
               console.log('e.target.value',e.target.value)
               dispatch(__setCollaboPart({ part: e.target.value, index: props.index }))}}
-            placeholder="part"
+            placeholder="Part"
           />
         ) : (
           <PartDiv {...partStyle}>{props.audioData.part}</PartDiv>
@@ -118,7 +118,7 @@ const PostingAudioControlBox: React.FC<
 };
 
 export default PostingAudioControlBox;
-const PartInput = styled(StInput).attrs({ maxLength: 6 })<Props>`
+const PartInput = styled(StInput).attrs({ maxLength: 5 })<Props>`
   border: 1px dashed white;
   text-align: center;
   color: white;
@@ -127,7 +127,7 @@ const PartInput = styled(StInput).attrs({ maxLength: 6 })<Props>`
   max-width: ${({ wd }) => wd};
   font-size: ${({ fs }) => fs};
   &::placeholder {
-    color: var(--ec-secondary-text);
+    color: #fff;
     font-weight: 300;
     font-size: ${({ fs }) => fs};
   }

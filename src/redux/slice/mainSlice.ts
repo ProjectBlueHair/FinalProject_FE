@@ -1,20 +1,26 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
 import { instanceAxios } from "../../dataManager/apiConfig";
 import { handleError } from "../../dataManager/errorHandler";
-import { CurrentMusic, Post } from "../../model/PostModel";
+import { CurrentMusic, LikeModel, Post } from "../../model/PostModel";
+import { __postLike } from "./detailSlice";
 export const __getPostList = createAsyncThunk(
   "__getPostList",
   async (payload: number, thunkAPI) => {
     try {
       const { data } = await instanceAxios.get(`/post?page=${Number(payload)}`);
       return handleError(data);
-
-      // if (data.customHttpStatus === 2000 || data.customHttpStatus === 4015) {
-      //   return data.data;
-      // } else {
-      //   throw new Error(data.message);
-      // }
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+export const __mainPostLike = createAsyncThunk(
+  "__mainPostLike",
+  async (payload: string | number, thunkAPI) => {
+    try {
+      const { data } = await instanceAxios.post(`post/like/${payload}`);
+      const resData: LikeModel = { ...handleError(data), postId: payload };
+      return resData;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -96,7 +102,22 @@ export const mainSlice = createSlice({
       .addCase(__getPostList.rejected, (state, { payload }) => {
         state.error = payload;
         state.isLoading = false;
-      });
+      })
+      .addCase(
+        __postLike.fulfilled,
+        (state, { payload }: { payload: LikeModel | undefined }) => {
+          const index = findPostIndex(state.posts, payload!.postId);
+          state.posts[index].isLiked = payload!.isLiked;
+          state.posts[index].likeCount = payload!.likeCount;
+        }
+        
+      ).addCase(
+        __postLike.rejected,
+        (state, { payload }) => {
+          state.error = payload
+        }
+        
+      )
   },
 });
 export const {
