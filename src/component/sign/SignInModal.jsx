@@ -47,12 +47,18 @@ const SignInModal = ({ onClose }) => {
           return;
         } else if (res.data.customHttpStatus === 4041) {
           alert(res.data.message);
+        } else if (res.data.customHttpStatus === 4040) {
+          alert(res.data.message);
+        } else if (res.data.customHttpStatus === 4000) {
+          alert(res.data.message);
         } else {
           setCookie("accesstoken", res.headers.accesstoken, {
             path: "/",
+            maxAge: 1800,
           });
           setCookie("refreshtoken", res.headers.refreshtoken, {
             path: "/",
+            maxAge: 1800,
           });
           alert(res.data.message);
           closeModal?.();
@@ -89,7 +95,6 @@ const SignInModal = ({ onClose }) => {
             <h2>N</h2>
           </SignButton>
         </SignTitleInput>
-        {/* 여기까지 확실 */}
         <SocialLogin>
           <button>
             <img

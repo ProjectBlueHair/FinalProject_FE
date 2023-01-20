@@ -54,6 +54,6 @@ const CloseButton = styled.div`
   cursor: pointer;
   i {
     color: #5d5d5d;
-    font-size: 25px;
+    font-size: 20px;
   }
 `;

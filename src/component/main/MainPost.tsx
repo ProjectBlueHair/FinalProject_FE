@@ -1,17 +1,24 @@
 import React from "react";
 import Img from "../elem/Img";
 import Flex from "../elem/Flex";
-import { like, pause, playButtonSecond, view } from "../../asset/pic";
+import {
+  fillHeart,
+  like,
+  pause,
+  playButtonSecond,
+  view,
+} from "../../asset/pic";
 import styled from "styled-components";
 import StLink from "../elem/Link";
 import {
   __playDifferentSrc,
   __MainTogglePlay,
+  __mainPostLike,
 } from "../../redux/slice/mainSlice";
 import { CurrentMusic, Post } from "../../model/PostModel";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import { useNavigate } from "react-router-dom";
-const MainPost: React.FC<{ post: Post }> = (props) => {
+const MainPost: React.FC<{ post: Post; index: number }> = (props) => {
   const profile_margin = "0 0 0 -1rem";
   const dispatch = useAppDispatch();
   const currentMusic = useAppSelector<CurrentMusic>(
@@ -36,7 +43,7 @@ const MainPost: React.FC<{ post: Post }> = (props) => {
         onClick={() => navigate(`/detail/${props.post.id}`)}
         hg="20rem"
         type="radius"
-        src={props.post.postImg}
+        src={props.post?.postImg}
       />
       {/* play box */}
       <Flex direction="row" justify="flex-start" gap="1rem" pd="0 1rem">
@@ -52,7 +59,7 @@ const MainPost: React.FC<{ post: Post }> = (props) => {
               : playButtonSecond
           }
         />
-     
+
         <Flex flex="1" direction="column" align="flex-start" gap="1rem">
           <div>{props.post.title}</div>
           {/* grid */}
@@ -80,7 +87,19 @@ const MainPost: React.FC<{ post: Post }> = (props) => {
               <IconSpan>{props.post.viewCount}</IconSpan>
             </Flex>
             <Flex justify="flex-start" gap="0.4rem">
-              <Img type="iconSmall" wd="1.5rem" src={like} />
+              <Img
+                onClick={() =>
+                  dispatch(
+                    __mainPostLike({
+                      postId: props.post.id,
+                      index: props.index,
+                    })
+                  )
+                }
+                type="iconSmall"
+                wd="1.5rem"
+                src={props.post.isLiked ? fillHeart : like}
+              />
               <IconSpan>{props.post.likeCount}</IconSpan>
             </Flex>
           </PostBottomContainer>

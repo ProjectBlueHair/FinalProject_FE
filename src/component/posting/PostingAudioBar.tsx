@@ -3,11 +3,11 @@ import { audioControlSelector } from "../../redux/slice/postingSlice";
 import { Audio, ProgressControl } from "../../model/PostingModel";
 import WaveSurfer from "wavesurfer.js";
 import { useAppSelector } from "../../redux/config";
+import Flex from "../elem/Flex";
 
 const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
   props
 ) => {
-
   const formWaveSurferOptions = (ref: HTMLDivElement) => ({
     // 재생 속도
     audioRate: 1,
@@ -33,6 +33,8 @@ const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
     interact: false,
     // 반응형 웨이브폼 여부
     responsive: true,
+    // 하단 가로스크롤바
+    hideScrollbar: true,
   });
 
   const wavesurfer = useRef<WaveSurfer | null>(null);
@@ -45,8 +47,8 @@ const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
       waveformRef.current as HTMLDivElement
     );
     wavesurfer.current = WaveSurfer.create(options);
-    console.log("props.audioInfo.src", props.audioData.src);
-    wavesurfer.current.load(props.audioData.src);
+    console.log("props.audioInfo.src", props.audioData.musicFile);
+    wavesurfer.current.load(props.audioData.musicFile);
     wavesurfer.current.on("ready", function () {
       if (wavesurfer.current) {
         wavesurfer.current.setVolume(props.volume);
@@ -54,7 +56,7 @@ const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
     });
 
     return () => wavesurfer.current?.destroy();
-  }, [props.audioData.src]);
+  }, [props.audioData.musicFile]);
 
   useEffect(() => {
     wavesurfer.current?.setVolume(props.volume);
@@ -72,11 +74,17 @@ const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
     }
   }, [playControl.seekTo]);
   return (
-    <div
-      style={{ width: "100%", padding: "0 0" }}
-      id="waveform"
-      ref={waveformRef}
-    />
+    <Flex justify="flex-start" wd="98%">
+      <div
+        style={{
+          width: "100%",
+          padding: "0.3rem 0.3rem",
+          marginLeft: "-1rem",
+          overflow: "hidden",
+        }}
+        ref={waveformRef}
+      />
+    </Flex>
   );
 };
 

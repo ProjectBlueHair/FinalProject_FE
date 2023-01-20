@@ -10,9 +10,13 @@ const MainPostList = () => {
   const [trigger, setTrigger] = useState(false);
 
   const dispatch = useAppDispatch();
-  const { posts, nextPage, isLoading } = useAppSelector<MainState>(
+  const { posts, nextPage, isLoading, error } = useAppSelector<MainState>(
     (state) => state.main
   );
+  console.log('POSTLIST POSTS', posts)
+  if (error) {
+    alert(error);
+  }
 
   let options = {
     root: scrollArea.current,
@@ -24,6 +28,7 @@ const MainPostList = () => {
     if (!isLoading) {
       dispatch(__getPostList(nextPage));
     }
+    return () => {};
   }, [trigger]);
 
   const callback: IntersectionObserverCallback = (entries, io) => {
@@ -41,8 +46,8 @@ const MainPostList = () => {
   return (
     <ScrollContainer ref={scrollArea}>
       <PostListContainer>
-        {posts?.map((post) => (
-          <MainPost key={post.id} post={post} />
+        {posts?.map((post, index) => (
+          <MainPost key={post.id} post={post} index={index} />
         ))}
         <div data-name="target" ref={target}></div>
       </PostListContainer>
@@ -58,21 +63,19 @@ const PostListContainer = styled.div`
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   gap: 1.5rem;
 
-  @media (max-width: 1100px){
+  @media (max-width: 1100px) {
     grid-template-columns: 1fr 1fr 1fr 1fr;
   }
-  @media (max-width: 900px){
+  @media (max-width: 900px) {
     grid-template-columns: 1fr 1fr 1fr;
   }
-  @media (max-width: 700px){
-    grid-template-columns: 1fr 1fr ;
+  @media (max-width: 700px) {
+    grid-template-columns: 1fr 1fr;
   }
-  @media (max-width: 500px){
-    grid-template-columns: 1fr ;
+  @media (max-width: 500px) {
+    grid-template-columns: 1fr;
     padding: 0 5rem;
-
   }
- 
 `;
 const ScrollContainer = styled.div`
   display: flex;

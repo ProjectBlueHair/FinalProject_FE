@@ -1,14 +1,26 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
 import { instanceAxios } from "../../dataManager/apiConfig";
-import { CurrentMusic, Post, Response } from "../../model/PostModel";
+import { handleError } from "../../dataManager/errorHandler";
+import { CurrentMusic, LikeModel, Post } from "../../model/PostModel";
+import { __postLike } from "./detailSlice";
 export const __getPostList = createAsyncThunk(
   "__getPostList",
   async (payload: number, thunkAPI) => {
     try {
-      // const { data } = await axios.get(`/post?page=${Number(payload)}`);
-      const {data} = await instanceAxios.get(`/post?page=${Number(payload)}`);
-      return data.data;
+      const { data } = await instanceAxios.get(`/post?page=${Number(payload)}`);
+      return handleError(data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+export const __mainPostLike = createAsyncThunk(
+  "__mainPostLike",
+  async (payload: { postId: string | number; index: number }, thunkAPI) => {
+    try {
+      const { data } = await instanceAxios.post(`post/like/${payload.postId}`);
+      const resData: LikeModel = { ...handleError(data), index: payload.index };
+      return resData;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -19,18 +31,22 @@ export interface MainState {
   nextPage: number;
   currentMusic: CurrentMusic;
   isLoading: boolean;
+  error: unknown;
 }
+const initialState = {
+  posts: [] as Post[],
+  nextPage: 0,
+  currentMusic: { post: {}, isPlayingMain: false, isPlayingPlayer: false },
+  isLoading: false,
+  error: null,
+} as MainState;
+
 const findPostIndex = (posts: Post[], payload: string | number) => {
   return posts.findIndex((post) => post.id === payload);
 };
 export const mainSlice = createSlice({
   name: "main",
-  initialState: {
-    posts: [] as Post[],
-    nextPage: 0,
-    currentMusic: { post: {}, isPlayingMain: false, isPlayingPlayer: false },
-    isLoading: false,
-  } as MainState,
+  initialState,
   reducers: {
     __MainTogglePlay: (state, action) => {
       state.currentMusic.isPlayingMain = action.payload;
@@ -67,6 +83,9 @@ export const mainSlice = createSlice({
         };
       }
     },
+    __mainCleanUp: (state) => {
+      return initialState;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -74,7 +93,6 @@ export const mainSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(__getPostList.fulfilled, (state, { payload }) => {
-        console.log("payload", payload);
         state.isLoading = false;
         if (state.nextPage === 0) {
           state.currentMusic = {
@@ -82,9 +100,23 @@ export const mainSlice = createSlice({
             post: payload[0],
           };
         }
-        state.posts = 
+        state.posts =
           state.nextPage === 0 ? payload : state.posts.concat(payload);
         state.nextPage = state.nextPage + 1;
+      })
+      .addCase(__getPostList.rejected, (state, { payload }) => {
+        state.error = payload;
+        state.isLoading = false;
+      })
+      .addCase(
+        __postLike.fulfilled,
+        (state, { payload }: { payload: LikeModel | undefined }) => {
+          state.posts[payload!.index].isLiked = payload!.isLiked;
+          state.posts[payload!.index].likeCount = payload!.likeCount;
+        }
+      )
+      .addCase(__postLike.rejected, (state, { payload }) => {
+        state.error = payload;
       });
   },
 });
@@ -94,5 +126,6 @@ export const {
   __PlayerTogglePlay,
   __PlayPrevious,
   __playNext,
+  __mainCleanUp,
 } = mainSlice.actions;
 export default mainSlice.reducer;

@@ -1,26 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { AiOutlineUp, AiOutlineDown } from "react-icons/ai";
 import DetailFollow from "./DetailFollow";
 import DetailComment from "./detailcomment/DetailComment";
+import { __getDetailCollabo } from "../../redux/slice/detailSlice";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const DetailDayAndFollow = ({ detail }) => {
-  const [upDown, setUpDown] = useState(false);
+  const [upDown, setUpDown] = useState(true);
+  const { id } = useParams();
+  const dispatch = useDispatch();
 
   const onUpDown = () => {
     setUpDown(!upDown);
   };
 
+  useEffect(() => {
+    dispatch(__getDetailCollabo(id));
+  }, []);
+  //작곡가 프로필/ 이름/ 악기 이름
+  const detailCollabo = useSelector((state) => state.detail.collabo.data);
+  console.log("d", detailCollabo);
   return (
     <DetailLeftLine>
-      <div>2023-01-11</div>
+      <div>{detail?.createdAt}</div>
       <div>{detail?.contents}</div>
       <FollowMore>
         <button onClick={onUpDown}>
           {upDown ? <AiOutlineDown /> : <AiOutlineUp />}
         </button>
       </FollowMore>
-      {upDown ? <DetailFollow /> : ""}
+      {upDown ? <DetailFollow detailCollabo={detailCollabo} /> : ""}
       <hr style={{ border: "1px solid rgba(0,0,0,0.2)" }} />
       <DetailComment />
     </DetailLeftLine>
@@ -30,9 +42,9 @@ const DetailDayAndFollow = ({ detail }) => {
 export default DetailDayAndFollow;
 
 const DetailLeftLine = styled.div`
-  width: 85rem;
-  /* border: 1px solid black; */
-  margin-right: 1rem;
+  width: 60%;
+  margin-left: -5%;
+  margin-right: 3%;
   div {
     margin-bottom: 1rem;
   }

@@ -1,4 +1,4 @@
-import React, { MutableRefObject } from "react";
+import React, { CSSProperties, MouseEventHandler, MutableRefObject } from "react";
 import styled from "styled-components";
 import { StyledComponent } from "styled-components";
 interface DivProps {
@@ -29,6 +29,9 @@ interface DivProps {
   children?: React.ReactNode;
   ref?: MutableRefObject<any>;
   cursor?: string;
+  isNewAudio?: boolean;
+  onClick?:MouseEventHandler;
+  style?: CSSProperties
 }
 interface FlexContainer {
   [key: string]: StyledComponent<"div", any, DivProps, never>;
@@ -78,7 +81,9 @@ const FlexCard = styled(StFlex)`
 `;
 const AudioBarWrapper = styled(StFlex)`
   border-radius: 5rem;
-  border: 1px solid var(--ec-main-color);
+  /* border: 1px solid var(--ec-main-color); */
+  border: ${({ isNewAudio }) =>
+    isNewAudio ? "1px solid var(--ec-main-color)" : "none"};
 `;
 const AudioBarRightWrapper = styled(StFlex)`
   flex: 1;

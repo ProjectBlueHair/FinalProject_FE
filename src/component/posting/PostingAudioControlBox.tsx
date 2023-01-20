@@ -6,12 +6,15 @@ import {
   soloButton,
   unMuteButton,
 } from "../../asset/pic";
-import { useAppDispatch } from "../../redux/config";
+import { Audio } from "../../model/PostingModel";
+import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
+  __setCollaboPart,
   __setMute,
   __setSolo,
   __setVolume,
 } from "../../redux/slice/postingSlice";
+import { userSelector } from "../../redux/slice/userSlice";
 import Flex from "../elem/Flex";
 import Img from "../elem/Img";
 import { StInput } from "../elem/Input";
@@ -23,26 +26,25 @@ export interface Props {
   hg: string;
   radius: string;
 }
-export const part: Props = {
+export const partStyle: Props = {
   fs: "1.2rem",
-  wd: "5rem",
-  hg: "1.8rem",
+  wd: "5.5rem",
+  hg: "2rem",
   radius: "10px",
 };
 
-const PostingAudioControlBox: React.FC<{
-  isMute?: boolean;
-  isSolo?: boolean;
-  volume?: number;
-  isNew: boolean;
-  index?: number;
-  isFormAudio?: boolean;
-}> = (props) => {
+const PostingAudioControlBox: React.FC<
+  Audio & {
+    index?: number;
+  }
+> = (props) => {
   const BOX_NICK_FS = "1.4rem";
   const BOX_ICON_WD = "2.2rem";
   const dispatch = useAppDispatch();
-  const [value, setValue] = useState("");
   const [volume, setVolume] = useState(0.5);
+
+  const user = useAppSelector(userSelector);
+
   const onVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = +e.target.value;
 
@@ -54,9 +56,8 @@ const PostingAudioControlBox: React.FC<{
 
   useEffect(() => {
     setVolume(props.volume || 0.5);
-    // props.volume === 0.01 ? 
   }, [props.volume]);
-  
+
   return (
     <Flex
       radius={AUDIO_BAR_RADIUS}
@@ -68,48 +69,51 @@ const PostingAudioControlBox: React.FC<{
       gap="0.5rem"
     >
       <Flex gap="1rem">
-        {props.isNew ? (
+        {props.isNewAudio && !props.isCollabo ? (
           <PartInput
-            {...part}
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            placeholder="part"
+            {...partStyle}
+            // value={value}
+            onChange={(e) => {
+              dispatch(
+                __setCollaboPart({ part: e.target.value, index: props.index })
+              );
+            }}
+            placeholder="Part"
           />
         ) : (
-          <PartDiv {...part}>Bass</PartDiv>
+          <PartDiv {...partStyle}>{props.audioData.musicPart}</PartDiv>
         )}
         <Span fw="300" fc="white" fs={BOX_NICK_FS}>
-          nickname
+          {props.audioData.nickname || user.nickname}
         </Span>
       </Flex>
-      {props.isFormAudio ? null : (
-        <Flex align="center" gap="1rem">
-          <Img
-            onClick={() => dispatch(__setMute(props.index))}
-            wd={BOX_ICON_WD}
-            src={props.isMute ? muteButton : unMuteButton}
-          />
-          <Img
-            onClick={() => dispatch(__setSolo(props.index))}
-            wd={BOX_ICON_WD}
-            src={props.isSolo ? soloButton : collaboButton}
-          />
-          <input
-            style={{ width: "9rem" }}
-            type="range"
-            id="volume"
-            name="volume"
-            // waveSurfer recognize value of `0` same as `1`
-            //  so we need to set some zero-ish value for silence
-            min="0.01"
-            max="0.985"
-            step=".025"
-            onChange={onVolumeChange}
-            // defaultValue={volume}
-            value={volume}
-          />
-        </Flex>
-      )}
+
+      <Flex align="center" gap="1rem">
+        <Img
+          onClick={() => dispatch(__setMute(props.index))}
+          wd={BOX_ICON_WD}
+          src={props.isMute ? muteButton : unMuteButton}
+        />
+        <Img
+          onClick={() => dispatch(__setSolo(props.index))}
+          wd={BOX_ICON_WD}
+          src={props.isSolo ? soloButton : collaboButton}
+        />
+        <input
+          style={{ width: "9rem" }}
+          type="range"
+          id="volume"
+          name="volume"
+          // waveSurfer recognize value of `0` same as `1`
+          //  so we need to set some zero-ish value for silence
+          min="0.01"
+          max="0.985"
+          step=".025"
+          onChange={onVolumeChange}
+          // defaultValue={volume}
+          value={volume}
+        />
+      </Flex>
     </Flex>
   );
 };
@@ -124,7 +128,7 @@ const PartInput = styled(StInput).attrs({ maxLength: 6 })<Props>`
   max-width: ${({ wd }) => wd};
   font-size: ${({ fs }) => fs};
   &::placeholder {
-    color: var(--ec-secondary-text);
+    color: #fff;
     font-weight: 300;
     font-size: ${({ fs }) => fs};
   }

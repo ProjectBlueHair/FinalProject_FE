@@ -14,9 +14,10 @@ const SignUpModal = ({ onClose }) => {
   const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordCheck, setPasswordCheck] = useState("");
 
   // 이미지 전송전 파일
-  const [s3image, setS3image] = useState();
+  const [s3image, setS3image] = useState(null);
 
   // 이미지 미리보기
   const [previewImg, setPreviewImg] = useState("");
@@ -26,11 +27,15 @@ const SignUpModal = ({ onClose }) => {
   const [isEmail, setIsEmail] = useState(false);
   const [onCheckNickname, setOnCheckNickname] = useState(false);
   const [onCheckEmail, setOnCheckEmail] = useState(false);
-  // 비밀번호 4가지 상태값
+  // 비밀번호 5가지 상태값
   const [isPwLength, setIsPwLength] = useState(false);
   const [isPwSymbol, setIsPwSymbol] = useState(false);
   const [isPwStr, setIsPwStr] = useState(false);
   const [isPwNum, setIsPwNum] = useState(false);
+  const [isPasswordCheck, setIsPasswordCheck] = useState(false);
+
+  // 비밀번호 확인 텍스트
+  const [pwMsg, setPwMsg] = useState("");
 
   const SignUpImg = (e) => {
     const file = e.target.files[0];
@@ -76,44 +81,61 @@ const SignUpModal = ({ onClose }) => {
   }, []);
 
   // 비밀번호
-  const onChangePassword = useCallback((e) => {
-    const passwordValue = e.target.value;
-    setPassword(passwordValue);
-    // 정규식 : 비밀번호 길이
-    const passwordLengthRegex = /^.{8,15}$/;
-    // 정규식 : 특수기호
-    const passwordSymbolRegex = /.*[!@#$%^&*]/;
-    // 정규식 : 숫자
-    const passwordNumRegex = /.*[0-9]/;
-    // 정규식 : 문자
-    const passwordStrRegex = /.*[a-zA-Z]/;
+  const onChangePassword = useCallback(
+    (e) => {
+      const passwordValue = e.target.value;
+      setPassword(passwordValue);
+      // 정규식 : 비밀번호 길이
+      const passwordLengthRegex = /^.{8,15}$/;
+      // 정규식 : 특수기호
+      const passwordSymbolRegex = /.*[!@#$%^&*]/;
+      // 정규식 : 숫자
+      const passwordNumRegex = /.*[0-9]/;
+      // 정규식 : 문자
+      const passwordStrRegex = /.*[a-zA-Z]/;
 
-    // 8자리에서 15자리 정규식
-    if (!passwordLengthRegex.test(passwordValue)) {
-      setIsPwLength(false);
-    } else {
-      setIsPwLength(true);
-    }
-    // 특수기호
-    if (!passwordSymbolRegex.test(passwordValue)) {
-      setIsPwSymbol(false);
-    } else {
-      setIsPwSymbol(true);
-    }
-    // 숫자
-    if (!passwordNumRegex.test(passwordValue)) {
-      setIsPwNum(false);
-    } else {
-      setIsPwNum(true);
-    }
-    // 문자
-    if (!passwordStrRegex.test(passwordValue)) {
-      setIsPwStr(false);
-    } else {
-      setIsPwStr(true);
-    }
-  }, []);
+      // 8자리에서 15자리 정규식
+      if (!passwordLengthRegex.test(passwordValue)) {
+        setIsPwLength(false);
+      } else {
+        setIsPwLength(true);
+      }
+      // 특수기호
+      if (!passwordSymbolRegex.test(passwordValue)) {
+        setIsPwSymbol(false);
+      } else {
+        setIsPwSymbol(true);
+      }
+      // 숫자
+      if (!passwordNumRegex.test(passwordValue)) {
+        setIsPwNum(false);
+      } else {
+        setIsPwNum(true);
+      }
+      // 문자
+      if (!passwordStrRegex.test(passwordValue)) {
+        setIsPwStr(false);
+      } else {
+        setIsPwStr(true);
+      }
+    },
+    [password]
+  );
 
+  // 비밀번호 체크
+  const onChangePasswordCheck = useCallback((e) => {
+    const passwordC = e.target.value;
+    setPasswordCheck(passwordC);
+    if (password === passwordC && password.length === passwordC.length) {
+      setIsPasswordCheck(true);
+      setPwMsg("");
+    } else {
+      setIsPasswordCheck(false);
+      setPwMsg("비밀번호가 일치하지 않습니다!");
+    }
+  });
+  console.log(isPasswordCheck);
+  console.log(isPwLength, isPwNum, isPwStr, isPwSymbol);
   // 닉네임 중복처리
   const onNicknameCheck = () => {
     if (nickname.length === 0) {
@@ -140,7 +162,10 @@ const SignUpModal = ({ onClose }) => {
         "member/validate/nickname",
         post
       );
+      console.log(data);
       if (data.customHttpStatus === 4092) {
+        alert(data.message);
+      } else if (data.customHttpStatus === 4090) {
         alert(data.message);
       } else {
         alert(data.message + "입니다");
@@ -174,6 +199,8 @@ const SignUpModal = ({ onClose }) => {
       const { data } = await instanceAxios.post("member/validate/email", post);
       if (data.customHttpStatus === 4091) {
         alert(data.message);
+      } else if (data.customHttpStatus === 4090) {
+        alert(data.message);
       } else {
         alert(data.message + "입니다");
         return data;
@@ -183,7 +210,6 @@ const SignUpModal = ({ onClose }) => {
 
   // 회원가입 버튼 클릭시 실행
   const postSignUp = async (post) => {
-    console.log(post);
     try {
       const { data } = await instanceAxios.post("member/signup", post);
       if (data.customHttpStatus === 2000) {
@@ -196,8 +222,8 @@ const SignUpModal = ({ onClose }) => {
   // 회원가입 버튼 클릭시 실행
   const onSignUpBtn = () => {
     uploadFiles(s3image).then((res) => {
-      console.log("res", res);
-      const profileImg = res.Location;
+      console.log(res);
+      const profileImg = res === null ? null : res.Location;
       postSignUp({
         nickname,
         email,
@@ -230,66 +256,146 @@ const SignUpModal = ({ onClose }) => {
         </SignUpImgDiv>
         <SignUpMiddleDiv>
           <SignUpTitle>Nickname</SignUpTitle>
-          <SignUpDivBox>
-            <input
-              type="text"
-              onChange={onChangeNickname}
-              maxLength={15}
-              placeholder="닉네임을 입력해 주세요"
-            />
-            <button onClick={onNicknameCheck}>중복체크</button>
-          </SignUpDivBox>
+          {!(onCheckNickname && isNickname) ? (
+            <SignUpDivBox>
+              <input
+                type="text"
+                onChange={onChangeNickname}
+                maxLength={15}
+                placeholder="닉네임을 입력해 주세요"
+              />
+              <button onClick={onNicknameCheck}>중복체크</button>
+            </SignUpDivBox>
+          ) : (
+            <SignUpDivBox style={{ backgroundColor: "#ff4d00" }}>
+              <input
+                type="text"
+                onChange={onChangeNickname}
+                maxLength={15}
+                placeholder="닉네임을 입력해 주세요"
+                readOnly={nickname}
+                style={{ color: "white" }}
+              />
+            </SignUpDivBox>
+          )}
           <SignUpTitle>E-mail</SignUpTitle>
-          <SignUpDivBox>
-            <input
-              type="email"
-              onChange={onChangeEmail}
-              placeholder="이메일을 입력해 주세요"
-            />
-            <button onClick={onEmailCheck}>중복체크</button>
-          </SignUpDivBox>
+          {!(onCheckEmail && isEmail) ? (
+            <SignUpDivBox>
+              <input
+                type="email"
+                onChange={onChangeEmail}
+                placeholder="이메일을 입력해 주세요"
+              />
+              <button onClick={onEmailCheck}>중복체크</button>
+            </SignUpDivBox>
+          ) : (
+            <SignUpDivBox style={{ backgroundColor: "#ff4d00" }}>
+              <input
+                type="email"
+                onChange={onChangeEmail}
+                placeholder="이메일을 입력해 주세요"
+                readOnly={email}
+                style={{ color: "white" }}
+              />
+            </SignUpDivBox>
+          )}
+
           <SignUpTitle>Password</SignUpTitle>
-          <SignUpDivBox>
-            <input
-              type="password"
-              onChange={onChangePassword}
-              placeholder="비밀번호를 입력해 주세요"
-            />
-          </SignUpDivBox>
+          {!(isPwLength && isPwSymbol && isPwStr && isPwNum) ? (
+            <SignUpDivBox>
+              <input
+                type="password"
+                onChange={onChangePassword}
+                placeholder="비밀번호를 입력해 주세요"
+              />
+            </SignUpDivBox>
+          ) : (
+            <SignUpDivBox style={{ backgroundColor: "#ff4d00" }}>
+              <input
+                type="password"
+                onChange={onChangePassword}
+                placeholder="비밀번호를 입력해 주세요"
+                style={{ color: "white" }}
+              />
+            </SignUpDivBox>
+          )}
+
           <PasswordCheck>
-            <div
-              style={
-                isPwLength ? { backgroundColor: "#ff4d00", color: "white" } : {}
-              }
-            >
-              8글자 이상
-            </div>
-            <div
-              style={
-                isPwSymbol ? { backgroundColor: "#ff4d00", color: "white" } : {}
-              }
-            >
-              특수기호
-            </div>
-            <div
-              style={
-                isPwStr ? { backgroundColor: "#ff4d00", color: "white" } : {}
-              }
-            >
-              문자
-            </div>
-            <div
-              style={
-                isPwNum ? { backgroundColor: "#ff4d00", color: "white" } : {}
-              }
-            >
-              숫자
-            </div>
+            {!(isPwLength && isPwSymbol && isPwStr && isPwNum) ? (
+              <>
+                <div
+                  style={
+                    isPwLength
+                      ? { backgroundColor: "#ff4d00", color: "white" }
+                      : {}
+                  }
+                >
+                  8글자 이상
+                </div>
+                <div
+                  style={
+                    isPwSymbol
+                      ? { backgroundColor: "#ff4d00", color: "white" }
+                      : {}
+                  }
+                >
+                  특수기호
+                </div>
+                <div
+                  style={
+                    isPwStr
+                      ? { backgroundColor: "#ff4d00", color: "white" }
+                      : {}
+                  }
+                >
+                  문자
+                </div>
+                <div
+                  style={
+                    isPwNum
+                      ? { backgroundColor: "#ff4d00", color: "white" }
+                      : {}
+                  }
+                >
+                  숫자
+                </div>
+              </>
+            ) : (
+              ""
+            )}
           </PasswordCheck>
+          <SignUpTitle style={{ marginTop: "5px" }}>Password Check</SignUpTitle>
+          {!(
+            isPasswordCheck &&
+            isPwLength &&
+            isPwSymbol &&
+            isPwStr &&
+            isPwNum
+          ) ? (
+            <SignUpDivBox>
+              <input
+                type="password"
+                placeholder="비밀번호 한번더 확인해 주세요"
+                onChange={onChangePasswordCheck}
+              ></input>
+              <p style={{ color: "rgba(245, 15, 0, 0.6)" }}>{pwMsg}</p>
+            </SignUpDivBox>
+          ) : (
+            <SignUpDivBox style={{ backgroundColor: "#ff4d00" }}>
+              <input
+                type="password"
+                placeholder="비밀번호 한번더 확인해 주세요"
+                onChange={onChangePasswordCheck}
+                style={{ color: "white" }}
+              ></input>
+            </SignUpDivBox>
+          )}
+
           <SignUpClick
             onClick={onSignUpBtn}
             disabled={
               !(
+                isPasswordCheck &&
                 isNickname &&
                 isEmail &&
                 onCheckNickname &&
@@ -302,6 +408,7 @@ const SignUpModal = ({ onClose }) => {
             }
             style={
               !(
+                isPasswordCheck &&
                 isNickname &&
                 isEmail &&
                 onCheckNickname &&
@@ -331,7 +438,7 @@ const SignUpTotal = styled.div`
   width: 500px;
   height: 600px;
   z-index: 1050;
-  margin: 70px auto;
+  margin: 50px auto;
 `;
 
 const SignUpMiddleDiv = styled.div`
@@ -349,7 +456,7 @@ const SignUpDivBox = styled.div`
   height: 4rem;
   border: 1px solid transparent;
   background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
+  border-radius: 20px;
   input {
     width: 23rem;
     border-radius: 10px;
@@ -368,6 +475,11 @@ const SignUpDivBox = styled.div`
     :hover {
       border: 1px solid rgba(0, 0, 0, 0.5);
     }
+  }
+  p {
+    padding-top: 10px;
+    padding-left: 10px;
+    font-size: 10px;
   }
 `;
 
@@ -415,7 +527,7 @@ const SignUpClick = styled.button`
   align-items: center;
   width: 30rem;
   height: 4rem;
-  border-radius: 10px;
+  border-radius: 20px;
   background-color: rgba(0, 0, 0, 0.2);
   border: transparent;
   color: white;
