@@ -32,7 +32,7 @@ const PostingPage = () => {
         <PostingAudioBars />
         <PostingFormAudio />
       </AudioBarsBackground>
-      <Flex align="flex-start" mg="4rem 0" hg="100%">
+      <Flex align="flex-start" mg="4rem 0">
         {POSTPAGE && <PostingForm isEdit={EDITPAGE} />}
         {COLLABOPAGE && <PostingFormCollabo />}
         {COLLABOREQUESTED && <PostingCollaboRequested />}
