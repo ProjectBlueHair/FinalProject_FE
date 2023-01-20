@@ -51,7 +51,6 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
 
   const title = useAppSelector(titleSelector);
   const collaboRequestData = useAppSelector(collaboRequestDataSelector);
-  console.log("collaboRequestData", collaboRequestData);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -94,12 +93,12 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
     }
     uploadFiles(image.file)
       .then((data) => {
-        console.log("aws s3 upload response", data);
         return data === null || undefined ? null : data.Location;
       })
       .then((data) => {
         const form: Form = {
           contents: descriptionInput.value,
+          collaboNotice: collaboInput.value,
           title: title,
           postImg: data,
         };
@@ -110,7 +109,11 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
         console.log("response from post uploading", data);
         return collaboRequest(formData, data.data);
       })
-      .then(({ data }) => {
+      .then(({ data }: { data: Response }) => {
+        if (data.customHttpStatus === 4003) {
+          throw new Error("유효하지 않은 음원 파일입니다.");
+        }
+
         console.log("response from collabo request", data.data);
         return collaboApprove(data.data);
       })
@@ -196,7 +199,9 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
             ></TextArea>
           </label>
           <Flex align="center" justify="flex-end" gap="2rem">
-            <Span fc="var(--ec-main-color)">음원 파트를 입력해 주세요 :)</Span>
+            <Span fc="var(--ec-main-color)">
+              각 음원의 파트를 입력해 주세요 :)
+            </Span>
             <TextButton
               btnType="basic"
               disabled={

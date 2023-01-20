@@ -19,6 +19,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { PATH } from "../../Router";
 import { batch } from "react-redux";
+import Span from "../elem/Span";
 
 const PostingFormCollabo = () => {
   const { id } = useParams();
@@ -80,7 +81,7 @@ const PostingFormCollabo = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Flex gap="2.5rem" align="flex-start" >
+      <Flex gap="2.5rem" align="flex-start">
         <Flex wd="100%" direction="column" gap="2rem" align="flex-start">
           <label>
             <div>설명</div>
@@ -90,7 +91,10 @@ const PostingFormCollabo = () => {
               {...descriptionInput}
             />
           </label>
-          <Flex justify="flex-end">
+          <Flex align="center" justify="flex-end" gap="2rem">
+            <Span fc="var(--ec-main-color)">
+              각 음원의 파트를 입력해 주세요 :)
+            </Span>
             <TextButton
               btnType="basic"
               disabled={

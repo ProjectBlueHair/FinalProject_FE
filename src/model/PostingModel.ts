@@ -11,13 +11,14 @@ export interface Audio {
   volume: number;
 }
 //what we receive from audio get api
-export interface AudioData { 
-  musicFile : string, 
-  part : string,
-  nickname : string
+export interface AudioData {
+  musicFile: string;
+  part: string;
+  nickname: string;
 }
 export interface Form {
   contents: string;
+  collaboNotice: string;
   postImg: string | null;
   title: string;
 }
@@ -30,20 +31,20 @@ export interface CollaboAudio {
   part: string;
 }
 export interface CollaboRequested {
-  activated: boolean
-  approval: boolean
+  activated: boolean;
+  approval: boolean;
   contents: string;
-  createdAt: string
-  modifiedAt: string
-  musicList: AudioData []
-  nickname: string
+  createdAt: string;
+  modifiedAt: string;
+  musicList: AudioData[];
+  nickname: string;
 }
 export interface CollaboReqeustedAudioData {
-  musicFile : string
-  musicPart : string
-  nickname : string
+  musicFile: string;
+  musicPart: string;
+  nickname: string;
 }
 export interface CollaboRequestData {
-  audios: CollaboAudio [];
-  isValid : boolean
+  audios: CollaboAudio[];
+  isValid: boolean;
 }

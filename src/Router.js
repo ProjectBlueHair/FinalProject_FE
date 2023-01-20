@@ -30,6 +30,10 @@ const Router = () => {
           <Route path={`${PATH.edit}/:id`} element={<PostingPage />} />
           <Route path={`${PATH.collabo}/:id`} element={<PostingPage />} />
           <Route
+            path={`${PATH.collaboRequested}/:id/:postId`}
+            element={<PostingPage />}
+          />
+          <Route
             path={`${PATH.collaboRequested}/:id`}
             element={<PostingPage />}
           />

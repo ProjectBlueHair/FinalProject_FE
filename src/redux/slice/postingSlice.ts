@@ -165,7 +165,7 @@ export const postingSlice = createSlice({
           const arr = [] as Audio[];
           console.log("payload.musicList[0]", payload.musicList[0]);
           state.progressControl.src =
-            state.progressControl.src || payload.musicList[0].musicFile;
+            state.progressControl.src || payload.musicList[0]?.musicFile;
 
           payload.musicList.map((audio: AudioData) => {
             arr.push({

@@ -17,13 +17,15 @@ import { Response } from "../../model/ResponseModel";
 import { PATH } from "../../Router";
 
 const PostingCollaboRequested = () => {
-  const { id } = useParams();
+  const { id, postId } = useParams();
+  console.log('id',id,'postId',postId)
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   useEffect(() => {
-    // dispatch(__getAudios(Number(id)))
+    dispatch(__getAudios(Number(postId)))
     dispatch(__getCollaboRequested(Number(id)));
     return () => {
+      
       dispatch(__cleanUp());
     };
   }, []);
@@ -33,8 +35,8 @@ const PostingCollaboRequested = () => {
   const collaboDescription = useAppSelector(collaboDescriptionSelector);
   const error = useAppSelector(errorSelector);
   if (error) {
-    // alert(error);
-    console.log(error);
+    alert(error);
+    // console.log(error);
     navigate(PATH.main);
   }
 
