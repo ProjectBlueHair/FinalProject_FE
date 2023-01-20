@@ -17,7 +17,7 @@ const PostingFormAudio = () => {
           onClick={() => {
             fileInputRef.current?.click();
           }}
-          style={{ textDecoration: "underline" }}
+          style={{ textDecoration: "underline", cursor: "pointer" }}
         >
           또는 여기를 클릭해서 파일을 선택하세요
         </div>
@@ -37,36 +37,47 @@ const PostingFormAudio = () => {
   const handleDrop = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
-    console.log("drop?");
     if (event.dataTransfer.files) {
       const files = event.dataTransfer.files;
-      const arr: File[] = [];
+      const arr = [];
       for (let i = 0; i < files.length; i++) {
         const type = files[i].type.split("/")[1];
         if (type !== "wav") return alert("유효하지 않은 오디오 형식입니다.");
-        console.log("drop file", files[i]);
-        arr.push(files[i]);
-      }
-      setFiles(arr);
-    }
-  }, []);
-
-  const handleFileChange = useCallback(() => {
-    if (files) {
-      console.log("file", files);
-      const arr = [];
-      for (let i = 0; i < files.length; i++) {
         arr.push(URL.createObjectURL(files[i]));
       }
       dispatch(__addNewAudio(arr));
-
       setText(defaultText());
     }
-  }, [files]);
+  }, []);
 
-  useEffect(() => {
-    handleFileChange();
-  }, [files, handleFileChange]); // handleFileChange는 안 넣어도 동작 함
+  // const handleFileChange = useCallback(() => {
+  //   if (files) {
+  //     console.log("file", files);
+  //     const arr = [];
+  //     for (let i = 0; i < files.length; i++) {
+  //       arr.push(URL.createObjectURL(files[i]));
+  //     }
+  //     dispatch(__addNewAudio(arr));
+
+  //     setText(defaultText());
+  //   }
+  // }, [files]);
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      const arr = [];
+      for (let i = 0; i < files.length; i++) {
+        const type = files[i].type.split("/")[1];
+        if (type !== "wav") return alert("유효하지 않은 오디오 형식입니다.");
+        arr.push(URL.createObjectURL(files[i]));
+      }
+      dispatch(__addNewAudio(arr));
+      setText(defaultText());
+    }
+  };
+  // useEffect(() => {
+  // handleFileChange();
+  // }, [files, handleFileChange]); // handleFileChange는 안 넣어도 동작 함
 
   return (
     <AudioDragForm
@@ -93,7 +104,8 @@ const PostingFormAudio = () => {
             hidden
             ref={fileInputRef}
             type={"file"}
-            accept="audio/*"
+            accept="audio/wav"
+            multiple
             onChange={handleFileChange}
           />
           {text}
