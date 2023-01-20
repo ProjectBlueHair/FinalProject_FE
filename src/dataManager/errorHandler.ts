@@ -1,9 +1,12 @@
 import { Response } from "../model/ResponseModel";
+import { removeCookies } from "./cookie";
 
 export const handleError = (data: Response) => {
   if (data.customHttpStatus === 2000 || data.customHttpStatus === 4015) {
     return data.data;
   } else if (data.customHttpStatus === 4011) {
+    removeCookies("accesstoken", { path: "/" });
+    removeCookies("refreshtoken", { path: "/" });
     throw new Error("4011 : 로그인이 필요한 페이지 (기능) 입니다.");
   } else if (data.customHttpStatus === 4013) {
     throw new Error("유효하지 않은 로그인 정보입니다. 재로그인이 필요합니다.");
