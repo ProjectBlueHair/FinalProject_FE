@@ -37,7 +37,7 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { openModal } = useModal();
   const { $openModal, $closeModal } = useTypeModal();
-  
+
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -120,7 +120,7 @@ const Header = () => {
             onClick={() => toggleMenu()}
             type="shadowProfile"
             src={user.profileImg}
-            hg='3.5rem'
+            hg="3.5rem"
           />
         ) : (
           <Img

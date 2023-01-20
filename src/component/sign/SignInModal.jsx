@@ -95,7 +95,6 @@ const SignInModal = ({ onClose }) => {
             <h2>N</h2>
           </SignButton>
         </SignTitleInput>
-        {/* 여기까지 확실 */}
         <SocialLogin>
           <button>
             <img
