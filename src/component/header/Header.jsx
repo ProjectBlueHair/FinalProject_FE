@@ -65,7 +65,7 @@ const Header = () => {
   console.log("user", user);
   useEffect(() => {
     dispatch(__getGeneralUserInfo());
-  }, [acToken,]);
+  }, [acToken]);
 
   return (
     <Grid>

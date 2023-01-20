@@ -21,11 +21,15 @@ const PostingCollaboRequested = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   useEffect(() => {
+    // dispatch(__getAudios(Number(id)))
     dispatch(__getCollaboRequested(Number(id)));
     return () => {
       dispatch(__cleanUp());
     };
   }, []);
+  useEffect(()=>{
+
+  },[])
   const collaboDescription = useAppSelector(collaboDescriptionSelector);
   const error = useAppSelector(errorSelector);
   if (error) {

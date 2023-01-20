@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, MutableRefObject } from "react";
+import React, { CSSProperties, MouseEventHandler, MutableRefObject } from "react";
 import styled from "styled-components";
 import { StyledComponent } from "styled-components";
 interface DivProps {
@@ -31,6 +31,7 @@ interface DivProps {
   cursor?: string;
   isNewAudio?: boolean;
   onClick?:MouseEventHandler;
+  style?: CSSProperties
 }
 interface FlexContainer {
   [key: string]: StyledComponent<"div", any, DivProps, never>;

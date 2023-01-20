@@ -166,7 +166,6 @@ export const postingSlice = createSlice({
       .addCase(
         __getCollaboRequested.fulfilled,
         (state, { payload }: { payload: CollaboRequested }) => {
-          console.log("__getCollaboRequested fullflled payload", payload);
           state.title = payload.nickname + "님의 콜라보 요청";
           state.collaboDescription = payload.contents;
           const arr = [] as Audio[];
@@ -195,7 +194,6 @@ export const __getAudios = createAsyncThunk(
   async (payload: number, thunkAPI) => {
     try {
       const { data } = await instanceAxios.get(`/post/${payload}/music`);
-      console.log("__getAudios customHttpStatus", data.data.customHttpStatus);
       return handleError(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);

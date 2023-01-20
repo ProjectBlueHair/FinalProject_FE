@@ -3,6 +3,7 @@ import { audioControlSelector } from "../../redux/slice/postingSlice";
 import { Audio, ProgressControl } from "../../model/PostingModel";
 import WaveSurfer from "wavesurfer.js";
 import { useAppSelector } from "../../redux/config";
+import Flex from "../elem/Flex";
 
 const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
   props
@@ -71,11 +72,12 @@ const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
     }
   }, [playControl.seekTo]);
   return (
-    <div
-      style={{ width: "100%", padding: "0 0" }}
-      id="waveform"
-      ref={waveformRef}
-    />
+    <Flex justify="flex-start" wd="98%">
+      <div
+        style={{ width: "100%", padding: "0.3rem 0.3rem", marginLeft: "-1rem" }}
+        ref={waveformRef}
+      />
+    </Flex>
   );
 };
 
