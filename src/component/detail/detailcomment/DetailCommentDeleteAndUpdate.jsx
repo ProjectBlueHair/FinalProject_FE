@@ -47,10 +47,10 @@ const DetailDeleteAndUpdate = ({ mcv }) => {
           {userInformation?.nickname !== mcv?.nickname ? (
             ""
           ) : (
-            <>
+            <div>
               <button onClick={onComUpdateNo}>수정</button>
               <button onClick={() => onComDelete(mcv.id)}>삭제</button>
-            </>
+            </div>
           )}
         </DetailComHeader>
         <DetailComContent>
@@ -89,10 +89,8 @@ export default DetailDeleteAndUpdate;
 
 const DetailComHeader = styled.div`
   display: flex;
-  div {
-    width: 66rem;
-    /* margin-top: 0.5rem; */
-  }
+  justify-content: space-between;
+  width: 100%;
   button {
     border: 1px solid transparent;
     margin-right: 1rem;
@@ -106,7 +104,7 @@ const DetailComHeader = styled.div`
 `;
 
 const DetailComContent = styled.div`
-  width: 75rem;
+  width: 100%;
   margin-top: -10px;
   span {
     display: flex;
@@ -115,6 +113,6 @@ const DetailComContent = styled.div`
   input {
     border: transparent;
     border-bottom: 1px solid black;
-    width: 68rem;
+    width: 88%;
   }
 `;

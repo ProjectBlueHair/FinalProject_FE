@@ -64,7 +64,7 @@ const DetailComment = () => {
 export default DetailComment;
 
 const CommentWrite = styled.div`
-  width: 85rem;
+  width: 100%;
   margin: 3rem auto;
   display: flex;
   img {
@@ -77,14 +77,14 @@ const CommentWrite = styled.div`
 
 const CommentWriteBox = styled.div`
   display: flex;
-  width: 76rem;
+  width: 100%;
   height: 3.5rem;
   margin-left: 1rem;
-  border: 1px solid black;
+  border: 1px solid rgba(0, 0, 0, 0.5);
   align-items: center;
   border-radius: 30px;
   input {
-    width: 68rem;
+    width: 90%;
     height: 3rem;
     margin: 1rem 2rem;
     border: transparent;

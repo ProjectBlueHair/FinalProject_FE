@@ -46,8 +46,8 @@ const DetailComTotal = styled.div`
 `;
 
 const DetailComTopImg = styled.img`
-  min-width: 4rem;
-  height: 3.5rem;
+  width: 3.3rem;
+  height: 3.3rem;
   border: 1px solid black;
   border-radius: 70%;
   margin-right: 1rem;
@@ -56,7 +56,7 @@ const DetailComTopImg = styled.img`
 const DetailComTop = styled.div`
   display: flex;
   flex-direction: column;
-  max-width: 78rem;
+  width: 100%;
 `;
 
 const DetailComUpDown = styled.div`

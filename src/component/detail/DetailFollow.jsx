@@ -26,19 +26,20 @@ const DetailFollow = ({ detailCollabo }) => {
       {detailCollabo?.map((collabo, index) => (
         <FollowTotal key={index}>
           <FollowTop>
-            <img src={collabo.profileImg} alt="" />
-            <FollowMiddle>
-              <FollowWriteInstrument>
-                {collabo?.musicPartsList?.map((part, index) => (
-                  <div key={index}>{part}</div>
-                ))}
-
-                <span>{collabo.nickname}</span>
-              </FollowWriteInstrument>
-              <div style={{ fontSize: "12px" }}>
-                팔로워 {collabo.followerCount} 명
-              </div>
-            </FollowMiddle>
+            <FollowImgText>
+              <img src={collabo.profileImg} alt="" />
+              <FollowMiddle>
+                <FollowWriteInstrument>
+                  {collabo?.musicPartsList?.map((part, index) => (
+                    <div key={index}>{part}</div>
+                  ))}
+                  <span>{collabo.nickname}</span>
+                </FollowWriteInstrument>
+                <div style={{ fontSize: "12px" }}>
+                  팔로워 {collabo.followerCount} 명
+                </div>
+              </FollowMiddle>
+            </FollowImgText>
             <FollowBtn>
               {acToken === undefined ? (
                 ""
@@ -59,19 +60,19 @@ const DetailFollow = ({ detailCollabo }) => {
 export default DetailFollow;
 
 const FollowTotal = styled.div`
-  width: 80rem;
+  width: 100%;
   display: flex;
   flex-direction: column;
 `;
 
 const FollowTop = styled.div`
   display: flex;
+  justify-content: space-between;
   gap: 10px;
   margin-top: 5px;
   img {
-    width: 5rem;
+    width: 4rem;
     height: 4rem;
-    border: 1px solid black;
     border-radius: 80%;
   }
 `;
@@ -80,11 +81,14 @@ const FollowMiddle = styled.div`
   display: flex;
   flex-direction: column;
 `;
+const FollowImgText = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
 
 const FollowWriteInstrument = styled.div`
   margin-top: 0.3rem;
   display: flex;
-  width: 20rem;
   height: 1.5rem;
   div {
     border: transparent;
@@ -102,12 +106,11 @@ const FollowWriteInstrument = styled.div`
 `;
 
 const FollowBtn = styled.div`
-  width: 65rem;
   display: flex;
   justify-content: flex-end;
   align-items: center;
   button {
-    width: 8rem;
+    width: 10rem;
     height: 3.5rem;
     font-size: 1.5rem;
     background-color: transparent;

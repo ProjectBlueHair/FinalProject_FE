@@ -49,10 +49,10 @@ const DetailCommentSubDeleteUpdate = ({ re }) => {
           {re?.nickname !== userInformation?.nickname ? (
             ""
           ) : (
-            <>
+            <div>
               <button onClick={onSubUp}>수정</button>
               <button onClick={() => onSubCommentDelete(re.id)}>삭제</button>
-            </>
+            </div>
           )}
         </DetailComSubHeader>
         <DetailComSubContent>
@@ -66,10 +66,10 @@ const DetailCommentSubDeleteUpdate = ({ re }) => {
         <DetailComSubHeader>
           <div>{re.nickname}</div>
           <button
-            style={{ width: "12rem" }}
+            style={{ width: "9rem" }}
             onClick={() => onUpdateSubCom(re.id)}
           >
-            수정완료
+            수정하기
           </button>
         </DetailComSubHeader>
         <DetailComSubContent>
@@ -91,12 +91,10 @@ export default DetailCommentSubDeleteUpdate;
 
 const DetailComSubHeader = styled.div`
   display: flex;
-  div {
-    width: 85rem;
-    margin-right: 1rem;
-  }
+  width: 100%;
+  justify-content: space-between;
   button {
-    width: 5.5rem;
+    width: 4rem;
     height: 2.5rem;
     border-radius: 10px;
     color: white !important;
@@ -106,11 +104,11 @@ const DetailComSubHeader = styled.div`
 `;
 
 const DetailComSubContent = styled.div`
-  width: 71rem;
+  width: 100%;
   margin-top: -10px;
   input {
     border: transparent;
     border-bottom: 1px solid black;
-    width: 62rem;
+    width: 90%;
   }
 `;
