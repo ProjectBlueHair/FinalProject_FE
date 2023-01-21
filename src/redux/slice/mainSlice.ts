@@ -8,7 +8,7 @@ export const __getPostList = createAsyncThunk(
   async (payload: number, thunkAPI) => {
     try {
       const { data } = await instanceAxios.get(`/post?page=${Number(payload)}`);
-      return data.data
+      return data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -20,11 +20,8 @@ export const __mainPostLike = createAsyncThunk(
     try {
       const { data } = await instanceAxios.post(`post/like/${payload.postId}`);
       const resData: LikeModel = { ...data.data, index: payload.index };
-      console.log('error1',data);
       return resData;
     } catch (error) {
-      console.log('error2',error);
-      
       return thunkAPI.rejectWithValue(error);
     }
   }

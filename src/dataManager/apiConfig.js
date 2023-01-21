@@ -34,14 +34,16 @@ instanceAxios.interceptors.response.use(
     console.log("res interceptor status", status);
     console.log("res interceptor data", data);
     console.log("res interceptor res", res);
-    
+
     if (data.customHttpStatus === 4011) {
-      console.log(('4011'));
+      console.log("4011");
       removeCookies("accesstoken", { path: "/" });
       removeCookies("refreshtoken", { path: "/" });
-       throw new Error("4011 : 로그인이 필요한 페이지 (기능) 입니다.");
+      throw new Error("4011 : 로그인이 필요한 페이지 (기능) 입니다.");
     } else if (data.customHttpStatus === 4013) {
-      throw new Error("유효하지 않은 로그인 정보입니다. 재로그인이 필요합니다.");
+      throw new Error(
+        "유효하지 않은 로그인 정보입니다. 재로그인이 필요합니다."
+      );
     } else if (data.customHttpStatus === 4003) {
       throw new Error("유효하지 않음 음원입니다. WAV 형식을 이용해 주세요.");
     } else if (data.customHttpStatus === 4041) {

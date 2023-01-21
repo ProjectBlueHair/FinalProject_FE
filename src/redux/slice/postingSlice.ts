@@ -232,9 +232,9 @@ export const uploadPost = async (data: Form) => {
 export const collaboRequest = async (data: any, postId: string | number) => {
   return await instanceAxios.post(`/post/${postId}/collabo`, data, config);
 };
-export const collaboRequestFirst = async (data: any, postId: string | number) => {
-  return await instanceAxios.post(`/post/${postId}/collabo/first`, data, config);
-};
+// export const collaboRequestFirst = async (data: any, postId: string | number) => {
+//   return await instanceAxios.post(`/post/${postId}/collabo/first`, data, config);
+// };
 export const collaboApprove = async (collaboId: string | number) => {
   return await instanceAxios.post(`/collabo/${collaboId}`);
 };
