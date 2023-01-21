@@ -12,6 +12,7 @@ import {
   uploadPost,
   __cleanUp,
   __typeTitle,
+  collaboRequestFirst,
 } from "../../redux/slice/postingSlice";
 import Flex, { StFlex } from "../elem/Flex";
 import Img from "../elem/Img";
@@ -119,7 +120,7 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
       })
       .then(({ data }) => {
         console.log("response from post uploading", data);
-        return collaboRequest(formData, data.data);
+        return collaboRequestFirst(formData, data.data);
       })
       .then(({ data }: { data: Response }) => {
         if (data.customHttpStatus === 4003) {
@@ -131,7 +132,6 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
       })
       .then(({ data }: { data: Response }) => {
         $closeModal();
-
         if (data.customHttpStatus === 2000) {
           $openModal({
             type: "alert",
@@ -141,14 +141,13 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
               to: "/",
             },
           });
-        } else {
-          $closeModal();
         }
-        console.log("collabo approve response", data);
       })
       .catch((err) => {
+        console.log('err',err);
+        
         $closeModal();
-        $openModal({ type: "alert", props: { message: err, type: "error" } });
+        $openModal({ type: "alert", props: { message:''+err , type: "error" } });
       });
   };
 

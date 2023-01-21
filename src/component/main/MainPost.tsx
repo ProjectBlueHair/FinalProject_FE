@@ -88,6 +88,7 @@ const MainPost: React.FC<{ post: Post; index: number }> = (props) => {
             </Flex>
             <Flex justify="flex-start" gap="0.4rem">
               <Img
+                filter={props.post.liked ? "none" : "rgba(0, 0, 0, 0.04)"}
                 onClick={() =>
                   dispatch(
                     __mainPostLike({
@@ -98,7 +99,7 @@ const MainPost: React.FC<{ post: Post; index: number }> = (props) => {
                 }
                 type="iconSmall"
                 wd="1.5rem"
-                src={props.post.isLiked ? fillHeart : like}
+                src={props.post.liked ? fillHeart : like}
               />
               <IconSpan>{props.post.likeCount}</IconSpan>
             </Flex>

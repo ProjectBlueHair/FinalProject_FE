@@ -11,7 +11,6 @@ import {
 } from "../../model/PostingModel";
 import { instanceAxios } from "../../dataManager/apiConfig";
 import { Response } from "../../model/ResponseModel";
-import { handleError } from "../../dataManager/errorHandler";
 
 export const audiosSelector = (state: AppState) => state.posting.audios;
 export const audioControlSelector = (state: AppState) =>
@@ -195,7 +194,7 @@ export const __getAudios = createAsyncThunk(
   async (payload: number, thunkAPI) => {
     try {
       const { data } = await instanceAxios.get(`/post/${payload}/music`);
-      return handleError(data);
+      return data.data
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -206,7 +205,7 @@ export const __getPostInfo = createAsyncThunk(
   async (payload: number, thunkAPI) => {
     try {
       const { data } = await instanceAxios.get(`/post/details/${payload}`);
-      return handleError(data);
+      return data.data
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -219,7 +218,7 @@ export const __getCollaboRequested = createAsyncThunk(
       const { data }: { data: Response } = await instanceAxios.get(
         `/collabo/${payload}`
       );
-      return handleError(data);
+      return data.data
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -232,6 +231,9 @@ export const uploadPost = async (data: Form) => {
 };
 export const collaboRequest = async (data: any, postId: string | number) => {
   return await instanceAxios.post(`/post/${postId}/collabo`, data, config);
+};
+export const collaboRequestFirst = async (data: any, postId: string | number) => {
+  return await instanceAxios.post(`/post/${postId}/collabo/first`, data, config);
 };
 export const collaboApprove = async (collaboId: string | number) => {
   return await instanceAxios.post(`/collabo/${collaboId}`);

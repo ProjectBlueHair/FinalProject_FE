@@ -37,10 +37,19 @@ const AlarmModal = () => {
     return instanceAxios.get("/notifications");
   };
   const [alarmState, setAlarmState] = useState<Alarm[]>([]);
-  const { $closeModal } = useTypeModal();
+  const { $closeModal, $openModal } = useTypeModal();
   console.log(alarmState);
+
   useEffect(() => {
-    getAlarm().then(({ data }) => setAlarmState(data.data));
+    getAlarm()
+      .then(({ data }) => setAlarmState(data.data))
+      .catch((err) => {
+        $closeModal();
+        $openModal({
+          type: "alert",
+          props: { message: "" + err, type: "error" },
+        });
+      });
   }, []);
 
   return (
@@ -52,7 +61,9 @@ const AlarmModal = () => {
               onClick={() => {
                 //todo: 임시
                 $closeModal({ type: "alarm" });
-                navigate(`/${alarm.type}/${alarm.typeId}/${alarm.postId || ''}`);
+                navigate(
+                  `/${alarm.type}/${alarm.typeId}/${alarm.postId || ""}`
+                );
               }}
               direction="column"
               cursor="pointer"
@@ -65,12 +76,7 @@ const AlarmModal = () => {
                 </Span>
               </Flex>
               <Flex justify="flex-start" gap={alarmGap}>
-                <Img
-                  wd="5rem"
-                  hg="5rem"
-                  radius="10px"
-                  src={alarm.senderImg}
-                />
+                <Img wd="5rem" hg="5rem" radius="10px" src={alarm.senderImg} />
                 <Flex
                   direction="column"
                   wd="none"

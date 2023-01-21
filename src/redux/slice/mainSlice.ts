@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { instanceAxios } from "../../dataManager/apiConfig";
-import { handleError } from "../../dataManager/errorHandler";
+
 import { CurrentMusic, LikeModel, Post } from "../../model/PostModel";
 import { __postLike } from "./detailSlice";
 export const __getPostList = createAsyncThunk(
@@ -8,7 +8,7 @@ export const __getPostList = createAsyncThunk(
   async (payload: number, thunkAPI) => {
     try {
       const { data } = await instanceAxios.get(`/post?page=${Number(payload)}`);
-      return handleError(data);
+      return data.data
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -19,9 +19,12 @@ export const __mainPostLike = createAsyncThunk(
   async (payload: { postId: string | number; index: number }, thunkAPI) => {
     try {
       const { data } = await instanceAxios.post(`post/like/${payload.postId}`);
-      const resData: LikeModel = { ...handleError(data), index: payload.index };
+      const resData: LikeModel = { ...data.data, index: payload.index };
+      console.log('error1',data);
       return resData;
     } catch (error) {
+      console.log('error2',error);
+      
       return thunkAPI.rejectWithValue(error);
     }
   }
@@ -109,13 +112,13 @@ export const mainSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(
-        __postLike.fulfilled,
+        __mainPostLike.fulfilled,
         (state, { payload }: { payload: LikeModel | undefined }) => {
-          state.posts[payload!.index].isLiked = payload!.isLiked;
+          state.posts[payload!.index].liked = payload!.isLiked;
           state.posts[payload!.index].likeCount = payload!.likeCount;
         }
       )
-      .addCase(__postLike.rejected, (state, { payload }) => {
+      .addCase(__mainPostLike.rejected, (state, { payload }) => {
         state.error = payload;
       });
   },

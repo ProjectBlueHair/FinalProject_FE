@@ -19,6 +19,7 @@ interface ImgProps {
   z?:string | number;
   cursor?:string
   id?:string;
+  filter? : string
   src?:any;
   onClick?:any
   key?: string | number
@@ -79,7 +80,7 @@ const IconButton = styled(StImg)`
 `;
 const IconSmall = styled(StImg)`
   &:hover {
-    filter: ${({ bg }) => bg || css`var(--ec-secondary-filter)`};
+    filter: ${({ filter }) => filter || css`var(--ec-secondary-filter)`};
     cursor: pointer;
   }
 `;
