@@ -10,7 +10,7 @@ export interface Post {
   title: string;
   mainProfileList: Member[];
   musicFile: string;
-  isLiked: boolean;
+  liked: boolean;
   likeCount: number;
   viewCount: number;
   tagList: string[];

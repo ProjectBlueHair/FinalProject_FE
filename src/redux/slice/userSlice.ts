@@ -1,15 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
 import { instanceAxios } from "../../dataManager/apiConfig";
-import { handleError } from "../../dataManager/errorHandler";
+
 import { AppState, useAppSelector } from "../config";
 export const __getGeneralUserInfo = createAsyncThunk(
   "__getGeneralUserInfo",
   async (payload, thunkAPI) => {
     try {
-      // const { data } = await axios.get(`/post?page=${Number(payload)}`);
+
       const { data } = await instanceAxios.get(`/member/info`);
-      // return handleError(data);
       return data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);

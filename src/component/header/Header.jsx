@@ -122,7 +122,7 @@ const Header = () => {
         <Flex direction="row" wd="none">
           <Img
             onClick={() => {
-              !isClicked.alarm && user.nickname
+              !isClicked.alarm
                 ? $openModal({ type: "alarm" })
                 : $closeModal();
               setIsClicked({ ...isClicked, alarm: !isClicked.alarm });
