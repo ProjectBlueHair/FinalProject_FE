@@ -50,7 +50,7 @@ const DetailFollow = ({ detailCollabo }) => {
               )}
             </FollowBtn>
           </FollowTop>
-          <FollowTitle>연주 설명부분</FollowTitle>
+          <FollowTitle>{collabo.contents}</FollowTitle>
         </FollowTotal>
       ))}
     </>
