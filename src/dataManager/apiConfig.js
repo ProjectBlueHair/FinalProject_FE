@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getCookies, removeCookies, setCookie } from "./cookie";
 
-const serverURL = process.env.REACT_APP_SERVER;
+export const serverURL = process.env.REACT_APP_SERVER;
 
 export const instanceAxios = axios.create({ baseURL: serverURL });
 export const reassuranceAxios = axios.create({ baseURL: serverURL });
@@ -31,12 +31,11 @@ instanceAxios.interceptors.response.use(
   (res) => {
     //만료 access:4015
     const { status, data, config } = res;
-    console.log("res interceptor status", status);
+    // console.log("res interceptor status", status);
     console.log("res interceptor data", data);
-    console.log("res interceptor res", res);
+    // console.log("res interceptor res", res);
 
     if (data.customHttpStatus === 4011) {
-      console.log("4011");
       removeCookies("accesstoken", { path: "/" });
       removeCookies("refreshtoken", { path: "/" });
       throw new Error("4011 : 로그인이 필요한 페이지 (기능) 입니다.");
@@ -66,8 +65,6 @@ instanceAxios.interceptors.response.use(
           )
           .then((data) => {
             const { accesstoken, refreshtoken } = data.headers;
-            console.log("TOKEN ACCESS", accesstoken);
-            console.log("TOKEN REFRESH", refreshtoken);
             if (!accesstoken || !refreshtoken) {
               removeCookies("accesstoken", { path: "/" });
               removeCookies("refreshtoken", { path: "/" });
