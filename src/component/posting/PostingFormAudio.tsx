@@ -11,7 +11,7 @@ const PostingFormAudio = () => {
   const isLoading = useAppSelector(loadingSelector)
   const defaultText = () => {
     return (
-      <div>
+      <Flex direction="column">
         <div>드래그 앤 드랍으로 음악을 추가하세요</div>
         <div
           onClick={() => {
@@ -19,9 +19,12 @@ const PostingFormAudio = () => {
           }}
           style={{ textDecoration: "underline", cursor: "pointer" }}
         >
-          또는 여기를 클릭해서 파일을 선택하세요
+          또는 여기를 클릭해서 파일을 선택하세요. 
         </div>
-      </div>
+        <div>
+        (현재 .wav 형식만 가능합니다.)
+        </div>
+      </Flex>
     );
   };
   const alertText = () => {
