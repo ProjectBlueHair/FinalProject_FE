@@ -2,6 +2,7 @@ export interface ProgressControl {
   isPlaying: boolean;
   seekTo: number;
   src: string | undefined;
+  onLoad : boolean
 }
 export interface Audio {
   audioData: AudioData;
@@ -10,8 +11,9 @@ export interface Audio {
   isCollabo? : boolean
   isSolo: boolean;
   volume: number;
+  isLoaded : boolean
 }
-//what we receive from audio get api
+//what we receive from server
 export interface AudioData {
   musicFile: string;
   musicPart: string;

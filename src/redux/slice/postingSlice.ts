@@ -36,7 +36,12 @@ const initialState = {
   title: "",
   collaboDescription: "",
   audios: [] as Audio[],
-  progressControl: { isPlaying: false, seekTo: 0, src: undefined },
+  progressControl: {
+    isPlaying: false,
+    seekTo: 0,
+    src: undefined,
+    onLoad: false,
+  },
   audio: {
     audioData: {} as AudioData,
     isMute: false,
@@ -44,8 +49,8 @@ const initialState = {
     volume: 0.5,
     isCollabo: false,
     isSolo: false,
+    isLoaded: false,
   } as Audio,
-  // collaboAudios: [] as CollaboAudio[],
   collaboRequestData: { isValid: false, audios: [] as CollaboAudio[] },
   isLoading: false,
   error: null,
@@ -56,6 +61,32 @@ export const postingSlice = createSlice({
   reducers: {
     __typeTitle: (state, { payload }) => {
       state.title = payload;
+    },
+    
+
+    __addNewAudio: (state, { payload }) => {
+      console.log("__addNewAudio payload", payload);
+      state.progressControl.src = state.progressControl.src || payload[0];
+      const arr: Audio[] = [];
+      const arr2: CollaboAudio[] = [];
+      payload.map((musicFile: string) => {
+        arr.push({
+          ...state.audio,
+          isNewAudio: true,
+          audioData: { ...state.audio.audioData, musicFile: musicFile },
+        });
+        arr2.push({ src: musicFile, part: "" });
+      });
+      state.audios = state.audios.concat(arr);
+      state.collaboRequestData.audios =
+        state.collaboRequestData.audios.concat(arr2);
+    },
+    __audioOnLoaded: (state, { payload }) => {
+      state.audios[payload].isLoaded = true;
+      const fullyLoaded = state.audios
+        .map((audio) => audio.isLoaded)
+        .indexOf(false);
+      state.progressControl.onLoad = fullyLoaded === -1;
     },
     __setCollaboPart: (state, { payload }) => {
       const originalAudiosLength =
@@ -104,24 +135,7 @@ export const postingSlice = createSlice({
         payload.volume === 0.01 ? true : false;
       state.audios[payload.index].volume = payload.volume;
     },
-    __addNewAudio: (state, { payload }) => {
-      console.log("__addNewAudio payload", payload);
-      state.progressControl.src = state.progressControl.src || payload[0];
-      const arr: Audio[] = [];
-      const arr2: CollaboAudio[] = [];
-      payload.map((musicFile: string) => {
-        arr.push({
-          ...state.audio,
-          isNewAudio: true,
-          audioData: { ...state.audio.audioData, musicFile: musicFile },
-        });
-        arr2.push({ src: musicFile, part: "" });
-      });
-      state.audios = state.audios.concat(arr);
-      state.collaboRequestData.audios =
-        state.collaboRequestData.audios.concat(arr2);
-    },
-    __cleanUp: (state) => {
+    __cleanUp: () => {
       return initialState;
     },
   },
@@ -141,7 +155,7 @@ export const postingSlice = createSlice({
       .addCase(
         __getAudios.fulfilled,
         (state, { payload }: { payload: AudioData[] }) => {
-          console.log('__getAudios payload',payload)
+          console.log("__getAudios payload", payload);
           console.log("extra reducer", payload);
           state.isLoading = false;
           payload.map((audio) => {
@@ -159,14 +173,13 @@ export const postingSlice = createSlice({
         state.error = payload;
       })
 
-
       .addCase(__getCollaboRequested.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(
         __getCollaboRequested.fulfilled,
         (state, { payload }: { payload: CollaboRequested }) => {
-          console.log('__getCollaboRequested payload',payload)
+          console.log("__getCollaboRequested payload", payload);
           state.title = payload.nickname + "님의 콜라보 요청";
           state.collaboDescription = payload.contents;
           console.log("payload.musicList[0]", payload.musicList[0]);
@@ -176,7 +189,7 @@ export const postingSlice = createSlice({
           payload.musicList.map((audio: AudioData) => {
             state.audios = state.audios.concat({
               ...state.audio,
-              isCollabo:true,
+              isCollabo: true,
               isNewAudio: true,
               audioData: audio,
             });
@@ -194,7 +207,7 @@ export const __getAudios = createAsyncThunk(
   async (payload: number, thunkAPI) => {
     try {
       const { data } = await instanceAxios.get(`/post/${payload}/music`);
-      return data.data
+      return data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -205,7 +218,7 @@ export const __getPostInfo = createAsyncThunk(
   async (payload: number, thunkAPI) => {
     try {
       const { data } = await instanceAxios.get(`/post/details/${payload}`);
-      return data.data
+      return data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -218,7 +231,7 @@ export const __getCollaboRequested = createAsyncThunk(
       const { data }: { data: Response } = await instanceAxios.get(
         `/collabo/${payload}`
       );
-      return data.data
+      return data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -248,5 +261,6 @@ export const {
   __typeTitle,
   __cleanUp,
   __setCollaboPart,
+  __audioOnLoaded
 } = postingSlice.actions;
 export default postingSlice.reducer;
