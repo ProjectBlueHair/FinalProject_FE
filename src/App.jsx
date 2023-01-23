@@ -1,21 +1,21 @@
+import { ThemeProvider } from "styled-components";
+import GlobalStyle from "./styles/GlobalStyle";
 
-import GlobalStyle from './GlobalStyle';
+import Router from "./Router";
+import theme from "./styles/theme";
 
-import Router from './Router';
-
-const App = ()=>{
-
+const App = () => {
   if (process.env.NODE_ENV === "production") {
     console.log = function no_console() {};
     console.warn = function no_console() {};
   }
-  
+
   return (
-    <>
-    <GlobalStyle/>
-    <Router/>
-    </>
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <Router />
+    </ThemeProvider>
   );
-}
+};
 
 export default App;

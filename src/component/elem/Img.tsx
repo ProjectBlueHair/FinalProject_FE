@@ -80,7 +80,7 @@ const IconButton = styled(StImg)`
 `;
 const IconSmall = styled(StImg)`
   &:hover {
-    filter: ${({ filter }) => filter || css`var(--ec-secondary-filter)`};
+    filter: ${(props) => props.filter || 'var(--ec-secondary-filter)'};
     cursor: pointer;
   }
 `;

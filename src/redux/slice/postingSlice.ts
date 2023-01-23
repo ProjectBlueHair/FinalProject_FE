@@ -34,7 +34,6 @@ export interface PostingState {
 }
 const initialState = {
   title: "",
-  collaboDescription: "",
   audios: [] as Audio[],
   progressControl: {
     isPlaying: false,
@@ -51,6 +50,7 @@ const initialState = {
     isSolo: false,
     isLoaded: false,
   } as Audio,
+  collaboDescription: "",
   collaboRequestData: { isValid: false, audios: [] as CollaboAudio[] },
   isLoading: false,
   error: null,
@@ -62,24 +62,17 @@ export const postingSlice = createSlice({
     __typeTitle: (state, { payload }) => {
       state.title = payload;
     },
-    
 
     __addNewAudio: (state, { payload }) => {
-      console.log("__addNewAudio payload", payload);
       state.progressControl.src = state.progressControl.src || payload[0];
-      const arr: Audio[] = [];
-      const arr2: CollaboAudio[] = [];
-      payload.map((musicFile: string) => {
-        arr.push({
+      payload.forEach((musicFile: string) => {
+        state.audios.push({
           ...state.audio,
           isNewAudio: true,
           audioData: { ...state.audio.audioData, musicFile: musicFile },
         });
-        arr2.push({ src: musicFile, part: "" });
+        state.collaboRequestData.audios.push({ src: musicFile, part: "" });
       });
-      state.audios = state.audios.concat(arr);
-      state.collaboRequestData.audios =
-        state.collaboRequestData.audios.concat(arr2);
     },
     __audioOnLoaded: (state, { payload }) => {
       state.audios[payload].isLoaded = true;
@@ -111,23 +104,20 @@ export const postingSlice = createSlice({
       state.audios[payload].isMute = !state.audios[payload].isMute;
     },
     __setSolo: (state, { payload }) => {
-      const arr = [...state.audios];
       const soloIndex = payload;
       //start solo
       if (!state.audios[payload].isSolo) {
-        arr.map((audio, index) => {
-          arr[index].volume = index === soloIndex ? 0.5 : 0.01;
-          arr[index].isSolo = index === soloIndex ? true : false;
+        state.audios.forEach((audio, index) => {
+          state.audios[index].volume = index === soloIndex ? 0.5 : 0.01;
+          state.audios[index].isSolo = index === soloIndex ? true : false;
         });
-        state.audios = arr;
       }
       //cancel solo
       else {
-        arr.map((audio, index) => {
-          arr[index].volume = 0.5;
-          arr[index].isSolo = false;
+        state.audios.forEach((audio, index) => {
+          state.audios[index].volume = 0.5;
+          state.audios[index].isSolo = false;
         });
-        state.audios = arr;
       }
     },
     __setVolume: (state, { payload }) => {
@@ -142,7 +132,6 @@ export const postingSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(__getPostInfo.rejected, (state, { payload }) => {
-        console.log("__getPostTitle rejected payload", payload);
         state.error = payload;
       })
       .addCase(__getPostInfo.fulfilled, (state, { payload }) => {
@@ -155,10 +144,8 @@ export const postingSlice = createSlice({
       .addCase(
         __getAudios.fulfilled,
         (state, { payload }: { payload: AudioData[] }) => {
-          console.log("__getAudios payload", payload);
-          console.log("extra reducer", payload);
           state.isLoading = false;
-          payload.map((audio) => {
+          payload.forEach((audio) => {
             state.audios = state.audios.concat({
               ...state.audio,
               isNewAudio: false,
@@ -169,7 +156,6 @@ export const postingSlice = createSlice({
         }
       )
       .addCase(__getAudios.rejected, (state, { payload }) => {
-        console.log("__getAudios rejected payload", payload);
         state.error = payload;
       })
 
@@ -179,14 +165,11 @@ export const postingSlice = createSlice({
       .addCase(
         __getCollaboRequested.fulfilled,
         (state, { payload }: { payload: CollaboRequested }) => {
-          console.log("__getCollaboRequested payload", payload);
           state.title = payload.nickname + "님의 콜라보 요청";
           state.collaboDescription = payload.contents;
-          console.log("payload.musicList[0]", payload.musicList[0]);
           state.progressControl.src =
             state.progressControl.src || payload.musicList[0]?.musicFile;
-
-          payload.musicList.map((audio: AudioData) => {
+          payload.musicList.forEach((audio: AudioData) => {
             state.audios = state.audios.concat({
               ...state.audio,
               isCollabo: true,
@@ -197,7 +180,6 @@ export const postingSlice = createSlice({
         }
       )
       .addCase(__getCollaboRequested.rejected, (state, { payload }) => {
-        console.log("__getCollaboRequested rejected payload", payload);
         state.error = payload;
       });
   },
@@ -245,9 +227,6 @@ export const uploadPost = async (data: Form) => {
 export const collaboRequest = async (data: any, postId: string | number) => {
   return await instanceAxios.post(`/post/${postId}/collabo`, data, config);
 };
-// export const collaboRequestFirst = async (data: any, postId: string | number) => {
-//   return await instanceAxios.post(`/post/${postId}/collabo/first`, data, config);
-// };
 export const collaboApprove = async (collaboId: string | number) => {
   return await instanceAxios.post(`/collabo/${collaboId}`);
 };
@@ -261,6 +240,6 @@ export const {
   __typeTitle,
   __cleanUp,
   __setCollaboPart,
-  __audioOnLoaded
+  __audioOnLoaded,
 } = postingSlice.actions;
 export default postingSlice.reducer;
