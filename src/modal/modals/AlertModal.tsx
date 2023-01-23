@@ -7,7 +7,17 @@ import Button from "../../component/elem/Button";
 import TypeModalWrapper from "../TypeModalWrapper";
 import useTypeModal from "../hooks/useTypeModal";
 import { useNavigate } from "react-router-dom";
+import { PATH } from "../../Router";
 /** type : error / info / confirm*/
+
+
+export const ALERT_TYPE = { 
+  error : 'error',
+  info : 'info',
+  confirm : 'confirm'
+}
+
+
 const AlertModal: React.FC<{ message?: string; type?: string; to?: string }> = (
   props
 ) => {

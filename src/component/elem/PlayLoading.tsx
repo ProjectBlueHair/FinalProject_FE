@@ -1,40 +1,26 @@
 import React from 'react'
 import styled from 'styled-components';
 
-const LoadingModal = () => {
+const PlayLoading = () => {
   return (
-    <Overlay>
       <Loading/>
-    </Overlay>
   )
 }
 
-export default LoadingModal
-const Overlay = styled.div`
-  position: fixed;
-  top: 50%;
-  padding: 2.5rem;
-  left: 50%;
-  z-index: 100000;
-  border-radius:10px;
-  transform: translate(-50%, -50%);
-  background-color: rgb(0, 0, 0, 0.5);
-`;
+export default PlayLoading
+
 
 export const Loading = styled.div`
     display: inline-block;
-    margin: auto;
-    width: 80px;
-    height: 80px;
+    margin: 0 2rem 0 0;
 
   &:after {
     content: "";
     display: block;
-    width: 53px;
-    height: 53px;
-    margin: 8px;
+    width: 3rem;
+    height: 3rem;
     border-radius: 50%;
-    border: 6px solid var(--ec-main-color);
+    border: 3px solid var(--ec-main-color);
     border-color: var(--ec-main-color) transparent var(--ec-main-color)
       transparent;
     animation: lds-dual-ring 0.6s linear infinite;

@@ -21,13 +21,13 @@ import { PATH } from "../../Router";
 import { getCookies, removeCookies } from "../../dataManager/cookie";
 import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
-import { __getUserInfo } from "../../redux/slice/detailSlice";
 import {
   userErrorSelector,
   userSelector,
   __getGeneralUserInfo,
 } from "../../redux/slice/userSlice";
 import Span from "../elem/Span";
+import { serverURL } from "../../dataManager/apiConfig";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -60,12 +60,24 @@ const Header = () => {
 
   const dispatch = useAppDispatch();
   const user = useAppSelector(userSelector);
-  const error = useAppSelector(userErrorSelector);
-  // if(error) alert(error)
-  console.log("user", user);
+
   useEffect(() => {
-    dispatch(__getGeneralUserInfo());
+    acToken && dispatch(__getGeneralUserInfo());
   }, [acToken]);
+
+  useEffect(() => {
+    const eventSource = new EventSource(`${serverURL}/subscribe`);
+    eventSource.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      console.log("data", data);
+    };
+    eventSource.onerror = (error) => {
+      console.error(error);
+    };
+    return () => {
+      eventSource.close();
+    };
+  }, []);
 
   return (
     <Grid>
@@ -122,9 +134,7 @@ const Header = () => {
         <Flex direction="row" wd="none">
           <Img
             onClick={() => {
-              !isClicked.alarm
-                ? $openModal({ type: "alarm" })
-                : $closeModal();
+              !isClicked.alarm ? $openModal({ type: "alarm" }) : $closeModal();
               setIsClicked({ ...isClicked, alarm: !isClicked.alarm });
             }}
             type="icon"
