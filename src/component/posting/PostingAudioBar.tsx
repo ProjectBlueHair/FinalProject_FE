@@ -1,10 +1,12 @@
 import React, { useEffect, useRef } from "react";
-import { audioControlSelector, __audioOnLoaded } from "../../redux/slice/postingSlice";
+import {
+  audioControlSelector,
+  __audioOnLoaded,
+} from "../../redux/slice/postingSlice";
 import { Audio, ProgressControl } from "../../model/PostingModel";
 import WaveSurfer from "wavesurfer.js";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import Flex from "../elem/Flex";
-import { useDispatch } from "react-redux";
 
 const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
   props
@@ -40,7 +42,7 @@ const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
 
   const wavesurfer = useRef<WaveSurfer | null>(null);
   const waveformRef = useRef<HTMLDivElement>(null);
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const playControl = useAppSelector(audioControlSelector);
 
   useEffect(() => {
@@ -48,11 +50,10 @@ const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
       waveformRef.current as HTMLDivElement
     );
     wavesurfer.current = WaveSurfer.create(options);
-    console.log("props.audioInfo.src", props.audioData.musicFile);
     wavesurfer.current.load(props.audioData.musicFile);
     wavesurfer.current.on("ready", function () {
       if (wavesurfer.current) {
-        dispatch(__audioOnLoaded(props.index))
+        dispatch(__audioOnLoaded(props.index));
         wavesurfer.current.setVolume(props.volume);
       }
     });

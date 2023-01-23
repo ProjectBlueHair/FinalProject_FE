@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getCookies, removeCookies, setCookie } from "./cookie";
 
-const serverURL = process.env.REACT_APP_SERVER;
+export const serverURL = process.env.REACT_APP_SERVER;
 
 export const instanceAxios = axios.create({ baseURL: serverURL });
 export const reassuranceAxios = axios.create({ baseURL: serverURL });
