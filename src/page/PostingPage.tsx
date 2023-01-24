@@ -35,7 +35,7 @@ const PostingPage = () => {
       },
     });
   return (
-    <Flex direction="column" justify="flex-start" hg="100%">
+    <Flex direction="column" justify="flex-start" >
       <Header />
       <AudioBarsBackground gap={AUDIO_BAR_GAP}>
         <PostingTitle />
