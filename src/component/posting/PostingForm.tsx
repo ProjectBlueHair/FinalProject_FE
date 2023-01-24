@@ -8,7 +8,6 @@ import {
   collaboApprove,
   collaboRequestDataSelector,
   collaboRequest,
-  errorSelector,
   uploadPost,
   __cleanUp,
   __typeTitle,
@@ -22,13 +21,11 @@ import axios from "axios";
 import Input from "../elem/Input";
 import Span from "../elem/Span";
 import TextArea from "../elem/Textarea";
-import TextButton from "../elem/Button";
 import CollaboSquare from "../../asset/icon/CollaboSquare";
 import { Response } from "../../model/ResponseModel";
-import { useNavigate } from "react-router-dom";
-import { PATH } from "../../Router";
 import useTypeModal from "../../modal/hooks/useTypeModal";
 import Button from "../elem/Button";
+
 export const formStyle = {
   border: "1px solid rgba(0,0,0,0.1)",
   borderRadius: "10px",
@@ -54,15 +51,9 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
   const title = useAppSelector(titleSelector);
   const collaboRequestData = useAppSelector(collaboRequestDataSelector);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const { $openModal, $closeModal } = useTypeModal();
 
-  const error = useAppSelector(errorSelector);
-  if (error) {
-    alert(error);
-    navigate(PATH.main);
-  }
   useEffect(() => {
     return () => {
       console.log("posting form cleaning");
@@ -72,7 +63,6 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     if (!collaboRequestData.isValid) {
       $openModal({
         type: "alert",
@@ -103,32 +93,21 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
     for (let i = 0; i < blobs.length; i++) {
       formData.append("musicFile", blobs[i]);
     }
-    uploadFiles(image.file)
-      .then((data) => {
-        return data === null || undefined ? null : data.Location;
-      })
-      .then((data) => {
-        const form: Form = {
-          contents: descriptionInput.value,
-          collaboNotice: collaboInput.value,
-          title: title,
-          postImg: data,
-        };
-        console.log("form payload for  ", form);
-        return uploadPost(form);
-      })
-      .then(({ data }) => {
-        console.log("response from post uploading", data);
-        return collaboRequest(formData, data.data);
-      })
-      .then(({ data }: { data: Response }) => {
-        if (data.customHttpStatus === 4003) {
-          throw new Error("유효하지 않은 음원 파일입니다.");
-        }
 
-        console.log("response from collabo request", data.data);
-        return collaboApprove(data.data);
-      })
+    const submitPost = async () => {
+      const imgData = await uploadFiles(image.file);
+      const form: Form = {
+        contents: descriptionInput.value,
+        collaboNotice: collaboInput.value,
+        title: title,
+        postImg: imgData ? imgData.location : null,
+      };
+      const postData = await uploadPost(form);
+      const collaboData = await collaboRequest(formData, postData.data.data);
+      const response = await collaboApprove(collaboData.data.data);
+      return response;
+    };
+    submitPost()
       .then(({ data }: { data: Response }) => {
         $closeModal();
         if (data.customHttpStatus === 2000) {
@@ -143,10 +122,11 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
         }
       })
       .catch((err) => {
-        console.log('err',err);
-        
         $closeModal();
-        $openModal({ type: "alert", props: { message:''+err , type: "error" } });
+        $openModal({
+          type: "alert",
+          props: { message: "" + err, type: "error" },
+        });
       });
   };
 

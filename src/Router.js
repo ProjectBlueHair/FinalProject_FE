@@ -5,6 +5,7 @@ import Tag from "./component/tag/Tag";
 import MainPage from "./page/MainPage";
 import PostingPage from "./page/PostingPage";
 import TypeModalContainer from "./modal/TypeModalContainer";
+import PostingReactQueryTest from "./component/posting/PostingReactQueryTest";
 export const PATH = {
   main: "/",
   signIn: "/sign-in",
@@ -29,6 +30,7 @@ const Router = () => {
           <Route path={PATH.post} element={<PostingPage />} />
           <Route path={`${PATH.edit}/:id`} element={<PostingPage />} />
           <Route path={`${PATH.collabo}/:id`} element={<PostingPage />} />
+          <Route path={`/test`} element={<PostingReactQueryTest />} />
           <Route
             path={`${PATH.collaboRequested}/:id/:postId`}
             element={<PostingPage />}

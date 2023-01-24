@@ -4,7 +4,7 @@ import Flex from "../elem/Flex";
 import Img from "../elem/Img";
 import AudioPlayer, { RHAP_UI } from "react-h5-audio-player";
 import { pause, playPrimary } from "../../asset/pic";
-import { iconSize } from "../../GlobalStyle";
+import { iconSize } from "../../styles/GlobalStyle";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
   audioControlSelector,

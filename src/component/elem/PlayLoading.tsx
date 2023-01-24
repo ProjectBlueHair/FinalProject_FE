@@ -17,8 +17,8 @@ export const Loading = styled.div`
   &:after {
     content: "";
     display: block;
-    width: 3.5rem;
-    height: 3.5rem;
+    width: 3rem;
+    height: 3rem;
     border-radius: 50%;
     border: 3px solid var(--ec-main-color);
     border-color: var(--ec-main-color) transparent var(--ec-main-color)
