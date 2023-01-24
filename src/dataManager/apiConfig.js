@@ -45,7 +45,10 @@ instanceAxios.interceptors.response.use(
       case 4041:
         throw new Error("존재하지 않는 게시물입니다. ");
       case 4015:
+        console.log('is token refreshing', isTokenRefreshing);
         if (!isTokenRefreshing) {
+          console.log('going');
+
           isTokenRefreshing = true;
           const RefreshToken = getCookies("refreshtoken");
           const AccessToken = getCookies("accesstoken");
@@ -61,6 +64,7 @@ instanceAxios.interceptors.response.use(
               }
             )
             .then((data) => {
+              console.log('going data', data.headers);
               const { accesstoken, refreshtoken } = data.headers;
               if (!accesstoken || !refreshtoken) {
                 removeCookies("accesstoken", { path: "/" });
