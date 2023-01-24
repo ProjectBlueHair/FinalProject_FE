@@ -11,7 +11,7 @@ import {
   settings,
   upload,
 } from "../../asset/pic";
-import styled from "styled-components";
+import styled, { ThemeConsumer } from "styled-components";
 import Input from "../elem/Input";
 import useModal from "../modal/useModal";
 import { useNavigate } from "react-router-dom";
@@ -28,7 +28,8 @@ import {
 } from "../../redux/slice/userSlice";
 import Span from "../elem/Span";
 import { serverURL } from "../../dataManager/apiConfig";
-
+import Div from "../elem/Div";
+import {EventSourcePolyfill} from "event-source-polyfill";
 const Header = () => {
   const navigate = useNavigate();
   const iconSize = "4rem";
@@ -63,21 +64,26 @@ const Header = () => {
 
   useEffect(() => {
     acToken && dispatch(__getGeneralUserInfo());
-  }, [acToken]);
+  }, [user.nickname]);
 
-  useEffect(() => {
-    const eventSource = new EventSource(`${serverURL}/subscribe`);
-    eventSource.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      console.log("data", data);
-    };
-    eventSource.onerror = (error) => {
-      console.error(error);
-    };
-    return () => {
-      eventSource.close();
-    };
-  }, []);
+  // useEffect(() => {
+  //   const RefreshToken = getCookies("refreshtoken");
+  //   const AccessToken = getCookies("accesstoken");
+  //   const es = new EventSourcePolyfill(
+  //     `${serverURL}/subscribe`,
+  //     {
+  //       headers: {
+  //         AccessToken: AccessToken,
+  //         RefreshToken: RefreshToken,
+  //       },
+  //     }
+  //   );
+  //   es.onmessage = (event) => {
+  //     console.log("polyfil", event.data);
+  //   };
+    
+  // }, []);
+
 
   return (
     <Grid>
@@ -141,7 +147,9 @@ const Header = () => {
             wd={iconSize}
             src={notifications}
           />
-          <AlarmDot mg="-2rem 0 0 -1.5rem" />
+          <Div fc="var(--ec-main-color)" mg="-2rem 0 0 -1.5rem">
+            4
+          </Div>
         </Flex>
         <Img
           onClick={() => navigate("/post")}
@@ -180,7 +188,7 @@ const Header = () => {
           />
         )}
       </Flex>
-      {acToken ? (
+      {user.nickname ? (
         <>
           {isOpen ? (
             <ToggleDiv ref={Sign}>
@@ -218,6 +226,7 @@ const Grid = styled.div`
   grid-template-columns: 1fr 1fr 1fr;
   gap: 1rem;
 `;
+const AlarmCount = styled.div``;
 
 const ToggleDiv = styled.div`
   position: absolute;
