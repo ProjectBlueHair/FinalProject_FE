@@ -1,15 +1,15 @@
 import React from "react";
-import DetailTop from "../component/detail/DetailTop";
 import Flex from "../component/elem/Flex";
 import Header from "../component/header/Header";
+import SetTotal from "../component/setpage/SetTotal";
 
-const Detail = () => {
+const SetPage = () => {
   return (
     <Flex direction="column" justify="flex-start" hg="100vh" gap="0">
       <Header />
-      <DetailTop />
+      <SetTotal />
     </Flex>
   );
 };
 
-export default Detail;
+export default SetPage;

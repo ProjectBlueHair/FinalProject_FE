@@ -37,7 +37,13 @@ export { default as redLike } from "./redlike.svg";
 export { default as collaboIcon } from "./collaboIcon.svg";
 export { default as alertInfo } from "./alertInfo.svg";
 export { default as alertBug } from "./alertBug.svg";
-
+export { default as facebook } from "./FaceBookIcon.svg";
+export { default as insta } from "./InstaIcon.svg";
+export { default as linkedIn } from "./LinkedInIcon.svg";
+export { default as soundcloud } from "./SoundCloudIcon.svg";
+export { default as twitter } from "./TwitterIcon.svg";
+export { default as checktrue } from "./checkTrue.svg";
+export { default as checkfalse } from "./checkFalse.svg";
 
 //vector (without margin)
 export { default as skipPrevVector } from "./skip-prev-vector.svg";
