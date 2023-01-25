@@ -21,6 +21,7 @@ const DetailFollow = ({ detailCollabo }) => {
     await dispatch(__putDetailFollow(follow));
     dispatch(__getDetailCollabo(id));
   };
+  console.log(detailCollabo);
   return (
     <>
       {detailCollabo?.map((collabo, index) => (

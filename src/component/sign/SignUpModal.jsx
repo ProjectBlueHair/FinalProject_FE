@@ -134,8 +134,7 @@ const SignUpModal = ({ onClose }) => {
       setPwMsg("비밀번호가 일치하지 않습니다!");
     }
   });
-  console.log(isPasswordCheck);
-  console.log(isPwLength, isPwNum, isPwStr, isPwSymbol);
+
   // 닉네임 중복처리
   const onNicknameCheck = () => {
     if (nickname.length === 0) {
