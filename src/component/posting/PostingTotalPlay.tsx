@@ -1,24 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRef } from "react";
 import Flex from "../elem/Flex";
 import Img from "../elem/Img";
 import AudioPlayer, { RHAP_UI } from "react-h5-audio-player";
 import { pause, playPrimary } from "../../asset/pic";
-import { iconSize } from "../../GlobalStyle";
+import { iconSize } from "../../styles/GlobalStyle";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
   audioControlSelector,
+  __cleanUp,
   __seekTo,
   __togglePlay,
 } from "../../redux/slice/postingSlice";
 
 import styled from "styled-components";
+import useTypeModal from "../../modal/hooks/useTypeModal";
+import PlayLoading from "../elem/PlayLoading";
 
 const PostingTotalPlay = () => {
   const audioPlayer = useRef<AudioPlayer>(null);
   const dispatch = useAppDispatch();
   const progressConrol = useAppSelector(audioControlSelector);
+  const { $openModal, $closeModal } = useTypeModal();
+  const [isLoading, setIsLoading] = useState(false);
+  console.log("progressConrol.onLoad", progressConrol.onLoad);
 
+  useEffect(() => {
+    if (!progressConrol.onLoad && !isLoading) {
+      setIsLoading(true);
+    } else {
+      setIsLoading(false);
+    }
+
+  }, [progressConrol.onLoad]);
   const handlePlay = () => {
     dispatch(__togglePlay(true));
   };
@@ -54,7 +68,9 @@ const PostingTotalPlay = () => {
             ]}
             customAdditionalControls={[]}
             customIcons={{
-              play: (
+              play: isLoading ? (
+                <PlayLoading />
+              ) : (
                 <Img
                   mg="0 2rem 0 0"
                   type="icon"

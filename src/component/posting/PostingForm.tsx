@@ -8,7 +8,6 @@ import {
   collaboApprove,
   collaboRequestDataSelector,
   collaboRequest,
-  errorSelector,
   uploadPost,
   __cleanUp,
   __typeTitle,
@@ -22,11 +21,11 @@ import axios from "axios";
 import Input from "../elem/Input";
 import Span from "../elem/Span";
 import TextArea from "../elem/Textarea";
-import TextButton from "../elem/TextButton";
 import CollaboSquare from "../../asset/icon/CollaboSquare";
 import { Response } from "../../model/ResponseModel";
-import { useNavigate } from "react-router-dom";
-import { PATH } from "../../Router";
+import useTypeModal from "../../modal/hooks/useTypeModal";
+import Button from "../elem/Button";
+
 export const formStyle = {
   border: "1px solid rgba(0,0,0,0.1)",
   borderRadius: "10px",
@@ -51,15 +50,10 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
 
   const title = useAppSelector(titleSelector);
   const collaboRequestData = useAppSelector(collaboRequestDataSelector);
-  console.log("collaboRequestData", collaboRequestData);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
-  const error = useAppSelector(errorSelector);
-  if (error) {
-    alert(error);
-    navigate(PATH.main);
-  }
+  const { $openModal, $closeModal } = useTypeModal();
+
   useEffect(() => {
     return () => {
       console.log("posting form cleaning");
@@ -69,10 +63,18 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!collaboRequestData.isValid) {
+      $openModal({
+        type: "alert",
+        props: { message: "각 음원의 파트를 입력해 주세요 :)", type: "info" },
+      });
+      return;
+    }
+    $openModal({ type: "loading", props: "" });
     const formData = new FormData();
 
     const collaboForm: CollaboForm = {
-      contents: 'collabo request from original author',
+      contents: "collabo request from original author",
       musicPartList: collaboRequestData.audios.map((audio) => audio.part),
     };
     formData.append(
@@ -88,42 +90,44 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
         return response.data;
       })
     );
-    console.log("collabo Request blobs", blobs);
     for (let i = 0; i < blobs.length; i++) {
       formData.append("musicFile", blobs[i]);
     }
-    uploadFiles(image.file)
-      .then((data) => {
-        console.log("aws s3 upload response", data);
-        return data === null || undefined ? null : data.Location;
-      })
-      .then((data) => {
-        const form: Form = {
-          contents: descriptionInput.value,
-          title: title,
-          postImg: data,
-        };
-        console.log("form payload for  ", form);
-        return uploadPost(form);
-      })
-      .then(({ data }) => {
-        console.log("response from post uploading", data);
-        return collaboRequest(formData, data.data);
-      })
-      .then(({ data }) => {
-        console.log("response from collabo request", data.data);
-        return collaboApprove(data.data);
-      })
+
+    const submitPost = async () => {
+      const imgData = await uploadFiles(image.file);
+      const form: Form = {
+        contents: descriptionInput.value,
+        collaboNotice: collaboInput.value,
+        title: title,
+        postImg: imgData ? imgData.location : null,
+      };
+      const postData = await uploadPost(form);
+      const collaboData = await collaboRequest(formData, postData.data.data);
+      const response = await collaboApprove(collaboData.data.data);
+      return response;
+    };
+    submitPost()
       .then(({ data }: { data: Response }) => {
+        $closeModal();
         if (data.customHttpStatus === 2000) {
-          alert("게시글이 작성되었습니다.");
-          navigate(PATH.main);
-        } else {
-          alert(data.message);
+          $openModal({
+            type: "alert",
+            props: {
+              message: "게시글이 작성되었습니다!",
+              type: "confirm",
+              to: "/",
+            },
+          });
         }
-        console.log("collabo approve response", data);
       })
-      .catch((err) => alert(err));
+      .catch((err) => {
+        $closeModal();
+        $openModal({
+          type: "alert",
+          props: { message: "" + err, type: "error" },
+        });
+      });
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -195,15 +199,19 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
               {...collaboInput}
             ></TextArea>
           </label>
-          <Flex justify="flex-end">
-            <TextButton
+          <Flex align="center" justify="flex-end" gap="2rem">
+            <Span fc="var(--ec-main-color)">
+              각 음원의 파트를 입력해 주세요 :)
+            </Span>
+            <Button
               btnType="basic"
-              disabled={title === "" || !collaboRequestData.isValid ? true : false}
+              disabled={
+                title === "" || !collaboRequestData.audios.length ? true : false
+              }
               type="submit"
             >
               올리기
-            </TextButton>
-            <button type="button"></button>
+            </Button>
           </Flex>
         </Flex>
       </Flex>

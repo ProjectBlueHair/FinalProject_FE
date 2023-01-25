@@ -5,8 +5,13 @@ import Tag from "./component/tag/Tag";
 import MainPage from "./page/MainPage";
 import PostingPage from "./page/PostingPage";
 import TypeModalContainer from "./modal/TypeModalContainer";
+
 import MyPage from "./page/MyPage";
 import SetPage from "./page/SetPage";
+
+import PostingReactQueryTest from "./component/posting/PostingReactQueryTest";
+import ChatPage from "./page/ChatPage";
+
 export const PATH = {
   main: "/",
   signIn: "/sign-in",
@@ -17,6 +22,7 @@ export const PATH = {
   edit: "/edit",
   collabo: "/collabo",
   collaboRequested: "/collaboRequested",
+  chat : "/chat"
 };
 
 const Router = () => {
@@ -33,6 +39,12 @@ const Router = () => {
           <Route path={PATH.post} element={<PostingPage />} />
           <Route path={`${PATH.edit}/:id`} element={<PostingPage />} />
           <Route path={`${PATH.collabo}/:id`} element={<PostingPage />} />
+          <Route path={`${PATH.chat}`} element={<ChatPage />} />
+          <Route path={`/test`} element={<PostingReactQueryTest />} />
+          <Route
+            path={`${PATH.collaboRequested}/:id/:postId`}
+            element={<PostingPage />}
+          />
           <Route
             path={`${PATH.collaboRequested}/:id`}
             element={<PostingPage />}

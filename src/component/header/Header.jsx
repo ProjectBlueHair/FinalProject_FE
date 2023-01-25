@@ -11,7 +11,7 @@ import {
   settings,
   upload,
 } from "../../asset/pic";
-import styled from "styled-components";
+import styled, { ThemeConsumer } from "styled-components";
 import Input from "../elem/Input";
 import useModal from "../modal/useModal";
 import { useNavigate } from "react-router-dom";
@@ -21,14 +21,15 @@ import { PATH } from "../../Router";
 import { getCookies, removeCookies } from "../../dataManager/cookie";
 import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
-import { __getUserInfo } from "../../redux/slice/detailSlice";
 import {
   userErrorSelector,
   userSelector,
   __getGeneralUserInfo,
 } from "../../redux/slice/userSlice";
 import Span from "../elem/Span";
-
+import { serverURL } from "../../dataManager/apiConfig";
+import Div from "../elem/Div";
+import {EventSourcePolyfill} from "event-source-polyfill";
 const Header = () => {
   const navigate = useNavigate();
   const iconSize = "4rem";
@@ -60,12 +61,29 @@ const Header = () => {
 
   const dispatch = useAppDispatch();
   const user = useAppSelector(userSelector);
-  const error = useAppSelector(userErrorSelector);
-  // if(error) alert(error)
-  console.log("user", user);
+
   useEffect(() => {
-    dispatch(__getGeneralUserInfo());
-  }, [acToken]);
+    acToken && dispatch(__getGeneralUserInfo());
+  }, [user.nickname]);
+
+  // useEffect(() => {
+  //   const RefreshToken = getCookies("refreshtoken");
+  //   const AccessToken = getCookies("accesstoken");
+  //   const es = new EventSourcePolyfill(
+  //     `${serverURL}/subscribe`,
+  //     {
+  //       headers: {
+  //         AccessToken: AccessToken,
+  //         RefreshToken: RefreshToken,
+  //       },
+  //     }
+  //   );
+  //   es.onmessage = (event) => {
+  //     console.log("polyfil", event.data);
+  //   };
+    
+  // }, []);
+
 
   return (
     <Grid>
@@ -76,7 +94,20 @@ const Header = () => {
           wd="20rem"
           src={mainLogo}
         />
-        <Img type="icon" wd={iconSize} src={follows} />
+        <Img
+          onClick={() => {
+            $openModal({
+              type: "alert",
+              props: {
+                message: "해당 기능은 곧 준비될 예정입니다 !",
+                type: "confirm",
+              },
+            });
+          }}
+          type="icon"
+          wd={iconSize}
+          src={follows}
+        />
       </Flex>
 
       <Flex>
@@ -92,20 +123,33 @@ const Header = () => {
       </Flex>
 
       <Flex justify="flex-end" gap="1.5rem">
-        <Img type="icon" wd={iconSize} src={message} />
+        <Img
+          onClick={() => {
+            $openModal({
+              type: "alert",
+              props: {
+                message: "채팅 기능은 곧 준비될 예정입니다 !",
+                type: "confirm",
+              },
+            });
+          }}
+          type="icon"
+          wd={iconSize}
+          src={message}
+        />
         <Flex direction="row" wd="none">
           <Img
             onClick={() => {
-              !isClicked.alarm
-                ? $openModal({ type: "alarm" })
-                : $closeModal({ type: "alarm" });
+              !isClicked.alarm ? $openModal({ type: "alarm" }) : $closeModal();
               setIsClicked({ ...isClicked, alarm: !isClicked.alarm });
             }}
             type="icon"
             wd={iconSize}
             src={notifications}
           />
-          <AlarmDot mg="-2rem 0 0 -1.5rem" />
+          <Div fc="var(--ec-main-color)" mg="-2rem 0 0 -1.5rem">
+            4
+          </Div>
         </Flex>
         <Img
           onClick={() => navigate("/post")}
@@ -113,7 +157,20 @@ const Header = () => {
           wd={iconSize}
           src={upload}
         />
-        <Img type="icon" wd={iconSize} src={settings} />
+        <Img
+          onClick={() => {
+            $openModal({
+              type: "alert",
+              props: {
+                message: "설정 기능은 곧 준비될 예정입니다 !",
+                type: "confirm",
+              },
+            });
+          }}
+          type="icon"
+          wd={iconSize}
+          src={settings}
+        />
         {user.profileImg ? (
           <Img
             cursor="pointer"
@@ -131,7 +188,7 @@ const Header = () => {
           />
         )}
       </Flex>
-      {acToken ? (
+      {user.nickname ? (
         <>
           {isOpen ? (
             <ToggleDiv ref={Sign}>
@@ -169,6 +226,7 @@ const Grid = styled.div`
   grid-template-columns: 1fr 1fr 1fr;
   gap: 1rem;
 `;
+const AlarmCount = styled.div``;
 
 const ToggleDiv = styled.div`
   position: absolute;

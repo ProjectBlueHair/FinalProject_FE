@@ -1,8 +1,11 @@
 import React, { useEffect, useRef } from "react";
-import { audioControlSelector } from "../../redux/slice/postingSlice";
+import {
+  audioControlSelector,
+  __audioOnLoaded,
+} from "../../redux/slice/postingSlice";
 import { Audio, ProgressControl } from "../../model/PostingModel";
 import WaveSurfer from "wavesurfer.js";
-import { useAppSelector } from "../../redux/config";
+import { useAppDispatch, useAppSelector } from "../../redux/config";
 import Flex from "../elem/Flex";
 
 const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
@@ -39,7 +42,7 @@ const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
 
   const wavesurfer = useRef<WaveSurfer | null>(null);
   const waveformRef = useRef<HTMLDivElement>(null);
-
+  const dispatch = useAppDispatch();
   const playControl = useAppSelector(audioControlSelector);
 
   useEffect(() => {
@@ -47,10 +50,10 @@ const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
       waveformRef.current as HTMLDivElement
     );
     wavesurfer.current = WaveSurfer.create(options);
-    console.log("props.audioInfo.src", props.audioData.musicFile);
     wavesurfer.current.load(props.audioData.musicFile);
     wavesurfer.current.on("ready", function () {
       if (wavesurfer.current) {
+        dispatch(__audioOnLoaded(props.index));
         wavesurfer.current.setVolume(props.volume);
       }
     });
@@ -76,7 +79,12 @@ const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
   return (
     <Flex justify="flex-start" wd="98%">
       <div
-        style={{ width: "100%", padding: "0.3rem 0.3rem", marginLeft: "-1rem" }}
+        style={{
+          width: "100%",
+          padding: "0.3rem 0.3rem",
+          marginLeft: "-1rem",
+          overflow: "hidden",
+        }}
         ref={waveformRef}
       />
     </Flex>

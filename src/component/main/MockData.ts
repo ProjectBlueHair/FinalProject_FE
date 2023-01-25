@@ -38,6 +38,7 @@ export const mockData = () => {
       musicFile: mockAudios[rand(0, 5)],
       mainProfileList: nickArr,
       tagList: tagArr,
+      liked: false,
       viewCount: rand(100, 5000),
       likeCount: rand(100, 5000),
     });

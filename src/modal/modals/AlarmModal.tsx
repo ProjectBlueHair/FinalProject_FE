@@ -14,9 +14,13 @@ import useTypeModal from "../hooks/useTypeModal";
 
 interface Alarm {
   content: string;
-  createdAt: string;
+  type: string;
+  typeId: string | number;
+  postId: string | number | null | undefined;
+  sender: string;
+  senderImg: string;
   isRead: boolean;
-  url: String;
+  createdAt: string;
 }
 const AlarmModal = () => {
   const navigate = useNavigate();
@@ -33,10 +37,19 @@ const AlarmModal = () => {
     return instanceAxios.get("/notifications");
   };
   const [alarmState, setAlarmState] = useState<Alarm[]>([]);
-  const {$closeModal} = useTypeModal()
+  const { $closeModal, $openModal } = useTypeModal();
   console.log(alarmState);
+
   useEffect(() => {
-    getAlarm().then(({ data }) => setAlarmState(data.data));
+    getAlarm()
+      .then(({ data }) => setAlarmState(data.data))
+      .catch((err) => {
+        $closeModal();
+        $openModal({
+          type: "alert",
+          props: { message: "" + err, type: "error" },
+        });
+      });
   }, []);
 
   return (
@@ -47,9 +60,10 @@ const AlarmModal = () => {
             <Flex
               onClick={() => {
                 //todo: 임시
-                const pathArr = alarm.url.split("/");
-                $closeModal({ type: "alarm" })
-                navigate(`${PATH.collaboRequested}/${pathArr[pathArr.length - 1]}`);
+                $closeModal({ type: "alarm" });
+                navigate(
+                  `/${alarm.type}/${alarm.typeId}/${alarm.postId || ""}`
+                );
               }}
               direction="column"
               cursor="pointer"
@@ -62,12 +76,7 @@ const AlarmModal = () => {
                 </Span>
               </Flex>
               <Flex justify="flex-start" gap={alarmGap}>
-                <Img
-                  wd="5rem"
-                  hg="5rem"
-                  radius="10px"
-                  src="/testRandomPost/2.jpg"
-                />
+                <Img wd="5rem" hg="5rem" radius="10px" src={alarm.senderImg} />
                 <Flex
                   direction="column"
                   wd="none"
@@ -75,13 +84,15 @@ const AlarmModal = () => {
                   align="flex-start"
                   gap={alarmGap}
                 >
-                  <Span fs="1.4rem">name</Span>
-                  <Span fs="1.2rem">like</Span>
+                  <Span fs="1.4rem">{alarm.sender}</Span>
+                  {/* <Span fs="1.2rem">like</Span> */}
                 </Flex>
                 <Img mg={"0 2rem 0 0"} wd="3.5rem" src={arrowRight} />
               </Flex>
               <Flex justify="flex-start">
-                <Span fc={"var(--ec-secondary-text)"} fw='400' fs="1.2rem">{alarm.createdAt}</Span>
+                <Span fc={"var(--ec-secondary-text)"} fw="400" fs="1.2rem">
+                  {alarm.createdAt}
+                </Span>
               </Flex>
             </Flex>
             <Flex

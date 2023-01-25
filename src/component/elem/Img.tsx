@@ -19,6 +19,7 @@ interface ImgProps {
   z?:string | number;
   cursor?:string
   id?:string;
+  filter? : string
   src?:any;
   onClick?:any
   key?: string | number
@@ -28,6 +29,15 @@ interface ImgProps {
 }
 interface ImgWrapper {
   [key: string]: StyledComponent<"img", any, ImgProps, never> | StyledComponent<"div", any, ImgProps, never> ;
+}
+export const ImgType = {
+  circle: 'circle',
+  shadowCircle: 'shadowCircle',
+  shadowProfile: 'shadowProfile',
+  radius: 'radius',
+  icon: 'icon',
+  iconSmall: 'iconSmall',
+  profileCount:'profileCount'
 }
 const Img: React.FC<ImgProps> = (props)=> {
   const IMG :ImgWrapper = {
@@ -79,7 +89,7 @@ const IconButton = styled(StImg)`
 `;
 const IconSmall = styled(StImg)`
   &:hover {
-    filter: ${({ bg }) => bg || css`var(--ec-secondary-filter)`};
+    filter: ${(props) => props.filter || 'var(--ec-secondary-filter)'};
     cursor: pointer;
   }
 `;

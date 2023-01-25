@@ -28,8 +28,8 @@ export interface Props {
 }
 export const partStyle: Props = {
   fs: "1.2rem",
-  wd: "5rem",
-  hg: "1.8rem",
+  wd: "5.5rem",
+  hg: "2rem",
   radius: "10px",
 };
 
@@ -43,7 +43,7 @@ const PostingAudioControlBox: React.FC<
   const dispatch = useAppDispatch();
   const [volume, setVolume] = useState(0.5);
 
-  const user = useAppSelector(userSelector) 
+  const user = useAppSelector(userSelector);
 
   const onVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = +e.target.value;
@@ -58,36 +58,38 @@ const PostingAudioControlBox: React.FC<
     setVolume(props.volume || 0.5);
   }, [props.volume]);
 
-
   return (
     <Flex
       radius={AUDIO_BAR_RADIUS}
-      pd="1rem 2rem"
+      pd="1rem 2.5rem"
       bg="var(--ec-main-color)"
       flex="0 0 20rem"
       hg="100%"
       direction="column"
       gap="0.5rem"
+      overFlow="hidden"
     >
-      <Flex gap="1rem">
-        {props.isNewAudio ? (
+      <Flex gap="1rem" justify="flex-start">
+        {props.isNewAudio && !props.isCollabo ? (
           <PartInput
             {...partStyle}
             // value={value}
             onChange={(e) => {
-              console.log('e.target.value',e.target.value)
-              dispatch(__setCollaboPart({ part: e.target.value, index: props.index }))}}
-            placeholder="part"
+              dispatch(
+                __setCollaboPart({ part: e.target.value, index: props.index })
+              );
+            }}
+            placeholder="Part"
           />
         ) : (
-          <PartDiv {...partStyle}>{props.audioData.part}</PartDiv>
+          <PartDiv {...partStyle}>{props.audioData.musicPart}</PartDiv>
         )}
         <Span fw="300" fc="white" fs={BOX_NICK_FS}>
-          {props.audioData.nickname || user.nickname }
+          {props.audioData.nickname || user.nickname}
         </Span>
       </Flex>
 
-      <Flex align="center" gap="1rem">
+      <Flex align="center" gap="1rem" justify="flex-start">
         <Img
           onClick={() => dispatch(__setMute(props.index))}
           wd={BOX_ICON_WD}
@@ -127,7 +129,7 @@ const PartInput = styled(StInput).attrs({ maxLength: 6 })<Props>`
   max-width: ${({ wd }) => wd};
   font-size: ${({ fs }) => fs};
   &::placeholder {
-    color: var(--ec-secondary-text);
+    color: #fff;
     font-weight: 300;
     font-size: ${({ fs }) => fs};
   }
