@@ -10,7 +10,7 @@ const UserCheck = () => {
   const { $openModal } = useTypeModal();
   const user = useAppSelector(userSelector);
 
-  if (!getCookies("accesstoken") || !user.nickname) {
+  if (!getCookies("accesstoken")) {
     $openModal({
       type: "alert",
       props: {

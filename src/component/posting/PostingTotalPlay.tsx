@@ -50,8 +50,8 @@ const PostingTotalPlay = () => {
             autoPlayAfterSrcChange={false}
             src={progressConrol.src}
             muted={true}
-            onPlay={handlePlay}
-            onPause={handlePause}
+            // onPlay={handlePlay} // safari에서 유저 interaction으로 인식 안해서 재생 안됨. 따라서 이미지에다가 onClick이벤트에 핸들러를 넣어줌
+            // onPause={handlePause}
             onSeeking={handleSeeking}
             autoPlay={false}
             ref={audioPlayer}
@@ -72,6 +72,7 @@ const PostingTotalPlay = () => {
                 <PlayLoading />
               ) : (
                 <Img
+                  onClick={()=>{handlePlay()}}
                   mg="0 2rem 0 0"
                   type="icon"
                   wd={iconSize}
@@ -79,7 +80,10 @@ const PostingTotalPlay = () => {
                 />
               ),
               pause: (
-                <Img mg="0 2rem 0 0" type="icon" wd={iconSize} src={pause} />
+                <Img 
+                onClick={()=>{handlePause()}}
+
+                mg="0 2rem 0 0" type="icon" wd={iconSize} src={pause} />
               ),
             }}
             customControlsSection={[]}
