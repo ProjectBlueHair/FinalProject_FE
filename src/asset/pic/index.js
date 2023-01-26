@@ -37,7 +37,6 @@ export { default as redLike } from "./redlike.svg";
 export { default as collaboIcon } from "./collaboIcon.svg";
 export { default as alertError } from "./alertError.svg";
 export { default as alertInfo } from "./alertInfo.svg";
-export { default as alertBug } from "./alertBug.svg";
 export { default as facebook } from "./FaceBookIcon.svg";
 export { default as insta } from "./InstaIcon.svg";
 export { default as linkedIn } from "./LinkedInIcon.svg";

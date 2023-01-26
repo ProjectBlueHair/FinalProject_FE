@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import useTypeModal from "../../modal/hooks/useTypeModal";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import { loadingSelector, __addNewAudio } from "../../redux/slice/postingSlice";
 import Flex, { StFlex } from "../elem/Flex";
@@ -8,7 +9,6 @@ import { AUDIO_BAR_HEIGHT, AUDIO_BAR_RADIUS } from "./PostingAudioBars";
 
 const PostingFormAudio = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const isLoading = useAppSelector(loadingSelector)
   const defaultText = () => {
     return (
       <Flex direction="column">
@@ -19,11 +19,9 @@ const PostingFormAudio = () => {
           }}
           style={{ textDecoration: "underline", cursor: "pointer" }}
         >
-          또는 여기를 클릭해서 파일을 선택하세요. 
+          또는 여기를 클릭해서 파일을 선택하세요.
         </div>
-        <div>
-        (현재 .wav 형식만 가능합니다.)
-        </div>
+        <div>(현재 .wav 형식만 가능합니다.)</div>
       </Flex>
     );
   };
@@ -37,20 +35,22 @@ const PostingFormAudio = () => {
   const [files, setFiles] = useState<File[]>([]);
   const [text, setText] = useState(defaultText());
   const dispatch = useAppDispatch();
+  const { $openModal, $closeModal } = useTypeModal();
+
   const handleDrop = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
     if (event.dataTransfer.files) {
       const files = event.dataTransfer.files;
-      console.log('files',files)
+      console.log("files", files);
       const arr = [];
       for (let i = 0; i < files.length; i++) {
         const type = files[i].type.split("/")[1];
-        console.log('type',type)
+        console.log("type", type);
 
         if (type !== "wav" && type !== "x-wav") {
           setText(defaultText());
-          return alert("유효하지 않은 오디오 형식입니다.") 
+          return alert("유효하지 않은 오디오 형식입니다.");
         }
 
         arr.push(URL.createObjectURL(files[i]));
@@ -60,18 +60,7 @@ const PostingFormAudio = () => {
     }
   }, []);
 
-  // const handleFileChange = useCallback(() => {
-  //   if (files) {
-  //     console.log("file", files);
-  //     const arr = [];
-  //     for (let i = 0; i < files.length; i++) {
-  //       arr.push(URL.createObjectURL(files[i]));
-  //     }
-  //     dispatch(__addNewAudio(arr));
 
-  //     setText(defaultText());
-  //   }
-  // }, [files]);
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
@@ -80,7 +69,10 @@ const PostingFormAudio = () => {
         const type = files[i].type.split("/")[1];
         if (type !== "wav" && type !== "x-wav") {
           setText(defaultText());
-          return alert("유효하지 않은 오디오 형식입니다.") 
+          return $openModal({
+            type: "alert",
+            props: { message: '유효하지 않은 오디오 형식입니다.', type: "error" },
+          });
         }
         arr.push(URL.createObjectURL(files[i]));
       }
@@ -88,9 +80,7 @@ const PostingFormAudio = () => {
       setText(defaultText());
     }
   };
-  // useEffect(() => {
-  // handleFileChange();
-  // }, [files, handleFileChange]); // handleFileChange는 안 넣어도 동작 함
+
 
   return (
     <AudioDragForm
