@@ -30,6 +30,15 @@ interface ImgProps {
 interface ImgWrapper {
   [key: string]: StyledComponent<"img", any, ImgProps, never> | StyledComponent<"div", any, ImgProps, never> ;
 }
+export const ImgType = {
+  circle: 'circle',
+  shadowCircle: 'shadowCircle',
+  shadowProfile: 'shadowProfile',
+  radius: 'radius',
+  icon: 'icon',
+  iconSmall: 'iconSmall',
+  profileCount:'profileCount'
+}
 const Img: React.FC<ImgProps> = (props)=> {
   const IMG :ImgWrapper = {
     circle: Circle,
@@ -80,7 +89,7 @@ const IconButton = styled(StImg)`
 `;
 const IconSmall = styled(StImg)`
   &:hover {
-    filter: ${({ filter }) => filter || css`var(--ec-secondary-filter)`};
+    filter: ${(props) => props.filter || 'var(--ec-secondary-filter)'};
     cursor: pointer;
   }
 `;

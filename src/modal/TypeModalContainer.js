@@ -2,9 +2,9 @@ import React from "react";
 import { createPortal } from "react-dom";
 import { useSelector } from "react-redux";
 import { typeModalSelector } from "./typeModalSlice";
-import AlarmModal from "./alarm/AlarmModal";
-import LoadingModal from "./alarm/LoadingModal";
-import AlertModal from "./alarm/AlertModal";
+import AlarmModal from "./modals/AlarmModal";
+import LoadingModal from "./modals/LoadingModal";
+import AlertModal from "./modals/AlertModal";
 const MODAL_COMPONENTS = {
   alarm: AlarmModal,
   loading : LoadingModal, 

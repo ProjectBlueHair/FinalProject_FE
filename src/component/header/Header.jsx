@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Flex from "../elem/Flex";
 import Img from "../elem/Img";
 import {
@@ -16,19 +16,18 @@ import Input from "../elem/Input";
 import useModal from "../modal/useModal";
 import { useNavigate } from "react-router-dom";
 import useTypeModal from "../../modal/hooks/useTypeModal";
-import AlarmDot from "../../asset/icon/AlarmDot";
 import { PATH } from "../../Router";
 import { getCookies, removeCookies } from "../../dataManager/cookie";
 import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
-import { __getUserInfo } from "../../redux/slice/detailSlice";
 import {
-  userErrorSelector,
   userSelector,
   __getGeneralUserInfo,
 } from "../../redux/slice/userSlice";
 import Span from "../elem/Span";
-
+import { instanceAxios, serverURL } from "../../dataManager/apiConfig";
+import Div from "../elem/Div";
+import { EventSourcePolyfill } from "event-source-polyfill";
 const Header = () => {
   const navigate = useNavigate();
   const iconSize = "4rem";
@@ -57,15 +56,38 @@ const Header = () => {
   const acToken = getCookies("accesstoken");
   useToggleOutSideClick(Sign, setIsOpen);
   const [isClicked, setIsClicked] = useState({ alarm: false });
+  const [unreadCount, setUnreadCount] = useState(0);
 
   const dispatch = useAppDispatch();
   const user = useAppSelector(userSelector);
-  const error = useAppSelector(userErrorSelector);
-  // if(error) alert(error)
-  console.log("user", user);
+
   useEffect(() => {
-    dispatch(__getGeneralUserInfo());
-  }, [acToken]);
+    acToken && dispatch(__getGeneralUserInfo());
+  }, [user.nickname]);
+  const getAlarmCount = () => {
+    return instanceAxios.get("/notification/count");
+  };
+  useEffect(() => {
+    const RefreshToken = getCookies("refreshtoken");
+    const AccessToken = getCookies("accesstoken");
+    if (AccessToken) {
+      const es = new EventSourcePolyfill(`${serverURL}/subscribe`, {
+        headers: {
+          AccessToken: AccessToken,
+          RefreshToken: RefreshToken,
+        },
+      });
+      es.onmessage = (event) => {
+        console.log('event',event.data);
+        if (!event.data.includes("EventStream Created")) {
+          getAlarmCount().then((data) => {
+            console.log("count", event.data.unreadNotificationCount);
+            setUnreadCount(event.data.unreadNotificationCount);
+          });
+        }
+      };
+    }
+  }, []);
 
   return (
     <Grid>
@@ -122,16 +144,14 @@ const Header = () => {
         <Flex direction="row" wd="none">
           <Img
             onClick={() => {
-              !isClicked.alarm
-                ? $openModal({ type: "alarm" })
-                : $closeModal();
+              !isClicked.alarm ? $openModal({ type: "alarm" }) : $closeModal();
               setIsClicked({ ...isClicked, alarm: !isClicked.alarm });
             }}
             type="icon"
             wd={iconSize}
             src={notifications}
           />
-          <AlarmDot mg="-2rem 0 0 -1.5rem" />
+          {unreadCount ? <AlarmCount>{unreadCount}</AlarmCount> : null}
         </Flex>
         <Img
           onClick={() => navigate("/post")}
@@ -170,7 +190,7 @@ const Header = () => {
           />
         )}
       </Flex>
-      {acToken ? (
+      {user.nickname ? (
         <>
           {isOpen ? (
             <ToggleDiv ref={Sign}>
@@ -207,6 +227,17 @@ const Grid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 1rem;
+`;
+const AlarmCount = styled.div`
+  position: absolute;
+  top: 38px;
+  right: 203px;
+  border-radius: 20px;
+  color: white;
+  padding: 0.3rem 0.7rem;
+  background-color: ${(props) => props.theme.color.main};
+  margin: -2rem 0 0 -1.5rem;
+  font-size: 1.1rem;
 `;
 
 const ToggleDiv = styled.div`

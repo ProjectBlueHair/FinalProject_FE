@@ -1,13 +1,22 @@
 import React from "react";
-import { alertError, alertInfo, message } from "../../asset/pic";
+import { useNavigate } from "react-router-dom";
+import { alertError, alertInfo } from "../../asset/pic";
+import Button from "../../component/elem/Button";
 import Div from "../../component/elem/Div";
 import Flex from "../../component/elem/Flex";
 import Img from "../../component/elem/Img";
-import Button from "../../component/elem/Button";
-import TypeModalWrapper from "../TypeModalWrapper";
 import useTypeModal from "../hooks/useTypeModal";
-import { useNavigate } from "react-router-dom";
+import TypeModalWrapper from "../TypeModalWrapper";
 /** type : error / info / confirm*/
+
+
+export const ALERT_TYPE = { 
+  error : 'error',
+  info : 'info',
+  confirm : 'confirm'
+}
+
+
 const AlertModal: React.FC<{ message?: string; type?: string; to?: string }> = (
   props
 ) => {
@@ -42,7 +51,7 @@ const AlertModal: React.FC<{ message?: string; type?: string; to?: string }> = (
         ) : (
           <>
             <Div fs="4rem" fw="700" mg="-2rem 0 0">
-              🤟
+              👏
             </Div>
 
             <Div fs="1.8rem" mg="2.2rem 0" fc="var(--ec-main-color)">

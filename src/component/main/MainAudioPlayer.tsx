@@ -14,7 +14,7 @@ import {
   skipPrev,
   volume,
 } from "../../asset/pic";
-import { iconSize } from "../../GlobalStyle";
+import { iconSize } from "../../styles/GlobalStyle";
 import {
   __PlayerTogglePlay,
   __playNext,

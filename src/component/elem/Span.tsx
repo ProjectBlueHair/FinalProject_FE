@@ -1,5 +1,5 @@
 import React from "react";
-import styled, { StyledComponent } from "styled-components";
+import styled, {  StyledComponent } from "styled-components";
 
 interface SpanProps {
   fc?: string;
@@ -9,13 +9,13 @@ interface SpanProps {
   type?: string;
 }
 interface SpanContainer {
-  [key: string]: StyledComponent<"div", any, SpanProps, never>;
+  [key: string]: StyledComponent<"span", any, SpanProps, never>;
 }
 const Span: React.FC<SpanProps> = (props) => {
   const SPAN_CONTAINER: SpanContainer = {};
 
   const Span = props.type ? SPAN_CONTAINER[props.type] : StSpan;
-  return <Span {...props} children={props.children} />;
+  return <Span {...props} children={props.children}></Span>;
 };
 
 export default Span;

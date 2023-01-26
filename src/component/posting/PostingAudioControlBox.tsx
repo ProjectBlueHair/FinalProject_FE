@@ -61,14 +61,15 @@ const PostingAudioControlBox: React.FC<
   return (
     <Flex
       radius={AUDIO_BAR_RADIUS}
-      pd="1rem 2rem"
+      pd="1rem 2.5rem"
       bg="var(--ec-main-color)"
       flex="0 0 20rem"
       hg="100%"
       direction="column"
       gap="0.5rem"
+      overFlow="hidden"
     >
-      <Flex gap="1rem">
+      <Flex gap="1rem" justify="flex-start">
         {props.isNewAudio && !props.isCollabo ? (
           <PartInput
             {...partStyle}
@@ -88,7 +89,7 @@ const PostingAudioControlBox: React.FC<
         </Span>
       </Flex>
 
-      <Flex align="center" gap="1rem">
+      <Flex align="center" gap="1rem" justify="flex-start">
         <Img
           onClick={() => dispatch(__setMute(props.index))}
           wd={BOX_ICON_WD}
