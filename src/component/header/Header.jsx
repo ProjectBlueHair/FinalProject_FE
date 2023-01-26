@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Flex from "../elem/Flex";
 import Img from "../elem/Img";
 import {
@@ -11,18 +11,16 @@ import {
   settings,
   upload,
 } from "../../asset/pic";
-import styled, { ThemeConsumer } from "styled-components";
+import styled from "styled-components";
 import Input from "../elem/Input";
 import useModal from "../modal/useModal";
 import { useNavigate } from "react-router-dom";
 import useTypeModal from "../../modal/hooks/useTypeModal";
-import AlarmDot from "../../asset/icon/AlarmDot";
 import { PATH } from "../../Router";
 import { getCookies, removeCookies } from "../../dataManager/cookie";
 import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
-  userErrorSelector,
   userSelector,
   __getGeneralUserInfo,
 } from "../../redux/slice/userSlice";
@@ -66,23 +64,23 @@ const Header = () => {
     acToken && dispatch(__getGeneralUserInfo());
   }, [user.nickname]);
 
-  // useEffect(() => {
-  //   const RefreshToken = getCookies("refreshtoken");
-  //   const AccessToken = getCookies("accesstoken");
-  //   const es = new EventSourcePolyfill(
-  //     `${serverURL}/subscribe`,
-  //     {
-  //       headers: {
-  //         AccessToken: AccessToken,
-  //         RefreshToken: RefreshToken,
-  //       },
-  //     }
-  //   );
-  //   es.onmessage = (event) => {
-  //     console.log("polyfil", event.data);
-  //   };
+  useEffect(() => {
+    const RefreshToken = getCookies("refreshtoken");
+    const AccessToken = getCookies("accesstoken");
+    const es = new EventSourcePolyfill(
+      `${serverURL}/subscribe`,
+      {
+        headers: {
+          AccessToken: AccessToken,
+          RefreshToken: RefreshToken,
+        },
+      }
+    );
+    es.onmessage = (event) => {
+      console.log("polyfil", event.data);
+    };
     
-  // }, []);
+  }, []);
 
 
   return (

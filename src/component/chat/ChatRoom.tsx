@@ -23,4 +23,5 @@ const ChatContainer = styled(StFlex)`
   height: 100%;
   align-items: flex-start;
   justify-content: flex-start;
+  
 `;
