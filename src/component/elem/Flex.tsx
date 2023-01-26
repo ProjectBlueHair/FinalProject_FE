@@ -85,7 +85,6 @@ const FlexCard = styled(StFlex)`
 `;
 const AudioBarWrapper = styled(StFlex)`
   border-radius: 5rem;
-  /* border: 1px solid var(--ec-main-color); */
   border: ${({ isNewAudio, theme }) =>
     isNewAudio ? `1px solid ${theme.color.main}` : "none"};
 `;

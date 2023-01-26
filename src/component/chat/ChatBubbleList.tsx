@@ -26,7 +26,7 @@ const ChatBubbleList = () => {
     },
   ];
   return (
-    <Flex direction="column" gap="2rem">
+    <Flex flex="1" direction="column" gap="2rem" justify="flex-start">
       {chatList.map((bubble) =>
         user.nickname === bubble.from ? (
           //my chat
