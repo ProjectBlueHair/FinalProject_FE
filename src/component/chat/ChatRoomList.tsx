@@ -1,8 +1,7 @@
-import React from "react";
-import ChatRoomItem from "./ChatRoomItem";
-import { ChatItem } from "../../model/ChatModel";
-import Flex, { StFlex } from "../elem/Flex";
 import styled from "styled-components";
+import { ChatItem } from "../../model/ChatModel";
+import { StFlex } from "../elem/Flex";
+import ChatRoomItem from "./ChatRoomItem";
 
 const ChatItemList: ChatItem [] = [
   { nickname: "test1", profileImg: "testRandomPost/1.jpg" },

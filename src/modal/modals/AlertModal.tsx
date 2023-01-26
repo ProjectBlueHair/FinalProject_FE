@@ -1,13 +1,12 @@
 import React from "react";
-import { alertError, alertInfo, message } from "../../asset/pic";
+import { useNavigate } from "react-router-dom";
+import { alertError, alertInfo } from "../../asset/pic";
+import Button from "../../component/elem/Button";
 import Div from "../../component/elem/Div";
 import Flex from "../../component/elem/Flex";
 import Img from "../../component/elem/Img";
-import Button from "../../component/elem/Button";
-import TypeModalWrapper from "../TypeModalWrapper";
 import useTypeModal from "../hooks/useTypeModal";
-import { useNavigate } from "react-router-dom";
-import { PATH } from "../../Router";
+import TypeModalWrapper from "../TypeModalWrapper";
 /** type : error / info / confirm*/
 
 
