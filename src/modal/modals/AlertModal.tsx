@@ -52,7 +52,7 @@ const AlertModal: React.FC<{ message?: string; type?: string; to?: string }> = (
         ) : (
           <>
             <Div fs="4rem" fw="700" mg="-2rem 0 0">
-              😁
+              👏
             </Div>
 
             <Div fs="1.8rem" mg="2.2rem 0" fc="var(--ec-main-color)">
