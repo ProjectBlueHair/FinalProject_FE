@@ -66,6 +66,8 @@ const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
   }, [props.volume]);
 
   useEffect(() => {
+    console.log("is playing", playControl.isPlaying);
+    console.log("wavesurfer.current", wavesurfer.current);
     playControl.isPlaying
       ? wavesurfer.current?.play()
       : wavesurfer.current?.pause();

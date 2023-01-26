@@ -146,7 +146,7 @@ const Header = () => {
             src={notifications}
           />
           <Div fc="var(--ec-main-color)" mg="-2rem 0 0 -1.5rem">
-            4
+            5
           </Div>
         </Flex>
         <Img
