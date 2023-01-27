@@ -30,7 +30,7 @@ const addRefreshSubscriber = (callback) => {
 instanceAxios.interceptors.response.use(
   (res) => {
     const { data, config } = res;
-    console.log("res interceptor data", data);
+    console.log("AXIOS INTERCEPTOR DATA", data);
     switch (data.customHttpStatus) {
       case 4003:
         throw new Error("처리할 수 없는 음원입니다");
@@ -61,7 +61,6 @@ instanceAxios.interceptors.response.use(
               }
             )
             .then((data) => {
-              console.log('going data', data.headers);
               const { accesstoken, refreshtoken } = data.headers;
               if (!accesstoken || !refreshtoken) {
                 removeCookies("accesstoken", { path: "/" });
@@ -98,6 +97,7 @@ instanceAxios.interceptors.response.use(
     }
   },
   async (error) => {
+    console.log('AXIOS INTERCEPTOR ERROR :',error);
     return Promise.reject(error);
   }
 );
