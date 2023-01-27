@@ -75,14 +75,16 @@ const Header = () => {
         headers: {
           AccessToken: AccessToken,
           RefreshToken: RefreshToken,
+          heartbeatTimeout : 3600 * 1000 // 1시간
         },
+        
       });
       es.onmessage = (event) => {
         console.log('event',event.data);
         if (!event.data.includes("EventStream Created")) {
           getAlarmCount().then((data) => {
-            console.log("count", event.data.unreadNotificationCount);
-            setUnreadCount(event.data.unreadNotificationCount);
+            console.log("count", data);
+            setUnreadCount(data.data.data.unreadNotificationCount);
           });
         }
       };
@@ -151,6 +153,7 @@ const Header = () => {
             wd={iconSize}
             src={notifications}
           />
+          {/* <AlarmCount>4</AlarmCount> */}
           {unreadCount ? <AlarmCount>{unreadCount}</AlarmCount> : null}
         </Flex>
         <Img
@@ -230,13 +233,12 @@ const Grid = styled.div`
 `;
 const AlarmCount = styled.div`
   position: absolute;
-  top: 38px;
-  right: 203px;
+  top: 20px;
+  right: 193px;
   border-radius: 20px;
   color: white;
   padding: 0.3rem 0.7rem;
   background-color: ${(props) => props.theme.color.main};
-  margin: -2rem 0 0 -1.5rem;
   font-size: 1.1rem;
 `;
 
