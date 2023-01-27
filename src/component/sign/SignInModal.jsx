@@ -6,10 +6,13 @@ import { setCookie } from "../../dataManager/cookie";
 import { instanceAxios } from "../../dataManager/apiConfig";
 import Img from "../elem/Img";
 import { mainLogo, log } from "../../asset/pic";
+import { useAppDispatch } from "../../redux/config";
+import { __getGeneralUserInfo } from "../../redux/slice/userSlice";
 
 const SignInModal = ({ onClose }) => {
   const { openModal } = useModal();
   const { closeModal } = useModal();
+  const dispatch = useAppDispatch()
 
   const onClickSignUpModal = () => {
     openModal({ type: "signUp" });
@@ -60,7 +63,9 @@ const SignInModal = ({ onClose }) => {
             path: "/",
             maxAge: 1800,
           });
+          
           alert(res.data.message);
+          dispatch(__getGeneralUserInfo())
           closeModal?.();
         }
       });

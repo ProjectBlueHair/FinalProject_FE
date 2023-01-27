@@ -25,17 +25,22 @@ export interface UserState {
   isLoading: boolean;
   error: unknown;
 }
+const initialState = {
+  user: { email: "", nickname: "", profileImg: "" } as User,
+  isLoading: false,
+  error: null,
+} as UserState;
 export const userSelector = (state: AppState) => state.user.user;
 export const userErrorSelector = (state: AppState) => state.user.error;
 export const userCheckSelector = (state: AppState) => state.user.isLoginUser;
 export const userSlice = createSlice({
   name: "user",
-  initialState: {
-    user: { email: "", nickname: "", profileImg: "" } as User,
-    isLoading: false,
-    error: null,
-  } as UserState,
-  reducers: {},
+  initialState,
+  reducers: {
+    __clearUser: (state) => {
+      return initialState;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(
       __getGeneralUserInfo.fulfilled,
@@ -45,5 +50,5 @@ export const userSlice = createSlice({
     );
   },
 });
-export const {} = userSlice.actions;
+export const {__clearUser} = userSlice.actions;
 export default userSlice.reducer;
