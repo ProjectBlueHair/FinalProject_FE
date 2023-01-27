@@ -3,7 +3,7 @@ import useInput from "../../hook/useInput";
 import {
   collaboRequestDataSelector,
   collaboRequest,
-  errorSelector,
+  postingErrorSelector,
   titleSelector,
   __cleanUp,
   __getAudios,
@@ -26,7 +26,7 @@ const PostingFormCollabo = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const error = useAppSelector(errorSelector);
+  const error = useAppSelector(postingErrorSelector);
   const { $openModal, $closeModal } = useTypeModal();
   if (error) {
     alert(error);
@@ -42,7 +42,7 @@ const PostingFormCollabo = () => {
     return () => {
       dispatch(__cleanUp());
     };
-  }, []);
+  }, [id]);
 
   const collaboRequestData = useAppSelector(collaboRequestDataSelector);
   const descriptionInput = useInput("");

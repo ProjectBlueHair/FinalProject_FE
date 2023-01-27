@@ -19,7 +19,7 @@ export const titleSelector = (state: AppState) => state.posting.title;
 export const collaboRequestDataSelector = (state: AppState) =>
   state.posting.collaboRequestData;
 export const loadingSelector = (state: AppState) => state.posting.isLoading;
-export const errorSelector = (state: AppState) => state.posting.error;
+export const postingErrorSelector = (state: AppState) => state.posting.error;
 export const collaboDescriptionSelector = (state: AppState) =>
   state.posting.collaboDescription;
 export interface PostingState {

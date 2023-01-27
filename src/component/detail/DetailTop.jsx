@@ -28,7 +28,7 @@ const DetailTop = () => {
     return () => {
       dispatch(__cleanUp());
     };
-  }, []);
+  }, [id]);
   // 뷰숫자, 좋아요 숫자, 제목, 내용, 배경이미지파일 (+ 작성일 추가)
   const detail = useSelector((state) => state.detail.detail.data)
   // 각 페이지 음악파일(props작업 끝)
