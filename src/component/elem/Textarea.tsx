@@ -7,19 +7,17 @@ interface TextAreaProps {
   type?: string;
   value?: string;
   onChange?: CallableFunction;
-  style? : CSSProperties
-  id?: string
-  readonly? :boolean
+  style?: CSSProperties;
+  id?: string;
+  readonly?: boolean;
 }
 interface TextAreaContainer {
   [key: string]: StyledComponent<"textarea", any, TextAreaProps, never>;
 }
 const TEXTAREA_MAX_LENGTH = 2000;
 const TextArea: React.FC<TextAreaProps> = (props) => {
-  const TEXTAREA: TextAreaContainer = {
-    
-  };
-  if(props.type && !TEXTAREA[props.type]){
+  const TEXTAREA: TextAreaContainer = {};
+  if (props.type && !TEXTAREA[props.type]) {
     console.log(`wrong type : ${props.type}`);
   }
   const TextArea = props.type ? TEXTAREA[props.type] : StTextarea;
@@ -32,17 +30,18 @@ const TextArea: React.FC<TextAreaProps> = (props) => {
 
 export default TextArea;
 
-const StTextarea = styled.textarea.attrs({ maxLength: TEXTAREA_MAX_LENGTH })<TextAreaProps>`
+export const StTextarea = styled.textarea.attrs({
+  maxLength: TEXTAREA_MAX_LENGTH,
+})<TextAreaProps>`
   border: none;
   width: 100%;
   resize: none;
-  font-size: 1.5rem;
-  color: var(--ec-primary-text);
+  font-size: 1.4rem;
+  color: ${props => props.theme.color.primaryText};
   &:focus {
     outline: none;
   }
   &::placeholder {
-    color: var(--ec-secondary-text);
+    color: ${props => props.theme.color.secondaryText};
   }
 `;
-

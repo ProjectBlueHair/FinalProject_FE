@@ -1,16 +1,14 @@
-import React, { useEffect, useState } from "react";
-import TypeModalWrapper from "../TypeModalWrapper";
-import Flex, { StFlex } from "../../component/elem/Flex";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import AlarmDot from "../../asset/icon/AlarmDot";
-import Span from "../../component/elem/Span";
-import Img from "../../component/elem/Img";
 import { arrowRight } from "../../asset/pic";
+import Flex, { StFlex } from "../../component/elem/Flex";
+import Img from "../../component/elem/Img";
+import Span from "../../component/elem/Span";
 import { instanceAxios } from "../../dataManager/apiConfig";
-import { useNavigate } from "react-router-dom";
-import { PATH } from "../../Router";
-import { url } from "inspector";
 import useTypeModal from "../hooks/useTypeModal";
+import TypeModalWrapper from "../TypeModalWrapper";
 
 interface Alarm {
   content: string;

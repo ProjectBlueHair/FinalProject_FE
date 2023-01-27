@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Flex from "../elem/Flex";
 import Img from "../elem/Img";
 import {
@@ -11,25 +11,23 @@ import {
   settings,
   upload,
 } from "../../asset/pic";
-import styled, { ThemeConsumer } from "styled-components";
+import styled from "styled-components";
 import Input from "../elem/Input";
 import useModal from "../modal/useModal";
 import { useNavigate } from "react-router-dom";
 import useTypeModal from "../../modal/hooks/useTypeModal";
-import AlarmDot from "../../asset/icon/AlarmDot";
 import { PATH } from "../../Router";
 import { getCookies, removeCookies } from "../../dataManager/cookie";
 import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
-  userErrorSelector,
   userSelector,
   __getGeneralUserInfo,
 } from "../../redux/slice/userSlice";
 import Span from "../elem/Span";
-import { serverURL } from "../../dataManager/apiConfig";
+import { instanceAxios, serverURL } from "../../dataManager/apiConfig";
 import Div from "../elem/Div";
-import {EventSourcePolyfill} from "event-source-polyfill";
+import { EventSourcePolyfill } from "event-source-polyfill";
 const Header = () => {
   const navigate = useNavigate();
   const iconSize = "4rem";
@@ -58,6 +56,7 @@ const Header = () => {
   const acToken = getCookies("accesstoken");
   useToggleOutSideClick(Sign, setIsOpen);
   const [isClicked, setIsClicked] = useState({ alarm: false });
+  const [unreadCount, setUnreadCount] = useState(0);
 
   const dispatch = useAppDispatch();
   const user = useAppSelector(userSelector);
@@ -65,25 +64,32 @@ const Header = () => {
   useEffect(() => {
     acToken && dispatch(__getGeneralUserInfo());
   }, [user.nickname]);
-
-  // useEffect(() => {
-  //   const RefreshToken = getCookies("refreshtoken");
-  //   const AccessToken = getCookies("accesstoken");
-  //   const es = new EventSourcePolyfill(
-  //     `${serverURL}/subscribe`,
-  //     {
-  //       headers: {
-  //         AccessToken: AccessToken,
-  //         RefreshToken: RefreshToken,
-  //       },
-  //     }
-  //   );
-  //   es.onmessage = (event) => {
-  //     console.log("polyfil", event.data);
-  //   };
-    
-  // }, []);
-
+  const getAlarmCount = () => {
+    return instanceAxios.get("/notification/count");
+  };
+  useEffect(() => {
+    const RefreshToken = getCookies("refreshtoken");
+    const AccessToken = getCookies("accesstoken");
+    if (AccessToken) {
+      const es = new EventSourcePolyfill(`${serverURL}/subscribe`, {
+        headers: {
+          AccessToken: AccessToken,
+          RefreshToken: RefreshToken,
+          heartbeatTimeout : 3600 * 1000 // 1시간
+        },
+        
+      });
+      es.onmessage = (event) => {
+        console.log('event',event.data);
+        if (!event.data.includes("EventStream Created")) {
+          getAlarmCount().then((data) => {
+            console.log("count", data);
+            setUnreadCount(data.data.data.unreadNotificationCount);
+          });
+        }
+      };
+    }
+  }, []);
 
   return (
     <Grid>
@@ -147,9 +153,8 @@ const Header = () => {
             wd={iconSize}
             src={notifications}
           />
-          <Div fc="var(--ec-main-color)" mg="-2rem 0 0 -1.5rem">
-            4
-          </Div>
+          {/* <AlarmCount>4</AlarmCount> */}
+          {unreadCount ? <AlarmCount>{unreadCount}</AlarmCount> : null}
         </Flex>
         <Img
           onClick={() => navigate("/post")}
@@ -226,7 +231,16 @@ const Grid = styled.div`
   grid-template-columns: 1fr 1fr 1fr;
   gap: 1rem;
 `;
-const AlarmCount = styled.div``;
+const AlarmCount = styled.div`
+  position: absolute;
+  top: 20px;
+  right: 193px;
+  border-radius: 20px;
+  color: white;
+  padding: 0.3rem 0.7rem;
+  background-color: ${(props) => props.theme.color.main};
+  font-size: 1.1rem;
+`;
 
 const ToggleDiv = styled.div`
   position: absolute;

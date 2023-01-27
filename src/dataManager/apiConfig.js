@@ -33,7 +33,7 @@ instanceAxios.interceptors.response.use(
     console.log("res interceptor data", data);
     switch (data.customHttpStatus) {
       case 4003:
-        throw new Error("유효하지 않음 음원입니다. WAV 형식을 이용해 주세요.");
+        throw new Error("처리할 수 없는 음원입니다");
       case 4011: //토큰 없음 : undefined인 case 존재
         removeCookies("accesstoken", { path: "/" });
         removeCookies("refreshtoken", { path: "/" });
@@ -45,10 +45,7 @@ instanceAxios.interceptors.response.use(
       case 4041:
         throw new Error("존재하지 않는 게시물입니다. ");
       case 4015:
-        console.log('is token refreshing', isTokenRefreshing);
         if (!isTokenRefreshing) {
-          console.log('going');
-
           isTokenRefreshing = true;
           const RefreshToken = getCookies("refreshtoken");
           const AccessToken = getCookies("accesstoken");

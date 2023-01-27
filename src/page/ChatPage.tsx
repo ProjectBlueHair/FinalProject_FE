@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import ChatRoom from "../component/chat/ChatRoom";
 import ChatRoomList from "../component/chat/ChatRoomList";
@@ -9,12 +8,13 @@ import MainAudioPlayer from "../component/main/MainAudioPlayer";
 const ChatPage = () => {
   return (
     <Flex direction="column" justify="flex-start" hg="100vh">
+      {/* <UserCheck/> */}
       <Header />
       <ChatGrid>
         <ChatRoomList />
         <ChatRoom />
       </ChatGrid>
-      <MainAudioPlayer/>
+      <MainAudioPlayer />
     </Flex>
   );
 };
