@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -9,12 +9,20 @@ import {
   __putComment,
 } from "../../../redux/slice/comment";
 import { __getUserInfo } from "../../../redux/slice/detailSlice";
+import DetailCommentSubLike from "./DetailCommentSubLike";
+import Img from "../../elem/Img";
+import { more } from "../../../asset/pic";
+import useToggleOutSideClick from "../../../modal/hooks/useToggleOutSideClick";
 
 const DetailCommentSubDeleteUpdate = ({ re }) => {
   const dispatch = useDispatch();
   const [subUPDEL, setSubUPDEL] = useState(false);
   const [comUpdateInput, setComUpdateInput] = useState(re.contents);
+  const [contentSubOpen, setContentSubOpen] = useState(false);
   const { id } = useParams();
+  const moreSubRef = useRef(null);
+
+  useToggleOutSideClick(moreSubRef, setContentSubOpen);
 
   useEffect(() => {
     dispatch(__getUserInfo());
@@ -33,6 +41,7 @@ const DetailCommentSubDeleteUpdate = ({ re }) => {
   // 수정/ 수정 확인 교체
   const onSubUp = () => {
     setSubUPDEL(true);
+    setContentSubOpen(false);
   };
   // 수정 완료
   const onUpdateSubCom = async (comID) => {
@@ -43,34 +52,42 @@ const DetailCommentSubDeleteUpdate = ({ re }) => {
 
   if (subUPDEL === false) {
     return (
-      <div>
+      <SubAllDiv>
         <DetailComSubHeader>
           <div>{re.nickname}</div>
           {re?.nickname !== userInformation?.nickname ? (
             ""
+          ) : contentSubOpen ? (
+            <span>
+              <Img
+                wd="2rem"
+                src={more}
+                onClick={() => setContentSubOpen(!contentSubOpen)}
+              />
+              <MoreSubBtn ref={moreSubRef}>
+                <button onClick={onSubUp}>수정</button>
+                <button onClick={() => onSubCommentDelete(re.id)}>삭제</button>
+              </MoreSubBtn>
+            </span>
           ) : (
-            <div>
-              <button onClick={onSubUp}>수정</button>
-              <button onClick={() => onSubCommentDelete(re.id)}>삭제</button>
-            </div>
+            <Img
+              wd="2rem"
+              src={more}
+              onClick={() => setContentSubOpen(!contentSubOpen)}
+            />
           )}
         </DetailComSubHeader>
         <DetailComSubContent>
           <div>{re.contents}</div>
         </DetailComSubContent>
-      </div>
+        <DetailCommentSubLike re={re} />
+      </SubAllDiv>
     );
   } else {
     return (
       <div>
         <DetailComSubHeader>
           <div>{re.nickname}</div>
-          <button
-            style={{ width: "9rem" }}
-            onClick={() => onUpdateSubCom(re.id)}
-          >
-            수정하기
-          </button>
         </DetailComSubHeader>
         <DetailComSubContent>
           <div>
@@ -82,6 +99,21 @@ const DetailCommentSubDeleteUpdate = ({ re }) => {
             />
           </div>
         </DetailComSubContent>
+
+        <ContentSubBTW>
+          <DetailCommentSubLike re={re} />
+          <button
+            style={{
+              marginRight: "10px",
+              border: "transparent",
+              borderBottom: "1px solid #ff4d00",
+              padding: "1px 3px",
+            }}
+            onClick={() => onUpdateSubCom(re.id)}
+          >
+            수정하기
+          </button>
+        </ContentSubBTW>
       </div>
     );
   }
@@ -89,26 +121,62 @@ const DetailCommentSubDeleteUpdate = ({ re }) => {
 
 export default DetailCommentSubDeleteUpdate;
 
+const SubAllDiv = styled.div`
+  max-width: 100%;
+`;
+
 const DetailComSubHeader = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
-  button {
-    width: 4rem;
-    height: 2.5rem;
-    border-radius: 10px;
-    color: white !important;
-    border: transparent;
-    background-color: #ff4d00 !important ;
+  margin-bottom: 5px;
+  span {
+    width: 2rem;
+    height: 2rem;
   }
 `;
 
 const DetailComSubContent = styled.div`
   width: 100%;
-  margin-top: -10px;
+  div {
+    width: 99%;
+  }
   input {
     border: transparent;
+    background-color: transparent;
     border-bottom: 1px solid black;
-    width: 90%;
+    width: 99%;
   }
+`;
+
+const MoreSubBtn = styled.div`
+  background-color: white;
+  width: 7rem;
+  height: 7rem;
+  border: 1px solid #ff4d00;
+  border-radius: 10px;
+  position: relative;
+  right: 0px;
+  top: 0px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  button {
+    border: 1px solid transparent;
+    background-color: transparent;
+    width: 4rem;
+    :hover {
+      border: transparent;
+      border-bottom: 1px solid #ff4d00;
+      width: 30px;
+    }
+  }
+`;
+
+const ContentSubBTW = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;

@@ -12,8 +12,10 @@ const DetailComment = () => {
   const { id } = useParams();
   useEffect(() => {
     dispatch(__getUserInfo());
+    dispatch(__getComment(id));
   }, []);
   const userInformation = useSelector((state) => state.detail.userInfo.data);
+
   const [mainContent, setMainContent] = useState("");
   const onChangeComment = (e) => {
     const firstContent = e.target.value;
@@ -33,16 +35,17 @@ const DetailComment = () => {
       setMainContent("");
     }
   };
+  // if(commentLength.l)
+
   if (userInformation?.nickname === undefined) {
     return (
-      <div style={{ marginTop: "-30px" }}>
-        <CommentWrite />
+      <CommentTotal>
         <DetailCommentView />
-      </div>
+      </CommentTotal>
     );
   } else {
     return (
-      <div>
+      <CommentTotal>
         <CommentWrite>
           <img src={userInformation?.profileImg} />
           <CommentWriteBox>
@@ -56,16 +59,26 @@ const DetailComment = () => {
           </CommentWriteBox>
         </CommentWrite>
         <DetailCommentView />
-      </div>
+      </CommentTotal>
     );
   }
 };
 
 export default DetailComment;
 
-const CommentWrite = styled.div`
+// 댓글 전체 div
+const CommentTotal = styled.div`
+  padding: 20px 0;
   width: 100%;
-  margin: 3rem auto;
+  margin-top: 20px;
+  background-color: #f2f2f2;
+  border-radius: 20px;
+`;
+
+// 댓글 입력 div
+const CommentWrite = styled.div`
+  width: 95%;
+  margin: 0 auto 3rem;
   display: flex;
   img {
     border: 1px solid black;
@@ -75,6 +88,7 @@ const CommentWrite = styled.div`
   }
 `;
 
+// 댓글 input감싸는 div
 const CommentWriteBox = styled.div`
   display: flex;
   width: 100%;
@@ -88,6 +102,7 @@ const CommentWriteBox = styled.div`
     height: 3rem;
     margin: 1rem 2rem;
     border: transparent;
+    background-color: transparent;
   }
   button {
     border: transparent;
