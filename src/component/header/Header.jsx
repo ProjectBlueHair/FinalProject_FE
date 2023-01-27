@@ -26,9 +26,9 @@ import {
   __getGeneralUserInfo,
 } from "../../redux/slice/userSlice";
 import Span from "../elem/Span";
-import {serverURL } from "../../dataManager/apiConfig";
+import { instanceAxios, serverURL } from "../../dataManager/apiConfig";
 import { EventSourcePolyfill } from "event-source-polyfill";
-import { getAlarmCount } from "./funcs";
+import { alarmSelector, __getAlarm } from "../../redux/slice/mainSlice";
 const iconSize = "4rem";
 
 const Header = () => {
@@ -57,40 +57,30 @@ const Header = () => {
   };
   useToggleOutSideClick(Sign, setIsOpen);
 
-
   const [isClicked, setIsClicked] = useState({ alarm: false });
   const { $openModal, $closeModal } = useTypeModal();
-  const [unreadCount, setUnreadCount] = useState(0);
   const dispatch = useAppDispatch();
   const RefreshToken = getCookies("refreshtoken");
   const AccessToken = getCookies("accesstoken");
   const user = useAppSelector(userSelector);
+  const alarmCount = useAppSelector(alarmSelector);
 
   useEffect(() => {
     if (!AccessToken && user.nickname) dispatch(__clearUser());
     if (AccessToken && !user.nickname) dispatch(__getGeneralUserInfo());
-  }, [user.nickname, AccessToken]);
-
-  useEffect(() => {
-    if (AccessToken) {
+    if (AccessToken && user.nickname) {
       const es = new EventSourcePolyfill(`${serverURL}/subscribe`, {
         headers: {
           AccessToken: AccessToken,
           RefreshToken: RefreshToken,
-          heartbeatTimeout: 3600 * 1000, // 1시간
+          heartBeatTimeout: 3600 * 1000, // 1시간
         },
       });
       es.onmessage = (event) => {
-        console.log("event", event.data);
-        if (!event.data.includes("EventStream Created")) {
-          getAlarmCount().then((data) => {
-            console.log("count", data);
-            setUnreadCount(data.data.data.unreadNotificationCount);
-          });
-        }
+        dispatch(__getAlarm());
       };
     }
-  }, []);
+  }, [user.nickname, AccessToken]);
 
   return (
     <Grid>
@@ -155,7 +145,7 @@ const Header = () => {
             src={notifications}
           />
           {/* <AlarmCount>4</AlarmCount> */}
-          {unreadCount ? <AlarmCount>{unreadCount}</AlarmCount> : null}
+          {alarmCount ? <AlarmCount>{alarmCount}</AlarmCount> : null}
         </Flex>
         <Img
           onClick={() => navigate("/post")}
