@@ -20,7 +20,7 @@ export const ALERT_TYPE = {
 const AlertModal: React.FC<{ message?: string; type?: string; to?: string }> = (
   props
 ) => {
-  const errorMessage = "다음과 같은 에러가 발생했습니다 ㅠ.ㅠ";
+  const errorMessage = "다음과 같은 에러가 발생했습니다.";
   const { $closeModal } = useTypeModal();
   const navigate = useNavigate();
 

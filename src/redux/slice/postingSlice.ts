@@ -30,7 +30,7 @@ export interface PostingState {
   audio: Audio; // form audio 컴포넌트 
   collaboRequestData: CollaboRequestData; // form collabo 컴포넌트
   isLoading: boolean; // 공통
-  error: unknown; // 공통 
+  error: any; // 공통 
 }
 const initialState = {
   title: "",

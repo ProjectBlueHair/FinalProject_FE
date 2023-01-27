@@ -10,14 +10,16 @@ import { postingErrorSelector } from "../redux/slice/postingSlice";
 const ErrorCheck = () => {
   const { $openModal } = useTypeModal();
   const postingError = useAppSelector(postingErrorSelector);
+  console.log('postingError', typeof (""+postingError));
+  const needRedirect = (''+postingError)?.includes("4041");
 
   if (postingError) {
     $openModal({
       type: "alert",
       props: {
-        message: "로그인이 필요한 페이지 (기능) 입니다.",
-        type: ALERT_TYPE.info,
-        to: PATH.main,
+        message: "" + postingError,
+        type: ALERT_TYPE.error,
+        to: needRedirect ? PATH.main : null,
       },
     });
   }

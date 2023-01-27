@@ -40,12 +40,6 @@ const PostingCollaboRequested = () => {
   }, [id]);
   useEffect(() => {}, []);
   const collaboDescription = useAppSelector(collaboDescriptionSelector);
-  const error = useAppSelector(postingErrorSelector);
-  if (error) {
-    alert(error);
-    // console.log(error);
-    navigate(PATH.main);
-  }
   const { $openModal, $closeModal } = useTypeModal();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

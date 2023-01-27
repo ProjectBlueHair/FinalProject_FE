@@ -14,6 +14,7 @@ import { getCookies } from "../dataManager/cookie";
 import { ALERT_TYPE } from "../modal/modals/AlertModal";
 import useTypeModal from "../modal/hooks/useTypeModal";
 import UserCheck from "../util/UserCheck";
+import ErrorCheck from "../util/ErrorCheck";
 
 export const AUDIO_BAR_GAP = "1.5rem";
 
@@ -28,6 +29,7 @@ const PostingPage = () => {
   return (
     <Flex direction="column" justify="flex-start" >
       <UserCheck/>
+      <ErrorCheck/>
       <Header />
       <AudioBarsBackground gap={AUDIO_BAR_GAP}>
         <PostingTitle />

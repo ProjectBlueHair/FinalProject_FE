@@ -43,7 +43,7 @@ instanceAxios.interceptors.response.use(
           "유효하지 않은 로그인 정보입니다. 재로그인이 필요합니다."
         );
       case 4041:
-        throw new Error("존재하지 않는 게시물입니다. ");
+        throw new Error("4041 : 존재하지 않는 게시물입니다. ");
       case 4015:
         if (!isTokenRefreshing) {
           isTokenRefreshing = true;
