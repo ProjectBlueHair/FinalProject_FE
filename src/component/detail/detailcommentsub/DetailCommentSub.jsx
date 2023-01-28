@@ -41,7 +41,6 @@ const DetailCommentSub = ({ mcv }) => {
           <DetailComTopSubImg src={re.profileImg} />
           <DetailComSubTop>
             <DetailCommentSubDeleteUpdate re={re} />
-            <DetailCommentSubLike re={re} />
           </DetailComSubTop>
         </DetailComSubTotal>
       ))}
@@ -67,12 +66,14 @@ const DetailCommentSub = ({ mcv }) => {
 };
 export default DetailCommentSub;
 
+// 대댓글 각각 div
 const DetailComSubTotal = styled.div`
   display: flex;
   margin-top: 1rem;
   width: 100%;
 `;
 
+// 대댓글 이미지
 const DetailComTopSubImg = styled.img`
   width: 3rem;
   height: 3rem;
@@ -81,13 +82,16 @@ const DetailComTopSubImg = styled.img`
   margin-right: 1rem;
 `;
 
+// 대댓글 우측 div
 const DetailComSubTop = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 95%;
 `;
 
+// 대댓글 input 부분
 const SubCommentWrite = styled.div`
+  margin: 10px 0;
   display: flex;
   align-items: center;
   width: 100%;
@@ -95,7 +99,6 @@ const SubCommentWrite = styled.div`
   div {
     display: flex;
     align-items: center;
-    margin-top: 1rem;
     width: 95%;
     height: 3rem;
     border: 1px solid black;
@@ -104,10 +107,12 @@ const SubCommentWrite = styled.div`
   input {
     width: 93%;
     border: transparent;
+    background-color: transparent;
     padding-left: 1rem;
     margin-left: 1rem;
   }
   button {
     color: #ff4d00;
+    border: transparent;
   }
 `;

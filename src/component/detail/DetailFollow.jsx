@@ -1,16 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import { AiOutlineUp, AiOutlineDown } from "react-icons/ai";
 import { getCookies } from "../../dataManager/cookie";
 import {
   __getDetailCollabo,
   __putDetailFollow,
 } from "../../redux/slice/detailSlice";
 
-const DetailFollow = ({ detailCollabo }) => {
+const DetailFollow = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
+  const [followMore, setFollowMore] = useState(true);
+  useEffect(() => {
+    dispatch(__getDetailCollabo(id));
+  }, []);
+  //작곡가 프로필/ 이름/ 악기 이름
+  const detailCollabo = useSelector((state) => state.detail.collabo.data);
+
+  const detailFollowOne = detailCollabo?.slice(0, 1);
+  const detailFollowAll = detailCollabo?.slice(1);
+  const moreClicker = () => {
+    setFollowMore(!followMore);
+  };
 
   const acToken = getCookies("accesstoken");
   const FollowClick = async (fol) => {
@@ -21,10 +35,9 @@ const DetailFollow = ({ detailCollabo }) => {
     await dispatch(__putDetailFollow(follow));
     dispatch(__getDetailCollabo(id));
   };
-  console.log(detailCollabo);
   return (
-    <>
-      {detailCollabo?.map((collabo, index) => (
+    <FollowAll>
+      {detailFollowOne?.map((collabo, index) => (
         <FollowTotal key={index}>
           <FollowTop>
             <FollowImgText>
@@ -36,7 +49,7 @@ const DetailFollow = ({ detailCollabo }) => {
                   ))}
                   <span>{collabo.nickname}</span>
                 </FollowWriteInstrument>
-                <div style={{ fontSize: "12px" }}>
+                <div style={{ marginTop: "10px" }}>
                   팔로워 {collabo.followerCount} 명
                 </div>
               </FollowMiddle>
@@ -51,26 +64,82 @@ const DetailFollow = ({ detailCollabo }) => {
               )}
             </FollowBtn>
           </FollowTop>
-          <FollowTitle>{collabo.contents}</FollowTitle>
+          <FollowContent>{collabo.contents}</FollowContent>
         </FollowTotal>
       ))}
-    </>
+      {detailCollabo?.length > 1 ? (
+        followMore ? (
+          <div
+            onClick={moreClicker}
+            style={{ display: "flex", alignItems: "center", gap: "5px" }}
+          >
+            <AiOutlineDown /> 더보기
+          </div>
+        ) : (
+          <>
+            {detailFollowAll?.map((collabo, index) => (
+              <FollowTotal key={index}>
+                <FollowTop>
+                  <FollowImgText>
+                    <img src={collabo.profileImg} alt="" />
+                    <FollowMiddle>
+                      <FollowWriteInstrument>
+                        {collabo?.musicPartsList?.map((part, index) => (
+                          <div key={index}>{part}</div>
+                        ))}
+                        <span>{collabo.nickname}</span>
+                      </FollowWriteInstrument>
+                      <div style={{ marginTop: "10px" }}>
+                        팔로워 {collabo.followerCount} 명
+                      </div>
+                    </FollowMiddle>
+                  </FollowImgText>
+                  <FollowBtn>
+                    {acToken === undefined ? (
+                      ""
+                    ) : (
+                      <button onClick={() => FollowClick(collabo)}>
+                        {collabo?.isFollowed ? "팔로우 취소" : "팔로우"}
+                      </button>
+                    )}
+                  </FollowBtn>
+                </FollowTop>
+                <FollowContent>{collabo.contents}</FollowContent>
+              </FollowTotal>
+            ))}
+            <div
+              onClick={moreClicker}
+              style={{ display: "flex", alignItems: "center", gap: "5px" }}
+            >
+              <AiOutlineUp />
+              닫기
+            </div>
+          </>
+        )
+      ) : (
+        ""
+      )}
+    </FollowAll>
   );
 };
 
 export default DetailFollow;
 
-const FollowTotal = styled.div`
+const FollowAll = styled.div`
   width: 100%;
-  display: flex;
-  flex-direction: column;
+  margin-top: 20px;
+  border-radius: 20px;
+  background-color: #f2f2f2;
+  padding: 0 20px 20px;
+`;
+
+const FollowTotal = styled.div`
+  padding-top: 20px;
 `;
 
 const FollowTop = styled.div`
   display: flex;
   justify-content: space-between;
-  gap: 10px;
-  margin-top: 5px;
   img {
     width: 4rem;
     height: 4rem;
@@ -81,7 +150,13 @@ const FollowTop = styled.div`
 const FollowMiddle = styled.div`
   display: flex;
   flex-direction: column;
+  margin-left: 10px;
 `;
+
+const FollowContent = styled.div`
+  margin: 10px auto;
+`;
+
 const FollowImgText = styled.div`
   display: flex;
   flex-direction: row;
@@ -118,8 +193,4 @@ const FollowBtn = styled.div`
     border: 2px solid #ff4d00;
     border-radius: 20px;
   }
-`;
-
-const FollowTitle = styled.div`
-  margin-top: -15px;
 `;

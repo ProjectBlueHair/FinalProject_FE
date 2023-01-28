@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { AiOutlineUp, AiOutlineDown } from "react-icons/ai";
+import styled from "styled-components";
 import DetailCommentSub from "../detailcommentsub/DetailCommentSub";
 
 const DetailUpDown = ({ mcv }) => {
@@ -8,7 +9,7 @@ const DetailUpDown = ({ mcv }) => {
     <div>
       {comUpDown ? <DetailCommentSub mcv={mcv} /> : ""}
       <div>
-        <button onClick={() => setComUpDown(!comUpDown)}>
+        <UpDownBtn onClick={() => setComUpDown(!comUpDown)}>
           {comUpDown ? (
             <span style={{ color: "gray" }}>
               <AiOutlineUp /> 댓글닫기
@@ -19,10 +20,16 @@ const DetailUpDown = ({ mcv }) => {
               댓글 보기
             </span>
           )}
-        </button>
+        </UpDownBtn>
       </div>
     </div>
   );
 };
 
 export default DetailUpDown;
+
+// 댓글 더보기 버튼
+const UpDownBtn = styled.button`
+  margin-top: 5px;
+  border: transparent;
+`;

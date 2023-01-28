@@ -1,74 +1,127 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { AiOutlineUp, AiOutlineDown } from "react-icons/ai";
 import DetailFollow from "./DetailFollow";
 import DetailComment from "./detailcomment/DetailComment";
 import { __getDetailCollabo } from "../../redux/slice/detailSlice";
-import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { AiOutlineUp, AiOutlineDown } from "react-icons/ai";
+import Img from "../elem/Img";
+import { save, share, collaboPlus, report } from "../../asset/pic";
+import { PATH } from "../../Router";
+import StLink from "../elem/Link";
 
 const DetailDayAndFollow = ({ detail }) => {
-  const [upDown, setUpDown] = useState(true);
   const { id } = useParams();
-  const dispatch = useDispatch();
+  const [contentMore, setContentMore] = useState(false);
+  // 100줄 넘어가면 더보기 보이게 만듬
+  const textLimit = useRef(100);
+  const navigate = useNavigate();
+  const shortContent = detail?.contents.slice(0, textLimit.current);
 
-  const onUpDown = () => {
-    setUpDown(!upDown);
-  };
-
-  useEffect(() => {
-    dispatch(__getDetailCollabo(id));
-  }, []);
-  //작곡가 프로필/ 이름/ 악기 이름
-  const detailCollabo = useSelector((state) => state.detail.collabo.data);
-  console.log("d", detailCollabo);
   return (
-    <DetailLeftLine>
-      <div>{detail?.createdAt}</div>
-      <div>{detail?.contents}</div>
-      <FollowMore>
-        <button onClick={onUpDown}>
-          {upDown ? <AiOutlineDown /> : <AiOutlineUp />}
-        </button>
-      </FollowMore>
-      {upDown ? <DetailFollow detailCollabo={detailCollabo} /> : ""}
-      <hr style={{ border: "1px solid rgba(0,0,0,0.2)" }} />
-      <DetailComment />
-    </DetailLeftLine>
+    <DetailLeftTotal>
+      <DetailMiddleTop>
+        <DetailShareLine>
+          <div>
+            <div>
+              <Img wd="3rem" src={save} />
+              <div>보관함 추가</div>
+            </div>
+            <div>
+              <Img wd="3rem" src={share} />
+              <div>공유</div>
+            </div>
+            <div>
+              <Img wd="3rem" src={report} />
+              <div>신고</div>
+            </div>
+          </div>
+          <div>
+            <div>
+              <div onClick={() => navigate(`${PATH.collabo}/${id}`)}>
+                <Img wd="3.5rem" src={collaboPlus} />
+                <div>콜라보 하기</div>
+              </div>
+            </div>
+          </div>
+        </DetailShareLine>
+        <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+          {detail?.tagList.map((tag, index) => (
+            <StLink to={`/tag/${tag}`} key={index}>
+              <div style={{ color: "#ff4d00" }}># {tag}</div>
+            </StLink>
+          ))}
+        </div>
+        <div style={{ color: "#ff4d00", marginTop: "5px" }}>설명</div>
+        <div style={{ marginTop: "5px" }}>
+          <div>{contentMore ? detail?.contents : shortContent}</div>
+          <div onClick={() => setContentMore(!contentMore)}>
+            {detail?.contents?.length > shortContent?.length ? (
+              contentMore ? (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                    marginTop: "5px",
+                  }}
+                >
+                  <AiOutlineUp /> 간략히
+                </div>
+              ) : (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                    marginTop: "5px",
+                  }}
+                >
+                  <AiOutlineDown /> 더보기
+                </div>
+              )
+            ) : (
+              ""
+            )}
+          </div>
+        </div>
+        <div style={{ color: "#ff4d00", marginTop: "5px" }}>콜라보 요청</div>
+        <div style={{ marginTop: "5px" }}>{detail?.collaboNotice}</div>
+      </DetailMiddleTop>
+      <div>
+        <DetailFollow />
+        <DetailComment />
+      </div>
+    </DetailLeftTotal>
   );
 };
 
 export default DetailDayAndFollow;
 
-const DetailLeftLine = styled.div`
-  width: 60%;
-  margin-left: -5%;
-  margin-right: 3%;
+const DetailLeftTotal = styled.div`
+  width: 65%;
+  display: flex;
+  flex-direction: column;
+  margin: 1px;
+  /* border: 1px solid black; */
+  border-radius: 20px;
+`;
+
+const DetailShareLine = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
   div {
-    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
   }
 `;
 
-const FollowMore = styled.div`
+const DetailMiddleTop = styled.div`
   display: flex;
-  flex-basis: 100%;
-  align-items: center;
-  color: rgba(0, 0, 0, 0.35);
-  font-size: 12px;
-  margin: 8px 0;
-  ::before,
-  ::after {
-    content: "";
-    flex-grow: 1;
-    height: 1px;
-    background-color: rgba(0, 0, 0, 0.35);
-    font-size: 0px;
-    line-height: 0px;
-  }
-  button {
-    border: transparent;
-    background-color: transparent;
-    margin: 0 10px;
-  }
+  flex-direction: column;
+  border-radius: 20px;
+  background-color: #f2f2f2;
+  padding: 10px 20px;
 `;
