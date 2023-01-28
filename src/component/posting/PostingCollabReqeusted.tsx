@@ -20,7 +20,6 @@ import useTypeModal from "../../modal/hooks/useTypeModal";
 
 const PostingCollaboRequested = () => {
   const { id, postId } = useParams();
-  console.log("id", id, "postId", postId);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   useEffect(() => {
@@ -38,7 +37,6 @@ const PostingCollaboRequested = () => {
       dispatch(__cleanUp());
     };
   }, [id]);
-  useEffect(() => {}, []);
   const collaboDescription = useAppSelector(collaboDescriptionSelector);
   const { $openModal, $closeModal } = useTypeModal();
 

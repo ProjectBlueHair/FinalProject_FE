@@ -1,6 +1,5 @@
 import { rest } from "msw";
-import { mockData } from "../component/main/MockData";
-import { Post } from "../model/PostModel";
+import { mockData } from "./MockData";
 
 const postList = mockData();
 export const handlers = [

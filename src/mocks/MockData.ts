@@ -1,6 +1,6 @@
 import nextId from "react-id-generator";
 import { mockText, mockAudios } from "./MockResource";
-import { Member, Post } from "../../model/PostModel";
+import { Member, Post } from "../model/MainModel";
 function rand(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -19,7 +19,7 @@ export const mockData = () => {
     //nick
     const nickArr: Member[] = new Array(rand(2, 5)).fill("").map((nick) => {
       return {
-        profileImg: `testRandomPost/${rand(1, 22)}.jpg`,
+        profileImg: `testRandomPost/${rand(1, 2)}.jpg`,
         nickname: mockTextArr[rand(101, 200)],
         musicPartList: ["bass", "piano"],
       };
@@ -33,7 +33,7 @@ export const mockData = () => {
 
     mockArr.push({
       id: nextId(),
-      postImg: `testRandomPost/${rand(1, 22)}.jpg`,
+      postImg: `testRandomPost/${rand(1, 2)}.jpg`,
       title: ranText,
       musicFile: mockAudios[rand(0, 5)],
       mainProfileList: nickArr,
