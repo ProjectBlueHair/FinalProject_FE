@@ -22,20 +22,21 @@ import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
   userSelector,
+  __clearUser,
   __getGeneralUserInfo,
 } from "../../redux/slice/userSlice";
 import Span from "../elem/Span";
 import { instanceAxios, serverURL } from "../../dataManager/apiConfig";
-import Div from "../elem/Div";
 import { EventSourcePolyfill } from "event-source-polyfill";
+import { alarmSelector, __getAlarm } from "../../redux/slice/mainSlice";
+const iconSize = "4rem";
+
 const Header = () => {
   const navigate = useNavigate();
-  const iconSize = "4rem";
   const Sign = useRef(null);
   // 토글창 상태관리
   const [isOpen, setIsOpen] = useState(false);
   const { openModal } = useModal();
-  const { $openModal, $closeModal } = useTypeModal();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -50,46 +51,36 @@ const Header = () => {
   const onClickLogOut = () => {
     removeCookies("accesstoken", { path: "/" });
     removeCookies("refreshtoken", { path: "/" });
+    dispatch(__clearUser());
     setIsOpen(false);
     navigate("/");
   };
-  const acToken = getCookies("accesstoken");
   useToggleOutSideClick(Sign, setIsOpen);
+
   const [isClicked, setIsClicked] = useState({ alarm: false });
-  const [unreadCount, setUnreadCount] = useState(0);
-
+  const { $openModal, $closeModal } = useTypeModal();
   const dispatch = useAppDispatch();
+  const RefreshToken = getCookies("refreshtoken");
+  const AccessToken = getCookies("accesstoken");
   const user = useAppSelector(userSelector);
+  const alarmCount = useAppSelector(alarmSelector);
 
   useEffect(() => {
-    acToken && dispatch(__getGeneralUserInfo());
-  }, [user.nickname]);
-  const getAlarmCount = () => {
-    return instanceAxios.get("/notification/count");
-  };
-  useEffect(() => {
-    const RefreshToken = getCookies("refreshtoken");
-    const AccessToken = getCookies("accesstoken");
-    if (AccessToken) {
+    if (!AccessToken && user.nickname) dispatch(__clearUser());
+    if (AccessToken && !user.nickname) dispatch(__getGeneralUserInfo());
+    if (AccessToken && user.nickname) {
       const es = new EventSourcePolyfill(`${serverURL}/subscribe`, {
         headers: {
           AccessToken: AccessToken,
           RefreshToken: RefreshToken,
-          heartbeatTimeout : 3600 * 1000 // 1시간
+          heartBeatTimeout: 3600 * 1000, // 1시간
         },
-        
       });
       es.onmessage = (event) => {
-        console.log('event',event.data);
-        if (!event.data.includes("EventStream Created")) {
-          getAlarmCount().then((data) => {
-            console.log("count", data);
-            setUnreadCount(data.data.data.unreadNotificationCount);
-          });
-        }
+        dispatch(__getAlarm());
       };
     }
-  }, []);
+  }, [user.nickname, AccessToken]);
 
   return (
     <Grid>
@@ -154,7 +145,7 @@ const Header = () => {
             src={notifications}
           />
           {/* <AlarmCount>4</AlarmCount> */}
-          {unreadCount ? <AlarmCount>{unreadCount}</AlarmCount> : null}
+          {alarmCount ? <AlarmCount>{alarmCount}</AlarmCount> : null}
         </Flex>
         <Img
           onClick={() => navigate("/post")}

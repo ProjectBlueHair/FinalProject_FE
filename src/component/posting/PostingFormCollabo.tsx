@@ -3,7 +3,7 @@ import useInput from "../../hook/useInput";
 import {
   collaboRequestDataSelector,
   collaboRequest,
-  errorSelector,
+  postingErrorSelector,
   titleSelector,
   __cleanUp,
   __getAudios,
@@ -16,8 +16,7 @@ import { formStyle } from "./PostingForm";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import { CollaboForm } from "../../model/PostingModel";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
-import { PATH } from "../../Router";
+import { useParams } from "react-router-dom";
 import { batch } from "react-redux";
 import Span from "../elem/Span";
 import useTypeModal from "../../modal/hooks/useTypeModal";
@@ -25,13 +24,7 @@ import useTypeModal from "../../modal/hooks/useTypeModal";
 const PostingFormCollabo = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const error = useAppSelector(errorSelector);
   const { $openModal, $closeModal } = useTypeModal();
-  if (error) {
-    alert(error);
-    navigate(PATH.main);
-  }
 
   useEffect(() => {
     batch(() => {
@@ -42,7 +35,7 @@ const PostingFormCollabo = () => {
     return () => {
       dispatch(__cleanUp());
     };
-  }, []);
+  }, [id]);
 
   const collaboRequestData = useAppSelector(collaboRequestDataSelector);
   const descriptionInput = useInput("");

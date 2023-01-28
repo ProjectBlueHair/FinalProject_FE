@@ -30,7 +30,7 @@ const addRefreshSubscriber = (callback) => {
 instanceAxios.interceptors.response.use(
   (res) => {
     const { data, config } = res;
-    console.log("res interceptor data", data);
+    console.log("AXIOS INTERCEPTOR DATA", data);
     switch (data.customHttpStatus) {
       case 4003:
         throw new Error("처리할 수 없는 음원입니다");
@@ -43,7 +43,7 @@ instanceAxios.interceptors.response.use(
           "유효하지 않은 로그인 정보입니다. 재로그인이 필요합니다."
         );
       case 4041:
-        throw new Error("존재하지 않는 게시물입니다. ");
+        throw new Error("4041 : 존재하지 않는 게시물입니다. ");
       case 4015:
         if (!isTokenRefreshing) {
           isTokenRefreshing = true;
@@ -61,7 +61,6 @@ instanceAxios.interceptors.response.use(
               }
             )
             .then((data) => {
-              console.log('going data', data.headers);
               const { accesstoken, refreshtoken } = data.headers;
               if (!accesstoken || !refreshtoken) {
                 removeCookies("accesstoken", { path: "/" });
@@ -98,6 +97,7 @@ instanceAxios.interceptors.response.use(
     }
   },
   async (error) => {
+    console.log('AXIOS INTERCEPTOR ERROR :',error);
     return Promise.reject(error);
   }
 );

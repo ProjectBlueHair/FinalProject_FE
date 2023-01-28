@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import {
   collaboApprove,
   collaboDescriptionSelector,
-  errorSelector,
+  postingErrorSelector,
   __cleanUp,
   __getAudios,
   __getCollaboRequested,
@@ -37,15 +37,9 @@ const PostingCollaboRequested = () => {
     return () => {
       dispatch(__cleanUp());
     };
-  }, []);
+  }, [id]);
   useEffect(() => {}, []);
   const collaboDescription = useAppSelector(collaboDescriptionSelector);
-  const error = useAppSelector(errorSelector);
-  if (error) {
-    alert(error);
-    // console.log(error);
-    navigate(PATH.main);
-  }
   const { $openModal, $closeModal } = useTypeModal();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

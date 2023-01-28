@@ -7,10 +7,13 @@ import Flex, { StFlex } from "../../component/elem/Flex";
 import Img from "../../component/elem/Img";
 import Span from "../../component/elem/Span";
 import { instanceAxios } from "../../dataManager/apiConfig";
+import { useAppDispatch } from "../../redux/config";
+import { __readAlarm } from "../../redux/slice/mainSlice";
 import useTypeModal from "../hooks/useTypeModal";
 import TypeModalWrapper from "../TypeModalWrapper";
 
 interface Alarm {
+  id: string;
   content: string;
   type: string;
   typeId: string | number;
@@ -20,26 +23,18 @@ interface Alarm {
   isRead: boolean;
   createdAt: string;
 }
+const alarmGap = "0.7rem";
+
 const AlarmModal = () => {
   const navigate = useNavigate();
-  const alarmGap = "0.7rem";
-  const alarmObj = {
-    content: "this is test",
-    createdAt: "2020-11-01",
-    isRead: true,
-    url: "urlpath",
-    postImg: "",
-  };
-  const arr = new Array(20).fill(alarmObj);
-  const getAlarm = () => {
-    return instanceAxios.get("/notifications");
-  };
+  const dispatch = useAppDispatch();
+
   const [alarmState, setAlarmState] = useState<Alarm[]>([]);
   const { $closeModal, $openModal } = useTypeModal();
-  console.log(alarmState);
 
   useEffect(() => {
-    getAlarm()
+    instanceAxios
+      .get("/notifications")
       .then(({ data }) => setAlarmState(data.data))
       .catch((err) => {
         $closeModal();
@@ -59,6 +54,7 @@ const AlarmModal = () => {
               onClick={() => {
                 //todo: 임시
                 $closeModal({ type: "alarm" });
+                dispatch(__readAlarm(alarm.id));
                 navigate(
                   `/${alarm.type}/${alarm.typeId}/${alarm.postId || ""}`
                 );
@@ -68,7 +64,7 @@ const AlarmModal = () => {
               gap={alarmGap}
             >
               <Flex justify="flex-start" gap={alarmGap}>
-                <AlarmDot />{" "}
+                {alarm.isRead ? null : <AlarmDot />}
                 <Span fw="400" fs="1.4rem">
                   {alarm.content}
                 </Span>

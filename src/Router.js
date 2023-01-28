@@ -45,10 +45,10 @@ const Router = () => {
             path={`${PATH.collaboRequested}/:id/:postId`}
             element={<PostingPage />}
           />
-          <Route
+          {/* <Route
             path={`${PATH.collaboRequested}/:id`}
             element={<PostingPage />}
-          />
+          /> */}
         </Routes>
       </BrowserRouter>
     </>
