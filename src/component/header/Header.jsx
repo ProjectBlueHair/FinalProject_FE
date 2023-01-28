@@ -67,7 +67,7 @@ const Header = () => {
 
   useEffect(() => {
     if (!AccessToken && user.nickname) dispatch(__clearUser());
-    if (AccessToken && !user.nickname) dispatch(__getGeneralUserInfo());
+    dispatch(__getGeneralUserInfo());
     if (AccessToken && user.nickname) {
       const es = new EventSourcePolyfill(`${serverURL}/subscribe`, {
         headers: {

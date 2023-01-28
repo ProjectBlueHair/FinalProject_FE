@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { instanceAxios } from "../../dataManager/apiConfig";
 import { AppState } from "../config";
 
-import { CurrentMusic, LikeModel, Post } from "../../model/PostModel";
+import { CurrentMusic, LikeModel, Post } from "../../model/MainModel";
 import { useAppSelector } from "../config";
 import { __postLike } from "./detailSlice";
 

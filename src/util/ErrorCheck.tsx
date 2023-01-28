@@ -10,7 +10,6 @@ import { postingErrorSelector } from "../redux/slice/postingSlice";
 const ErrorCheck = () => {
   const { $openModal } = useTypeModal();
   const postingError = useAppSelector(postingErrorSelector);
-  console.log('postingError', typeof (""+postingError));
   const needRedirect = (''+postingError)?.includes("4041");
 
   if (postingError) {
