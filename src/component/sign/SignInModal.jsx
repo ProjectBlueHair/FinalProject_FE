@@ -103,7 +103,6 @@ const SignInModal = ({ onClose }) => {
             maxAge: 1800,
           });
           
-          alert(res.data.message);
           dispatch(__getGeneralUserInfo())
           $openModal({
             type: "alert",
