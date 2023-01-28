@@ -8,11 +8,13 @@ import Img from "../elem/Img";
 import { mainLogo, log } from "../../asset/pic";
 import { useAppDispatch } from "../../redux/config";
 import { __getGeneralUserInfo } from "../../redux/slice/userSlice";
+import useTypeModal from "../../modal/hooks/useTypeModal";
 
 const SignInModal = ({ onClose }) => {
   const { openModal } = useModal();
   const { closeModal } = useModal();
   const dispatch = useAppDispatch()
+  const { $openModal, $closeModal } = useTypeModal();
 
   const onClickSignUpModal = () => {
     openModal({ type: "signUp" });
@@ -34,26 +36,63 @@ const SignInModal = ({ onClose }) => {
       if (data.status === 200) {
         return data;
       } else {
-        alert("아이디, 비밀번호를 잘못입력하셨습니다");
+        $openModal({
+          type: "alert",
+          props: {
+            message: "아이디, 비밀번호를 잘못입력하셨습니다",
+            type: "info",
+          },
+        });
+        // alert("아이디, 비밀번호를 잘못입력하셨습니다");
       }
     } catch (error) {}
   };
 
   const onClickSignIn = () => {
     if (signIn.email === "") {
-      alert("이메일을 입력해주세요");
+      $openModal({
+        type: "alert",
+        props: {
+          message: "이메일을 입력해주세요",
+          type: "info",
+        },
+      });
     } else if (signIn.password === "") {
-      alert("비밀번호를 입력해 주세요");
+      $openModal({
+        type: "alert",
+        props: {
+          message: "비밀번호를 입력해 주세요",
+          type: "info",
+        },
+      });
     } else {
       postSignIn(signIn).then((res) => {
         if (res === undefined) {
           return;
         } else if (res.data.customHttpStatus === 4041) {
-          alert(res.data.message);
+          $openModal({
+            type: "alert",
+            props: {
+              message: res.data.message,
+              type: "info",
+            },
+          });
         } else if (res.data.customHttpStatus === 4040) {
-          alert(res.data.message);
+          $openModal({
+            type: "alert",
+            props: {
+              message: res.data.message,
+              type: "info",
+            },
+          });
         } else if (res.data.customHttpStatus === 4000) {
-          alert(res.data.message);
+          $openModal({
+            type: "alert",
+            props: {
+              message: res.data.message,
+              type: "info",
+            },
+          });
         } else {
           setCookie("accesstoken", res.headers.accesstoken, {
             path: "/",
@@ -66,6 +105,13 @@ const SignInModal = ({ onClose }) => {
           
           alert(res.data.message);
           dispatch(__getGeneralUserInfo())
+          $openModal({
+            type: "alert",
+            props: {
+              message: res.data.message,
+              type: "info",
+            },
+          });
           closeModal?.();
         }
       });
