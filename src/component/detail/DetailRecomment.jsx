@@ -5,6 +5,7 @@ import { more, like, view } from "../../asset/pic";
 import { instanceAxios } from "../../dataManager/apiConfig";
 import { useNavigate } from "react-router-dom";
 import useTypeModal from "../../modal/hooks/useTypeModal";
+import StLink from "../elem/Link";
 
 const DetailRecomment = () => {
   const [ReList, setReList] = useState();
@@ -30,29 +31,27 @@ const DetailRecomment = () => {
     window.location.reload();
   };
 
-  // const moreClick = () => {
-  //   $openModal({
-  //     type: "alert",
-  //     props: {
-  //       message: "해당 기능은 곧 준비될 예정입니다 !",
-  //       type: "confirm",
-  //     },
-  //   });
-  // };
-
   return (
     <DetailReComCol>
       <h1>추천 음악</h1>
       {ReList?.map((List) => (
-        <DetailRightLine key={List.id} onClick={() => detailMove(List.id)}>
-          <RecommentImg src={List.postImg} alt="사진" />
+        <DetailRightLine key={List.id}>
+          <RecommentImg
+            src={List.postImg}
+            alt="사진"
+            onClick={() => detailMove(List.id)}
+          />
           <RecommentText>
             <RecommentTitle>
-              <div>{List.title}</div>
+              <div onClick={() => detailMove(List.id)}>{List.title}</div>
               {/* <Img wd="3rem" src={more} onClick={moreClick} /> */}
             </RecommentTitle>
             <RecommentTag>
-              <div>해시태그 값없음</div>
+              {List?.tagList?.map((re) => (
+                <StLink to={`/tag/${re}`}>
+                  <div>{re}</div>
+                </StLink>
+              ))}
             </RecommentTag>
             <RecommentImgViewLike>
               <RecommentProfile>
@@ -149,6 +148,8 @@ const RecommentTag = styled.div`
     padding: 1.5px 3px;
     font-size: 1rem;
     margin-right: 5px;
+    color: black;
+    background-color: rgba(0, 0, 0, 0.1);
   }
 `;
 

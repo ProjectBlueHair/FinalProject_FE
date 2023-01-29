@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import useTypeModal from "../../../modal/hooks/useTypeModal";
 import { __getComment, __postComment } from "../../../redux/slice/comment";
 import { __getUserInfo } from "../../../redux/slice/detailSlice";
 import DetailCommentView from "./DetailCommentView";
@@ -10,6 +11,7 @@ import DetailCommentView from "./DetailCommentView";
 const DetailComment = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
+  const { $openModal, $closeModal } = useTypeModal();
   useEffect(() => {
     dispatch(__getUserInfo());
     dispatch(__getComment(id));
@@ -28,14 +30,19 @@ const DetailComment = () => {
       mainContent === undefined ||
       mainContent.trim() === ""
     ) {
-      return alert("댓글을 입력해 주세요");
+      $openModal({
+        type: "alert",
+        props: {
+          message: "댓글을 입력해 주세요.",
+          type: "info",
+        },
+      });
     } else {
       await dispatch(__postComment({ id, mainContent }));
       dispatch(__getComment(id));
       setMainContent("");
     }
   };
-  // if(commentLength.l)
 
   if (userInformation?.nickname === undefined) {
     return (

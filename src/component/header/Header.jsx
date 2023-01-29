@@ -29,7 +29,7 @@ import {
 import Span from "../elem/Span";
 import { serverURL } from "../../dataManager/apiConfig";
 import Div from "../elem/Div";
-import {EventSourcePolyfill} from "event-source-polyfill";
+import { EventSourcePolyfill } from "event-source-polyfill";
 const Header = () => {
   const navigate = useNavigate();
   const iconSize = "4rem";
@@ -81,10 +81,17 @@ const Header = () => {
   //   es.onmessage = (event) => {
   //     console.log("polyfil", event.data);
   //   };
-    
+
   // }, []);
 
+  const onClickSetPage = () => {
+    navigate("/setpage");
+  };
 
+  const onClickMypage = () => {
+    navigate(`/mypage/${user.nickname}`);
+  };
+  console.log("22", user);
   return (
     <Grid>
       <Flex justify="space-between">
@@ -171,49 +178,51 @@ const Header = () => {
           wd={iconSize}
           src={settings}
         />
-        {user.profileImg ? (
-          <Img
-            cursor="pointer"
-            onClick={() => toggleMenu()}
-            type="shadowProfile"
-            src={user.profileImg}
-            hg="3.5rem"
-          />
-        ) : (
-          <Img
-            type="icon"
-            wd={iconSize}
-            src={account}
-            onClick={() => toggleMenu()}
-          />
-        )}
+        <div ref={Sign}>
+          {user.profileImg ? (
+            <Img
+              cursor="pointer"
+              onClick={() => toggleMenu()}
+              type="shadowProfile"
+              src={user.profileImg}
+              hg="3.5rem"
+            />
+          ) : (
+            <Img
+              type="icon"
+              wd={iconSize}
+              src={account}
+              onClick={() => toggleMenu()}
+            />
+          )}
+          {user.nickname ? (
+            <>
+              {isOpen ? (
+                <ToggleDiv>
+                  <Span fc="var(--ec-main-color)" fw="700">
+                    {user.nickname}
+                  </Span>
+                  <button onClick={onClickLogOut}>로그아웃</button>
+                  <button onClick={onClickMypage}>마이페이지</button>
+                  <button onClick={onClickSetPage}>계정설정</button>
+                </ToggleDiv>
+              ) : (
+                ""
+              )}
+            </>
+          ) : (
+            <>
+              {isOpen ? (
+                <ToggleDiv2>
+                  <button onClick={onClickSignBtn}>로그인</button>
+                </ToggleDiv2>
+              ) : (
+                ""
+              )}
+            </>
+          )}
+        </div>
       </Flex>
-      {user.nickname ? (
-        <>
-          {isOpen ? (
-            <ToggleDiv ref={Sign}>
-              <Span fc="var(--ec-main-color)" fw="700">
-                {user.nickname}
-              </Span>
-              <button onClick={onClickLogOut}>로그아웃</button>
-              <button>마이페이지</button>
-              <button>계정설정</button>
-            </ToggleDiv>
-          ) : (
-            ""
-          )}
-        </>
-      ) : (
-        <>
-          {isOpen ? (
-            <ToggleDiv2 ref={Sign}>
-              <button onClick={onClickSignBtn}>로그인</button>
-            </ToggleDiv2>
-          ) : (
-            ""
-          )}
-        </>
-      )}
     </Grid>
   );
 };
@@ -235,7 +244,7 @@ const ToggleDiv = styled.div`
   width: 100px;
   height: 120px;
   margin-top: 25px;
-  margin-right: 80px;
+  margin-right: 75px;
   background-color: white;
   border: 2px solid #ff4d00;
   border-radius: 10px;
@@ -244,6 +253,8 @@ const ToggleDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  animation: toggleDiv;
+  animation-duration: 0.5s;
   button {
     margin-top: 10px;
     background-color: white;
@@ -251,6 +262,16 @@ const ToggleDiv = styled.div`
     font-size: 15px;
     :hover {
       border-bottom: 1px solid #ff4d00;
+    }
+  }
+  @keyframes toggleDiv {
+    0% {
+      transform: scaleY(0.1);
+      transform-origin: 100% 0%;
+    }
+    100% {
+      transform: scaleY(1);
+      transform-origin: 100% 0%;
     }
   }
 `;
@@ -271,6 +292,8 @@ const ToggleDiv2 = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  animation: toggleDiv2;
+  animation-duration: 0.5s;
   button {
     margin-top: 10px;
     background-color: white;
@@ -278,6 +301,16 @@ const ToggleDiv2 = styled.div`
     font-size: 15px;
     :hover {
       border-bottom: 1px solid #ff4d00;
+    }
+  }
+  @keyframes toggleDiv2 {
+    0% {
+      transform: scaleY(0.1);
+      transform-origin: 100% 0%;
+    }
+    100% {
+      transform: scaleY(1);
+      transform-origin: 100% 0%;
     }
   }
 `;

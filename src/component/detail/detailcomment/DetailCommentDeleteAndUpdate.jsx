@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import {
   __deleteComment,
@@ -19,6 +19,7 @@ const DetailDeleteAndUpdate = ({ mcv }) => {
   const [comUpdateInput, setComUpdateInput] = useState(mcv.contents);
   const [contentOpen, setContentOpen] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { id } = useParams();
   const moreRef = useRef(null);
 
@@ -48,12 +49,14 @@ const DetailDeleteAndUpdate = ({ mcv }) => {
     dispatch(__getComment(id));
     setcomUpdate(false);
   };
-
+  const MypageMove = (name) => {
+    navigate(`/mypage/${name}`);
+  };
   if (comUpdate === false) {
     return (
       <div>
         <DetailComHeader>
-          <div>{mcv?.nickname}</div>
+          <div onClick={() => MypageMove(mcv?.nickname)}>{mcv?.nickname}</div>
           {userInformation?.nickname !== mcv?.nickname ? (
             ""
           ) : contentOpen ? (
