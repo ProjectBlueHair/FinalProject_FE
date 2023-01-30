@@ -176,7 +176,7 @@ const Header = () => {
           wd={iconSize}
           src={settings}
         />
-        <
+        <div
         
         ref={Sign}>
           {user.profileImg ? (

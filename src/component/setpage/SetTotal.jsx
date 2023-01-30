@@ -17,6 +17,8 @@ import { __getUserInfo } from "../../redux/slice/detailSlice";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import useTypeModal from "../../modal/hooks/useTypeModal";
+import { reissuance } from "../../util/Reissuance";
+import { removeCookies, setCookie } from "../../dataManager/cookie";
 
 const SetTotal = () => {
   const dispatch = useDispatch();
@@ -356,18 +358,36 @@ const SetTotal = () => {
         nickname,
         password,
       }).then((res) => {
-        if (res === undefined) {
-          return;
-        } else {
-          $openModal({
-            type: "alert",
-            props: {
-              message: res.message,
-              type: "info",
-            },
-          });
-          navigate("/");
-        }
+        res &&
+          reissuance()
+            .then((data) => {
+              const { accesstoken, refreshtoken } = data.headers;
+              console.log("access", accesstoken);
+              if (!accesstoken || !refreshtoken) {
+                removeCookies("accesstoken", { path: "/" });
+                removeCookies("refreshtoken", { path: "/" });
+                throw new Error(
+                  "로그인이 만료되었습니다. 다시 로그인 해주세요"
+                );
+              }
+              setCookie("accesstoken", accesstoken, {
+                path: "/",
+              });
+              setCookie("refreshtoken", refreshtoken, {
+                path: "/",
+              });
+              $openModal({
+                type: "alert",
+                props: {
+                  message: res.message,
+                  type: "info",
+                  to: "/",
+                },
+              });
+            })
+            .catch((e) => {
+              throw new Error("재발행 실패");
+            });
       });
     } else {
       uploadFiles(proImg).then((res) => {
@@ -391,18 +411,36 @@ const SetTotal = () => {
           nickname,
           password,
         }).then((res) => {
-          if (res === undefined) {
-            return;
-          } else {
-            $openModal({
-              type: "alert",
-              props: {
-                message: res.message,
-                type: "info",
-              },
-            });
-            navigate("/");
-          }
+          res &&
+            reissuance()
+              .then((data) => {
+                const { accesstoken, refreshtoken } = data.headers;
+                console.log("access", accesstoken);
+                if (!accesstoken || !refreshtoken) {
+                  removeCookies("accesstoken", { path: "/" });
+                  removeCookies("refreshtoken", { path: "/" });
+                  throw new Error(
+                    "로그인이 만료되었습니다. 다시 로그인 해주세요"
+                  );
+                }
+                setCookie("accesstoken", accesstoken, {
+                  path: "/",
+                });
+                setCookie("refreshtoken", refreshtoken, {
+                  path: "/",
+                });
+                $openModal({
+                  type: "alert",
+                  props: {
+                    message: res.message,
+                    type: "info",
+                    to: "/",
+                  },
+                });
+              })
+              .catch((e) => {
+                throw new Error("재발행 실패");
+              });
         });
       });
     }
