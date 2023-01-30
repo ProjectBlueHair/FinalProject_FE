@@ -1,18 +1,33 @@
 import React from "react";
 import styled from "styled-components";
-import { useAppSelector } from "../../redux/config";
-import {
-  titleSelector,
-} from "../../redux/slice/postingSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/config";
+import { formSelector, titleSelector, __form, __typeTitle } from "../../redux/slice/postingSlice";
+import theme from "../../styles/theme";
+import TextArea from "../elem/Textarea";
 
 const PostingTitle: React.FC = () => {
-  const title = useAppSelector(titleSelector);
-  const defaultTitle = "Your Music Title";
+  const title = useAppSelector(formSelector.title);
+  console.log('title',title);
+  
+  const dispatch = useAppDispatch()
+  const defaultTitle = "제목";
 
-  return <Title>{!title ? defaultTitle : title}</Title>;
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>)=>{
+    dispatch(__form({title:e.target.value}))
+  }
+  return (
+    <TextArea
+      radius="20px"
+      pd="1.5rem 1.5rem"
+      hg="100%"
+      fs="1.8rem"
+      onChange={handleChange}
+      placeholder={defaultTitle}
+      border={`1px solid ${theme.color.rgbaBorder1}`}
+      value={title}
+      bg='transparent'
+    />
+  );
 };
 
 export default PostingTitle;
-const Title = styled.div`
-  font-size: 3rem;
-`;

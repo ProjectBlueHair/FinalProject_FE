@@ -28,10 +28,12 @@ import {
 import Span from "../elem/Span";
 import Div from "../elem/Div";
 import { instanceAxios, serverURL } from "../../dataManager/apiConfig";
-import { EventSourcePolyfill } from "event-source-polyfill";
+import { NativeEventSource, EventSourcePolyfill } from "event-source-polyfill";
 import { alarmSelector, __getAlarm } from "../../redux/slice/mainSlice";
+import * as ssePolyfill from 'event-source-polyfill/src/eventsource.min.js';
 const iconSize = "4rem";
-
+const EventSource = EventSourcePolyfill || NativeEventSource;
+global.EventSource = EventSourcePolyfill || NativeEventSource;
 const Header = () => {
   const navigate = useNavigate();
   const Sign = useRef(null);
@@ -56,6 +58,7 @@ const Header = () => {
     setIsOpen(false);
     navigate("/");
   };
+
   useToggleOutSideClick(Sign, setIsOpen);
 
   const [isClicked, setIsClicked] = useState({ alarm: false });
@@ -66,28 +69,37 @@ const Header = () => {
   const user = useAppSelector(userSelector);
   const alarmCount = useAppSelector(alarmSelector);
 
+  const listenAlarm = () => {
+    let eventSource = new ssePolyfill.EventSourcePolyfill(`${serverURL}/subscribe`, {
+      headers: {
+        AccessToken: AccessToken,
+        RefreshToken: RefreshToken,
+      },
+      withCredentials:true
+      // heartbeatTimeout: 3600 * 1000, // 1시간
+    });
+    console.log("credentials", eventSource.withCredentials);
+    eventSource.onopen = () => {
+      console.log("open connection");
+    };
+    eventSource.onmessage = (event) => {
+      console.log("EVENT DATA", JSON.parse(event.data));
+      dispatch(__getAlarm());
+    };
+    eventSource.onerror = (e) => {
+      eventSource.close();
+    };
+  };
   useEffect(() => {
-    if (AccessToken && user.nickname) {
-      const es = new EventSourcePolyfill(`${serverURL}/subscribe`, {
-        headers: {
-          AccessToken: AccessToken,
-          RefreshToken: RefreshToken,
-        },
-        heartbeatTimeout: 3600 * 1000, // 1시간
-      });
-      es.onmessage = (event) => {
-        console.log("event.data");
-        dispatch(__getAlarm());
-      };
-    }
+    if (AccessToken && user.nickname) listenAlarm();
     if (!AccessToken && user.nickname) dispatch(__clearUser());
     if (AccessToken && !user.nickname) dispatch(__getGeneralUserInfo());
   }, [user.nickname, AccessToken]);
-  
+
   const onClickSetPage = () => {
     navigate("/setpage");
   };
-  
+
   const onClickMypage = () => {
     navigate(`/mypage/${user.nickname}`);
   };
@@ -171,9 +183,7 @@ const Header = () => {
           wd={iconSize}
           src={settings}
         />
-        <div
-        
-        ref={Sign}>
+        <div ref={Sign}>
           {user.profileImg ? (
             <Img
               cursor="pointer"

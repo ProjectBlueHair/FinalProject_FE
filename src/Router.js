@@ -11,6 +11,7 @@ import SetPage from "./page/SetPage";
 
 import PostingReactQueryTest from "./component/posting/PostingReactQueryTest";
 import ChatPage from "./page/ChatPage";
+import PostingPageNext from "./page/PostingPageNext";
 
 export const PATH = {
   main: "/",
@@ -37,6 +38,7 @@ const Router = () => {
           <Route path="/setpage" element={<SetPage />} />
           <Route path={`${PATH.tag}/:tag`} element={<Tag />} />
           <Route path={PATH.post} element={<PostingPage />} />
+          <Route path={'/postingtest'} element={<PostingPageNext />} />
           <Route path={`${PATH.edit}/:id`} element={<PostingPage />} />
           <Route path={`${PATH.collabo}/:id`} element={<PostingPage />} />
           <Route path={`${PATH.chat}`} element={<ChatPage />} />

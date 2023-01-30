@@ -96,14 +96,14 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
 
     const submitPost = async () => {
       const imgData = await uploadFiles(image.file);
+
       const form: Form = {
         contents: descriptionInput.value,
         collaboNotice: collaboInput.value,
         title: title,
-        postImg: imgData ? imgData.location : null,
+        postImg: imgData ? imgData.Location : null,
       };
       const postData = await uploadPost(form);
-      console.log('postData',postData)
       const collaboData = await collaboRequest(formData, postData.data.data);
       const response = await collaboApprove(collaboData.data.data);
       return response;
