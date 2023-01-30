@@ -7,6 +7,7 @@ import { Audio, ProgressControl } from "../../model/PostingModel";
 import WaveSurfer from "wavesurfer.js";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import Flex from "../elem/Flex";
+import { AUDIO_BAR_HEIGHT } from "./PostingAudioBars";
 
 const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
   props
@@ -17,7 +18,7 @@ const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
     // 바 가로 길이
     barWidth: 3,
     // 웨이브 높이
-    height: 80,
+    height: AUDIO_BAR_HEIGHT-5,
     // ref css요소같은거 연동? 해줌
     container: ref,
     // 커서 줄색상 (없애는게 좋아보임)

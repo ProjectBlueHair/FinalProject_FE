@@ -28,6 +28,6 @@ const StDiv = styled.div<DivProps>`
   font-size: ${({ fs }) => fs || "inherit"};
   font-weight: ${({ fw }) => fw || "inherit"};
   color: ${({ fc }) => fc || "inherit"};
-  margin: ${({ mg }) => mg || "inherit"};
-  padding: ${({ pd }) => pd || "inherit"};
+  margin: ${({ mg }) => mg || "none"};
+  padding: ${({ pd }) => pd || "none"};
 `;

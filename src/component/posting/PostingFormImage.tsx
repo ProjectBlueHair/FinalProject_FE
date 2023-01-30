@@ -1,6 +1,13 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  Fragment,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import styled from "styled-components";
 import useTypeModal from "../../modal/hooks/useTypeModal";
+import { imgTitleBoxSize } from "../../page/PostingPageNext";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
   formSelector,
@@ -11,10 +18,12 @@ import {
 import theme from "../../styles/theme";
 import Div from "../elem/Div";
 import Flex, { StFlex } from "../elem/Flex";
+import Img from "../elem/Img";
 import Span from "../elem/Span";
 
 const PostingFormImage: React.FC<{ className?: string }> = (props) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+
   const defaultText = () => {
     return (
       <Flex direction="column" gap="1rem">
@@ -45,48 +54,91 @@ const PostingFormImage: React.FC<{ className?: string }> = (props) => {
   const [text, setText] = useState(defaultText());
   const dispatch = useAppDispatch();
   const postImg = useAppSelector(formSelector.postImg);
-  console.log("postImg", postImg);
+  const { $openModal } = useTypeModal();
+  const isImage = (file: File) => {
+    return file.type.split("/")[0] === "image";
+  };
 
   const handleDrop = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
     if (event.dataTransfer.files) {
-      dispatch(__form(URL.createObjectURL(event.dataTransfer.files[0])));
+      if (!isImage(event.dataTransfer.files[0])) {
+        setText(defaultText());
+        return $openModal({
+          type: "alert",
+          props: {
+            message: "유효하지 않은 이미지 형식입니다.",
+            type: "error",
+          },
+        });
+      }
+      dispatch(
+        __form({ postImg: URL.createObjectURL(event.dataTransfer.files[0]) })
+      );
       setText(defaultText());
     }
   }, []);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      dispatch(__form(URL.createObjectURL(files[0])));
+    if (event.target.files) {
+      if (!isImage(event.target.files[0])) {
+        setText(defaultText());
+        return $openModal({
+          type: "alert",
+          props: {
+            message: "유효하지 않은 이미지 형식입니다.",
+            type: "error",
+          },
+        });
+      }
+      dispatch(__form({ postImg: URL.createObjectURL(event.target.files[0]) }));
       setText(defaultText());
     }
   };
 
   return (
-    <ImageDragForm
-      onDrop={handleDrop}
-      onDragOver={(event: React.DragEvent<HTMLDivElement>) => {
-        event.preventDefault();
-        setText(alertText());
-      }}
-      onDragLeave={(event: React.DragEvent<HTMLDivElement>) => {
-        console.log("bye");
-        setText(defaultText());
-      }}
+    <Flex
+      radius="20px 20px 0 0"
+      className={props.className}
+      hg="21rem"
+      direction="column"
+      overFlow="hidden"
     >
-      {/* <Flex wd="none" className={props.className}> */}
-      <input
-        hidden
-        ref={fileInputRef}
-        type={"file"}
-        accept="image/*"
-        onChange={handleFileChange}
-      />
-      {text}
-      {/* </Flex> */}
-    </ImageDragForm>
+      <ImageDragForm
+        onDrop={handleDrop}
+        onDragOver={(event: React.DragEvent<HTMLDivElement>) => {
+          event.preventDefault();
+          setText(alertText());
+        }}
+        onDragLeave={(event: React.DragEvent<HTMLDivElement>) => {
+          console.log("bye");
+          setText(defaultText());
+        }}
+      >
+        <input
+          style={{ lineHeight: 0 }}
+          hidden
+          ref={fileInputRef}
+          type={"file"}
+          accept="image/*"
+          onChange={handleFileChange}
+        />
+
+        {postImg ? (
+          <Img
+            cursor="pointer"
+            onClick={() => fileInputRef.current?.click()}
+            radius="20px 20px 0 0"
+            wd={imgTitleBoxSize}
+            hg="23rem"
+            src={postImg}
+          />
+        ) : (
+          text
+        )}
+      </ImageDragForm>
+    </Flex>
   );
 };
 

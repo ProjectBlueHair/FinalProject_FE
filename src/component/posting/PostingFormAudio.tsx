@@ -22,14 +22,14 @@ const PostingFormAudio = () => {
           style={{
             textDecoration: "underline",
             cursor: "pointer",
+            fontSize: "1.2rem",
+            fontWeight:'400'
           }}
           fc={theme.color.secondaryText}
         >
-          또는 클릭해서 파일 추가하기       <Span fs="1.2rem">
-          (현재 .wav 형식만 가능합니다.)
-        </Span>
+          또는 클릭해서 파일 추가하기{" "}
+          <Span>(현재 .wav 형식만 가능합니다.)</Span>
         </Div>
- 
       </Flex>
     );
   };
@@ -40,7 +40,6 @@ const PostingFormAudio = () => {
       </Span>
     );
   };
-  const [files, setFiles] = useState<File[]>([]);
   const [text, setText] = useState(defaultText());
   const dispatch = useAppDispatch();
   const { $openModal, $closeModal } = useTypeModal();
@@ -110,7 +109,7 @@ const PostingFormAudio = () => {
         isNewAudio={false}
         isFormAudio={true}
         radius={AUDIO_BAR_RADIUS}
-        hg={AUDIO_BAR_HEIGHT}
+        hg={`${AUDIO_BAR_HEIGHT}px`}
       >
         <Flex flex="1">
           <input

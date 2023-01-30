@@ -4,7 +4,6 @@ function useTypeModal() {
   const dispatch = useDispatch();
 
   const handleOpenModal = ({ type, props }) => {
-    console.log('type',type)
     dispatch(__openModal({ type, props }));
   };
 

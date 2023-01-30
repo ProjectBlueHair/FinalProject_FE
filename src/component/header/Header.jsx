@@ -103,7 +103,6 @@ const Header = () => {
   const onClickMypage = () => {
     navigate(`/mypage/${user.nickname}`);
   };
-  console.log("22", user);
   return (
     <Grid>
       <Flex justify="space-between">
@@ -234,7 +233,7 @@ const Header = () => {
 
 export default Header;
 const Grid = styled.div`
-  padding: 2rem 2rem;
+  padding: 1.5rem 2rem;
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;

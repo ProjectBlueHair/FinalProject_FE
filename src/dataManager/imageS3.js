@@ -7,6 +7,7 @@ const BK = process.env.REACT_APP_BK;
 const SK = process.env.REACT_APP_SK;
 
 export const uploadFiles = (file) => {
+  console.log('filecheck',file);
   if (file === null || undefined) {
     return Promise.resolve(file);
   } else {

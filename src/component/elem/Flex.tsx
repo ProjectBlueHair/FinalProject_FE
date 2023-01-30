@@ -21,7 +21,7 @@ interface DivProps {
   overFlow?: string;
   flexWrap?: string;
   flexGrow?: string;
-  bg?: string;
+  bg?: string | number;
   shadow?: string;
   radius?: string;
   border?: string;
@@ -89,7 +89,7 @@ const FlexCard = styled(StFlex)`
 const AudioBarWrapper = styled(StFlex)`
   border-radius: 5rem;
   border: ${({ isNewAudio, theme }) =>
-    isNewAudio ? `1px solid ${theme.color.main}` : "none"};
+    isNewAudio ? `1px solid ${theme.color.rgbaBorder1}` : "none"};
   background-color: ${(props) =>
     props.isFormAudio ? theme.color.rgbaBg1 : "none"};
 `;

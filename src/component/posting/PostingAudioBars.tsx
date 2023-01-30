@@ -9,7 +9,8 @@ import {
 import PostingAudioControlBox from "./PostingAudioControlBox";
 import { AUDIO_BAR_GAP } from "../../page/PostingPage";
 export const AUDIO_BAR_RADIUS = "4rem";
-export const AUDIO_BAR_HEIGHT = "8rem";
+export const AUDIO_BAR_HEIGHT = 67;
+
 
 const PostingAudioBars = () => {
   const audios = useAppSelector(audiosSelector);
@@ -18,7 +19,7 @@ const PostingAudioBars = () => {
   return (
     <Flex direction="column" gap={AUDIO_BAR_GAP}>
       {audios.map((audio, index) => (
-        <Flex key={index} type="audioBar" isNewAudio={audio.isNewAudio} hg={AUDIO_BAR_HEIGHT} radius={AUDIO_BAR_RADIUS}>
+        <Flex key={index} type="audioBar" isNewAudio={audio.isNewAudio} hg={`${AUDIO_BAR_HEIGHT}px`} radius={AUDIO_BAR_RADIUS}>
           <PostingAudioControlBox
             index={index}
             {...audio}
