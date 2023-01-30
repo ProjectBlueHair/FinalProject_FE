@@ -13,7 +13,6 @@ const MODAL_COMPONENTS = {
 
 function TypeModalContainer() {
   const modalList = useSelector(typeModalSelector);
-  console.log("modalList", modalList);
 
   const renderModal = modalList.map(({ type, props }) => {
     const ModalComponent = MODAL_COMPONENTS[type];

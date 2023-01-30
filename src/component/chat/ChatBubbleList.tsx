@@ -10,12 +10,18 @@ const ChatBubbleList = () => {
   const user = useAppSelector(userSelector);
   const chatList: ChatBubbleModel[] = [
     {
+      id:1,
       from: "mcho",
       profileImg: "testRandomPost/1.jpg",
-      message: ["hi mcho 1", "hi mcho 2", "hi mcho 3 hi mcho 3 hi mcho 3 hi mcho 3hi mcho 3hi mcho 3hi mcho 3hi mcho 3hi mcho 3hi mcho 3"],
+      message: [
+        "hi mcho 1",
+        "hi mcho 2",
+        "hi mcho 3 hi mcho 3 hi mcho 3 hi mcho 3hi mcho 3hi mcho 3hi mcho 3hi mcho 3hi mcho 3hi mcho 3",
+      ],
       time: "11:33pm",
     },
     {
+      id:2,
       from: "mcho1",
       profileImg: "testRandomPost/1.jpg",
       message: [
@@ -27,10 +33,10 @@ const ChatBubbleList = () => {
   ];
   return (
     <Flex flex="1" direction="column" gap="2rem" justify="flex-start">
-      {chatList.map((bubble) =>
+      {chatList.map((bubble, index) =>(
         user.nickname === bubble.from ? (
           //my chat
-          <Flex justify="flex-end" gap="1rem" align="flex-end">
+          <Flex key={bubble.id} justify="flex-end" gap="1rem" align="flex-end">
             <Div>{bubble.time}</Div>
             <Flex wd="none" direction="column" gap="1rem" align="flex-end">
               {bubble.message.map((msg) => (
@@ -39,7 +45,7 @@ const ChatBubbleList = () => {
             </Flex>
           </Flex>
         ) : (
-          <Flex justify="flex-start" gap="1rem" align="flex-start">
+          <Flex key={bubble.id} justify="flex-start" gap="1rem" align="flex-start">
             <Img
               wd="3rem"
               hg="3rem"
@@ -55,7 +61,7 @@ const ChatBubbleList = () => {
               {bubble.time}
             </Flex>
           </Flex> //others chat
-        )
+        ))
       )}
     </Flex>
   );

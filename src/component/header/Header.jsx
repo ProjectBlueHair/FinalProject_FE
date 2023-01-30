@@ -66,20 +66,21 @@ const Header = () => {
   const alarmCount = useAppSelector(alarmSelector);
 
   useEffect(() => {
-    if (!AccessToken && user.nickname) dispatch(__clearUser());
-    dispatch(__getGeneralUserInfo());
     if (AccessToken && user.nickname) {
       const es = new EventSourcePolyfill(`${serverURL}/subscribe`, {
         headers: {
           AccessToken: AccessToken,
           RefreshToken: RefreshToken,
-          heartBeatTimeout: 3600 * 1000, // 1시간
         },
+        heartbeatTimeout: 3600 * 1000, // 1시간
       });
       es.onmessage = (event) => {
+        console.log("event.data");
         dispatch(__getAlarm());
       };
     }
+    if (!AccessToken && user.nickname) dispatch(__clearUser());
+    if (AccessToken && !user.nickname) dispatch(__getGeneralUserInfo());
   }, [user.nickname, AccessToken]);
 
   return (
@@ -122,13 +123,7 @@ const Header = () => {
       <Flex justify="flex-end" gap="1.5rem">
         <Img
           onClick={() => {
-            $openModal({
-              type: "alert",
-              props: {
-                message: "채팅 기능은 곧 준비될 예정입니다 !",
-                type: "confirm",
-              },
-            });
+            navigate(PATH.chat);
           }}
           type="icon"
           wd={iconSize}
