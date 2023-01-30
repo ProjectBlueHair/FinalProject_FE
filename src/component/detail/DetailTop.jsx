@@ -50,7 +50,7 @@ const DetailTop = () => {
       setLikeCount(detail?.likeCount);
     }
   }, [detail?.isLiked, detail?.likeCount]);
-  console.log(detail);
+
   const onLikeClick = () => {
     dispatch(__postLike(id));
     if (likeView === false || likeCount === 0) {

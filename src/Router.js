@@ -22,7 +22,7 @@ export const PATH = {
   edit: "/edit",
   collabo: "/collabo",
   collaboRequested: "/collaboRequested",
-  chat : "/chat"
+  chat: "/chat",
 };
 
 const Router = () => {
@@ -33,7 +33,7 @@ const Router = () => {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/detail/:id" element={<Detail />} />
-          <Route path="/mypage" element={<MyPage />} />
+          <Route path="/mypage/:nickname" element={<MyPage />} />
           <Route path="/setpage" element={<SetPage />} />
           <Route path={`${PATH.tag}/:tag`} element={<Tag />} />
           <Route path={PATH.post} element={<PostingPage />} />

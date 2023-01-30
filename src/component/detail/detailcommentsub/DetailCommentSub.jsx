@@ -3,17 +3,20 @@ import styled from "styled-components";
 import Img from "../../elem/Img";
 import { more } from "../../../asset/pic";
 import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { __getComment, __postCommentSub } from "../../../redux/slice/comment";
 import DetailCommentSubDeleteUpdate from "./DetailCommentSubDeleteUpdate";
 import { useSelector } from "react-redux";
 import { __getUserInfo } from "../../../redux/slice/detailSlice";
 import DetailCommentSubLike from "./DetailCommentSubLike";
+import useTypeModal from "../../../modal/hooks/useTypeModal";
 
 const DetailCommentSub = ({ mcv }) => {
   const [comSubV, setComSubV] = useState("");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { id } = useParams();
+  const { $openModal, $closeModal } = useTypeModal();
   useEffect(() => {
     dispatch(__getUserInfo());
   }, []);
@@ -27,18 +30,31 @@ const DetailCommentSub = ({ mcv }) => {
   const onClickComSub = async () => {
     const sub = { detailId: mcv?.id, id, comSubV };
     if (comSubV.trim() === "") {
-      alert("댓글을 입력해 주세요");
+      $openModal({
+        type: "alert",
+        props: {
+          message: "댓글을 입력해 주세요.",
+          type: "info",
+        },
+      });
     } else {
       await dispatch(__postCommentSub(sub));
       dispatch(__getComment(id));
       setComSubV("");
     }
   };
+
+  const MypageMove = (name) => {
+    navigate(`/mypage/${name}`);
+  };
   return (
-    <>
+    <DetailSubView>
       {mcv.replyList?.map((re) => (
         <DetailComSubTotal key={re.id}>
-          <DetailComTopSubImg src={re.profileImg} />
+          <DetailComTopSubImg
+            src={re.profileImg}
+            onClick={() => MypageMove(re.nickname)}
+          />
           <DetailComSubTop>
             <DetailCommentSubDeleteUpdate re={re} />
           </DetailComSubTop>
@@ -61,10 +77,25 @@ const DetailCommentSub = ({ mcv }) => {
           </div>
         </SubCommentWrite>
       )}
-    </>
+    </DetailSubView>
   );
 };
 export default DetailCommentSub;
+
+const DetailSubView = styled.div`
+  animation: Updown;
+  animation-duration: 0.5s;
+  @keyframes Updown {
+    0% {
+      transform: scaleY(0);
+      transform-origin: 100% 0%;
+    }
+    100% {
+      transform: scaleY(1);
+      transform-origin: 100% 0%;
+    }
+  }
+`;
 
 // 대댓글 각각 div
 const DetailComSubTotal = styled.div`

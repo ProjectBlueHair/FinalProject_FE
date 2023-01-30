@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import {
   __deleteComment,
@@ -16,6 +16,7 @@ import useToggleOutSideClick from "../../../modal/hooks/useToggleOutSideClick";
 
 const DetailCommentSubDeleteUpdate = ({ re }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [subUPDEL, setSubUPDEL] = useState(false);
   const [comUpdateInput, setComUpdateInput] = useState(re.contents);
   const [contentSubOpen, setContentSubOpen] = useState(false);
@@ -49,12 +50,15 @@ const DetailCommentSubDeleteUpdate = ({ re }) => {
     dispatch(__getComment(id));
     setSubUPDEL(false);
   };
+  const MypageMove = (name) => {
+    navigate(`/mypage/${name}`);
+  };
 
   if (subUPDEL === false) {
     return (
       <SubAllDiv>
         <DetailComSubHeader>
-          <div>{re.nickname}</div>
+          <div onClick={() => MypageMove(re.nickname)}>{re.nickname}</div>
           {re?.nickname !== userInformation?.nickname ? (
             ""
           ) : contentSubOpen ? (

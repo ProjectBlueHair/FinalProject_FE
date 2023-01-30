@@ -3,7 +3,7 @@ import styled from "styled-components";
 // import Img from "../../elem/Img";
 // import { more } from "../../../asset/pic";
 import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { __getComment } from "../../../redux/slice/comment";
 import { useSelector } from "react-redux";
 import DetailUpDown from "./DetailCommentUpDown";
@@ -11,6 +11,7 @@ import DetailDeleteAndUpdate from "./DetailCommentDeleteAndUpdate";
 
 const DetailCommentView = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {
@@ -18,12 +19,17 @@ const DetailCommentView = () => {
   }, []);
 
   const mainCommentView = useSelector((state) => state.comment.comment);
-
+  const MypageMove = (name) => {
+    navigate(`/mypage/${name}`);
+  };
   return (
     <div>
       {mainCommentView?.map((mcv) => (
         <DetailComTotal key={mcv.id}>
-          <DetailComTopImg src={mcv.profileImg} />
+          <DetailComTopImg
+            src={mcv.profileImg}
+            onClick={() => MypageMove(mcv?.nickname)}
+          />
           <DetailComTop>
             <DetailDeleteAndUpdate mcv={mcv} />
             <div>

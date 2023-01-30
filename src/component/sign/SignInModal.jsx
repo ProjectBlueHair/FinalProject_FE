@@ -5,10 +5,12 @@ import styled from "styled-components";
 import { setCookie } from "../../dataManager/cookie";
 import { instanceAxios } from "../../dataManager/apiConfig";
 import Img from "../elem/Img";
-import { mainLogo, log } from "../../asset/pic";
+import { mainLogo, log, kakaoIcon, googleIcon } from "../../asset/pic";
 import { useAppDispatch } from "../../redux/config";
 import { __getGeneralUserInfo } from "../../redux/slice/userSlice";
 import useTypeModal from "../../modal/hooks/useTypeModal";
+export const kakaoKEY = process.env.REACT_APP_KakaoKey;
+export const kakaoREDIRECT = process.env.REACT_APP_KaKaoREDIRECT;
 
 const SignInModal = ({ onClose }) => {
   const { openModal } = useModal();
@@ -43,7 +45,6 @@ const SignInModal = ({ onClose }) => {
             type: "info",
           },
         });
-        // alert("아이디, 비밀번호를 잘못입력하셨습니다");
       }
     } catch (error) {}
   };
@@ -117,6 +118,13 @@ const SignInModal = ({ onClose }) => {
     }
   };
 
+  const KakaoMove = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoKEY}&redirect_uri=${kakaoREDIRECT}&response_type=code`;
+
+  const KakaoLogin = (e) => {
+    e.preventDefault();
+    window.location.href = KakaoMove;
+  };
+
   return (
     <Modal onClose={onClose}>
       <SignInTotal>
@@ -146,17 +154,11 @@ const SignInModal = ({ onClose }) => {
           </SignButton>
         </SignTitleInput>
         <SocialLogin>
-          <button>
-            <img
-              src="https://w.namu.la/s/059f8bf3e629d3f2e343fe3f3f10809022d58800962db675d233429660bf98d9ceccd60e23b1324d090c87485833b10c2c4503c93a230003ba67d5fcafa527934b23df1ee2f666d6df84170dc02bfd188a5247adc86510eda15d18429f5d2d6c"
-              alt=""
-            />
+          <button onClick={KakaoLogin}>
+            <Img cursor="pointer" wd="35rem" src={kakaoIcon} />
           </button>
           <button>
-            <img
-              src="https://w.namu.la/s/86283733ababc9c88b9a5439aee56a911be2ad08d1685fd3cc130cf3bee72c919dfb2ea3c3a2c62093afa4d6e6c85f9177e5eb1301d8757038d59f557141d0b91b0c051fa4fccb8ee0e911930d50aaeb799ccb803bd92752dd69a7384c1d487a"
-              alt=""
-            />
+            <Img cursor="pointer" wd="35rem" src={googleIcon} />
           </button>
         </SocialLogin>
         <SocialLogin>

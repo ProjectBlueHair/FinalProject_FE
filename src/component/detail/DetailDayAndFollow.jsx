@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import DetailFollow from "./DetailFollow";
 import DetailComment from "./detailcomment/DetailComment";
@@ -6,9 +6,21 @@ import { __getDetailCollabo } from "../../redux/slice/detailSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import { AiOutlineUp, AiOutlineDown } from "react-icons/ai";
 import Img from "../elem/Img";
-import { save, share, collaboPlus, report } from "../../asset/pic";
+import { save, share, collaboPlus, report, kakaoIcon } from "../../asset/pic";
 import { PATH } from "../../Router";
 import StLink from "../elem/Link";
+import {
+  FacebookIcon,
+  FacebookShareButton,
+  LinkedinIcon,
+  LinkedinShareButton,
+  TwitterIcon,
+  TwitterShareButton,
+} from "react-share";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import useTypeModal from "../../modal/hooks/useTypeModal";
+import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
+import { useShare } from "../../hook/useShare";
 
 const DetailDayAndFollow = ({ detail }) => {
   const { id } = useParams();
@@ -17,7 +29,42 @@ const DetailDayAndFollow = ({ detail }) => {
   const textLimit = useRef(100);
   const navigate = useNavigate();
   const shortContent = detail?.contents.slice(0, textLimit.current);
+  const [shareOpen, setShareOpen] = useState(false);
+  console.log(shareOpen);
+  const { $openModal, $closeModal } = useTypeModal();
+  const onShare = useCallback(() => {
+    setShareOpen(!shareOpen);
+  });
+  const shared = useRef(null);
+  useToggleOutSideClick(shared, setShareOpen);
+  const currentUrl = window.location.href;
+  const urlShareClick = () => {
+    $openModal({
+      type: "alert",
+      props: {
+        message: "URL주소가 복사가 되었습니다!",
+        type: "info",
+      },
+    });
+  };
+  // 카카오 공유 로직
+  // kakao SDK import
+  const status = useShare("https://developers.kakao.com/sdk/js/kakao.js");
+  // kakao SDK 초기화
+  useEffect(() => {
+    if (status === "ready" && window.Kakao) {
+      // 중복 initialization 방지
+      if (!window.Kakao.isInitialized()) {
+        window.Kakao.init("발급받은 js key");
+      }
+    }
+  }, [status]);
 
+  const kakaoShare = () => {
+    window.Kakao.Link.sendScrap({
+      requestUrl: currentUrl,
+    });
+  };
   return (
     <DetailLeftTotal>
       <DetailMiddleTop>
@@ -27,9 +74,42 @@ const DetailDayAndFollow = ({ detail }) => {
               <Img wd="3rem" src={save} />
               <div>보관함 추가</div>
             </div>
-            <div>
+            <div onClick={onShare} ref={shared}>
               <Img wd="3rem" src={share} />
-              <div>공유</div>
+              <div style={{ width: "30px" }}>공유</div>
+              {shareOpen ? (
+                <ShareDiv>
+                  <FacebookShareButton url={currentUrl}>
+                    <FacebookIcon
+                      size={20}
+                      round={true}
+                      borderRadius={24}
+                    ></FacebookIcon>
+                  </FacebookShareButton>
+                  <TwitterShareButton url={currentUrl}>
+                    <TwitterIcon
+                      size={20}
+                      round={true}
+                      borderRadius={24}
+                    ></TwitterIcon>
+                  </TwitterShareButton>
+                  <LinkedinShareButton url={currentUrl}>
+                    <LinkedinIcon
+                      size={20}
+                      round={true}
+                      borderRadius={24}
+                    ></LinkedinIcon>
+                  </LinkedinShareButton>
+                  <CopyToClipboard text={currentUrl}>
+                    <URLShareBtn onClick={urlShareClick}>url</URLShareBtn>
+                  </CopyToClipboard>
+                  <button onClick={kakaoShare}>
+                    <Img wd="2rem" src={kakaoIcon} />
+                  </button>
+                </ShareDiv>
+              ) : (
+                ""
+              )}
             </div>
             <div>
               <Img wd="3rem" src={report} />
@@ -124,4 +204,49 @@ const DetailMiddleTop = styled.div`
   border-radius: 20px;
   background-color: #f2f2f2;
   padding: 10px 20px;
+`;
+
+const ShareDiv = styled.div`
+  width: 70%;
+  height: 3.5rem;
+  border: 1px solid #ff4d00;
+  position: relative;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-around;
+  button {
+    border: transparent;
+    display: flex;
+    align-items: center;
+  }
+  animation-name: shareBox;
+  animation-duration: 0.5s;
+
+  @keyframes shareBox {
+    0% {
+      transform: scaleX(0);
+      transform-origin: 0% 0%;
+    }
+    100% {
+      transform: scaleX(1);
+      transform-origin: 0% 0%;
+    }
+  }
+`;
+
+const URLShareBtn = styled.button`
+  width: 20px;
+  height: 20px;
+  color: white;
+  border-radius: 24px;
+  border: 0px;
+  font-weight: 800;
+  font-size: 9px;
+  padding-left: 3px;
+  cursor: pointer;
+  background-color: #ff4d00;
+  &:hover {
+    background-color: #e24400;
+  }
 `;

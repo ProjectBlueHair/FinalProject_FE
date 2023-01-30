@@ -181,7 +181,6 @@ const SignUpModal = ({ onClose }) => {
         "member/validate/nickname",
         post
       );
-      console.log(data);
       if (data.customHttpStatus === 4092) {
         $openModal({
           type: "alert",
@@ -289,7 +288,6 @@ const SignUpModal = ({ onClose }) => {
   // 회원가입 버튼 클릭시 실행
   const onSignUpBtn = () => {
     uploadFiles(s3image).then((res) => {
-      console.log(res);
       const profileImg = res === null ? null : res.Location;
       postSignUp({
         nickname,
@@ -300,7 +298,13 @@ const SignUpModal = ({ onClose }) => {
         if (res === undefined) {
           return;
         } else {
-          alert(res.message);
+          $openModal({
+            type: "alert",
+            props: {
+              message: res.message,
+              type: "info",
+            },
+          });
           closeModal?.();
         }
       });

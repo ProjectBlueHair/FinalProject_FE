@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { AiOutlineUp, AiOutlineDown } from "react-icons/ai";
 import { getCookies } from "../../dataManager/cookie";
@@ -12,6 +12,7 @@ import {
 
 const DetailFollow = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { id } = useParams();
   const [followMore, setFollowMore] = useState(true);
   useEffect(() => {
@@ -19,13 +20,11 @@ const DetailFollow = () => {
   }, []);
   //작곡가 프로필/ 이름/ 악기 이름
   const detailCollabo = useSelector((state) => state.detail.collabo.data);
-
   const detailFollowOne = detailCollabo?.slice(0, 1);
   const detailFollowAll = detailCollabo?.slice(1);
   const moreClicker = () => {
     setFollowMore(!followMore);
   };
-
   const acToken = getCookies("accesstoken");
   const FollowClick = async (fol) => {
     const follow = {
@@ -35,19 +34,29 @@ const DetailFollow = () => {
     await dispatch(__putDetailFollow(follow));
     dispatch(__getDetailCollabo(id));
   };
+
+  const MypageMove = (name) => {
+    navigate(`/mypage/${name}`);
+  };
   return (
     <FollowAll>
       {detailFollowOne?.map((collabo, index) => (
         <FollowTotal key={index}>
           <FollowTop>
             <FollowImgText>
-              <img src={collabo.profileImg} alt="" />
+              <img
+                src={collabo.profileImg}
+                alt=""
+                onClick={() => MypageMove(collabo?.nickname)}
+              />
               <FollowMiddle>
                 <FollowWriteInstrument>
                   {collabo?.musicPartsList?.map((part, index) => (
                     <div key={index}>{part}</div>
                   ))}
-                  <span>{collabo.nickname}</span>
+                  <span onClick={() => MypageMove(collabo?.nickname)}>
+                    {collabo.nickname}
+                  </span>
                 </FollowWriteInstrument>
                 <div style={{ marginTop: "10px" }}>
                   팔로워 {collabo.followerCount} 명
