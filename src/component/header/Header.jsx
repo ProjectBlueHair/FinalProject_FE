@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Flex from "../elem/Flex";
 import Img from "../elem/Img";
 import {
@@ -11,33 +11,33 @@ import {
   settings,
   upload,
 } from "../../asset/pic";
-import styled, { ThemeConsumer } from "styled-components";
+import styled from "styled-components";
 import Input from "../elem/Input";
 import useModal from "../modal/useModal";
 import { useNavigate } from "react-router-dom";
 import useTypeModal from "../../modal/hooks/useTypeModal";
-import AlarmDot from "../../asset/icon/AlarmDot";
 import { PATH } from "../../Router";
 import { getCookies, removeCookies } from "../../dataManager/cookie";
 import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
-  userErrorSelector,
   userSelector,
+  __clearUser,
   __getGeneralUserInfo,
 } from "../../redux/slice/userSlice";
 import Span from "../elem/Span";
-import { serverURL } from "../../dataManager/apiConfig";
 import Div from "../elem/Div";
+import { instanceAxios, serverURL } from "../../dataManager/apiConfig";
 import { EventSourcePolyfill } from "event-source-polyfill";
+import { alarmSelector, __getAlarm } from "../../redux/slice/mainSlice";
+const iconSize = "4rem";
+
 const Header = () => {
   const navigate = useNavigate();
-  const iconSize = "4rem";
   const Sign = useRef(null);
   // 토글창 상태관리
   const [isOpen, setIsOpen] = useState(false);
   const { openModal } = useModal();
-  const { $openModal, $closeModal } = useTypeModal();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -52,42 +52,41 @@ const Header = () => {
   const onClickLogOut = () => {
     removeCookies("accesstoken", { path: "/" });
     removeCookies("refreshtoken", { path: "/" });
+    dispatch(__clearUser());
     setIsOpen(false);
     navigate("/");
   };
-  const acToken = getCookies("accesstoken");
   useToggleOutSideClick(Sign, setIsOpen);
-  const [isClicked, setIsClicked] = useState({ alarm: false });
 
+  const [isClicked, setIsClicked] = useState({ alarm: false });
+  const { $openModal, $closeModal } = useTypeModal();
   const dispatch = useAppDispatch();
+  const RefreshToken = getCookies("refreshtoken");
+  const AccessToken = getCookies("accesstoken");
   const user = useAppSelector(userSelector);
+  const alarmCount = useAppSelector(alarmSelector);
 
   useEffect(() => {
-    acToken && dispatch(__getGeneralUserInfo());
-  }, [user.nickname]);
-
-  // useEffect(() => {
-  //   const RefreshToken = getCookies("refreshtoken");
-  //   const AccessToken = getCookies("accesstoken");
-  //   const es = new EventSourcePolyfill(
-  //     `${serverURL}/subscribe`,
-  //     {
-  //       headers: {
-  //         AccessToken: AccessToken,
-  //         RefreshToken: RefreshToken,
-  //       },
-  //     }
-  //   );
-  //   es.onmessage = (event) => {
-  //     console.log("polyfil", event.data);
-  //   };
-
-  // }, []);
-
+    if (!AccessToken && user.nickname) dispatch(__clearUser());
+    dispatch(__getGeneralUserInfo());
+    if (AccessToken && user.nickname) {
+      const es = new EventSourcePolyfill(`${serverURL}/subscribe`, {
+        headers: {
+          AccessToken: AccessToken,
+          RefreshToken: RefreshToken,
+          heartBeatTimeout: 3600 * 1000, // 1시간
+        },
+      });
+      es.onmessage = (event) => {
+        dispatch(__getAlarm());
+      };
+    }
+  }, [user.nickname, AccessToken]);
+  
   const onClickSetPage = () => {
     navigate("/setpage");
   };
-
+  
   const onClickMypage = () => {
     navigate(`/mypage/${user.nickname}`);
   };
@@ -154,9 +153,8 @@ const Header = () => {
             wd={iconSize}
             src={notifications}
           />
-          <Div fc="var(--ec-main-color)" mg="-2rem 0 0 -1.5rem">
-            4
-          </Div>
+          {/* <AlarmCount>4</AlarmCount> */}
+          {alarmCount ? <AlarmCount>{alarmCount}</AlarmCount> : null}
         </Flex>
         <Img
           onClick={() => navigate("/post")}
@@ -178,7 +176,9 @@ const Header = () => {
           wd={iconSize}
           src={settings}
         />
-        <div ref={Sign}>
+        <
+        
+        ref={Sign}>
           {user.profileImg ? (
             <Img
               cursor="pointer"
@@ -235,7 +235,16 @@ const Grid = styled.div`
   grid-template-columns: 1fr 1fr 1fr;
   gap: 1rem;
 `;
-const AlarmCount = styled.div``;
+const AlarmCount = styled.div`
+  position: absolute;
+  top: 20px;
+  right: 193px;
+  border-radius: 20px;
+  color: white;
+  padding: 0.3rem 0.7rem;
+  background-color: ${(props) => props.theme.color.main};
+  font-size: 1.1rem;
+`;
 
 const ToggleDiv = styled.div`
   position: absolute;

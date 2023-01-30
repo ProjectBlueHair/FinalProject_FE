@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import {
   collaboApprove,
   collaboDescriptionSelector,
-  errorSelector,
+  postingErrorSelector,
   __cleanUp,
   __getAudios,
   __getCollaboRequested,
@@ -20,7 +20,6 @@ import useTypeModal from "../../modal/hooks/useTypeModal";
 
 const PostingCollaboRequested = () => {
   const { id, postId } = useParams();
-  console.log("id", id, "postId", postId);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   useEffect(() => {
@@ -37,15 +36,8 @@ const PostingCollaboRequested = () => {
     return () => {
       dispatch(__cleanUp());
     };
-  }, []);
-  useEffect(() => {}, []);
+  }, [id]);
   const collaboDescription = useAppSelector(collaboDescriptionSelector);
-  const error = useAppSelector(errorSelector);
-  if (error) {
-    alert(error);
-    // console.log(error);
-    navigate(PATH.main);
-  }
   const { $openModal, $closeModal } = useTypeModal();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

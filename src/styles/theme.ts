@@ -10,7 +10,6 @@ export const color = {
   chatBubbleMine: "rgba(255, 77, 0, 0.1);",
   rgbaBorder1: "rgba(0, 0, 0, 0.1)",
 };
-
 const theme = {
   color,
 };

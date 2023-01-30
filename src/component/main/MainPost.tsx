@@ -15,7 +15,7 @@ import {
   __MainTogglePlay,
   __mainPostLike,
 } from "../../redux/slice/mainSlice";
-import { CurrentMusic, Post } from "../../model/PostModel";
+import { CurrentMusic, Post } from "../../model/MainModel";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import { useNavigate } from "react-router-dom";
 const MainPost: React.FC<{ post: Post; index: number }> = (props) => {

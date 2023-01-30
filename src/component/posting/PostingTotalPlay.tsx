@@ -8,20 +8,17 @@ import { iconSize } from "../../styles/GlobalStyle";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
   audioControlSelector,
-  __cleanUp,
   __seekTo,
   __togglePlay,
 } from "../../redux/slice/postingSlice";
 
 import styled from "styled-components";
-import useTypeModal from "../../modal/hooks/useTypeModal";
 import PlayLoading from "../elem/PlayLoading";
 
 const PostingTotalPlay = () => {
   const audioPlayer = useRef<AudioPlayer>(null);
   const dispatch = useAppDispatch();
   const progressConrol = useAppSelector(audioControlSelector);
-  const { $openModal, $closeModal } = useTypeModal();
   const [isLoading, setIsLoading] = useState(false);
   console.log("progressConrol.onLoad", progressConrol.onLoad);
 
@@ -50,8 +47,8 @@ const PostingTotalPlay = () => {
             autoPlayAfterSrcChange={false}
             src={progressConrol.src}
             muted={true}
-            onPlay={handlePlay}
-            onPause={handlePause}
+            // onPlay={handlePlay} // safari에서 유저 interaction으로 인식 안해서 재생 안됨. 따라서 이미지에다가 onClick이벤트에 핸들러를 넣어줌
+            // onPause={handlePause}
             onSeeking={handleSeeking}
             autoPlay={false}
             ref={audioPlayer}
@@ -72,6 +69,7 @@ const PostingTotalPlay = () => {
                 <PlayLoading />
               ) : (
                 <Img
+                  onClick={()=>{handlePlay()}}
                   mg="0 2rem 0 0"
                   type="icon"
                   wd={iconSize}
@@ -79,7 +77,10 @@ const PostingTotalPlay = () => {
                 />
               ),
               pause: (
-                <Img mg="0 2rem 0 0" type="icon" wd={iconSize} src={pause} />
+                <Img 
+                onClick={()=>{handlePause()}}
+
+                mg="0 2rem 0 0" type="icon" wd={iconSize} src={pause} />
               ),
             }}
             customControlsSection={[]}

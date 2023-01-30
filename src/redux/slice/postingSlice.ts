@@ -19,18 +19,18 @@ export const titleSelector = (state: AppState) => state.posting.title;
 export const collaboRequestDataSelector = (state: AppState) =>
   state.posting.collaboRequestData;
 export const loadingSelector = (state: AppState) => state.posting.isLoading;
-export const errorSelector = (state: AppState) => state.posting.error;
+export const postingErrorSelector = (state: AppState) => state.posting.error;
 export const collaboDescriptionSelector = (state: AppState) =>
   state.posting.collaboDescription;
 export interface PostingState {
-  title: string;
-  collaboDescription: string;
-  audios: Audio[];
-  progressControl: ProgressControl;
-  audio: Audio;
-  collaboRequestData: CollaboRequestData;
-  isLoading: boolean;
-  error: unknown;
+  title: string; //작성 form 컴포넌트
+  collaboDescription: string; // 콜라보 승인 컴포넌트
+  progressControl: ProgressControl; // total play 컴포넌트
+  audios: Audio[]; // audio bars 컴포넌트
+  audio: Audio; // form audio 컴포넌트 
+  collaboRequestData: CollaboRequestData; // form collabo 컴포넌트
+  isLoading: boolean; // 공통
+  error: any; // 공통 
 }
 const initialState = {
   title: "",

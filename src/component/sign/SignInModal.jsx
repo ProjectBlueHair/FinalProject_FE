@@ -6,6 +6,8 @@ import { setCookie } from "../../dataManager/cookie";
 import { instanceAxios } from "../../dataManager/apiConfig";
 import Img from "../elem/Img";
 import { mainLogo, log, kakaoIcon, googleIcon } from "../../asset/pic";
+import { useAppDispatch } from "../../redux/config";
+import { __getGeneralUserInfo } from "../../redux/slice/userSlice";
 import useTypeModal from "../../modal/hooks/useTypeModal";
 export const kakaoKEY = process.env.REACT_APP_KakaoKey;
 export const kakaoREDIRECT = process.env.REACT_APP_KaKaoREDIRECT;
@@ -13,6 +15,7 @@ export const kakaoREDIRECT = process.env.REACT_APP_KaKaoREDIRECT;
 const SignInModal = ({ onClose }) => {
   const { openModal } = useModal();
   const { closeModal } = useModal();
+  const dispatch = useAppDispatch()
   const { $openModal, $closeModal } = useTypeModal();
 
   const onClickSignUpModal = () => {
@@ -100,6 +103,8 @@ const SignInModal = ({ onClose }) => {
             path: "/",
             maxAge: 1800,
           });
+          
+          dispatch(__getGeneralUserInfo())
           $openModal({
             type: "alert",
             props: {

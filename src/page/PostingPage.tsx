@@ -13,6 +13,8 @@ import PostingCollaboRequested from "../component/posting/PostingCollabReqeusted
 import { getCookies } from "../dataManager/cookie";
 import { ALERT_TYPE } from "../modal/modals/AlertModal";
 import useTypeModal from "../modal/hooks/useTypeModal";
+import UserCheck from "../util/UserCheck";
+import ErrorCheck from "../util/ErrorCheck";
 
 export const AUDIO_BAR_GAP = "1.5rem";
 
@@ -23,19 +25,11 @@ const PostingPage = () => {
   const EDITPAGE = PATH.edit.split("/")[1] === CURRENT_PATH;
   const COLLABOPAGE = PATH.collabo.split("/")[1] === CURRENT_PATH;
   const COLLABOREQUESTED = PATH.collaboRequested.split("/")[1] === CURRENT_PATH;
-  const { $openModal } = useTypeModal();
-
-  !getCookies("accesstoken") &&
-    $openModal({
-      type: "alert",
-      props: {
-        message: "로그인이 필요한 페이지 (기능) 입니다.",
-        type: ALERT_TYPE.info,
-        to: PATH.main,
-      },
-    });
+ 
   return (
     <Flex direction="column" justify="flex-start" >
+      <UserCheck/>
+      <ErrorCheck/>
       <Header />
       <AudioBarsBackground gap={AUDIO_BAR_GAP}>
         <PostingTitle />
