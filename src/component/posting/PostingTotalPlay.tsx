@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useRef } from "react";
 import Flex from "../elem/Flex";
 import Img from "../elem/Img";
@@ -40,7 +40,7 @@ const PostingTotalPlay = () => {
     dispatch(__seekTo(audioPlayer.current?.audio.current?.currentTime));
   };
   return (
-    <Flex>
+    <Fragment>
       {progressConrol.src ? (
         <ProgressWrapper>
           <AudioPlayer
@@ -87,7 +87,7 @@ const PostingTotalPlay = () => {
           />
         </ProgressWrapper>
       ) : null}
-    </Flex>
+    </Fragment>
   );
 };
 
