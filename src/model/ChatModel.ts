@@ -3,6 +3,7 @@ export interface ChatItem {
   profileImg: string;
 }
 export interface ChatBubbleModel {
+  id : number;
   from: string;
   profileImg: string;
   message: string [];

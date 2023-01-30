@@ -25,7 +25,6 @@ const PostingPage = () => {
   const EDITPAGE = PATH.edit.split("/")[1] === CURRENT_PATH;
   const COLLABOPAGE = PATH.collabo.split("/")[1] === CURRENT_PATH;
   const COLLABOREQUESTED = PATH.collaboRequested.split("/")[1] === CURRENT_PATH;
- 
   return (
     <Flex direction="column" justify="flex-start" >
       <UserCheck/>

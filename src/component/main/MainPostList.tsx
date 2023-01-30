@@ -13,7 +13,6 @@ const MainPostList = () => {
   const { posts, nextPage, isLoading, error } = useAppSelector<MainState>(
     (state) => state.main
   );
-  console.log("POSTLIST POSTS", posts);
   if (error) {
     alert(''+error);
   }
