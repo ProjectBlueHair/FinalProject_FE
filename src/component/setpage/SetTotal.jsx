@@ -17,6 +17,7 @@ import { __getUserInfo } from "../../redux/slice/detailSlice";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import useTypeModal from "../../modal/hooks/useTypeModal";
+import { reissuance } from "../../util/Reissuance";
 
 const SetTotal = () => {
   const dispatch = useDispatch();
@@ -359,14 +360,16 @@ const SetTotal = () => {
         if (res === undefined) {
           return;
         } else {
-          $openModal({
-            type: "alert",
-            props: {
-              message: res.message,
-              type: "info",
-            },
-          });
-          navigate("/");
+          if (reissuance()) {
+            $openModal({
+              type: "alert",
+              props: {
+                message: res.message,
+                type: "info",
+              },
+            });
+            navigate("/");
+          }
         }
       });
     } else {

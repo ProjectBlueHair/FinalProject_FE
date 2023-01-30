@@ -11,8 +11,7 @@ instanceAxios.interceptors.request.use((config) => {
   const acc = getCookies("accesstoken");
   const ref = getCookies("refreshtoken");
   config.headers["AccessToken"] = `${acc}`;
-  config.headers["RefreshToken"] = `${ref}`;
-  config.headers["Access-Control-Allow-Origin"] = "*";
+  // config.headers["Access-Control-Allow-Origin"] = "*";
   return config;
 });
 
