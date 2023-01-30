@@ -12,6 +12,13 @@ import {
 import { instanceAxios } from "../../dataManager/apiConfig";
 import { Response } from "../../model/ResponseModel";
 
+export const formSelector = {
+  title: (state: AppState) => state.posting.form.title,
+  postImg: (state: AppState) => state.posting.form.postImg,
+  collaboNotice: (state: AppState) => state.posting.form.collaboNotice,
+  contents: (state: AppState) => state.posting.form.contents,
+  
+};
 export const audiosSelector = (state: AppState) => state.posting.audios;
 export const audioControlSelector = (state: AppState) =>
   state.posting.progressControl;
@@ -24,16 +31,18 @@ export const collaboDescriptionSelector = (state: AppState) =>
   state.posting.collaboDescription;
 export interface PostingState {
   title: string; //작성 form 컴포넌트
+  form: Form;
   collaboDescription: string; // 콜라보 승인 컴포넌트
   progressControl: ProgressControl; // total play 컴포넌트
   audios: Audio[]; // audio bars 컴포넌트
-  audio: Audio; // form audio 컴포넌트 
+  audio: Audio; // form audio 컴포넌트
   collaboRequestData: CollaboRequestData; // form collabo 컴포넌트
   isLoading: boolean; // 공통
-  error: any; // 공통 
+  error: any; // 공통
 }
 const initialState = {
   title: "",
+  form: { contents: "", collaboNotice: "", postImg: "", title: "" },
   audios: [] as Audio[],
   progressControl: {
     isPlaying: false,
@@ -62,7 +71,10 @@ export const postingSlice = createSlice({
     __typeTitle: (state, { payload }) => {
       state.title = payload;
     },
-
+    __form: (state, { payload }) => {
+      state.form = { ...state.form, ...payload };
+      console.log("state.form", state.form);
+    },
     __addNewAudio: (state, { payload }) => {
       state.progressControl.src = state.progressControl.src || payload[0];
       payload.forEach((musicFile: string) => {
@@ -241,5 +253,6 @@ export const {
   __cleanUp,
   __setCollaboPart,
   __audioOnLoaded,
+  __form,
 } = postingSlice.actions;
 export default postingSlice.reducer;

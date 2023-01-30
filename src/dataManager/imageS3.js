@@ -15,6 +15,7 @@ export const uploadFiles = (file) => {
     AWS.config.update({
       accessKeyId: AK,
       secretAccessKey: SK,
+      region:'ap-northeast-2'
     });
     return new AWS.S3.ManagedUpload({
       params: {

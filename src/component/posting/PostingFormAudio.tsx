@@ -3,6 +3,8 @@ import styled from "styled-components";
 import useTypeModal from "../../modal/hooks/useTypeModal";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import { loadingSelector, __addNewAudio } from "../../redux/slice/postingSlice";
+import theme from "../../styles/theme";
+import Div from "../elem/Div";
 import Flex, { StFlex } from "../elem/Flex";
 import Span from "../elem/Span";
 import { AUDIO_BAR_HEIGHT, AUDIO_BAR_RADIUS } from "./PostingAudioBars";
@@ -11,17 +13,23 @@ const PostingFormAudio = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const defaultText = () => {
     return (
-      <Flex direction="column">
-        <div>드래그 앤 드랍으로 음악을 추가하세요</div>
-        <div
+      <Flex direction="column" gap="0.5rem">
+        <div>드래그 앤 드롭으로 악기를 추가해주세요</div>
+        <Div
           onClick={() => {
             fileInputRef.current?.click();
           }}
-          style={{ textDecoration: "underline", cursor: "pointer" }}
+          style={{
+            textDecoration: "underline",
+            cursor: "pointer",
+          }}
+          fc={theme.color.secondaryText}
         >
-          또는 여기를 클릭해서 파일을 선택하세요.
-        </div>
-        <div>(현재 .wav 형식만 가능합니다.)</div>
+          또는 클릭해서 파일 추가하기       <Span fs="1.2rem">
+          (현재 .wav 형식만 가능합니다.)
+        </Span>
+        </Div>
+ 
       </Flex>
     );
   };
@@ -60,7 +68,6 @@ const PostingFormAudio = () => {
     }
   }, []);
 
-
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
@@ -71,7 +78,10 @@ const PostingFormAudio = () => {
           setText(defaultText());
           return $openModal({
             type: "alert",
-            props: { message: '유효하지 않은 오디오 형식입니다.', type: "error" },
+            props: {
+              message: "유효하지 않은 오디오 형식입니다.",
+              type: "error",
+            },
           });
         }
         arr.push(URL.createObjectURL(files[i]));
@@ -80,7 +90,6 @@ const PostingFormAudio = () => {
       setText(defaultText());
     }
   };
-
 
   return (
     <AudioDragForm
@@ -98,7 +107,8 @@ const PostingFormAudio = () => {
     >
       <Flex
         type="audioBar"
-        isNewAudio={true}
+        isNewAudio={false}
+        isFormAudio={true}
         radius={AUDIO_BAR_RADIUS}
         hg={AUDIO_BAR_HEIGHT}
       >

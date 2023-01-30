@@ -39,8 +39,8 @@ const ChatBubbleList = () => {
           <Flex key={bubble.id} justify="flex-end" gap="1rem" align="flex-end">
             <Div>{bubble.time}</Div>
             <Flex wd="none" direction="column" gap="1rem" align="flex-end">
-              {bubble.message.map((msg) => (
-                <ChatBubble isMine={true}>{msg}</ChatBubble>
+              {bubble.message.map((msg, index) => (
+                <ChatBubble key={index} isMine={true}>{msg}</ChatBubble>
               ))}
             </Flex>
           </Flex>
@@ -53,8 +53,8 @@ const ChatBubbleList = () => {
               src={bubble.profileImg}
             />
             <Flex wd="none" direction="column" gap="1rem" align="flex-end">
-              {bubble.message.map((msg) => (
-                <ChatBubble isMine={false}>{msg}</ChatBubble>
+              {bubble.message.map((msg, index) => (
+                <ChatBubble key={index} isMine={false}>{msg}</ChatBubble>
               ))}
             </Flex>
             <Flex wd="none" align="flex-end" hg="100%">
