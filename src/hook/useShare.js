@@ -56,6 +56,7 @@ const useShare = (src) => {
     };
     // 의존성 배열에 src가 변경될때 마다 리렌더링시킴
   }, [src]);
+  return status;
 };
 
 export { useShare };

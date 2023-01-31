@@ -1,23 +1,30 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Img from "../elem/Img";
-import {
-  facebook,
-  insta,
-  like,
-  linkedIn,
-  twitter,
-  view,
-} from "../../asset/pic";
+import { facebook, insta, linkedIn, twitter, kakaoIcon } from "../../asset/pic";
 import MypageLeftBottom from "./MypageLeftBottom";
 import { instanceAxios } from "../../dataManager/apiConfig";
 import { useNavigate, useParams } from "react-router-dom";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useDispatch } from "react-redux";
+import {
+  FacebookIcon,
+  FacebookShareButton,
+  LinkedinIcon,
+  LinkedinShareButton,
+  TwitterIcon,
+  TwitterShareButton,
+} from "react-share";
+import { useShare } from "../../hook/useShare";
+import useTypeModal from "../../modal/hooks/useTypeModal";
+export const kakaoJS = process.env.REACT_APP_KaKaoJSKey;
 
 const MypageLeft = () => {
   const { nickname } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const currentUrl = window.location.href;
+  const { $openModal, $closeModal } = useTypeModal();
   const [myShare, setMyShare] = useState(false);
   const mySetInformation = async () => {
     try {
@@ -37,6 +44,49 @@ const MypageLeft = () => {
   console.log("2", information);
 
   const mypageFollow = () => {};
+
+  const urlShareClick = () => {
+    $openModal({
+      type: "alert",
+      props: {
+        message: "URL주소가 복사가 되었습니다!",
+        type: "info",
+      },
+    });
+  };
+
+  // 카카오 공유 로직
+  // kakao SDK import
+  const status = useShare("https://developers.kakao.com/sdk/js/kakao.js");
+  // kakao SDK 초기화
+  useEffect(() => {
+    if (status === "ready" && window.Kakao) {
+      // 중복 initialization 방지
+      if (!window.Kakao.isInitialized()) {
+        window.Kakao.init(kakaoJS);
+      }
+    }
+  }, [status]);
+
+  const kakaoShare = () => {
+    window.Kakao.Link.sendDefault({
+      objectType: "feed",
+      content: {
+        title: "우연한 만남으로 시작되고 쌓이는 음악 콜라보 서비스",
+        description: `${information.nickname}님의 페이지로 구경하러 오세요!`,
+        imageUrl:
+          "https://velog.velcdn.com/images/koz8615/post/86ed8ae9-89f3-4f3e-aeb5-b390d8fd6547/image.png",
+        link: {
+          webUrl: currentUrl,
+        },
+      },
+      itemContent: {
+        profileText: information.nickname,
+        profileImageUrl: information.profileImg,
+      },
+    });
+  };
+
   return (
     <LeftTotalDiv>
       <MypageLeftDiv>
@@ -63,9 +113,43 @@ const MypageLeft = () => {
         )}
         <MypageBtn onClick={() => setMyShare(!myShare)}>
           <div>공유</div>
-          {myShare ? <MypageShare>5개 링크 들어갈곳</MypageShare> : ""}
         </MypageBtn>
-
+        {myShare ? (
+          <MypageShare>
+            <FacebookShareButton url={currentUrl}>
+              <FacebookIcon
+                size={20}
+                round={true}
+                borderRadius={24}
+              ></FacebookIcon>
+            </FacebookShareButton>
+            <TwitterShareButton url={currentUrl}>
+              <TwitterIcon
+                size={20}
+                round={true}
+                borderRadius={24}
+              ></TwitterIcon>
+            </TwitterShareButton>
+            <LinkedinShareButton url={currentUrl}>
+              <LinkedinIcon
+                size={20}
+                round={true}
+                borderRadius={24}
+              ></LinkedinIcon>
+            </LinkedinShareButton>
+            <CopyToClipboard text={currentUrl}>
+              <URLShareBtn onClick={urlShareClick}>url</URLShareBtn>
+            </CopyToClipboard>
+            <button
+              onClick={kakaoShare}
+              style={{ backgroundColor: "transparent" }}
+            >
+              <Img wd="2rem" src={kakaoIcon} />
+            </button>
+          </MypageShare>
+        ) : (
+          ""
+        )}
         <div style={{ marginTop: "1rem" }}>{information?.email}</div>
         <RowView style={{ marginTop: "2rem" }}>
           <button
@@ -236,11 +320,46 @@ const MoreViewDiv = styled.div`
 `;
 
 const MypageShare = styled.div`
-  width: 20rem;
+  width: 60%;
   position: relative;
-  border: 1px solid black;
-  top: 20px;
-  right: 20px;
+  border: 1px solid #ff4d00;
+  border-radius: 5px;
+  padding: 10px;
   z-index: 1;
   background-color: white;
+  display: flex;
+  justify-content: space-around;
+  animation: shareBox;
+  animation-duration: 0.5s;
+  @keyframes shareBox {
+    0% {
+      transform: scaleY(0);
+      transform-origin: 100% 0%;
+    }
+    100% {
+      transform: scaleY(1);
+      transform-origin: 100% 0%;
+    }
+  }
+  button {
+    border: transparent;
+    display: flex;
+    align-items: center;
+  }
+`;
+
+const URLShareBtn = styled.button`
+  width: 20px;
+  height: 20px;
+  color: white;
+  border-radius: 24px;
+  border: 0px;
+  font-weight: 800;
+  font-size: 9px;
+  padding-left: 3px;
+  cursor: pointer;
+  background-color: #ff4d00;
+  &:hover {
+    background-color: #e24400;
+  }
 `;

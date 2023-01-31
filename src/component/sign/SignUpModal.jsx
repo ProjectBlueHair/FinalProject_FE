@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Modal from "../modal/Modal";
 import styled from "styled-components";
 import useModal from "../modal/useModal";
@@ -129,12 +129,12 @@ const SignUpModal = ({ onClose }) => {
     },
     [password]
   );
-
+  console.log(isPwLength && isPwNum && isPwStr && isPwSymbol);
   // 비밀번호 체크
   const onChangePasswordCheck = useCallback((e) => {
     const passwordC = e.target.value;
     setPasswordCheck(passwordC);
-    if (password === passwordC && password.length === passwordC.length) {
+    if (password === passwordC) {
       setIsPasswordCheck(true);
       setPwMsg("");
     } else {
@@ -310,7 +310,14 @@ const SignUpModal = ({ onClose }) => {
       });
     });
   };
-
+  useEffect(() => {
+    if (password === passwordCheck) {
+      setIsPasswordCheck(true);
+    } else {
+      setIsPasswordCheck(false);
+    }
+  }, [password, passwordCheck]);
+  console.log(isPasswordCheck);
   return (
     <Modal onClose={onClose}>
       <SignUpTotal>
@@ -436,13 +443,7 @@ const SignUpModal = ({ onClose }) => {
             )}
           </PasswordCheck>
           <SignUpTitle style={{ marginTop: "5px" }}>Password Check</SignUpTitle>
-          {!(
-            isPasswordCheck &&
-            isPwLength &&
-            isPwSymbol &&
-            isPwStr &&
-            isPwNum
-          ) ? (
+          {!isPasswordCheck ? (
             <SignUpDivBox>
               <input
                 type="password"

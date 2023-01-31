@@ -11,7 +11,7 @@ import DetailCommentView from "./DetailCommentView";
 const DetailComment = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
-  const { $openModal, $closeModal } = useTypeModal();
+  const { $openModal } = useTypeModal();
   useEffect(() => {
     dispatch(__getUserInfo());
     dispatch(__getComment(id));

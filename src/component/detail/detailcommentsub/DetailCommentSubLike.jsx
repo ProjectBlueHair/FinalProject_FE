@@ -11,13 +11,13 @@ import useTypeModal from "../../../modal/hooks/useTypeModal";
 const DetailCommentSubLike = ({ re }) => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { $openModal, $closeModal } = useTypeModal();
+  const { $openModal } = useTypeModal();
   const onNoSign = () => {
     $openModal({
       type: "alert",
       props: {
         message: "로그인이 필요한 페이지 (기능) 입니다.",
-        type: "info",
+        type: "error",
       },
     });
   };

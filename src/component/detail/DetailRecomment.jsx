@@ -10,7 +10,6 @@ import StLink from "../elem/Link";
 const DetailRecomment = () => {
   const [ReList, setReList] = useState();
   const navigate = useNavigate();
-  const { $openModal, $closeModal } = useTypeModal();
   const detailReCom = async () => {
     try {
       const {
