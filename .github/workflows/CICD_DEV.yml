@@ -1,7 +1,8 @@
 name: CICD_DEV
 on:
   push:
-    branches: [dev]
+  # 서비스 배포 후에 사용할 것
+    branches: []
 jobs:
   build:
     runs-on: ubuntu-latest
