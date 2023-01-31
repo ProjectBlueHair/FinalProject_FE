@@ -14,7 +14,7 @@ export { default as view } from "./view.svg";
 export { default as like } from "./like.svg";
 export { default as skipPrev } from "./skip-prev.svg";
 export { default as skipNext } from "./skip-next.svg";
-export { default as playPrimary } from "./play-primary.svg";
+export { default as playPrimary } from "./playPrimary.svg";
 export { default as more } from "./more.svg";
 export { default as mockPlaybar } from "./mock-playbar.svg";
 export { default as mockSoundbar } from "./mock-soundbar.svg";

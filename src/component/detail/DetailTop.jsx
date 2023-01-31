@@ -82,7 +82,7 @@ const DetailTop = () => {
             <DetailRowDiv>
               <Img wd="2rem" src={view} style={{ marginRight: "10px" }} />
               <div>{detail?.viewCount}</div>
-            </DetailRowDiv>
+            </DetailRowDiv> 
             <DetailRowDiv>
               {acToken === undefined ? (
                 <Img

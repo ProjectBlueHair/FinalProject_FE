@@ -22,7 +22,7 @@ export interface AudioData {
 export interface Form {
   contents: string;
   collaboNotice: string;
-  postImg: string | null;
+  postImg: string;
   title: string;
 }
 export interface CollaboForm {
@@ -46,6 +46,10 @@ export interface CollaboReqeustedAudioData {
   musicFile: string;
   musicPart: string;
   nickname: string;
+}
+export interface CollaboReqeustedForm {
+  title: string;
+  explain: string;
 }
 export interface CollaboRequestData {
   audios: CollaboAudio[];

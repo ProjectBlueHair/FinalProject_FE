@@ -37,16 +37,16 @@ const Router = () => {
           <Route path="/mypage/:nickname" element={<MyPage />} />
           <Route path="/setpage" element={<SetPage />} />
           <Route path={`${PATH.tag}/:tag`} element={<Tag />} />
-          <Route path={PATH.post} element={<PostingPage />} />
-          <Route path={"/postingtest"} element={<PostingPageNext />} />
-          <Route path={`${PATH.edit}/:id`} element={<PostingPage />} />
-          <Route path={`${PATH.collabo}/:id`} element={<PostingPage />} />
+          <Route path={'/posttest'} element={<PostingPage />} />
+          <Route path={PATH.post} element={<PostingPageNext />} />
+          <Route path={`${PATH.edit}/:id`} element={<PostingPageNext />} />
+          <Route path={`${PATH.collabo}/:id`} element={<PostingPageNext />} />
           <Route path={`${PATH.chat}`} element={<ChatPage />} />
           <Route path={`/test`} element={<PostingReactQueryTest />} />
           <Route path="/login/kakao" element={<KakaoLoginHandler />} />
           <Route
             path={`${PATH.collaboRequested}/:id/:postId`}
-            element={<PostingPage />}
+            element={<PostingPageNext />}
           />
           {/* <Route
             path={`${PATH.collaboRequested}/:id`}

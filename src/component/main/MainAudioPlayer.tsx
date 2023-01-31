@@ -122,7 +122,14 @@ const MainAudioPlayer = () => {
           ]}
           // customAdditionalControls={[]}
           customIcons={{
-            play: <Img className="playButton" type="icon" wd={iconSize} src={playPrimary} />,
+            play: (
+              <Img
+                className="playButton"
+                type="icon"
+                wd={iconSize}
+                src={playPrimary}
+              />
+            ),
             previous: (
               <Img
                 className="subIcon"
@@ -174,11 +181,9 @@ const Grid = styled.div`
     .playButton {
       margin-right: 2rem;
     }
-    .rhap_time{
+    .rhap_time {
       display: none;
     }
- 
-   
   }
 
   // audio player classes

@@ -26,9 +26,9 @@ const PostingPage = () => {
   const COLLABOPAGE = PATH.collabo.split("/")[1] === CURRENT_PATH;
   const COLLABOREQUESTED = PATH.collaboRequested.split("/")[1] === CURRENT_PATH;
   return (
-    <Flex direction="column" justify="flex-start" >
-      <UserCheck/>
-      <ErrorCheck/>
+    <Flex direction="column" justify="flex-start">
+      <UserCheck />
+      <ErrorCheck />
       <Header />
       <AudioBarsBackground gap={AUDIO_BAR_GAP}>
         <PostingTitle />
@@ -55,7 +55,6 @@ export const AudioBarsBackground = styled.div<{ gap: string }>`
   width: 100%;
   padding: 3.5rem 4rem 2rem;
   gap: ${({ gap }) => gap};
-
   background-image: linear-gradient(
       rgba(240, 240, 240, 0.5),
       rgba(255, 255, 255, 1)

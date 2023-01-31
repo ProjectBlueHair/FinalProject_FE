@@ -8,6 +8,7 @@ import {
   AudioData,
   CollaboRequested,
   CollaboRequestData,
+  CollaboReqeustedForm,
 } from "../../model/PostingModel";
 import { instanceAxios } from "../../dataManager/apiConfig";
 import { Response } from "../../model/ResponseModel";
@@ -17,22 +18,20 @@ export const formSelector = {
   postImg: (state: AppState) => state.posting.form.postImg,
   collaboNotice: (state: AppState) => state.posting.form.collaboNotice,
   contents: (state: AppState) => state.posting.form.contents,
-  
+  form: (state: AppState) => state.posting.form,
 };
 export const audiosSelector = (state: AppState) => state.posting.audios;
 export const audioControlSelector = (state: AppState) =>
   state.posting.progressControl;
-export const titleSelector = (state: AppState) => state.posting.title;
 export const collaboRequestDataSelector = (state: AppState) =>
   state.posting.collaboRequestData;
 export const loadingSelector = (state: AppState) => state.posting.isLoading;
 export const postingErrorSelector = (state: AppState) => state.posting.error;
-export const collaboDescriptionSelector = (state: AppState) =>
-  state.posting.collaboDescription;
+export const CollaboRequestedFormSelector = (state: AppState) =>
+  state.posting.collaboRequestedForm;
 export interface PostingState {
-  title: string; //작성 form 컴포넌트
   form: Form;
-  collaboDescription: string; // 콜라보 승인 컴포넌트
+  collaboRequestedForm: CollaboReqeustedForm; // 콜라보 승인 컴포넌트
   progressControl: ProgressControl; // total play 컴포넌트
   audios: Audio[]; // audio bars 컴포넌트
   audio: Audio; // form audio 컴포넌트
@@ -41,7 +40,6 @@ export interface PostingState {
   error: any; // 공통
 }
 const initialState = {
-  title: "",
   form: { contents: "", collaboNotice: "", postImg: "", title: "" },
   audios: [] as Audio[],
   progressControl: {
@@ -59,7 +57,7 @@ const initialState = {
     isSolo: false,
     isLoaded: false,
   } as Audio,
-  collaboDescription: "",
+  collaboRequestedForm: { title: "", explain: "" },
   collaboRequestData: { isValid: false, audios: [] as CollaboAudio[] },
   isLoading: false,
   error: null,
@@ -68,9 +66,6 @@ export const postingSlice = createSlice({
   name: "posting",
   initialState,
   reducers: {
-    __typeTitle: (state, { payload }) => {
-      state.title = payload;
-    },
     __form: (state, { payload }) => {
       state.form = { ...state.form, ...payload };
       console.log("state.form", state.form);
@@ -147,7 +142,8 @@ export const postingSlice = createSlice({
         state.error = payload;
       })
       .addCase(__getPostInfo.fulfilled, (state, { payload }) => {
-        state.title = payload.title;
+        state.form.title = payload.title;
+        state.form.postImg = payload.postImg;
         state.isLoading = false;
       })
       .addCase(__getAudios.pending, (state) => {
@@ -177,8 +173,11 @@ export const postingSlice = createSlice({
       .addCase(
         __getCollaboRequested.fulfilled,
         (state, { payload }: { payload: CollaboRequested }) => {
-          state.title = payload.nickname + "님의 콜라보 요청";
-          state.collaboDescription = payload.contents;
+          state.collaboRequestedForm = {
+            ...state.collaboRequestedForm,
+            title: payload.nickname + "님의 콜라보 요청 메세지",
+            explain: payload.contents,
+          };
           state.progressControl.src =
             state.progressControl.src || payload.musicList[0]?.musicFile;
           payload.musicList.forEach((audio: AudioData) => {
@@ -192,6 +191,8 @@ export const postingSlice = createSlice({
         }
       )
       .addCase(__getCollaboRequested.rejected, (state, { payload }) => {
+        console.log("__getCollaboRequested", payload);
+
         state.error = payload;
       });
   },
@@ -212,6 +213,8 @@ export const __getPostInfo = createAsyncThunk(
   async (payload: number, thunkAPI) => {
     try {
       const { data } = await instanceAxios.get(`/post/details/${payload}`);
+      console.log("postinfo(detail)", data);
+
       return data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -249,7 +252,6 @@ export const {
   __setMute,
   __setSolo,
   __setVolume,
-  __typeTitle,
   __cleanUp,
   __setCollaboPart,
   __audioOnLoaded,
