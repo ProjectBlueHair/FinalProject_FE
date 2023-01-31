@@ -30,10 +30,10 @@ import Div from "../elem/Div";
 import { instanceAxios, serverURL } from "../../dataManager/apiConfig";
 import { NativeEventSource, EventSourcePolyfill } from "event-source-polyfill";
 import { alarmSelector, __getAlarm } from "../../redux/slice/mainSlice";
-import * as ssePolyfill from 'event-source-polyfill/src/eventsource.min.js';
+import * as ssePolyfill from "event-source-polyfill/src/eventsource.min.js";
 const iconSize = "4rem";
-const EventSource = EventSourcePolyfill || NativeEventSource;
-global.EventSource = EventSourcePolyfill || NativeEventSource;
+// const EventSource = NativeEventSource || EventSourcePolyfill
+// global.EventSource = NativeEventSource || EventSourcePolyfill
 const Header = () => {
   const navigate = useNavigate();
   const Sign = useRef(null);
@@ -64,36 +64,49 @@ const Header = () => {
   const [isClicked, setIsClicked] = useState({ alarm: false });
   const { $openModal, $closeModal } = useTypeModal();
   const dispatch = useAppDispatch();
-  const RefreshToken = getCookies("refreshtoken");
   const AccessToken = getCookies("accesstoken");
   const user = useAppSelector(userSelector);
   const alarmCount = useAppSelector(alarmSelector);
 
-  const listenAlarm = () => {
-    let eventSource = new ssePolyfill.EventSourcePolyfill(`${serverURL}/subscribe`, {
-      headers: {
-        AccessToken: AccessToken,
-        RefreshToken: RefreshToken,
-      },
-      withCredentials:true
-      // heartbeatTimeout: 3600 * 1000, // 1시간
-    });
-    console.log("credentials", eventSource.withCredentials);
-    eventSource.onopen = () => {
-      console.log("open connection");
-    };
-    eventSource.onmessage = (event) => {
-      console.log("EVENT DATA", JSON.parse(event.data));
-      dispatch(__getAlarm());
-    };
-    eventSource.onerror = (e) => {
-      eventSource.close();
-    };
-  };
   useEffect(() => {
-    if (AccessToken && user.nickname) listenAlarm();
     if (!AccessToken && user.nickname) dispatch(__clearUser());
     if (AccessToken && !user.nickname) dispatch(__getGeneralUserInfo());
+    let readyState = localStorage.getItem("readyState");
+    console.log("readystate 1", readyState);
+    if (readyState === null) readyState = 2;
+
+    const isConnecting = Number(readyState) === 1 || Number(readyState) === 0;
+    console.log("isConnecting", isConnecting);
+
+    if (AccessToken && user.nickname && !isConnecting) {
+      console.log("hi");
+      let eventSource = new EventSource(
+        `${serverURL}/subscribe/${user.nickname}`
+      );
+      eventSource.onopen = () => {
+        console.log("open connection", eventSource);
+        localStorage.setItem("readyState", eventSource.readyState);
+      };
+      eventSource.onmessage = (event) => {
+        console.log("EVENT DATA", eventSource);
+        console.log("EVENT DATA", event.data);
+        dispatch(__getAlarm());
+      };
+      eventSource.onerror = (e) => {
+        eventSource.close();
+        console.log("event source check 3 ", eventSource);
+        localStorage.setItem("readyState", eventSource.readyState);
+        // eventSource = new EventSource(
+        //   `${serverURL}/subscribe/${user.nickname}`
+        // );
+      };
+      return () => {
+        eventSource.close();
+        console.log("is unmounting ???", eventSource.readyState);
+        localStorage.setItem("readyState", eventSource.readyState);
+
+      };
+    }
   }, [user.nickname, AccessToken]);
 
   const onClickSetPage = () => {
