@@ -443,7 +443,13 @@ const SignUpModal = ({ onClose }) => {
             )}
           </PasswordCheck>
           <SignUpTitle style={{ marginTop: "5px" }}>Password Check</SignUpTitle>
-          {!isPasswordCheck ? (
+          {!(
+            isPwLength &&
+            isPwSymbol &&
+            isPwStr &&
+            isPwNum &&
+            isPasswordCheck
+          ) ? (
             <SignUpDivBox>
               <input
                 type="password"

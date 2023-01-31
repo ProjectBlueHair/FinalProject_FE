@@ -30,7 +30,7 @@ const MypageLeft = () => {
     try {
       const {
         data: { data },
-      } = await instanceAxios.get(`member/mypage/${nickname}`);
+      } = await instanceAxios.get(encodeURI(`member/mypage/${nickname}`));
       console.log("2", data);
       setInformation(data);
     } catch (error) {
