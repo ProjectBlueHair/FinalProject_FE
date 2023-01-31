@@ -15,11 +15,17 @@ jobs:
           echo "REACT_APP_AK=$REACT_APP_AK" >> .env.production
           echo "REACT_APP_BK=$REACT_APP_BK" >> .env.production
           echo "REACT_APP_SK=$REACT_APP_SK" >> .env.production
+          echo "REACT_APP_KakaoKey=$REACT_APP_KakaoKey" >> .env.production
+          echo "REACT_APP_KaKaoREDIRECT=$REACT_APP_KaKaoREDIRECT" >> .env.production
+          echo "REACT_APP_KaKaoJSKey=$REACT_APP_KaKaoJSKey" >> .env.production
         env:
           REACT_APP_SERVER: ${{ secrets.REACT_APP_SERVER }}
           REACT_APP_AK: ${{ secrets.REACT_APP_AK }}
           REACT_APP_BK: ${{ secrets.REACT_APP_BK }}
           REACT_APP_SK: ${{ secrets.REACT_APP_SK }}
+          REACT_APP_KakaoKey: ${{ secrets.REACT_APP_KakaoKey }}
+          REACT_APP_KaKaoREDIRECT: ${{ secrets.REACT_APP_KaKaoREDIRECT_DEV }}
+          REACT_APP_KaKaoJSKey: ${{ secrets.REACT_APP_KaKaoJSKey }}
 
       - name: Install dependencies
         run: yarn install
