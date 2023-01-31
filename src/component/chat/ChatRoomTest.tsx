@@ -10,40 +10,45 @@ import ChatBubbleList from "./ChatBubbleList";
 import ChatForm from "./ChatForm";
 import { getCookies } from "../../dataManager/cookie";
 
-import { Client } from "@stomp/stompjs";
-const getChatRooms = async () => {
-  return await instanceAxios.get("/chat/rooms");
-};
-const ChatRoom = () => {
+import { Stomp } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
+const ChatRoomTest = () => {
   const AccessToken = getCookies("accesstoken");
 
   useEffect(() => {
-    const client = new Client({
-      brokerURL: `${socketURL}/ws/chat`,
-      connectHeaders: {
+    console.log("test~~~");
+
+    const socket = new SockJS(`${socketURL}/ws/chat`);
+    const client = Stomp.over(function () {
+      // return socket
+      return new WebSocket(`${socketURL}/ws/chat`);
+    });
+    client.connect(
+      {
         AccessToken: AccessToken,
       },
-      debug: function (str) {
-        console.log("debug", str);
+      (frame: any) => {
+        console.log("connected? ", frame);
+        client.subscribe("/topic/chat/room/1", (tick) => {
+          console.log(tick.body);
+        });
       },
-      reconnectDelay: 5000, //자동 재 연결
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
-    });
-
-    client.onConnect = function (frame) {
-      console.log("frame", frame);
+      (error: unknown) => {
+        console.log("연결실패");
+        console.log(error);
+      }
+    );
+    client.onWebSocketError = (e) => {
+      console.log("error", e);
     };
-
-    client.onStompError = function (frame) {
-      console.log("Broker reported error: " + frame.headers["message"]);
-      console.log("Additional details: " + frame.body);
+    client.onStompError = (e) => {
+      console.log("stomperror", e);
     };
-    client.activate();
-    getChatRooms().then((data) => console.log("data", data));
 
     return () => {
-      client.deactivate();
+      if (client) {
+        client.disconnect();
+      }
     };
   }, []);
   return (
@@ -54,7 +59,7 @@ const ChatRoom = () => {
   );
 };
 
-export default ChatRoom;
+export default ChatRoomTest;
 
 const ChatContainer = styled(StFlex)`
   flex-direction: column;

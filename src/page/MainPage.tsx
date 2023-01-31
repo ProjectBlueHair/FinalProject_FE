@@ -18,8 +18,8 @@ const MainPage = () => {
   return (
     <Flex direction="column" justify="flex-start" hg="100vh" gap="0">
       {/* header, main 패딩 같아서 main container 로 감싸줌 */}
+      <Header />
       <MainContainer>
-        <Header />
         <MainPostList />
       </MainContainer>
       <MainAudioPlayer />

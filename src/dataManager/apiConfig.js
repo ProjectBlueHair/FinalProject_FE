@@ -30,7 +30,7 @@ const addRefreshSubscriber = (callback) => {
 instanceAxios.interceptors.response.use(
   (res) => {
     const { data, config } = res;
-    console.log("AXIOS INTERCEPTOR DATA", data);
+    // console.log("AXIOS INTERCEPTOR DATA", data);
     switch (data.customHttpStatus) {
       case 4003:
         throw new Error("처리할 수 없는 음원입니다");
