@@ -61,52 +61,46 @@ const Header = () => {
 
   useToggleOutSideClick(Sign, setIsOpen);
 
-  const [isClicked, setIsClicked] = useState({ alarm: false });
   const { $openModal, $closeModal } = useTypeModal();
   const dispatch = useAppDispatch();
   const AccessToken = getCookies("accesstoken");
   const user = useAppSelector(userSelector);
   const alarmCount = useAppSelector(alarmSelector);
 
+
   useEffect(() => {
     if (!AccessToken && user.nickname) dispatch(__clearUser());
     if (AccessToken && !user.nickname) dispatch(__getGeneralUserInfo());
-    let readyState = localStorage.getItem("readyState");
-    console.log("readystate 1", readyState);
-    if (readyState === null) readyState = 2;
+    // let readyState = localStorage.getItem("readyState");
+    // if (readyState === null) readyState = 2;
+    // const isConnecting = Number(readyState) === 1 || Number(readyState) === 0;
 
-    const isConnecting = Number(readyState) === 1 || Number(readyState) === 0;
-    console.log("isConnecting", isConnecting);
-
-    if (AccessToken && user.nickname && !isConnecting) {
-      console.log("hi");
-      let eventSource = new EventSource(
-        `${serverURL}/subscribe/${user.nickname}`
-      );
-      eventSource.onopen = () => {
-        console.log("open connection", eventSource);
-        localStorage.setItem("readyState", eventSource.readyState);
-      };
-      eventSource.onmessage = (event) => {
-        console.log("EVENT DATA", eventSource);
-        console.log("EVENT DATA", event.data);
-        dispatch(__getAlarm());
-      };
-      eventSource.onerror = (e) => {
-        eventSource.close();
-        console.log("event source check 3 ", eventSource);
-        localStorage.setItem("readyState", eventSource.readyState);
-        // eventSource = new EventSource(
-        //   `${serverURL}/subscribe/${user.nickname}`
-        // );
-      };
-      return () => {
-        eventSource.close();
-        console.log("is unmounting ???", eventSource.readyState);
-        localStorage.setItem("readyState", eventSource.readyState);
-
-      };
-    }
+    // if (AccessToken && user.nickname && !isConnecting) {
+    //   let eventSource = new EventSource(
+    //     `${serverURL}/subscribe/${user.nickname}`
+    //   );
+    //   eventSource.onopen = () => {
+    //     localStorage.setItem("readyState", eventSource.readyState);
+    //   };
+    //   eventSource.onmessage = (event) => {
+    //     console.log("EVENT DATA", eventSource);
+    //     console.log("EVENT DATA", event.data);
+    //     dispatch(__getAlarm());
+    //   };
+    //   eventSource.onerror = (e) => {
+    //     eventSource.close();
+    //     console.log("event source check 3 ", eventSource);
+    //     localStorage.setItem("readyState", eventSource.readyState);
+    //     // eventSource = new EventSource(
+    //     //   `${serverURL}/subscribe/${user.nickname}`
+    //     // );
+    //   };
+    //   return () => {
+    //     eventSource.close();
+    //     console.log("is unmounting ???", eventSource.readyState);
+    //     localStorage.setItem("readyState", eventSource.readyState);
+    //   };
+    // }
   }, [user.nickname, AccessToken]);
 
   const onClickSetPage = () => {
@@ -165,8 +159,7 @@ const Header = () => {
         <Flex direction="row" wd="none">
           <Img
             onClick={() => {
-              !isClicked.alarm ? $openModal({ type: "alarm" }) : $closeModal();
-              setIsClicked({ ...isClicked, alarm: !isClicked.alarm });
+              $openModal({ type: "alarm" }) 
             }}
             type="icon"
             wd={iconSize}
