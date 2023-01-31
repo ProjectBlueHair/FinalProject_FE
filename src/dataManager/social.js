@@ -9,6 +9,5 @@ export const kakao = async (post) => {
     return data;
   } catch (error) {
     alert(error);
-    window.location.href("http://localhost:3000/");
   }
 };

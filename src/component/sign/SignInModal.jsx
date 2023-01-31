@@ -256,5 +256,8 @@ const SocialLogin = styled.div`
 const SignUpBtn = styled.button`
   margin: 0 auto;
   font-size: 1.7rem;
-  border-bottom: 2px solid red;
+
+  :hover {
+    border-bottom: 2px solid #ff4d00;
+  }
 `;
