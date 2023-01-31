@@ -1,17 +1,53 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import { instanceAxios } from "../../dataManager/apiConfig";
+import {
+  instanceAxios,
+  serverURL,
+  socketURL,
+} from "../../dataManager/apiConfig";
 import { StFlex } from "../elem/Flex";
 import ChatBubbleList from "./ChatBubbleList";
 import ChatForm from "./ChatForm";
+import { getCookies } from "../../dataManager/cookie";
 
-const getChatRooms = async ()=>{
-  return await instanceAxios.get('/chat/rooms')
-}
+import { Client } from "@stomp/stompjs";
+const getChatRooms = async () => {
+  return await instanceAxios.get("/chat/rooms");
+};
 const ChatRoom = () => {
-  useEffect(()=>{
-    getChatRooms().then(data=>console.log('data',data));
-  },[])
+  const AccessToken = getCookies("accesstoken");
+  
+
+
+  useEffect(() => {
+    const client = new Client({
+      brokerURL: `wss://jaymild.shop/ws/chat`,
+      connectHeaders: {
+        AccessToken: AccessToken,
+      },
+      debug: function (str) {
+        console.log(str);
+      },
+      reconnectDelay: 5000, //자동 재 연결
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
+    });
+    
+    client.onConnect = function (frame) {
+      console.log("frame", frame);
+    };
+  
+    client.onStompError = function (frame) {
+      console.log("Broker reported error: " + frame.headers["message"]);
+      console.log("Additional details: " + frame.body);
+    };
+    client.activate();
+    getChatRooms().then((data) => console.log("data", data));
+
+    return () => {
+      client.deactivate();
+    };
+  }, []);
   return (
     <ChatContainer>
       <ChatBubbleList />

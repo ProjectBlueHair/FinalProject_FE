@@ -5,6 +5,7 @@ import Router from "./Router";
 import theme from "./styles/theme";
 
 const App = () => {
+  console.log('process.env.NODE_ENV', process.env.NODE_ENV);
   if (process.env.NODE_ENV === "production") {
     console.log = function no_console() {};
     console.warn = function no_console() {};
