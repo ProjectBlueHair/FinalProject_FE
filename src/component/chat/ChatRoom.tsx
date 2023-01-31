@@ -1,51 +1,29 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import {
-  instanceAxios,
-  serverURL,
-  socketURL,
-} from "../../dataManager/apiConfig";
+import { socketURL } from "../../dataManager/apiConfig";
 import { StFlex } from "../elem/Flex";
 import ChatBubbleList from "./ChatBubbleList";
 import ChatForm from "./ChatForm";
-import { getCookies } from "../../dataManager/cookie";
 
-import { Client } from "@stomp/stompjs";
-const getChatRooms = async () => {
-  return await instanceAxios.get("/chat/rooms");
-};
+import { useStomp } from "../../hook/useStomp";
 const ChatRoom = () => {
-  const AccessToken = getCookies("accesstoken");
-
+  const {
+    isConnected,
+    subscribe,
+    unsubscribe,
+    subscriptions,
+  } = useStomp();
   useEffect(() => {
-    const client = new Client({
-      brokerURL: `${socketURL}/ws/chat`,
-      connectHeaders: {
-        AccessToken: AccessToken,
-      },
-      debug: function (str) {
-        console.log("debug", str);
-      },
-      reconnectDelay: 5000, //자동 재 연결
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
+    isConnected && subscribe("/topic/chat/room/1", (body) => {
+      console.log("subscribe callback ... body", body);
     });
-
-    client.onConnect = function (frame) {
-      console.log("frame", frame);
-    };
-
-    client.onStompError = function (frame) {
-      console.log("Broker reported error: " + frame.headers["message"]);
-      console.log("Additional details: " + frame.body);
-    };
-    client.activate();
-    getChatRooms().then((data) => console.log("data", data));
-
     return () => {
-      client.deactivate();
+      if (subscriptions["/topic/chat/room/1"]) {
+        unsubscribe("/topic/chat/room/1");
+      }
     };
-  }, []);
+  }, [isConnected]);
+
   return (
     <ChatContainer>
       <ChatBubbleList />

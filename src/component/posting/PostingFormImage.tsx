@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import styled from "styled-components";
 import useTypeModal from "../../modal/hooks/useTypeModal";
-import { imgTitleBoxSize } from "../../page/PostingPageNext";
+import { imgTitleBoxSize } from "../../page/PostingPage";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
   formSelector,
