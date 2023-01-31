@@ -1,8 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { __getPostList } from "../../redux/slice/mainSlice";
 import MypagePlayList from "./MypagePlayList";
 
 const MypageRight = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(__getPostList());
+  }, []);
+  const List = useSelector((state) => state.main.posts);
+
   return (
     <MypageRightDiv>
       <MypageTop>
@@ -26,22 +36,9 @@ const MypageRight = () => {
         </div>
       </MypageTop>
       <MyRow>
-        <MypagePlayList />
-        <MypagePlayList />
-        <MypagePlayList />
-        <MypagePlayList />
-        <MypagePlayList />
-        <MypagePlayList />
-        <MypagePlayList />
-        <MypagePlayList />
-        <MypagePlayList />
-        <MypagePlayList />
-        <MypagePlayList />
-        <MypagePlayList />
-        <MypagePlayList />
-        <MypagePlayList />
-        <MypagePlayList />
-        <MypagePlayList />
+        {List?.map((L) => (
+          <MypagePlayList L={L} />
+        ))}
       </MyRow>
     </MypageRightDiv>
   );

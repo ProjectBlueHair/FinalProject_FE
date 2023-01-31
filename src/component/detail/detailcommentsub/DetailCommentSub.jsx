@@ -16,7 +16,7 @@ const DetailCommentSub = ({ mcv }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
-  const { $openModal, $closeModal } = useTypeModal();
+  const { $openModal } = useTypeModal();
   useEffect(() => {
     dispatch(__getUserInfo());
   }, []);

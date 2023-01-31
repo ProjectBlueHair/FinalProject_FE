@@ -21,17 +21,17 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import useTypeModal from "../../modal/hooks/useTypeModal";
 import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
 import { useShare } from "../../hook/useShare";
+export const kakaoJS = process.env.REACT_APP_KaKaoJSKey;
 
 const DetailDayAndFollow = ({ detail }) => {
   const { id } = useParams();
   const [contentMore, setContentMore] = useState(false);
+  const { $openModal } = useTypeModal();
   // 100줄 넘어가면 더보기 보이게 만듬
   const textLimit = useRef(100);
   const navigate = useNavigate();
   const shortContent = detail?.contents.slice(0, textLimit.current);
   const [shareOpen, setShareOpen] = useState(false);
-  console.log(shareOpen);
-  const { $openModal, $closeModal } = useTypeModal();
   const onShare = useCallback(() => {
     setShareOpen(!shareOpen);
   });
@@ -55,22 +55,46 @@ const DetailDayAndFollow = ({ detail }) => {
     if (status === "ready" && window.Kakao) {
       // 중복 initialization 방지
       if (!window.Kakao.isInitialized()) {
-        window.Kakao.init("발급받은 js key");
+        window.Kakao.init(kakaoJS);
       }
     }
   }, [status]);
 
   const kakaoShare = () => {
-    window.Kakao.Link.sendScrap({
-      requestUrl: currentUrl,
+    window.Kakao.Link.sendDefault({
+      objectType: "feed",
+      content: {
+        title: "우연한 만남으로 시작되고 쌓이는 음악 콜라보 서비스",
+        description: `제목 : ${detail?.title}`,
+        imageUrl: detail?.postImg,
+        link: {
+          webUrl: currentUrl,
+        },
+      },
+      itemContent: {
+        profileText: "Oncounter",
+        profileImageUrl:
+          "https://velog.velcdn.com/images/koz8615/post/f9135d4e-b835-49d8-bc39-284c21ec504e/image.jpg",
+      },
     });
   };
+
+  const NotTouch = () => {
+    $openModal({
+      type: "alert",
+      props: {
+        message: "준비중인 페이지 (기능) 입니다.",
+        type: "info",
+      },
+    });
+  };
+
   return (
     <DetailLeftTotal>
       <DetailMiddleTop>
         <DetailShareLine>
           <div>
-            <div>
+            <div onClick={NotTouch}>
               <Img wd="3rem" src={save} />
               <div>보관함 추가</div>
             </div>
@@ -103,7 +127,7 @@ const DetailDayAndFollow = ({ detail }) => {
                   <CopyToClipboard text={currentUrl}>
                     <URLShareBtn onClick={urlShareClick}>url</URLShareBtn>
                   </CopyToClipboard>
-                  <button onClick={kakaoShare}>
+                  <button onClick={kakaoShare} id="kakaoShared">
                     <Img wd="2rem" src={kakaoIcon} />
                   </button>
                 </ShareDiv>
@@ -111,7 +135,7 @@ const DetailDayAndFollow = ({ detail }) => {
                 ""
               )}
             </div>
-            <div>
+            <div onClick={NotTouch}>
               <Img wd="3rem" src={report} />
               <div>신고</div>
             </div>
@@ -220,10 +244,10 @@ const ShareDiv = styled.div`
     display: flex;
     align-items: center;
   }
-  animation-name: shareBox;
+  animation-name: shareBoxx;
   animation-duration: 0.5s;
 
-  @keyframes shareBox {
+  @keyframes shareBoxx {
     0% {
       transform: scaleX(0);
       transform-origin: 0% 0%;

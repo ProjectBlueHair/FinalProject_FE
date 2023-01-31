@@ -24,7 +24,7 @@ const DetailTop = () => {
   const detail = useSelector((state) => state.detail.detail.data);
   const [likeView, setLikeView] = useState(detail?.isLiked);
   const [likeCount, setLikeCount] = useState(detail?.likeCount);
-  const { $openModal, $closeModal } = useTypeModal();
+  const { $openModal } = useTypeModal();
   useEffect(() => {
     dispatch(__getDetail(id));
     dispatch(__getAudios(id));
@@ -66,7 +66,7 @@ const DetailTop = () => {
       type: "alert",
       props: {
         message: "로그인이 필요한 페이지 (기능) 입니다.",
-        type: "info",
+        type: "error",
       },
     });
   };

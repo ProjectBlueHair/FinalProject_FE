@@ -15,7 +15,7 @@ export const kakaoREDIRECT = process.env.REACT_APP_KaKaoREDIRECT;
 const SignInModal = ({ onClose }) => {
   const { openModal } = useModal();
   const { closeModal } = useModal();
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const { $openModal, $closeModal } = useTypeModal();
 
   const onClickSignUpModal = () => {
@@ -103,15 +103,15 @@ const SignInModal = ({ onClose }) => {
             path: "/",
             maxAge: 1800,
           });
-          
-          dispatch(__getGeneralUserInfo())
-          $openModal({
-            type: "alert",
-            props: {
-              message: res.data.message,
-              type: "info",
-            },
-          });
+
+          dispatch(__getGeneralUserInfo());
+          // $openModal({
+          //   type: "alert",
+          //   props: {
+          //     message: res.data.message,
+          //     type: "info",
+          //   },
+          // });
           closeModal?.();
         }
       });

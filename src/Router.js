@@ -8,7 +8,7 @@ import TypeModalContainer from "./modal/TypeModalContainer";
 
 import MyPage from "./page/MyPage";
 import SetPage from "./page/SetPage";
-
+import KakaoLoginHandler from "./component/sign/KakaoLoginHandler";
 import PostingReactQueryTest from "./component/posting/PostingReactQueryTest";
 import ChatPage from "./page/ChatPage";
 import PostingPageNext from "./page/PostingPageNext";
@@ -43,6 +43,7 @@ const Router = () => {
           <Route path={`${PATH.collabo}/:id`} element={<PostingPageNext />} />
           <Route path={`${PATH.chat}`} element={<ChatPage />} />
           <Route path={`/test`} element={<PostingReactQueryTest />} />
+          <Route path="/login/kakao" element={<KakaoLoginHandler />} />
           <Route
             path={`${PATH.collaboRequested}/:id/:postId`}
             element={<PostingPageNext />}
