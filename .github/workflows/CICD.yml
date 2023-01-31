@@ -25,7 +25,7 @@ jobs:
         run: yarn install
 
       - name: Build
-        run: yarn build
+        run: yarn build:prod
 
       - name: S3 Deploy
         run: aws s3 sync ./build s3://oncounter.co.kr/ --acl bucket-owner-full-control # 현재 build된 폴더에 접근 후 s3 버킷인 oncounter에 파일 업로드
