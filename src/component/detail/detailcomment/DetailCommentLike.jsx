@@ -1,12 +1,11 @@
-import React from "react";
 import { useDispatch } from "react-redux";
-import Img from "../../elem/Img";
-import { like, redLike } from "../../../asset/pic";
-import styled from "styled-components";
-import { __getComment, __likeComment } from "../../../redux/slice/comment";
 import { useParams } from "react-router-dom";
+import styled from "styled-components";
+import { like, redLike } from "../../../asset/pic";
 import { getCookies } from "../../../dataManager/cookie";
 import useTypeModal from "../../../modal/hooks/useTypeModal";
+import { __getComment, __likeComment } from "../../../redux/slice/comment";
+import Img from "../../elem/Img";
 
 const DetailCommentLike = ({ mcv }) => {
   const { id } = useParams();

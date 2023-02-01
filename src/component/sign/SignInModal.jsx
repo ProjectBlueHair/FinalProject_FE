@@ -49,7 +49,7 @@ const SignInModal = ({ onClose }) => {
     } catch (error) {}
   };
 
-  const onClickSignIn = () => {
+  const onClickSignIn = (e) => {
     if (signIn.email === "") {
       $openModal({
         type: "alert",
@@ -125,6 +125,13 @@ const SignInModal = ({ onClose }) => {
     window.location.href = KakaoMove;
   };
 
+  const HKP = (e) => {
+    $closeModal();
+    if (e.key === "Enter") {
+      onClickSignIn();
+    }
+  };
+
   return (
     <Modal onClose={onClose}>
       <SignInTotal>
@@ -139,6 +146,7 @@ const SignInModal = ({ onClose }) => {
             name="email"
             onChange={onChangeSignIn}
             placeholder="이메일을 입력해 주세요"
+            onKeyPress={HKP}
           />
           <div>Password</div>
           <input
@@ -146,6 +154,7 @@ const SignInModal = ({ onClose }) => {
             name="password"
             onChange={onChangeSignIn}
             placeholder="비밀번호 입력해 주세요"
+            onKeyPress={HKP}
           />
           <SignButton onClick={onClickSignIn}>
             <h2>LOG</h2>

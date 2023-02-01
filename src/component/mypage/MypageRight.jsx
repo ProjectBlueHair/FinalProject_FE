@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { __getPostList } from "../../redux/slice/mainSlice";
 import MypagePlayList from "./MypagePlayList";
@@ -37,7 +36,7 @@ const MypageRight = () => {
       </MypageTop>
       <MyRow>
         {List?.map((L) => (
-          <MypagePlayList L={L} />
+          <MypagePlayList L={L} key={L.id} />
         ))}
       </MyRow>
     </MypageRightDiv>
@@ -68,8 +67,7 @@ const MypageTop = styled.div`
 
 const MyRow = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   flex-wrap: wrap;
-  /* border: 1px solid black; */
   gap: 1em;
 `;

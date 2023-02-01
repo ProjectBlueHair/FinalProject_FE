@@ -1,12 +1,7 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import Img from "../elem/Img";
-import { facebook, insta, linkedIn, twitter, kakaoIcon } from "../../asset/pic";
-import MypageLeftBottom from "./MypageLeftBottom";
-import { instanceAxios } from "../../dataManager/apiConfig";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   FacebookIcon,
   FacebookShareButton,
@@ -15,10 +10,17 @@ import {
   TwitterIcon,
   TwitterShareButton,
 } from "react-share";
+import styled from "styled-components";
+import { facebook, insta, kakaoIcon, linkedIn, twitter } from "../../asset/pic";
+import { instanceAxios } from "../../dataManager/apiConfig";
 import { useShare } from "../../hook/useShare";
+import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
 import useTypeModal from "../../modal/hooks/useTypeModal";
 import { __directMessage } from "../chat/chatSlice";
 import { PATH } from "../../Router";
+import { __putDetailFollow } from "../../redux/slice/detailSlice";
+import Img from "../elem/Img";
+import MypageLeftBottom from "./MypageLeftBottom";
 export const kakaoJS = process.env.REACT_APP_KaKaoJSKey;
 
 const MypageLeft = () => {
@@ -28,6 +30,8 @@ const MypageLeft = () => {
   const currentUrl = window.location.href;
   const { $openModal, $closeModal } = useTypeModal();
   const [myShare, setMyShare] = useState(false);
+  const shareds = useRef(null);
+  useToggleOutSideClick(shareds, setMyShare);
   const mySetInformation = async () => {
     try {
       const {
@@ -44,9 +48,16 @@ const MypageLeft = () => {
   }, []);
   const [information, setInformation] = useState();
   console.log("2", information);
+  const myFollowingMemberNickname = information?.nickname;
+  const isFollowed = information?.isFollowed;
 
-  const mypageFollow = () => {};
-
+  const mypageFollow = async () => {
+    await dispatch(
+      __putDetailFollow({ myFollowingMemberNickname, isFollowed })
+    );
+    mySetInformation();
+  };
+  console.log(myShare);
   const urlShareClick = () => {
     $openModal({
       type: "alert",
@@ -109,7 +120,10 @@ const MypageLeft = () => {
           </>
         ) : (
           <>
-            <MypageBtn onClick={mypageFollow}>팔로우</MypageBtn>
+
+            <MypageBtn onClick={mypageFollow}>
+              {isFollowed ? "팔로우취소" : "팔로우"}
+            </MypageBtn>
             <MypageBtn
               onClick={() => {
                 dispatch(__directMessage(information?.nickname)).then(
@@ -121,45 +135,48 @@ const MypageLeft = () => {
             </MypageBtn>
           </>
         )}
-        <MypageBtn onClick={() => setMyShare(!myShare)}>
-          <div>공유</div>
+        <MypageBtn ref={shareds} onClick={() => setMyShare(!myShare)}>
+          <ShareDiv>공유</ShareDiv>
+          <ShareDiv>
+            {myShare ? (
+              <MypageShare>
+                <FacebookShareButton url={currentUrl}>
+                  <FacebookIcon
+                    size={20}
+                    round={true}
+                    borderRadius={24}
+                  ></FacebookIcon>
+                </FacebookShareButton>
+                <TwitterShareButton url={currentUrl}>
+                  <TwitterIcon
+                    size={20}
+                    round={true}
+                    borderRadius={24}
+                  ></TwitterIcon>
+                </TwitterShareButton>
+                <LinkedinShareButton url={currentUrl}>
+                  <LinkedinIcon
+                    size={20}
+                    round={true}
+                    borderRadius={24}
+                  ></LinkedinIcon>
+                </LinkedinShareButton>
+                <CopyToClipboard text={currentUrl}>
+                  <URLShareBtn onClick={urlShareClick}>url</URLShareBtn>
+                </CopyToClipboard>
+                <button
+                  onClick={kakaoShare}
+                  style={{ backgroundColor: "transparent" }}
+                >
+                  <Img wd="2rem" src={kakaoIcon} />
+                </button>
+              </MypageShare>
+            ) : (
+              ""
+            )}
+          </ShareDiv>
         </MypageBtn>
-        {myShare ? (
-          <MypageShare>
-            <FacebookShareButton url={currentUrl}>
-              <FacebookIcon
-                size={20}
-                round={true}
-                borderRadius={24}
-              ></FacebookIcon>
-            </FacebookShareButton>
-            <TwitterShareButton url={currentUrl}>
-              <TwitterIcon
-                size={20}
-                round={true}
-                borderRadius={24}
-              ></TwitterIcon>
-            </TwitterShareButton>
-            <LinkedinShareButton url={currentUrl}>
-              <LinkedinIcon
-                size={20}
-                round={true}
-                borderRadius={24}
-              ></LinkedinIcon>
-            </LinkedinShareButton>
-            <CopyToClipboard text={currentUrl}>
-              <URLShareBtn onClick={urlShareClick}>url</URLShareBtn>
-            </CopyToClipboard>
-            <button
-              onClick={kakaoShare}
-              style={{ backgroundColor: "transparent" }}
-            >
-              <Img wd="2rem" src={kakaoIcon} />
-            </button>
-          </MypageShare>
-        ) : (
-          ""
-        )}
+
         <div style={{ marginTop: "1rem" }}>{information?.email}</div>
         <RowView style={{ marginTop: "2rem" }}>
           <button
@@ -265,6 +282,14 @@ const MypageBtn = styled.button`
   background-color: transparent;
   margin: 5px auto;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ShareDiv = styled.div`
+  width: 100%;
+  display: flex;
   align-items: center;
   justify-content: center;
 `;
@@ -330,11 +355,13 @@ const MoreViewDiv = styled.div`
 `;
 
 const MypageShare = styled.div`
-  width: 60%;
+  width: 100%;
   position: relative;
   border: 1px solid #ff4d00;
   border-radius: 5px;
   padding: 10px;
+  margin-top: -43px;
+  top: 50px;
   z-index: 1;
   background-color: white;
   display: flex;

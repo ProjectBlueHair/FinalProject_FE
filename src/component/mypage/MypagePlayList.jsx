@@ -1,7 +1,6 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { playButtonSecond, pause, view, like } from "../../asset/pic";
+import { pause, playButtonSecond, view } from "../../asset/pic";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
   __MainTogglePlay,
@@ -9,13 +8,13 @@ import {
 } from "../../redux/slice/mainSlice";
 import Img from "../elem/Img";
 import StLink from "../elem/Link";
+import MypageLike from "./MypageLike";
 
 const MypagePlayList = (props) => {
   const L = props.L;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const currentMusic = useAppSelector((state) => state.main.currentMusic);
-
   const onClickPlayBtn = () => {
     currentMusic.post.id === props.L.id
       ? dispatch(__MainTogglePlay(!currentMusic.isPlayingPlayer))
@@ -62,21 +61,22 @@ const MypagePlayList = (props) => {
             </RightProfile>
             <RightViewLike>
               <div>
-                <Img wd="1rem" src={view} />
-                <div>count</div>
+                <Img wd="0.5rem" src={view} />
+                <div>{L?.viewCount}</div>
               </div>
               <div>
-                <Img wd="2rem" src={like} />
-                <div>count</div>
+                <MypageLike L={L} />
               </div>
             </RightViewLike>
           </RightProfileAndLike>
         </RightCol>
       </RightRow>
       <HashDiv>
-        <StLink to={`/tag/1`}>
-          <button># ㅎㅇ</button>
-        </StLink>
+        {L?.tagList?.map((tags, index) => (
+          <StLink to={`/tag/${tags}`} key={index}>
+            <button># {tags}</button>
+          </StLink>
+        ))}
       </HashDiv>
     </MypageMusic>
   );
@@ -90,7 +90,7 @@ const MypageMusic = styled.div`
   width: 22%;
   img {
     width: 100%;
-    height: 13rem;
+    height: 15rem;
     border-radius: 10px;
   }
 `;
@@ -146,15 +146,16 @@ const RightProfile = styled.div`
 
 const RightViewLike = styled.div`
   display: flex;
-  margin-left: 3px;
+  margin-left: 5px;
   div {
-    margin-left: 3px;
+    margin-left: 5px;
     display: flex;
     align-items: center;
+    font-size: 11px;
   }
   img {
-    width: 2rem;
-    height: 2rem;
+    width: 1rem;
+    height: 1.5rem;
   }
 `;
 

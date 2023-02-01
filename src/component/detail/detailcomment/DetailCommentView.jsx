@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
 // import Img from "../../elem/Img";
 // import { more } from "../../../asset/pic";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { __getComment } from "../../../redux/slice/comment";
-import { useSelector } from "react-redux";
-import DetailUpDown from "./DetailCommentUpDown";
 import DetailDeleteAndUpdate from "./DetailCommentDeleteAndUpdate";
+import DetailUpDown from "./DetailCommentUpDown";
 
 const DetailCommentView = () => {
   const dispatch = useDispatch();

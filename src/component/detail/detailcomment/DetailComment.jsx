@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import useTypeModal from "../../../modal/hooks/useTypeModal";
@@ -11,7 +10,7 @@ import DetailCommentView from "./DetailCommentView";
 const DetailComment = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
-  const { $openModal } = useTypeModal();
+  const { $openModal, $closeModal } = useTypeModal();
   useEffect(() => {
     dispatch(__getUserInfo());
     dispatch(__getComment(id));
@@ -44,6 +43,13 @@ const DetailComment = () => {
     }
   };
 
+  const DComment = (e) => {
+    $closeModal();
+    if (e?.key === "Enter") {
+      onClickComment();
+    }
+  };
+
   if (userInformation?.nickname === undefined) {
     return (
       <CommentTotal>
@@ -61,6 +67,7 @@ const DetailComment = () => {
               name="comment"
               value={mainContent}
               onChange={onChangeComment}
+              onKeyPress={DComment}
             />
             <button onClick={onClickComment}>댓글</button>
           </CommentWriteBox>

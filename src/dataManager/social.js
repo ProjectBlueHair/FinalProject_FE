@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { instanceAxios } from "./apiConfig";
 
 export const kakao = async (post) => {

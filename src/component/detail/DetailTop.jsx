@@ -1,21 +1,17 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import DetailDayAndFollow from "./DetailDayAndFollow";
-import DetailRecomment from "./DetailRecomment";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import {
-  __getDetail,
-  __getDetailMusic,
-  __postLike,
-} from "../../redux/slice/detailSlice";
-import { __cleanUp, __getAudios } from "../../redux/slice/postingSlice";
-import PostingTotalPlay from "../posting/PostingTotalPlay";
-import PostingAudioBars from "../posting/PostingAudioBars";
-import Img from "../elem/Img";
-import { view, like, redLike } from "../../asset/pic";
+import styled from "styled-components";
+import { like, redLike, view } from "../../asset/pic";
 import { getCookies } from "../../dataManager/cookie";
 import useTypeModal from "../../modal/hooks/useTypeModal";
+import { __getDetail, __postLike } from "../../redux/slice/detailSlice";
+import { __cleanUp, __getAudios } from "../../redux/slice/postingSlice";
+import Img from "../elem/Img";
+import PostingAudioBars from "../posting/PostingAudioBars";
+import PostingTotalPlay from "../posting/PostingTotalPlay";
+import DetailDayAndFollow from "./DetailDayAndFollow";
+import DetailRecomment from "./DetailRecomment";
 
 const DetailTop = () => {
   const dispatch = useDispatch();
@@ -71,6 +67,12 @@ const DetailTop = () => {
     });
   };
 
+  useEffect(() => {
+    if (acToken) {
+      dispatch(__getDetail(id));
+    }
+  }, [acToken]);
+
   return (
     <PlayTop>
       <DetailTopView imgs={detail?.postImg}>
@@ -82,7 +84,7 @@ const DetailTop = () => {
             <DetailRowDiv>
               <Img wd="2rem" src={view} style={{ marginRight: "10px" }} />
               <div>{detail?.viewCount}</div>
-            </DetailRowDiv> 
+            </DetailRowDiv>
             <DetailRowDiv>
               {acToken === undefined ? (
                 <Img

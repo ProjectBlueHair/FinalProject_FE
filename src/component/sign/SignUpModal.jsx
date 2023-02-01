@@ -317,7 +317,12 @@ const SignUpModal = ({ onClose }) => {
       setIsPasswordCheck(false);
     }
   }, [password, passwordCheck]);
-  console.log(isPasswordCheck);
+
+  const UpHandler = (e) => {
+    if (e.key === "Enter") {
+      onSignUpBtn();
+    }
+  };
   return (
     <Modal onClose={onClose}>
       <SignUpTotal>
@@ -341,6 +346,7 @@ const SignUpModal = ({ onClose }) => {
                 onChange={onChangeNickname}
                 maxLength={15}
                 placeholder="닉네임을 입력해 주세요"
+                onKeyPress={UpHandler}
               />
               <button onClick={onNicknameCheck}>중복체크</button>
             </SignUpDivBox>
@@ -353,6 +359,7 @@ const SignUpModal = ({ onClose }) => {
                 placeholder="닉네임을 입력해 주세요"
                 readOnly={nickname}
                 style={{ color: "white" }}
+                onKeyPress={UpHandler}
               />
             </SignUpDivBox>
           )}
@@ -363,6 +370,7 @@ const SignUpModal = ({ onClose }) => {
                 type="email"
                 onChange={onChangeEmail}
                 placeholder="이메일을 입력해 주세요"
+                onKeyPress={UpHandler}
               />
               <button onClick={onEmailCheck}>중복체크</button>
             </SignUpDivBox>
@@ -374,6 +382,7 @@ const SignUpModal = ({ onClose }) => {
                 placeholder="이메일을 입력해 주세요"
                 readOnly={email}
                 style={{ color: "white" }}
+                onKeyPress={UpHandler}
               />
             </SignUpDivBox>
           )}
@@ -394,6 +403,7 @@ const SignUpModal = ({ onClose }) => {
                 onChange={onChangePassword}
                 placeholder="비밀번호를 입력해 주세요"
                 style={{ color: "white" }}
+                onKeyPress={UpHandler}
               />
             </SignUpDivBox>
           )}
@@ -455,6 +465,7 @@ const SignUpModal = ({ onClose }) => {
                 type="password"
                 placeholder="비밀번호 한번더 확인해 주세요"
                 onChange={onChangePasswordCheck}
+                onKeyPress={UpHandler}
               ></input>
               <p style={{ color: "rgba(245, 15, 0, 0.6)" }}>{pwMsg}</p>
             </SignUpDivBox>
@@ -465,6 +476,7 @@ const SignUpModal = ({ onClose }) => {
                 placeholder="비밀번호 한번더 확인해 주세요"
                 onChange={onChangePasswordCheck}
                 style={{ color: "white" }}
+                onKeyPress={UpHandler}
               ></input>
             </SignUpDivBox>
           )}
