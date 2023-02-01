@@ -7,20 +7,27 @@ import {
   mainLogo,
   message,
   notifications,
-  search, upload
+  search,
+  upload,
 } from "../../asset/pic";
 import { serverURL } from "../../dataManager/apiConfig";
 import { getCookies, removeCookies } from "../../dataManager/cookie";
 import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
 import useTypeModal from "../../modal/hooks/useTypeModal";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
-import { alarmSelector, __getAlarm } from "../../redux/slice/mainSlice";
+import {
+  alarmSelector,
+  __clearAlarmCount,
+  __getAlarm,
+} from "../../redux/slice/mainSlice";
 import {
   userSelector,
   __clearUser,
-  __getGeneralUserInfo
+  __getGeneralUserInfo,
 } from "../../redux/slice/userSlice";
 import { PATH } from "../../Router";
+import theme from "../../styles/theme";
+import Div from "../elem/Div";
 import Flex from "../elem/Flex";
 import Img from "../elem/Img";
 import Input from "../elem/Input";
@@ -39,7 +46,6 @@ const Header = () => {
     setIsOpen(!isOpen);
   };
 
-
   // 모달창(로그인)
   const onClickSignBtn = () => {
     openModal({ type: "signIn" });
@@ -50,6 +56,7 @@ const Header = () => {
     removeCookies("accesstoken", { path: "/" });
     removeCookies("refreshtoken", { path: "/" });
     dispatch(__clearUser());
+    dispatch(__clearAlarmCount());
     setIsOpen(false);
     navigate("/");
   };
@@ -65,6 +72,8 @@ const Header = () => {
   useEffect(() => {
     if (!AccessToken && user.nickname) dispatch(__clearUser());
     if (AccessToken && !user.nickname) dispatch(__getGeneralUserInfo());
+    console.log('access ... ',AccessToken);
+    // if (AccessToken === undefined) onClickLogOut();
     let readyState = localStorage.getItem("readyState");
     if (readyState === null) readyState = 2;
     const isConnecting = Number(readyState) === 1 || Number(readyState) === 0;
@@ -76,7 +85,7 @@ const Header = () => {
     if (AccessToken && user.nickname && !isConnecting) {
       eventSource = new EventSource(`${serverURL}/subscribe/${user.nickname}`, {
         withCredentials: true,
-        connection : 'keep-alive'
+        connection: "keep-alive",
       });
     }
     if (eventSource) {
@@ -91,10 +100,13 @@ const Header = () => {
         eventSource.close();
         console.log("on error ... error message", e);
         console.log("on error ... readystate", eventSource.readyState);
-        eventSource = new EventSource(`${serverURL}/subscribe/${user.nickname}`, {
-          withCredentials: true,
-          connection : 'keep-alive'
-        });
+        eventSource = new EventSource(
+          `${serverURL}/subscribe/${user.nickname}`,
+          {
+            withCredentials: true,
+            connection: "keep-alive",
+          }
+        );
         console.log(
           "on error ... after reconnect readystate",
           eventSource.readyState
@@ -192,12 +204,21 @@ const Header = () => {
               hg="3.5rem"
             />
           ) : (
-            <Img
-              type="icon"
-              wd={iconSize}
-              src={account}
-              onClick={() => toggleMenu()}
-            />
+            <Div
+              onClick={onClickSignBtn}
+              style={{ cursor: "pointer" }}
+              fs="1.6rem"
+              fw="700"
+              fc={theme.color.main}
+            >
+              Login
+            </Div>
+            // <Img
+            //   type="icon"
+            //   wd={iconSize}
+            //   src={account}
+            //   onClick={() => toggleMenu()}
+            // />
           )}
           {user.nickname ? (
             <>

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { useStomp } from "../../hook/useStomp";
 import { Chat } from "../../model/ChatModel";
@@ -20,19 +20,9 @@ const ChatList = () => {
   const dispatch = useAppDispatch();
   const { isConnected, subscribe, unsubscribe, subscriptions } = useStomp();
   const chat = useAppSelector(chatSelector);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    console.log(
-      "chat list ... isconnected",
-      isConnected,
-      "roomId",
-      roomId,
-      "subscriptions",
-      subscriptions
-    );
-
-    console.log('roomId...chatlist',roomId);
-    
     isConnected &&
       roomId &&
       subscribe({ path: "/topic/chat/room", roomId: roomId }, (body: Chat) => {
@@ -45,7 +35,6 @@ const ChatList = () => {
       }
       if (chat.length > 0) {
         console.log("chatlist ... clear chat ... ");
-
         dispatch(__clearChat());
       }
     };
@@ -55,9 +44,14 @@ const ChatList = () => {
     dispatch(__getChat(roomId));
   }, [roomId]);
 
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current?.scrollHeight;
+    }
+  }, [chat]);
+
   return (
-    <ChatContainer>
-      {/* <ScrollContainer> */}
+    <ChatContainer ref={scrollRef}>
       {chat.map((chatItem, index) =>
         user.nickname === chatItem.nickname ? (
           //my chat
@@ -88,7 +82,6 @@ const ChatList = () => {
           </Flex> //others chat
         )
       )}
-      {/* </ScrollContainer> */}
     </ChatContainer>
   );
 };
@@ -101,7 +94,7 @@ const ChatContainer = styled(StFlex)`
   gap: 2rem;
   justify-content: flex-start;
   overflow-y: scroll;
-  padding: 0 2rem;
+  padding: 0 2rem 2rem;
 `;
 
 const ChatBubble = styled.div<{ isMine: boolean }>`

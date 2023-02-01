@@ -6,13 +6,15 @@ import { Fragment } from "react";
 import { useAppSelector } from "../redux/config";
 import { userSelector } from "../redux/slice/userSlice";
 import { postingErrorSelector } from "../redux/slice/postingSlice";
+import { mainErrorSelector } from "../redux/slice/mainSlice";
 
 const ErrorCheck = () => {
   const { $openModal } = useTypeModal();
   const postingError = useAppSelector(postingErrorSelector);
+  const mainError = useAppSelector(mainErrorSelector);
   const needRedirect = (''+postingError)?.includes("4041");
 
-  if (postingError) {
+  if (postingError || mainError) {
     $openModal({
       type: "alert",
       props: {

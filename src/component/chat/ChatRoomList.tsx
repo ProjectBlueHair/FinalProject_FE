@@ -12,7 +12,6 @@ import {
 const ChatRoomList = () => {
   const dispatch = useAppDispatch();
   const chatRooms = useAppSelector(chatRoomsSelector);
-  const currentRoomId = useAppSelector(currentRoomIdSelector);
   useEffect(() => {
     dispatch(__getChatRooms());
   }, []);
