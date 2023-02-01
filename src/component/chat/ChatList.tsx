@@ -22,6 +22,17 @@ const ChatList = () => {
   const chat = useAppSelector(chatSelector);
 
   useEffect(() => {
+    console.log(
+      "chat list ... isconnected",
+      isConnected,
+      "roomId",
+      roomId,
+      "subscriptions",
+      subscriptions
+    );
+
+    console.log('roomId...chatlist',roomId);
+    
     isConnected &&
       roomId &&
       subscribe({ path: "/topic/chat/room", roomId: roomId }, (body: Chat) => {
@@ -47,41 +58,36 @@ const ChatList = () => {
   return (
     <ChatContainer>
       {/* <ScrollContainer> */}
-        {chat.map((chatItem, index) =>
-          user.nickname === chatItem.nickname ? (
-            //my chat
-            <Flex key={index} justify="flex-end" gap="1rem" align="flex-end">
-              <Div>{chatItem.time}</Div>
-              <Flex wd="none" direction="column" gap="1rem" align="flex-end">
-                <ChatBubble key={index} isMine={true}>
-                  {chatItem.message}
-                </ChatBubble>
-              </Flex>
+      {chat.map((chatItem, index) =>
+        user.nickname === chatItem.nickname ? (
+          //my chat
+          <Flex key={index} justify="flex-end" gap="1rem" align="flex-end">
+            <Div>{chatItem.time}</Div>
+            <Flex wd="none" direction="column" gap="1rem" align="flex-end">
+              <ChatBubble key={index} isMine={true}>
+                {chatItem.message}
+              </ChatBubble>
             </Flex>
-          ) : (
-            <Flex
-              key={index}
-              justify="flex-start"
-              gap="1rem"
-              align="flex-start"
-            >
-              <Img
-                wd="3rem"
-                hg="3rem"
-                type={ImgType.shadowProfile}
-                src={chatItem.profileImg}
-              />
-              <Flex wd="none" direction="column" gap="1rem" align="flex-start">
-                <ChatBubble key={index} isMine={false}>
-                  {chatItem.message}
-                </ChatBubble>
-              </Flex>
-              <Flex wd="none" align="flex-end" hg="100%">
-                {chatItem.time}
-              </Flex>
-            </Flex> //others chat
-          )
-        )}
+          </Flex>
+        ) : (
+          <Flex key={index} justify="flex-start" gap="1rem" align="flex-start">
+            <Img
+              wd="3rem"
+              hg="3rem"
+              type={ImgType.shadowProfile}
+              src={chatItem.profileImg}
+            />
+            <Flex wd="none" direction="column" gap="1rem" align="flex-start">
+              <ChatBubble key={index} isMine={false}>
+                {chatItem.message}
+              </ChatBubble>
+            </Flex>
+            <Flex wd="none" align="flex-end" hg="100%">
+              {chatItem.time}
+            </Flex>
+          </Flex> //others chat
+        )
+      )}
       {/* </ScrollContainer> */}
     </ChatContainer>
   );

@@ -7,19 +7,25 @@ import {
   mainLogo,
   message,
   notifications,
-  search,
-  settings,
-  upload,
+  search, upload
 } from "../../asset/pic";
+<<<<<<< Updated upstream
+=======
+import { serverURL } from "../../dataManager/apiConfig";
+>>>>>>> Stashed changes
 import { getCookies, removeCookies } from "../../dataManager/cookie";
 import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
 import useTypeModal from "../../modal/hooks/useTypeModal";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
+<<<<<<< Updated upstream
 import { alarmSelector } from "../../redux/slice/mainSlice";
+=======
+import { alarmSelector, __getAlarm } from "../../redux/slice/mainSlice";
+>>>>>>> Stashed changes
 import {
   userSelector,
   __clearUser,
-  __getGeneralUserInfo,
+  __getGeneralUserInfo
 } from "../../redux/slice/userSlice";
 import { PATH } from "../../Router";
 import Flex from "../elem/Flex";
@@ -39,6 +45,7 @@ const Header = () => {
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+
 
   // 모달창(로그인)
   const onClickSignBtn = () => {
@@ -65,49 +72,49 @@ const Header = () => {
   useEffect(() => {
     if (!AccessToken && user.nickname) dispatch(__clearUser());
     if (AccessToken && !user.nickname) dispatch(__getGeneralUserInfo());
-    // let readyState = localStorage.getItem("readyState");
-    // if (readyState === null) readyState = 2;
-    // const isConnecting = Number(readyState) === 1 || Number(readyState) === 0;
+    let readyState = localStorage.getItem("readyState");
+    if (readyState === null) readyState = 2;
+    const isConnecting = Number(readyState) === 1 || Number(readyState) === 0;
 
-    // console.log(
-    //   "AccessToken && user.nickname && !isConnecting",
-    //   AccessToken && user.nickname && !isConnecting
-    // );
-    // if (AccessToken && user.nickname && !isConnecting) {
-    //   eventSource = new EventSource(`${serverURL}/subscribe/${user.nickname}`, {
-    //     withCredentials: true,
-    //     connection : 'keep-alive'
-    //   });
-    // }
-    // if (eventSource) {
-    //   eventSource.onopen = () => {
-    //     console.log("on open ... ready state", eventSource.readyState);
-    //     localStorage.setItem("readyState", eventSource.readyState);
-    //   };
-    //   eventSource.onmessage = (event) => {
-    //     dispatch(__getAlarm());
-    //   };
-    //   eventSource.onerror = (e) => {
-    //     eventSource.close();
-    //     console.log("on error ... error message", e);
-    //     console.log("on error ... readystate", eventSource.readyState);
-    //     eventSource = new EventSource(`${serverURL}/subscribe/${user.nickname}`, {
-    //       withCredentials: true,
-    //       connection : 'keep-alive'
-    //     });
-    //     console.log(
-    //       "on error ... after reconnect readystate",
-    //       eventSource.readyState
-    //     );
-    //     localStorage.setItem("readyState", eventSource.readyState);
-    //   };
-    // }
-    // return () => {
-    //   console.log("unmounting ... eventsource : ", eventSource);
-    //   eventSource?.close();
-    //   console.log("unmounting ... readystate", eventSource?.readyState);
-    //   localStorage.setItem("readyState", 2);
-    // };
+    console.log(
+      "AccessToken && user.nickname && !isConnecting",
+      AccessToken && user.nickname && !isConnecting
+    );
+    if (AccessToken && user.nickname && !isConnecting) {
+      eventSource = new EventSource(`${serverURL}/subscribe/${user.nickname}`, {
+        withCredentials: true,
+        connection : 'keep-alive'
+      });
+    }
+    if (eventSource) {
+      eventSource.onopen = () => {
+        console.log("on open ... ready state", eventSource.readyState);
+        localStorage.setItem("readyState", eventSource.readyState);
+      };
+      eventSource.onmessage = (event) => {
+        dispatch(__getAlarm());
+      };
+      eventSource.onerror = (e) => {
+        eventSource.close();
+        console.log("on error ... error message", e);
+        console.log("on error ... readystate", eventSource.readyState);
+        eventSource = new EventSource(`${serverURL}/subscribe/${user.nickname}`, {
+          withCredentials: true,
+          connection : 'keep-alive'
+        });
+        console.log(
+          "on error ... after reconnect readystate",
+          eventSource.readyState
+        );
+        localStorage.setItem("readyState", eventSource.readyState);
+      };
+    }
+    return () => {
+      console.log("unmounting ... eventsource : ", eventSource);
+      eventSource?.close();
+      console.log("unmounting ... readystate", eventSource?.readyState);
+      localStorage.setItem("readyState", 2);
+    };
   }, [user.nickname, AccessToken]);
 
   const onClickSetPage = () => {

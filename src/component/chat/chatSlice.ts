@@ -6,6 +6,7 @@ import { AppState } from "../../redux/config";
 export const roomIdSelector = (state: AppState) => state.chat.currentRoomId;
 export const chatSelector = (state: AppState) => state.chat.chat;
 export const chatRoomsSelector = (state: AppState) => state.chat.chatRooms;
+export const currentRoomIdSelector = (state: AppState) => state.chat.currentRoomId;
 
 export const chatSlice = createSlice({
   name: "chat",
@@ -37,11 +38,11 @@ export const chatSlice = createSlice({
       .addCase(__getChatRooms.fulfilled, (state, { payload }) => {
         console.log("__getChatRooms payload ..", payload);
         state.chatRooms = payload;
-        state.currentRoomId = payload[0].roomId;
+        state.currentRoomId = payload.length>0 ? payload[0].roomId : 0;
       })
       .addCase(__getChat.fulfilled, (state, { payload }) => {
         console.log("__getChat payload ..", payload);
-        state.chat = payload;
+        state.chat = state.chat.concat(payload);
       });
   },
 });
