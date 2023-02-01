@@ -30,7 +30,6 @@ const MainAudioPlayer = () => {
   );
   const dispatch = useAppDispatch();
 
-  const onListenHandler = (e: Event) => {};
   const onPlayHandler = () => {
     dispatch(__PlayerTogglePlay(true));
   };
@@ -97,7 +96,6 @@ const MainAudioPlayer = () => {
         </Flex>
 
         {/* flex row right grid [music btns, music bar, volume control] */}
-
         <AudioPlayer
           crossOrigin="anonymous"
           autoPlayAfterSrcChange={false}
@@ -107,7 +105,6 @@ const MainAudioPlayer = () => {
           onClickPrevious={onClickPrevious}
           onClickNext={onClickNext}
           autoPlay={false}
-          onListen={onListenHandler}
           ref={audioPlayer}
           layout="horizontal"
           showJumpControls={false}

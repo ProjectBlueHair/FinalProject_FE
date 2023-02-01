@@ -1,8 +1,10 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 import { more } from "../../asset/pic/index";
+import { useStomp } from "../../hook/useStomp";
 import { ChatRoom } from "../../model/ChatModel";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
+import { isEmptyObj } from "../../util/funcs";
 import Flex, { StFlex } from "../elem/Flex";
 import Img, { ImgType } from "../elem/Img";
 import { currentRoomIdSelector, __selectChatRoom } from "./chatSlice";
@@ -10,6 +12,7 @@ import { currentRoomIdSelector, __selectChatRoom } from "./chatSlice";
 const ChatRoomItem: React.FC<ChatRoom> = (props) => {
   const dispatch = useAppDispatch();
   const currentRoomId = useAppSelector(currentRoomIdSelector);
+  const {subscriptions} = useStomp()
   return (
     <ItemCard
       isCurrent={currentRoomId === props.roomId}

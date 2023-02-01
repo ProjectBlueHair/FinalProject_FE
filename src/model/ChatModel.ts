@@ -15,4 +15,5 @@ export interface ChatState {
   chatRooms : ChatRoom[]
   chat : Chat []
   currentRoomId : string | number
+  connected : boolean
 }

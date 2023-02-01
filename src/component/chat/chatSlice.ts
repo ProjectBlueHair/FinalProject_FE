@@ -6,7 +6,10 @@ import { AppState } from "../../redux/config";
 export const roomIdSelector = (state: AppState) => state.chat.currentRoomId;
 export const chatSelector = (state: AppState) => state.chat.chat;
 export const chatRoomsSelector = (state: AppState) => state.chat.chatRooms;
-export const currentRoomIdSelector = (state: AppState) => state.chat.currentRoomId;
+export const currentRoomIdSelector = (state: AppState) =>
+  state.chat.currentRoomId;
+export const connectionSelector = (state: AppState) =>
+  state.chat.connected;
 
 export const chatSlice = createSlice({
   name: "chat",
@@ -14,6 +17,7 @@ export const chatSlice = createSlice({
     chatRooms: [] as ChatRoom[],
     chat: [] as Chat[],
     currentRoomId: 0,
+    connected: false,
   } as ChatState,
   reducers: {
     __selectChatRoom: (state, { payload }) => {
@@ -28,6 +32,9 @@ export const chatSlice = createSlice({
     __clearChat: (state) => {
       state.chat = [];
     },
+    __stompConnected: (state, { payload }) => {
+      state.connected = payload
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -38,11 +45,11 @@ export const chatSlice = createSlice({
       .addCase(__getChatRooms.fulfilled, (state, { payload }) => {
         console.log("__getChatRooms payload ..", payload);
         state.chatRooms = payload;
-        state.currentRoomId = payload.length>0 ? payload[0].roomId : 0;
+        state.currentRoomId = payload.length > 0 ? payload[0].roomId : 0;
       })
       .addCase(__getChat.fulfilled, (state, { payload }) => {
         console.log("__getChat payload ..", payload);
-        state.chat = state.chat.concat(payload);
+        state.chat = payload;
       });
   },
 });
@@ -73,14 +80,14 @@ export const __getChat = createAsyncThunk(
   async (payload: string | number, thunkAPI) => {
     try {
       const { data } = await instanceAxios.get(`/chat/room/${payload}`);
-      console.log('__getChat thunk ...', data);
-      
+      console.log("__getChat thunk ...", data);
+
       return data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
   }
 );
-export const { __selectChatRoom, __clearChat, __updateChat } =
+export const { __selectChatRoom, __clearChat, __updateChat,__stompConnected } =
   chatSlice.actions;
 export default chatSlice.reducer;

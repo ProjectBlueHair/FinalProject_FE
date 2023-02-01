@@ -9,6 +9,7 @@ import Flex, { StFlex } from "../elem/Flex";
 import Img, { ImgType } from "../elem/Img";
 import {
   chatSelector,
+  connectionSelector,
   roomIdSelector,
   __clearChat,
   __getChat,
@@ -17,13 +18,16 @@ import {
 const ChatList = () => {
   const user = useAppSelector(userSelector);
   const roomId = useAppSelector(roomIdSelector);
+  const connected = useAppSelector(connectionSelector);
+  console.log("roomid ... ", roomId);
+
   const dispatch = useAppDispatch();
   const { isConnected, subscribe, unsubscribe, subscriptions } = useStomp();
   const chat = useAppSelector(chatSelector);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    isConnected &&
+    connected &&
       roomId &&
       subscribe({ path: "/topic/chat/room", roomId: roomId }, (body: Chat) => {
         console.log("subscribe callback ... body", body);
@@ -38,7 +42,7 @@ const ChatList = () => {
         dispatch(__clearChat());
       }
     };
-  }, [isConnected, roomId]);
+  }, [connected, roomId]);
 
   useEffect(() => {
     dispatch(__getChat(roomId));

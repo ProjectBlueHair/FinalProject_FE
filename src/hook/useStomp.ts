@@ -1,9 +1,11 @@
 import { Client, Stomp, StompConfig, StompSubscription } from "@stomp/stompjs";
 import { useCallback, useEffect } from "react";
 import SockJS from "sockjs-client";
+import { __stompConnected } from "../component/chat/chatSlice";
 import { socketURL } from "../dataManager/apiConfig";
 import { getCookies } from "../dataManager/cookie";
 import { Chat } from "../model/ChatModel";
+import { useAppDispatch } from "../redux/config";
 
 interface ObjectType {
   [key: string]: any;
@@ -14,6 +16,7 @@ let isConnected = false;
 const subscriptions: { [key: string]: StompSubscription } = {};
 
 export const useStomp = (config?: StompConfig, callback?: () => void) => {
+const dispatch = useAppDispatch()
   const connect = useCallback(() => {
     if (!stompClient) {
       const socket = new SockJS(`${socketURL}/ws/chat`);
@@ -25,6 +28,7 @@ export const useStomp = (config?: StompConfig, callback?: () => void) => {
     stompClient.onConnect = (frame) => {
       console.log("useStomp ... onConnect", frame);
       isConnected = true;
+      dispatch(__stompConnected(true))
       callback && callback();
     };
   }, []);
@@ -66,6 +70,8 @@ export const useStomp = (config?: StompConfig, callback?: () => void) => {
   const disconnect = useCallback(() => {
     console.log('disconnect...');
     stompClient.deactivate();
+    dispatch(__stompConnected(false))
+
   }, [stompClient]);
 
   useEffect(() => {
