@@ -19,25 +19,15 @@ const ChatForm = () => {
   const roomId = useAppSelector(roomIdSelector);
   const { send } = useStomp();
   const messageInput = useTextArea("");
-  const sendChat = () => {
-    return instanceAxios.post(`${socketURL}/api/chat/message/${roomId}`, {
-      nickname: user.nickname,
-      profileImg: user.profileImg,
-      message: messageInput.value,
-      time: "",
-      date: "",
-    });
-  };
+
   const handleSubmit = () => {
-    send(`/topic/chat/room/${roomId}`, {
-    // send(`/app/chat/message/${roomId}`, {
+    send(`/app/chat/message/${roomId}`, {
       nickname: user.nickname,
       profileImg: user.profileImg,
       message: messageInput.value,
       time: "",
       date: "",
     });
-    // sendChat()
   };
   return (
     <Flex align="flex-start" gap="1rem">
