@@ -53,15 +53,20 @@ const PostingCollaboRequested = () => {
       .then(({ data }: { data: Response }) => {
         if (data.customHttpStatus === 2000) {
           $closeModal();
-          alert(data.message);
-          navigate(`${PATH.detail}/${postId}`);
+          $openModal({
+            type: "alert",
+            props: {
+              message: data.message,
+              type: "confirm",
+              to: `${PATH.detail}/${postId}`,
+            },
+          });
         } else {
           throw new Error(data.message);
         }
       })
       .catch((err) => {
         $closeModal();
-        alert(err);
       });
   };
 
@@ -96,21 +101,7 @@ const PostingCollaboRequested = () => {
         </Flex>
       </Flex>
     </form>
-    // <form onSubmit={handleSubmit}>
-    //   <Flex gap="2.5rem" align="flex-start">
-    //     <Flex wd="100%" direction="column" gap="2rem" align="flex-start">
-    //       <div>설명</div>
-    //       <div style={{ ...formStyle, height: "15rem", width: "70rem" }}>
-    //         {collaboDescription}
-    //       </div>
-    //       <Flex justify="flex-end">
-    //         <TextButton btnType="basic" type="submit">
-    //           승인하기
-    //         </TextButton>
-    //       </Flex>
-    //     </Flex>
-    //   </Flex>
-    // </form>
+
   );
 };
 

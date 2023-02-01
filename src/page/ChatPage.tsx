@@ -5,11 +5,12 @@ import Header from "../component/header/Header";
 import MainAudioPlayer from "../component/main/MainAudioPlayer";
 import ChatList from "../component/chat/ChatList";
 import ChatForm from "../component/chat/ChatForm";
+import UserCheck from "../util/UserCheck";
 
 const ChatPage = () => {
   return (
     <Flex direction="column" justify="flex-start" hg="100vh">
-      {/* <UserCheck/> */}
+      <UserCheck/>
       <Header />
       <ChatGrid>
         <ChatRoomList />

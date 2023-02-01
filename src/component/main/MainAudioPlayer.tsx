@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import Flex from "../elem/Flex";
 import styled from "styled-components";
 import Img from "../elem/Img";
@@ -100,7 +100,7 @@ const MainAudioPlayer = () => {
 
         <AudioPlayer
           crossOrigin="anonymous"
-          autoPlayAfterSrcChange={true}
+          autoPlayAfterSrcChange={false}
           src={post?.musicFile}
           onPlay={onPlayHandler}
           onPause={onPauseHandler}

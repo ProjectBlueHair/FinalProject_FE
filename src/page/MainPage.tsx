@@ -7,17 +7,19 @@ import MainAudioPlayer from "../component/main/MainAudioPlayer";
 import { useDispatch } from "react-redux";
 import { __cleanUp } from "../redux/slice/postingSlice";
 import { __mainCleanUp } from "../redux/slice/mainSlice";
+import ErrorCheck from "../util/ErrorCheck";
 const MainPage = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     return () => {
-      dispatch(__mainCleanUp());
+      // dispatch(__mainCleanUp());
     };
   }, []);
 
   return (
     <Flex direction="column" justify="flex-start" hg="100vh" gap="0">
       {/* header, main 패딩 같아서 main container 로 감싸줌 */}
+      <ErrorCheck/>
       <Header />
       <MainContainer>
         <MainPostList />

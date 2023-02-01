@@ -24,6 +24,7 @@ const initialState = {
 } as MainState;
 
 export const alarmSelector = (state: AppState) => state.main.alarmCount;
+export const mainErrorSelector = (state: AppState) => state.main.error;
 const findPostIndex = (posts: Post[], payload: string | number) => {
   return posts.findIndex((post) => post.id === payload);
 };
@@ -68,6 +69,9 @@ export const mainSlice = createSlice({
     },
     __mainCleanUp: (state) => {
       return initialState;
+    },
+    __clearAlarmCount: (state) => {
+      state.alarmCount = 0
     },
   },
   extraReducers: (builder) => {
@@ -169,5 +173,6 @@ export const {
   __PlayPrevious,
   __playNext,
   __mainCleanUp,
+  __clearAlarmCount
 } = mainSlice.actions;
 export default mainSlice.reducer;
