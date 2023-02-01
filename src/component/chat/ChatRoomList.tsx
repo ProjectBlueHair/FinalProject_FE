@@ -3,11 +3,16 @@ import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import { StFlex } from "../elem/Flex";
 import ChatRoomItem from "./ChatRoomItem";
-import { chatRoomsSelector, __getChatRooms } from "./chatSlice";
+import {
+  chatRoomsSelector,
+  currentRoomIdSelector,
+  __getChatRooms,
+} from "./chatSlice";
 
 const ChatRoomList = () => {
   const dispatch = useAppDispatch();
   const chatRooms = useAppSelector(chatRoomsSelector);
+  const currentRoomId = useAppSelector(currentRoomIdSelector);
   useEffect(() => {
     dispatch(__getChatRooms());
   }, []);

@@ -13,7 +13,7 @@ let stompClient: Client;
 let isConnected = false;
 const subscriptions: { [key: string]: StompSubscription } = {};
 
-export function useStomp(config?: StompConfig, callback?: () => void) {
+export const useStomp = (config?: StompConfig, callback?: () => void) => {
   const connect = useCallback(() => {
     if (!stompClient) {
       const socket = new SockJS(`${socketURL}/ws/chat`);
@@ -40,7 +40,6 @@ export function useStomp(config?: StompConfig, callback?: () => void) {
     [stompClient]
   );
 
-
   const subscribe = useCallback(
     <T>(path: ObjectType, callback: (msg: T) => void) => {
       if (!stompClient) return;
@@ -65,6 +64,7 @@ export function useStomp(config?: StompConfig, callback?: () => void) {
   }, []);
 
   const disconnect = useCallback(() => {
+    console.log('disconnect...');
     stompClient.deactivate();
   }, [stompClient]);
 
@@ -80,4 +80,4 @@ export function useStomp(config?: StompConfig, callback?: () => void) {
     send,
     isConnected,
   };
-}
+};

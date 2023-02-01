@@ -8,22 +8,36 @@ import { StTextarea } from "../elem/Textarea";
 import { chatSelector, roomIdSelector } from "./chatSlice";
 import { userSelector } from "../../redux/slice/userSlice";
 import { useAppSelector } from "../../redux/config";
-import { serverURL } from "../../dataManager/apiConfig";
+import {
+  instanceAxios,
+  serverURL,
+  socketURL,
+} from "../../dataManager/apiConfig";
 
 const ChatForm = () => {
   const user = useAppSelector(userSelector);
   const roomId = useAppSelector(roomIdSelector);
   const { send } = useStomp();
   const messageInput = useTextArea("");
-  const handleSubmit = () => {
-    send(`/topic/chat/room/${roomId}`, {
-    // send(`/app/api/chat/message`, {
+  const sendChat = () => {
+    return instanceAxios.post(`${socketURL}/api/chat/message/${roomId}`, {
       nickname: user.nickname,
       profileImg: user.profileImg,
       message: messageInput.value,
       time: "",
       date: "",
     });
+  };
+  const handleSubmit = () => {
+    send(`/topic/chat/room/${roomId}`, {
+    // send(`/app/chat/message/${roomId}`, {
+      nickname: user.nickname,
+      profileImg: user.profileImg,
+      message: messageInput.value,
+      time: "",
+      date: "",
+    });
+    // sendChat()
   };
   return (
     <Flex align="flex-start" gap="1rem">
