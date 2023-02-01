@@ -1,6 +1,7 @@
 export interface ChatItem {
   nickname: string;
   profileImg: string;
+  roomId : string | number
 }
 export interface ChatBubbleModel {
   id : number;

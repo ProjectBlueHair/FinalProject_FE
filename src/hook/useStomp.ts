@@ -41,16 +41,15 @@ export function useStomp(config?: StompConfig, callback?: () => void) {
   );
 
   const subscribe = useCallback(
-    <T>(path: string, callback: (msg: T) => void) => {
+    <T>(path: ObjectType, callback: (msg: T) => void) => {
       if (!stompClient) return;
 
-      if (subscriptions[path]) return;
-
-      const subscription = stompClient.subscribe(path, (message) => {
+      if (subscriptions[path.path]) return;
+      const subscription = stompClient.subscribe(`${path.path}/${path.roomId}`, (message) => {
         const body: T = JSON.parse(message.body);
         callback(body);
       });
-      subscriptions[path] = subscription;
+      subscriptions[path.path] = subscription;
     },
     []
   );

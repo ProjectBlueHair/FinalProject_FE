@@ -1,16 +1,33 @@
-import React from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
 import { ChatBubbleModel } from "../../model/ChatModel";
 import { useAppSelector } from "../../redux/config";
 import { userSelector } from "../../redux/slice/userSlice";
 import Div from "../elem/Div";
-import Flex, { StFlex } from "../elem/Flex";
+import Flex from "../elem/Flex";
 import Img, { ImgType } from "../elem/Img";
+
+import { useStomp } from "../../hook/useStomp";
+import { roomIdSelector } from "./chatSlice";
 const ChatBubbleList = () => {
   const user = useAppSelector(userSelector);
+  const roomId = useAppSelector(roomIdSelector);
+  const { isConnected, subscribe, unsubscribe, subscriptions } = useStomp();
+  useEffect(() => {
+    isConnected &&
+      subscribe({ path: "/topic/chat/room", roomId: roomId }, (body) => {
+        console.log("subscribe callback ... body", body);
+      });
+    return () => {
+      if (subscriptions["/topic/chat/room"]) {
+        unsubscribe("/topic/chat/room");
+      }
+    };
+  }, [isConnected, roomId]);
+
   const chatList: ChatBubbleModel[] = [
     {
-      id:1,
+      id: 1,
       from: "mcho",
       profileImg: "testRandomPost/1.jpg",
       message: [
@@ -21,7 +38,7 @@ const ChatBubbleList = () => {
       time: "11:33pm",
     },
     {
-      id:2,
+      id: 2,
       from: "mcho1",
       profileImg: "testRandomPost/1.jpg",
       message: [
@@ -33,19 +50,24 @@ const ChatBubbleList = () => {
   ];
   return (
     <Flex flex="1" direction="column" gap="2rem" justify="flex-start">
-      {chatList.map((bubble, index) =>(
+      {chatList.map((bubble, index) =>
         user.nickname === bubble.from ? (
           //my chat
           <Flex key={bubble.id} justify="flex-end" gap="1rem" align="flex-end">
             <Div>{bubble.time}</Div>
             <Flex wd="none" direction="column" gap="1rem" align="flex-end">
-              {bubble.message.map((msg, index) => (
-                <ChatBubble key={index} isMine={true}>{msg}</ChatBubble>
-              ))}
+              <ChatBubble key={index} isMine={true}>
+                {bubble.message}
+              </ChatBubble>
             </Flex>
           </Flex>
         ) : (
-          <Flex key={bubble.id} justify="flex-start" gap="1rem" align="flex-start">
+          <Flex
+            key={bubble.id}
+            justify="flex-start"
+            gap="1rem"
+            align="flex-start"
+          >
             <Img
               wd="3rem"
               hg="3rem"
@@ -53,15 +75,15 @@ const ChatBubbleList = () => {
               src={bubble.profileImg}
             />
             <Flex wd="none" direction="column" gap="1rem" align="flex-start">
-              {bubble.message.map((msg, index) => (
-                <ChatBubble key={index} isMine={false}>{msg}</ChatBubble>
-              ))}
+              <ChatBubble key={index} isMine={false}>
+                {bubble.message}
+              </ChatBubble>
             </Flex>
             <Flex wd="none" align="flex-end" hg="100%">
               {bubble.time}
             </Flex>
           </Flex> //others chat
-        ))
+        )
       )}
     </Flex>
   );

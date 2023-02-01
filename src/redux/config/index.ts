@@ -9,7 +9,8 @@ import main from "../slice/mainSlice";
 import posting from "../slice/postingSlice";
 import { typeModalSlice } from "../../modal/typeModalSlice";
 import { collaboSlice } from "../slice/collaboSlice";
-import {userSlice} from "../slice/userSlice";
+import { userSlice } from "../slice/userSlice";
+import { chatSlice } from "../../component/chat/chatSlice";
 
 const rootReducer = combineReducers({
   modal: modalSlice.reducer,
@@ -18,10 +19,9 @@ const rootReducer = combineReducers({
   detail,
   comment,
   typeModal: typeModalSlice.reducer,
-  collabo : collaboSlice.reducer, 
-  user : userSlice.reducer
-  
-
+  collabo: collaboSlice.reducer,
+  user: userSlice.reducer,
+  chat: chatSlice.reducer,
 });
 export type AppState = ReturnType<typeof rootReducer>;
 

@@ -3,14 +3,14 @@ import { ChatItem } from "../../model/ChatModel";
 import { StFlex } from "../elem/Flex";
 import ChatRoomItem from "./ChatRoomItem";
 
-const ChatItemList: ChatItem [] = [
-  { nickname: "test1", profileImg: "testRandomPost/1.jpg" },
-  { nickname: "test2", profileImg: "testRandomPost/2.jpg" },
+const ChatItemList: ChatItem[] = [
+  { roomId: 0, nickname: "test1", profileImg: "testRandomPost/1.jpg" },
+  { roomId: 1, nickname: "test2", profileImg: "testRandomPost/2.jpg" },
 ];
 
 const ChatRoomList = () => {
   return (
-    <ChatRoomListContainer >
+    <ChatRoomListContainer>
       {ChatItemList.map((item, index) => (
         <ChatRoomItem key={index} {...item} />
       ))}
@@ -21,10 +21,8 @@ const ChatRoomList = () => {
 export default ChatRoomList;
 
 const ChatRoomListContainer = styled(StFlex)`
-  
   flex-direction: column;
   gap: 1rem;
   overflow: auto;
   justify-content: flex-start;
-
-`
+`;
