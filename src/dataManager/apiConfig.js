@@ -3,7 +3,6 @@ import { getCookies, removeCookies, setCookie } from "./cookie";
 
 export const serverURL = process.env.REACT_APP_SERVER;
 export const socketURL = process.env.REACT_APP_SOCKET_SERVER;
-export const wssURL = process.env.REACT_APP_SOCKET_WSS;
 
 export const instanceAxios = axios.create({ baseURL: serverURL });
 export const reassuranceAxios = axios.create({ baseURL: serverURL });
