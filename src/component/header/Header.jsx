@@ -71,49 +71,49 @@ const Header = () => {
   useEffect(() => {
     if (!AccessToken && user.nickname) dispatch(__clearUser());
     if (AccessToken && !user.nickname) dispatch(__getGeneralUserInfo());
-    let readyState = localStorage.getItem("readyState");
-    if (readyState === null) readyState = 2;
-    const isConnecting = Number(readyState) === 1 || Number(readyState) === 0;
+    // let readyState = localStorage.getItem("readyState");
+    // if (readyState === null) readyState = 2;
+    // const isConnecting = Number(readyState) === 1 || Number(readyState) === 0;
 
-    console.log(
-      "AccessToken && user.nickname && !isConnecting",
-      AccessToken && user.nickname && !isConnecting
-    );
-    if (AccessToken && user.nickname && !isConnecting) {
-      eventSource = new EventSource(`${serverURL}/subscribe/${user.nickname}`, {
-        withCredentials: true,
-        connection : 'keep-alive'
-      });
-    }
-    if (eventSource) {
-      eventSource.onopen = () => {
-        console.log("on open ... ready state", eventSource.readyState);
-        localStorage.setItem("readyState", eventSource.readyState);
-      };
-      eventSource.onmessage = (event) => {
-        dispatch(__getAlarm());
-      };
-      eventSource.onerror = (e) => {
-        eventSource.close();
-        console.log("on error ... error message", e);
-        console.log("on error ... readystate", eventSource.readyState);
-        eventSource = new EventSource(`${serverURL}/subscribe/${user.nickname}`, {
-          withCredentials: true,
-          connection : 'keep-alive'
-        });
-        console.log(
-          "on error ... after reconnect readystate",
-          eventSource.readyState
-        );
-        localStorage.setItem("readyState", eventSource.readyState);
-      };
-    }
-    return () => {
-      console.log("unmounting ... eventsource : ", eventSource);
-      eventSource?.close();
-      console.log("unmounting ... readystate", eventSource?.readyState);
-      localStorage.setItem("readyState", 2);
-    };
+    // console.log(
+    //   "AccessToken && user.nickname && !isConnecting",
+    //   AccessToken && user.nickname && !isConnecting
+    // );
+    // if (AccessToken && user.nickname && !isConnecting) {
+    //   eventSource = new EventSource(`${serverURL}/subscribe/${user.nickname}`, {
+    //     withCredentials: true,
+    //     connection : 'keep-alive'
+    //   });
+    // }
+    // if (eventSource) {
+    //   eventSource.onopen = () => {
+    //     console.log("on open ... ready state", eventSource.readyState);
+    //     localStorage.setItem("readyState", eventSource.readyState);
+    //   };
+    //   eventSource.onmessage = (event) => {
+    //     dispatch(__getAlarm());
+    //   };
+    //   eventSource.onerror = (e) => {
+    //     eventSource.close();
+    //     console.log("on error ... error message", e);
+    //     console.log("on error ... readystate", eventSource.readyState);
+    //     eventSource = new EventSource(`${serverURL}/subscribe/${user.nickname}`, {
+    //       withCredentials: true,
+    //       connection : 'keep-alive'
+    //     });
+    //     console.log(
+    //       "on error ... after reconnect readystate",
+    //       eventSource.readyState
+    //     );
+    //     localStorage.setItem("readyState", eventSource.readyState);
+    //   };
+    // }
+    // return () => {
+    //   console.log("unmounting ... eventsource : ", eventSource);
+    //   eventSource?.close();
+    //   console.log("unmounting ... readystate", eventSource?.readyState);
+    //   localStorage.setItem("readyState", 2);
+    // };
   }, [user.nickname, AccessToken]);
 
   const onClickSetPage = () => {

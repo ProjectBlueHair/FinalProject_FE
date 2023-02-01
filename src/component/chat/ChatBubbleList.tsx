@@ -52,7 +52,7 @@ const ChatBubbleList = () => {
               type={ImgType.shadowProfile}
               src={bubble.profileImg}
             />
-            <Flex wd="none" direction="column" gap="1rem" align="flex-end">
+            <Flex wd="none" direction="column" gap="1rem" align="flex-start">
               {bubble.message.map((msg, index) => (
                 <ChatBubble key={index} isMine={false}>{msg}</ChatBubble>
               ))}
