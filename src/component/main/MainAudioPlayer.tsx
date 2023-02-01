@@ -3,7 +3,6 @@ import Flex from "../elem/Flex";
 import styled from "styled-components";
 import Img from "../elem/Img";
 import AudioPlayer, { RHAP_UI } from "react-h5-audio-player";
-import "./MainAudioPlayer.css";
 import {
   mute,
   pause,

@@ -1,24 +1,24 @@
-import useTypeModal from "../modal/hooks/useTypeModal";
-import { getCookies } from "../dataManager/cookie";
-import { ALERT_TYPE } from "../modal/modals/AlertModal";
-import { PATH } from "../Router";
 import { Fragment } from "react";
+import useTypeModal from "../modal/hooks/useTypeModal";
+import { ALERT_TYPE } from "../modal/modals/AlertModal";
 import { useAppSelector } from "../redux/config";
-import { userSelector } from "../redux/slice/userSlice";
-import { postingErrorSelector } from "../redux/slice/postingSlice";
 import { mainErrorSelector } from "../redux/slice/mainSlice";
+import { postingErrorSelector } from "../redux/slice/postingSlice";
+import { PATH } from "../Router";
 
 const ErrorCheck = () => {
   const { $openModal } = useTypeModal();
   const postingError = useAppSelector(postingErrorSelector);
   const mainError = useAppSelector(mainErrorSelector);
-  const needRedirect = (''+postingError)?.includes("4041");
+  console.log("error check... main", mainError, "posting", postingError);
+
+  const needRedirect = ("" + postingError)?.includes("4041");
 
   if (postingError || mainError) {
     $openModal({
       type: "alert",
       props: {
-        message: "" + postingError,
+        message: "" + postingError || mainError,
         type: ALERT_TYPE.error,
         to: needRedirect ? PATH.main : null,
       },

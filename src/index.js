@@ -1,10 +1,9 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
-import store from "./redux/config";
-import { Provider } from "react-redux";
-import ModalContainer from "./component/modal/ModalContainer";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { Provider } from "react-redux";
+import App from "./App";
+import ModalContainer from "./component/modal/ModalContainer";
+import store from "./redux/config";
 if (process.env.NODE_ENV === "development") {
   // worker.start({ onUnhandledRequest: "bypass" });
 }
