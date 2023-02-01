@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { AiOutlineUp, AiOutlineDown } from "react-icons/ai";
 import { getCookies } from "../../dataManager/cookie";
 import {
   __getDetailCollabo,
+  __getUserInfo,
   __putDetailFollow,
 } from "../../redux/slice/detailSlice";
 
@@ -17,7 +17,10 @@ const DetailFollow = () => {
   const [followMore, setFollowMore] = useState(true);
   useEffect(() => {
     dispatch(__getDetailCollabo(id));
+    dispatch(__getUserInfo());
   }, []);
+  const userInfo = useSelector((state) => state.user.user);
+  console.log("3", userInfo.nickname);
   //작곡가 프로필/ 이름/ 악기 이름
   const detailCollabo = useSelector((state) => state.detail.collabo.data);
   const detailFollowOne = detailCollabo?.slice(0, 1);
@@ -38,6 +41,8 @@ const DetailFollow = () => {
   const MypageMove = (name) => {
     navigate(`/mypage/${name}`);
   };
+
+  console.log(detailCollabo);
   return (
     <FollowAll>
       {detailFollowOne?.map((collabo, index) => (
@@ -65,6 +70,8 @@ const DetailFollow = () => {
             </FollowImgText>
             <FollowBtn>
               {acToken === undefined ? (
+                ""
+              ) : userInfo.nickname === collabo.nickname ? (
                 ""
               ) : (
                 <button onClick={() => FollowClick(collabo)}>
@@ -105,6 +112,8 @@ const DetailFollow = () => {
                   </FollowImgText>
                   <FollowBtn>
                     {acToken === undefined ? (
+                      ""
+                    ) : userInfo.nickname === collabo.nickname ? (
                       ""
                     ) : (
                       <button onClick={() => FollowClick(collabo)}>

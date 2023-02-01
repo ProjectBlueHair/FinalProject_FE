@@ -1,22 +1,18 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import Img from "../../elem/Img";
-import { more } from "../../../asset/pic";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { __getComment, __postCommentSub } from "../../../redux/slice/comment";
-import DetailCommentSubDeleteUpdate from "./DetailCommentSubDeleteUpdate";
-import { useSelector } from "react-redux";
-import { __getUserInfo } from "../../../redux/slice/detailSlice";
-import DetailCommentSubLike from "./DetailCommentSubLike";
+import styled from "styled-components";
 import useTypeModal from "../../../modal/hooks/useTypeModal";
+import { __getComment, __postCommentSub } from "../../../redux/slice/comment";
+import { __getUserInfo } from "../../../redux/slice/detailSlice";
+import DetailCommentSubDeleteUpdate from "./DetailCommentSubDeleteUpdate";
 
 const DetailCommentSub = ({ mcv }) => {
   const [comSubV, setComSubV] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
-  const { $openModal } = useTypeModal();
+  const { $openModal, $closeModal } = useTypeModal();
   useEffect(() => {
     dispatch(__getUserInfo());
   }, []);
@@ -47,6 +43,13 @@ const DetailCommentSub = ({ mcv }) => {
   const MypageMove = (name) => {
     navigate(`/mypage/${name}`);
   };
+
+  const KPH = (e) => {
+    $closeModal();
+    if (e.key === "Enter") {
+      onClickComSub();
+    }
+  };
   return (
     <DetailSubView>
       {mcv.replyList?.map((re) => (
@@ -72,6 +75,7 @@ const DetailCommentSub = ({ mcv }) => {
               name="commentSub"
               value={comSubV}
               onChange={onChangeCommentSub}
+              onKeyPress={KPH}
             />
             <button onClick={onClickComSub}>댓글</button>
           </div>

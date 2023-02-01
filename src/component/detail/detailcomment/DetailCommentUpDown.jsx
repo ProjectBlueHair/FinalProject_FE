@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { AiOutlineUp, AiOutlineDown } from "react-icons/ai";
+import { useState } from "react";
+import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 import styled from "styled-components";
 import DetailCommentSub from "../detailcommentsub/DetailCommentSub";
 

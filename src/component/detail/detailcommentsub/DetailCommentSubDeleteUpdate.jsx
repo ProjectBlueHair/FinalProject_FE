@@ -1,18 +1,17 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { more } from "../../../asset/pic";
+import useToggleOutSideClick from "../../../modal/hooks/useToggleOutSideClick";
 import {
   __deleteComment,
   __getComment,
   __putComment,
 } from "../../../redux/slice/comment";
 import { __getUserInfo } from "../../../redux/slice/detailSlice";
-import DetailCommentSubLike from "./DetailCommentSubLike";
 import Img from "../../elem/Img";
-import { more } from "../../../asset/pic";
-import useToggleOutSideClick from "../../../modal/hooks/useToggleOutSideClick";
+import DetailCommentSubLike from "./DetailCommentSubLike";
 
 const DetailCommentSubDeleteUpdate = ({ re }) => {
   const dispatch = useDispatch();
@@ -106,17 +105,10 @@ const DetailCommentSubDeleteUpdate = ({ re }) => {
 
         <ContentSubBTW>
           <DetailCommentSubLike re={re} />
-          <button
-            style={{
-              marginRight: "10px",
-              border: "transparent",
-              borderBottom: "1px solid #ff4d00",
-              padding: "1px 3px",
-            }}
-            onClick={() => onUpdateSubCom(re.id)}
-          >
-            수정하기
-          </button>
+          <SubUpClear>
+            <button onClick={() => setSubUPDEL(false)}>취소</button>
+            <button onClick={() => onUpdateSubCom(re.id)}>수정하기</button>
+          </SubUpClear>
         </ContentSubBTW>
       </div>
     );
@@ -148,8 +140,8 @@ const DetailComSubContent = styled.div`
   input {
     border: transparent;
     background-color: transparent;
-    border-bottom: 1px solid black;
-    width: 99%;
+    border-bottom: 1px solid #ff4d00;
+    width: 100%;
   }
 `;
 
@@ -183,4 +175,15 @@ const ContentSubBTW = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+`;
+
+const SubUpClear = styled.div`
+  button {
+    border: transparent;
+    background-color: #ff4d00;
+    border-radius: 20px;
+    color: white;
+    padding: 1px 5px;
+    margin-right: 4px;
+  }
 `;

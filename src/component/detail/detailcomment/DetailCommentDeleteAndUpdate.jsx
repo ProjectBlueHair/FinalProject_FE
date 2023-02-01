@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { more } from "../../../asset/pic";
+import useToggleOutSideClick from "../../../modal/hooks/useToggleOutSideClick";
 import {
   __deleteComment,
   __getComment,
@@ -10,9 +11,7 @@ import {
 } from "../../../redux/slice/comment";
 import { __getUserInfo } from "../../../redux/slice/detailSlice";
 import Img from "../../elem/Img";
-import { more } from "../../../asset/pic";
 import DetailCommentLike from "./DetailCommentLike";
-import useToggleOutSideClick from "../../../modal/hooks/useToggleOutSideClick";
 
 const DetailDeleteAndUpdate = ({ mcv }) => {
   const [comUpdate, setcomUpdate] = useState(false);
@@ -101,17 +100,10 @@ const DetailDeleteAndUpdate = ({ mcv }) => {
         </DetailComContent>
         <ContentBTW>
           <DetailCommentLike mcv={mcv} />
-          <button
-            onClick={() => onComUpdateYes(mcv.id)}
-            style={{
-              marginRight: "10px",
-              border: "transparent",
-              borderBottom: "1px solid #ff4d00",
-              padding: "1px 3px",
-            }}
-          >
-            수정하기
-          </button>
+          <UpClear>
+            <button onClick={() => setcomUpdate(false)}>취소</button>
+            <button onClick={() => onComUpdateYes(mcv.id)}>수정하기</button>
+          </UpClear>
         </ContentBTW>
       </div>
     );
@@ -142,7 +134,7 @@ const DetailComContent = styled.div`
   input {
     border: transparent;
     background-color: transparent;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid #ff4d00;
     width: 99%;
     margin-right: 10px;
     margin-top: 5px;
@@ -178,5 +170,16 @@ const MoreBtn = styled.div`
       border-bottom: 1px solid #ff4d00;
       width: 30px;
     }
+  }
+`;
+
+const UpClear = styled.div`
+  button {
+    border: transparent;
+    background-color: #ff4d00;
+    border-radius: 20px;
+    color: white;
+    padding: 1px 5px;
+    margin-right: 5px;
   }
 `;

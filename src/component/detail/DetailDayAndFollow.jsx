@@ -1,14 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import styled from "styled-components";
-import DetailFollow from "./DetailFollow";
-import DetailComment from "./detailcomment/DetailComment";
-import { __getDetailCollabo } from "../../redux/slice/detailSlice";
+import { useEffect, useRef, useState } from "react";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
-import { AiOutlineUp, AiOutlineDown } from "react-icons/ai";
-import Img from "../elem/Img";
-import { save, share, collaboPlus, report, kakaoIcon } from "../../asset/pic";
-import { PATH } from "../../Router";
-import StLink from "../elem/Link";
 import {
   FacebookIcon,
   FacebookShareButton,
@@ -17,10 +10,16 @@ import {
   TwitterIcon,
   TwitterShareButton,
 } from "react-share";
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import useTypeModal from "../../modal/hooks/useTypeModal";
-import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
+import styled from "styled-components";
+import { collaboPlus, kakaoIcon, report, save, share } from "../../asset/pic";
 import { useShare } from "../../hook/useShare";
+import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
+import useTypeModal from "../../modal/hooks/useTypeModal";
+import { PATH } from "../../Router";
+import Img from "../elem/Img";
+import StLink from "../elem/Link";
+import DetailComment from "./detailcomment/DetailComment";
+import DetailFollow from "./DetailFollow";
 export const kakaoJS = process.env.REACT_APP_KaKaoJSKey;
 
 const DetailDayAndFollow = ({ detail }) => {
@@ -32,9 +31,9 @@ const DetailDayAndFollow = ({ detail }) => {
   const navigate = useNavigate();
   const shortContent = detail?.contents.slice(0, textLimit.current);
   const [shareOpen, setShareOpen] = useState(false);
-  const onShare = useCallback(() => {
+  const onShare = () => {
     setShareOpen(!shareOpen);
-  });
+  };
   const shared = useRef(null);
   useToggleOutSideClick(shared, setShareOpen);
   const currentUrl = window.location.href;

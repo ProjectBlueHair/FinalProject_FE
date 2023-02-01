@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import MypageLeft from "./MypageLeft";
 import MypageRight from "./MypageRight";

@@ -10,7 +10,7 @@ export const reassuranceAxios = axios.create({ baseURL: serverURL });
 instanceAxios.interceptors.request.use((config) => {
   if (config === undefined) return;
   const acc = getCookies("accesstoken");
-  const ref = getCookies("refreshtoken");
+  // const ref = getCookies("refreshtoken");
   config.headers["AccessToken"] = `${acc}`;
   // config.headers["Access-Control-Allow-Origin"] = "*";
   return config;
@@ -97,7 +97,7 @@ instanceAxios.interceptors.response.use(
     }
   },
   async (error) => {
-    console.log('AXIOS INTERCEPTOR ERROR :',error);
+    console.log("AXIOS INTERCEPTOR ERROR :", error);
     return Promise.reject(error);
   }
 );

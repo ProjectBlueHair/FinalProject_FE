@@ -1,4 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { elementScrollIntoView } from "seamless-scroll-polyfill";
 import styled from "styled-components";
 import {
   checkfalse,
@@ -8,17 +11,13 @@ import {
   linkedIn,
   twitter,
 } from "../../asset/pic";
-import Img from "../elem/Img";
 import { instanceAxios } from "../../dataManager/apiConfig";
-import { elementScrollIntoView } from "seamless-scroll-polyfill";
-import { uploadFiles } from "../../dataManager/imageS3";
-import { useDispatch } from "react-redux";
-import { __getUserInfo } from "../../redux/slice/detailSlice";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import useTypeModal from "../../modal/hooks/useTypeModal";
-import { reissuance } from "../../util/Reissuance";
 import { removeCookies, setCookie } from "../../dataManager/cookie";
+import { uploadFiles } from "../../dataManager/imageS3";
+import useTypeModal from "../../modal/hooks/useTypeModal";
+import { __getUserInfo } from "../../redux/slice/detailSlice";
+import { reissuance } from "../../util/Reissuance";
+import Img from "../elem/Img";
 
 const SetTotal = () => {
   const dispatch = useDispatch();
@@ -618,7 +617,7 @@ const SetTotal = () => {
                     fontSize: "13px",
                   }}
                 >
-                  ( 직업이 여러개 일 시 "," 를 이용하여 구분하여주세요!! ex.래퍼
+                  ( 직업이 여러개 일 시 "," 를 이용하여 구분해 주세요!! ex.래퍼
                   , 작사가 )
                 </span>
               </div>
@@ -896,7 +895,7 @@ const SetProfile = styled.div`
 `;
 
 const MyInformationInput = styled.textarea`
-  width: 80%;
+  width: 100%;
   height: 10rem;
   border-radius: 10px;
   border: 1px solid rgba(0, 0, 0, 0.3);
