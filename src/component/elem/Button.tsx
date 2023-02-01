@@ -7,6 +7,9 @@ interface ButtonProps {
   disabled?: boolean;
   mg?: string;
   pd?: string;
+  fc?: string;
+  fs?: string;
+  fw?: string;
   type?: "submit" | "reset" | "button" | undefined;
   onClick?: MouseEventHandler;
 }
@@ -29,11 +32,13 @@ export default Button;
 const CursorPointer = styled.button<ButtonProps>`
   margin: ${({ mg }) => mg || "none"};
   padding: ${({ pd }) => pd || "none"};
+  font-size: ${({ fs }) => fs || "inherit"};
+  font-weight: ${({ fw }) => fw || "inherit"};
+  color: ${(props) => props.fc || props.theme.color.primaryText};
   outline: none;
   border: none;
   background-color: transparent;
   font-size: 1.4rem;
-  color: ${({ theme }) => theme.color.primaryText};
   cursor: pointer;
 `;
 
@@ -58,7 +63,7 @@ const BasicButton = styled(CursorPointer)`
 
   &:active:enabled {
     color: #ffffff;
-    background-color: ${props => props.theme.color.main};
+    background-color: ${(props) => props.theme.color.main};
   }
   &:hover:enabled {
     color: #ffffff;

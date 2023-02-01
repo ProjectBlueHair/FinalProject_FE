@@ -222,12 +222,7 @@ const Header = () => {
             >
               Login
             </Div>
-            // <Img
-            //   type="icon"
-            //   wd={iconSize}
-            //   src={account}
-            //   onClick={() => toggleMenu()}
-            // />
+
           )}
           {user.nickname ? (
             <>
