@@ -9,9 +9,7 @@ import TypeModalContainer from "./modal/TypeModalContainer";
 import MyPage from "./page/MyPage";
 import SetPage from "./page/SetPage";
 import KakaoLoginHandler from "./component/sign/KakaoLoginHandler";
-import PostingReactQueryTest from "./component/posting/PostingReactQueryTest";
 import ChatPage from "./page/ChatPage";
-import PostingPageNext from "./page/PostingPageNext";
 
 export const PATH = {
   main: "/",
@@ -37,16 +35,15 @@ const Router = () => {
           <Route path="/mypage/:nickname" element={<MyPage />} />
           <Route path="/setpage" element={<SetPage />} />
           <Route path={`${PATH.tag}/:tag`} element={<Tag />} />
-          <Route path={'/posttest'} element={<PostingPage />} />
-          <Route path={PATH.post} element={<PostingPageNext />} />
-          <Route path={`${PATH.edit}/:id`} element={<PostingPageNext />} />
-          <Route path={`${PATH.collabo}/:id`} element={<PostingPageNext />} />
+          <Route path={"/posttest"} element={<PostingPage />} />
+          <Route path={PATH.post} element={<PostingPage />} />
+          <Route path={`${PATH.edit}/:id`} element={<PostingPage />} />
+          <Route path={`${PATH.collabo}/:id`} element={<PostingPage />} />
           <Route path={`${PATH.chat}`} element={<ChatPage />} />
-          <Route path={`/test`} element={<PostingReactQueryTest />} />
           <Route path="/login/kakao" element={<KakaoLoginHandler />} />
           <Route
             path={`${PATH.collaboRequested}/:id/:postId`}
-            element={<PostingPageNext />}
+            element={<PostingPage />}
           />
           {/* <Route
             path={`${PATH.collaboRequested}/:id`}

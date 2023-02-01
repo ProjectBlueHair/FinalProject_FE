@@ -30,6 +30,7 @@ import useModal from "../modal/useModal";
 const iconSize = "4rem";
 // const EventSource = NativeEventSource || EventSourcePolyfill
 // global.EventSource = NativeEventSource || EventSourcePolyfill
+let eventSource = null;
 const Header = () => {
   const navigate = useNavigate();
   const Sign = useRef(null);
@@ -70,32 +71,45 @@ const Header = () => {
     // if (readyState === null) readyState = 2;
     // const isConnecting = Number(readyState) === 1 || Number(readyState) === 0;
 
+    // console.log(
+    //   "AccessToken && user.nickname && !isConnecting",
+    //   AccessToken && user.nickname && !isConnecting
+    // );
     // if (AccessToken && user.nickname && !isConnecting) {
-    //   let eventSource = new EventSource(
-    //     `${serverURL}/subscribe/${user.nickname}`
-    //   );
+    //   eventSource = new EventSource(`${serverURL}/subscribe/${user.nickname}`, {
+    //     withCredentials: true,
+    //     connection : 'keep-alive'
+    //   });
+    // }
+    // if (eventSource) {
     //   eventSource.onopen = () => {
+    //     console.log("on open ... ready state", eventSource.readyState);
     //     localStorage.setItem("readyState", eventSource.readyState);
     //   };
     //   eventSource.onmessage = (event) => {
-    //     console.log("EVENT DATA", eventSource);
-    //     console.log("EVENT DATA", event.data);
     //     dispatch(__getAlarm());
     //   };
     //   eventSource.onerror = (e) => {
     //     eventSource.close();
-    //     console.log("event source check 3 ", eventSource);
-    //     localStorage.setItem("readyState", eventSource.readyState);
-    //     // eventSource = new EventSource(
-    //     //   `${serverURL}/subscribe/${user.nickname}`
-    //     // );
-    //   };
-    //   return () => {
-    //     eventSource.close();
-    //     console.log("is unmounting ???", eventSource.readyState);
+    //     console.log("on error ... error message", e);
+    //     console.log("on error ... readystate", eventSource.readyState);
+    //     eventSource = new EventSource(`${serverURL}/subscribe/${user.nickname}`, {
+    //       withCredentials: true,
+    //       connection : 'keep-alive'
+    //     });
+    //     console.log(
+    //       "on error ... after reconnect readystate",
+    //       eventSource.readyState
+    //     );
     //     localStorage.setItem("readyState", eventSource.readyState);
     //   };
     // }
+    // return () => {
+    //   console.log("unmounting ... eventsource : ", eventSource);
+    //   eventSource?.close();
+    //   console.log("unmounting ... readystate", eventSource?.readyState);
+    //   localStorage.setItem("readyState", 2);
+    // };
   }, [user.nickname, AccessToken]);
 
   const onClickSetPage = () => {
@@ -112,7 +126,7 @@ const Header = () => {
         <Img
           onClick={() => navigate(PATH.main)}
           cursor="pointer"
-          wd="20rem"
+          wd="18rem"
           src={mainLogo}
         />
         <Img
@@ -170,20 +184,6 @@ const Header = () => {
           wd={iconSize}
           src={upload}
         />
-        <Img
-          onClick={() => {
-            $openModal({
-              type: "alert",
-              props: {
-                message: "설정 기능은 곧 준비될 예정입니다 !",
-                type: "confirm",
-              },
-            });
-          }}
-          type="icon"
-          wd={iconSize}
-          src={settings}
-        />
         <div ref={Sign}>
           {user.profileImg ? (
             <Img
@@ -235,16 +235,16 @@ const Header = () => {
 
 export default Header;
 const Grid = styled.div`
-  padding: 1.5rem 2rem;
+  padding: 1.3rem 3rem;
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 1rem;
 `;
 const AlarmCount = styled.div`
-  position: absolute;
-  top: 20px;
-  right: 193px;
+  position: fixed;
+  top: 1.4rem;
+  right: 12.8rem;
   border-radius: 20px;
   color: white;
   padding: 0.3rem 0.7rem;

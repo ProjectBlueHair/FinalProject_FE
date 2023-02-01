@@ -3,6 +3,7 @@ import { getCookies, removeCookies, setCookie } from "./cookie";
 
 export const serverURL = process.env.REACT_APP_SERVER;
 export const socketURL = process.env.REACT_APP_SOCKET_SERVER;
+export const wssURL = process.env.REACT_APP_SOCKET_WSS;
 
 export const instanceAxios = axios.create({ baseURL: serverURL });
 export const reassuranceAxios = axios.create({ baseURL: serverURL });
@@ -10,9 +11,7 @@ export const reassuranceAxios = axios.create({ baseURL: serverURL });
 instanceAxios.interceptors.request.use((config) => {
   if (config === undefined) return;
   const acc = getCookies("accesstoken");
-  // const ref = getCookies("refreshtoken");
   config.headers["AccessToken"] = `${acc}`;
-  // config.headers["Access-Control-Allow-Origin"] = "*";
   return config;
 });
 
@@ -30,7 +29,7 @@ const addRefreshSubscriber = (callback) => {
 instanceAxios.interceptors.response.use(
   (res) => {
     const { data, config } = res;
-    console.log("AXIOS INTERCEPTOR DATA", data);
+    // console.log("AXIOS INTERCEPTOR DATA", data);
     switch (data.customHttpStatus) {
       case 4003:
         throw new Error("처리할 수 없는 음원입니다");
