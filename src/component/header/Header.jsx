@@ -9,19 +9,12 @@ import {
   notifications,
   search, upload
 } from "../../asset/pic";
-<<<<<<< Updated upstream
-=======
 import { serverURL } from "../../dataManager/apiConfig";
->>>>>>> Stashed changes
 import { getCookies, removeCookies } from "../../dataManager/cookie";
 import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
 import useTypeModal from "../../modal/hooks/useTypeModal";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
-<<<<<<< Updated upstream
-import { alarmSelector } from "../../redux/slice/mainSlice";
-=======
 import { alarmSelector, __getAlarm } from "../../redux/slice/mainSlice";
->>>>>>> Stashed changes
 import {
   userSelector,
   __clearUser,
