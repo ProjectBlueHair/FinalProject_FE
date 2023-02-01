@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import Img from "../elem/Img";
-import { more, like, view } from "../../asset/pic";
-import { instanceAxios } from "../../dataManager/apiConfig";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useTypeModal from "../../modal/hooks/useTypeModal";
+import styled from "styled-components";
+import { like, view } from "../../asset/pic";
+import { instanceAxios } from "../../dataManager/apiConfig";
+import Img from "../elem/Img";
 import StLink from "../elem/Link";
 
 const DetailRecomment = () => {

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import Flex from "../elem/Flex";
-import Img from "../elem/Img";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import {
   account,
   follows,
@@ -11,26 +11,22 @@ import {
   settings,
   upload,
 } from "../../asset/pic";
-import styled from "styled-components";
-import Input from "../elem/Input";
-import useModal from "../modal/useModal";
-import { useNavigate } from "react-router-dom";
-import useTypeModal from "../../modal/hooks/useTypeModal";
-import { PATH } from "../../Router";
 import { getCookies, removeCookies } from "../../dataManager/cookie";
 import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
+import useTypeModal from "../../modal/hooks/useTypeModal";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
+import { alarmSelector } from "../../redux/slice/mainSlice";
 import {
   userSelector,
   __clearUser,
   __getGeneralUserInfo,
 } from "../../redux/slice/userSlice";
+import { PATH } from "../../Router";
+import Flex from "../elem/Flex";
+import Img from "../elem/Img";
+import Input from "../elem/Input";
 import Span from "../elem/Span";
-import Div from "../elem/Div";
-import { instanceAxios, serverURL } from "../../dataManager/apiConfig";
-import { NativeEventSource, EventSourcePolyfill } from "event-source-polyfill";
-import { alarmSelector, __getAlarm } from "../../redux/slice/mainSlice";
-import * as ssePolyfill from "event-source-polyfill/src/eventsource.min.js";
+import useModal from "../modal/useModal";
 const iconSize = "4rem";
 // const EventSource = NativeEventSource || EventSourcePolyfill
 // global.EventSource = NativeEventSource || EventSourcePolyfill
@@ -122,6 +118,7 @@ const Header = () => {
 
   const onClickMypage = () => {
     navigate(`/mypage/${user.nickname}`);
+    window.location.reload();
   };
   return (
     <Grid>
@@ -266,7 +263,7 @@ const ToggleDiv = styled.div`
   background-color: white;
   border: 2px solid #ff4d00;
   border-radius: 10px;
-  z-index: 1;
+  z-index: 1000;
   padding: 10px 10px 0 0;
   display: flex;
   flex-direction: column;
@@ -305,7 +302,7 @@ const ToggleDiv2 = styled.div`
   background-color: white;
   border: 2px solid #ff4d00;
   border-radius: 10px;
-  z-index: 1;
+  z-index: 1000;
   padding: 5px 10px 0 0;
   display: flex;
   flex-direction: column;
