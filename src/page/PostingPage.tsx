@@ -10,7 +10,6 @@ import PostingTotalPlay from "../component/posting/PostingTotalPlay";
 import PostingFormCollabo from "../component/posting/PostingFormCollabo";
 import PostingForm from "../component/posting/PostingForm";
 import PostingCollaboRequested from "../component/posting/PostingCollabReqeusted";
-
 import { PATH } from "../Router";
 import UserCheck from "../util/UserCheck";
 import ErrorCheck from "../util/ErrorCheck";

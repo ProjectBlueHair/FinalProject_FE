@@ -1,26 +1,21 @@
-import React, { useEffect} from "react";
-import useInput from "../../hook/useInput";
-import { useAppDispatch } from "../../redux/config";
-import { CollaboForm, Form } from "../../model/PostingModel";
-import {
-  collaboApprove,
-  collaboRequestDataSelector,
-  collaboRequest,
-  uploadPost,
-  __cleanUp,
-  formSelector,
-} from "../../redux/slice/postingSlice";
-import Flex from "../elem/Flex";
-import { useAppSelector } from "../../redux/config";
-import { uploadFiles } from "../../dataManager/imageS3";
 import axios from "axios";
+import React, { useEffect } from "react";
+import { uploadFiles } from "../../dataManager/imageS3";
+import useInput from "../../hook/useInput";
+import useTypeModal from "../../modal/hooks/useTypeModal";
+import { CollaboForm, Form, NewPostForm } from "../../model/PostingModel";
+import { Response } from "../../model/ResponseModel";
+import { useAppDispatch, useAppSelector } from "../../redux/config";
+import {
+  collaboRequestDataSelector, formSelector,
+  uploadNewPost, __cleanUp
+} from "../../redux/slice/postingSlice";
+import theme from "../../styles/theme";
+import Button from "../elem/Button";
+import Div from "../elem/Div";
+import Flex from "../elem/Flex";
 import Span from "../elem/Span";
 import TextArea from "../elem/Textarea";
-import { Response } from "../../model/ResponseModel";
-import useTypeModal from "../../modal/hooks/useTypeModal";
-import Button from "../elem/Button";
-import theme from "../../styles/theme";
-import Div from "../elem/Div";
 
 export const formStyle = {
   border: "1px solid rgba(0,0,0,0.1)",
@@ -64,18 +59,17 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
       return;
     }
     $openModal({ type: "loading", props: "" });
-    const formData = new FormData();
-
+    const form: Form = {
+      contents: descriptionInput.value,
+      collaboNotice: collaboInput.value,
+      title: postForm.title,
+      postImg: "",
+    };
     const collaboForm: CollaboForm = {
-      contents: "collabo request from original author",
+      contents: "원곡자",
       musicPartList: collaboRequestData.audios.map((audio) => audio.part),
     };
-    formData.append(
-      "jsonData",
-      new Blob([JSON.stringify(collaboForm)], { type: "application/json" })
-    );
-    const imgBlob = postForm.postImg ? await fetchBlob(postForm.postImg) : null;
-
+    const formData = new FormData();
     const blobs = await Promise.all(
       collaboRequestData.audios.map(async (collabo) => {
         const response = await axios.get(collabo.src, {
@@ -87,20 +81,20 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
     for (let i = 0; i < blobs.length; i++) {
       formData.append("musicFile", blobs[i]);
     }
-
+    const imgBlob = postForm.postImg ? await fetchBlob(postForm.postImg) : null;
 
     const submitPost = async () => {
       const imgData = await uploadFiles(imgBlob);
-      const form: Form = {
-        contents: descriptionInput.value,
-        collaboNotice: collaboInput.value,
-        title: postForm.title,
-        postImg: imgData ? imgData.Location : null,
+      const newPostForm: NewPostForm = {
+        requestCollaboRequestDto: collaboForm,
+        requestPostDto: { ...form, postImg: imgData ? imgData.Location : null },
       };
-      const postData = await uploadPost(form);
-      const collaboData = await collaboRequest(formData, postData.data.data);
-      const response = await collaboApprove(collaboData.data.data);
-      return response;
+      formData.append(
+        "jsonData",
+        new Blob([JSON.stringify(newPostForm)], { type: "application/json" })
+      );
+      const postData = await uploadNewPost(formData);
+      return postData;
     };
     submitPost()
       .then(({ data }: { data: Response }) => {

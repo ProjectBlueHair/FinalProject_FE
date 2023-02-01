@@ -28,8 +28,6 @@ import Input from "../elem/Input";
 import Span from "../elem/Span";
 import useModal from "../modal/useModal";
 const iconSize = "4rem";
-// const EventSource = NativeEventSource || EventSourcePolyfill
-// global.EventSource = NativeEventSource || EventSourcePolyfill
 let eventSource = null;
 const Header = () => {
   const navigate = useNavigate();

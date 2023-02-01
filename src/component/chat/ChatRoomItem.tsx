@@ -1,14 +1,16 @@
 import React from "react";
 import styled from "styled-components";
-import { ChatItem } from "../../model/ChatModel";
-import Div from "../elem/Div";
+import { more } from "../../asset/pic/index";
+import { ChatRoom } from "../../model/ChatModel";
+import { useAppDispatch } from "../../redux/config";
 import Flex, { StFlex } from "../elem/Flex";
 import Img, { ImgType } from "../elem/Img";
-import { more } from "../../asset/pic/index";
+import { __selectChatRoom } from "./chatSlice";
 
-const ChatRoomItem: React.FC<ChatItem> = (props) => {
+const ChatRoomItem: React.FC<ChatRoom> = (props) => {
+  const dispatch = useAppDispatch();
   return (
-    <ItemCard>
+    <ItemCard onClick={() => dispatch(__selectChatRoom(props.roomId))}>
       <Img
         wd="3.5rem"
         hg="3.5rem"
