@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
+import { more } from "../../asset/pic/index";
 import { ChatRoom } from "../../model/ChatModel";
-import Div from "../elem/Div";
+import { useAppDispatch } from "../../redux/config";
 import Flex, { StFlex } from "../elem/Flex";
 import Img, { ImgType } from "../elem/Img";
-import { more } from "../../asset/pic/index";
-import { useStomp } from "../../hook/useStomp";
-import { useAppDispatch } from "../../redux/config";
 import { __selectChatRoom } from "./chatSlice";
 
 const ChatRoomItem: React.FC<ChatRoom> = (props) => {

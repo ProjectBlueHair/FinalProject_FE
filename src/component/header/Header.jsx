@@ -32,8 +32,6 @@ import { NativeEventSource, EventSourcePolyfill } from "event-source-polyfill";
 import { alarmSelector, __getAlarm } from "../../redux/slice/mainSlice";
 import * as ssePolyfill from "event-source-polyfill/src/eventsource.min.js";
 const iconSize = "4rem";
-// const EventSource = NativeEventSource || EventSourcePolyfill
-// global.EventSource = NativeEventSource || EventSourcePolyfill
 let eventSource = null;
 const Header = () => {
   const navigate = useNavigate();

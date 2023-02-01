@@ -1,9 +1,10 @@
 import styled from "styled-components";
-import ChatSection from "../component/chat/ChatSection";
 import ChatRoomList from "../component/chat/ChatRoomList";
-import Flex from "../component/elem/Flex";
+import Flex, { StFlex } from "../component/elem/Flex";
 import Header from "../component/header/Header";
 import MainAudioPlayer from "../component/main/MainAudioPlayer";
+import ChatList from "../component/chat/ChatList";
+import ChatForm from "../component/chat/ChatForm";
 
 const ChatPage = () => {
   return (
@@ -12,7 +13,10 @@ const ChatPage = () => {
       <Header />
       <ChatGrid>
         <ChatRoomList />
-        <ChatSection />
+        <ChatSectionContainer>
+          <ChatList />
+          <ChatForm />
+        </ChatSectionContainer>
       </ChatGrid>
       <MainAudioPlayer />
     </Flex>
@@ -26,5 +30,17 @@ const ChatGrid = styled.div`
   padding: 0 2rem 2rem;
   gap: 2rem;
   width: 100%;
-  height: 100%;
+  overflow: hidden;
+  flex: 1;
 `;
+const ChatSectionContainer = styled(StFlex)`
+  flex-direction: column;
+  padding: 2rem 5rem;
+  border-radius: 20px;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid ${(props) => props.theme.color.rgbaBorder1};
+  align-items: flex-start;
+  justify-content: flex-start;
+`;
+

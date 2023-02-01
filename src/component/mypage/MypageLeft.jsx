@@ -17,6 +17,8 @@ import {
 } from "react-share";
 import { useShare } from "../../hook/useShare";
 import useTypeModal from "../../modal/hooks/useTypeModal";
+import { __directMessage } from "../chat/chatSlice";
+import { PATH } from "../../Router";
 export const kakaoJS = process.env.REACT_APP_KaKaoJSKey;
 
 const MypageLeft = () => {
@@ -108,7 +110,15 @@ const MypageLeft = () => {
         ) : (
           <>
             <MypageBtn onClick={mypageFollow}>팔로우</MypageBtn>
-            <MypageBtn>다이렉트 메세지</MypageBtn>
+            <MypageBtn
+              onClick={() => {
+                dispatch(__directMessage(information?.nickname)).then(
+                  navigate(PATH.chat)
+                );
+              }}
+            >
+              다이렉트 메세지
+            </MypageBtn>
           </>
         )}
         <MypageBtn onClick={() => setMyShare(!myShare)}>

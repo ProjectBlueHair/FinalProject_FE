@@ -5,12 +5,25 @@ import useTextArea from "../../hook/useTextArea";
 import Button from "../elem/Button";
 import Flex from "../elem/Flex";
 import { StTextarea } from "../elem/Textarea";
+import { chatSelector, roomIdSelector } from "./chatSlice";
+import { userSelector } from "../../redux/slice/userSlice";
+import { useAppSelector } from "../../redux/config";
+import { serverURL } from "../../dataManager/apiConfig";
 
 const ChatForm = () => {
+  const user = useAppSelector(userSelector);
+  const roomId = useAppSelector(roomIdSelector);
   const { send } = useStomp();
   const messageInput = useTextArea("");
   const handleSubmit = () => {
-    send("/topic/chat/room/1", { message: messageInput.value});
+    send(`/topic/chat/room/${roomId}`, {
+    // send(`/app/api/chat/message`, {
+      nickname: user.nickname,
+      profileImg: user.profileImg,
+      message: messageInput.value,
+      time: "",
+      date: "",
+    });
   };
   return (
     <Flex align="flex-start" gap="1rem">

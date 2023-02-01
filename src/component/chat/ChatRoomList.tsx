@@ -1,23 +1,25 @@
+import { useEffect } from "react";
 import styled from "styled-components";
-import { ChatRoom } from "../../model/ChatModel";
+import { useAppDispatch, useAppSelector } from "../../redux/config";
 import { StFlex } from "../elem/Flex";
 import ChatRoomItem from "./ChatRoomItem";
-
-const ChatItemList: ChatRoom[] = [
-  // { roomId: 0, nickname: "test1", profileImg: "testRandomPost/1.jpg" },
-  // { roomId: 1, nickname: "test2", profileImg: "testRandomPost/2.jpg" },
-];
+import { chatRoomsSelector, __getChatRooms } from "./chatSlice";
 
 const ChatRoomList = () => {
+  const dispatch = useAppDispatch();
+  const chatRooms = useAppSelector(chatRoomsSelector);
+  useEffect(() => {
+    dispatch(__getChatRooms());
+  }, []);
+
   return (
     <ChatRoomListContainer>
-      {ChatItemList.map((item, index) => (
+      {chatRooms.map((item, index) => (
         <ChatRoomItem key={index} {...item} />
       ))}
     </ChatRoomListContainer>
   );
 };
-
 export default ChatRoomList;
 
 const ChatRoomListContainer = styled(StFlex)`

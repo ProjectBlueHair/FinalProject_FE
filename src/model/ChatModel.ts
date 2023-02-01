@@ -5,10 +5,14 @@ export interface ChatRoom {
   finalMessage: string;
 }
 export interface Chat {
-  id: number;
   nickname: string;
   profileImg: string;
-  message: string[];
-  date: string;
-  time: string;
+  message: string;
+  date?: string;
+  time?: string;
+}
+export interface ChatState {
+  chatRooms : ChatRoom[]
+  chat : Chat []
+  currentRoomId : string | number
 }

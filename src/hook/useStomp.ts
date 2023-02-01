@@ -3,6 +3,7 @@ import { useCallback, useEffect } from "react";
 import SockJS from "sockjs-client";
 import { socketURL } from "../dataManager/apiConfig";
 import { getCookies } from "../dataManager/cookie";
+import { Chat } from "../model/ChatModel";
 
 interface ObjectType {
   [key: string]: any;
@@ -16,7 +17,6 @@ export function useStomp(config?: StompConfig, callback?: () => void) {
   const connect = useCallback(() => {
     if (!stompClient) {
       const socket = new SockJS(`${socketURL}/ws/chat`);
-      //   stompClient = new Client(config);
       stompClient = Stomp.over(() => {
         return socket;
       });
@@ -30,7 +30,7 @@ export function useStomp(config?: StompConfig, callback?: () => void) {
   }, []);
 
   const send = useCallback(
-    (path: string, body: ObjectType, headers?: ObjectType) => {
+    (path: string, body: Chat, headers?: ObjectType) => {
       stompClient.publish({
         destination: path,
         headers: { AccessToken: getCookies("accesstoken") },
@@ -40,15 +40,20 @@ export function useStomp(config?: StompConfig, callback?: () => void) {
     [stompClient]
   );
 
+
   const subscribe = useCallback(
     <T>(path: ObjectType, callback: (msg: T) => void) => {
       if (!stompClient) return;
+      console.log("subscribe.... ", subscriptions[path.path]);
 
       if (subscriptions[path.path]) return;
-      const subscription = stompClient.subscribe(`${path.path}/${path.roomId}`, (message) => {
-        const body: T = JSON.parse(message.body);
-        callback(body);
-      });
+      const subscription = stompClient.subscribe(
+        `${path.path}/${path.roomId}`,
+        (message) => {
+          const body: T = JSON.parse(message.body);
+          callback(body);
+        }
+      );
       subscriptions[path.path] = subscription;
     },
     []
