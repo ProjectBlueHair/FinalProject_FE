@@ -9,6 +9,7 @@ import {
   CollaboRequested,
   CollaboRequestData,
   CollaboReqeustedForm,
+  NewPostForm,
 } from "../../model/PostingModel";
 import { instanceAxios } from "../../dataManager/apiConfig";
 import { Response } from "../../model/ResponseModel";
@@ -238,6 +239,9 @@ export const __getCollaboRequested = createAsyncThunk(
 const config = { headers: { "Content-Type": "multipart/form-data" } };
 export const uploadPost = async (data: Form) => {
   return await instanceAxios.post(`/post`, data);
+};
+export const uploadNewPost = async (data: FormData) => {
+  return await instanceAxios.post(`/post/new`, data);
 };
 export const collaboRequest = async (data: any, postId: string | number) => {
   return await instanceAxios.post(`/post/${postId}/collabo`, data, config);

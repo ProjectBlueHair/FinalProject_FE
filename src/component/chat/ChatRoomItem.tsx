@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { ChatItem } from "../../model/ChatModel";
+import { ChatRoom } from "../../model/ChatModel";
 import Div from "../elem/Div";
 import Flex, { StFlex } from "../elem/Flex";
 import Img, { ImgType } from "../elem/Img";
@@ -9,22 +9,10 @@ import { useStomp } from "../../hook/useStomp";
 import { useAppDispatch } from "../../redux/config";
 import { __selectChatRoom } from "./chatSlice";
 
-const ChatRoomItem: React.FC<ChatItem> = (props) => {
-  const { isConnected, subscribe, unsubscribe, subscriptions } = useStomp();
-  const [roomId, setRoomId] = useState();
+const ChatRoomItem: React.FC<ChatRoom> = (props) => {
   const dispatch = useAppDispatch();
-  const handleChatEnter = () => {
-    // subscriptions && unsubscribe(subscriptions(path))
-    // isConnected &&
-    //   subscribe({ path: "/topic/chat/room", roomId: 1 }, (body) => {
-    //     console.log("subscribe callback ... body", body);
-    //   });
-    // setRoomId(props.roomId)
-    dispatch(__selectChatRoom(props.roomId));
-  };
-
   return (
-    <ItemCard onClick={handleChatEnter}>
+    <ItemCard onClick={() => dispatch(__selectChatRoom(props.roomId))}>
       <Img
         wd="3.5rem"
         hg="3.5rem"

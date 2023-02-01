@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ChatItem } from "../../model/ChatModel";
+import { ChatRoom } from "../../model/ChatModel";
 import { AppState } from "../../redux/config";
 
 
@@ -9,7 +9,7 @@ export const chatSlice = createSlice({
   name: "chat",
   initialState: {
     roomId: "",
-  } as ChatItem,
+  } as ChatRoom,
   reducers: {
     __selectChatRoom: (state, { payload }) => {
       state.roomId = payload;

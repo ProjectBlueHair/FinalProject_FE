@@ -4,19 +4,19 @@ import { StFlex } from "../elem/Flex";
 import ChatBubbleList from "./ChatBubbleList";
 import ChatForm from "./ChatForm";
 
-const ChatRoom = () => {
+const ChatSection = () => {
 
   return (
-    <ChatContainer>
+    <ChatSectionContainer>
       <ChatBubbleList />
       <ChatForm />
-    </ChatContainer>
+    </ChatSectionContainer>
   );
 };
 
-export default ChatRoom;
+export default ChatSection;
 
-const ChatContainer = styled(StFlex)`
+const ChatSectionContainer = styled(StFlex)`
   flex-direction: column;
   padding: 2rem 5rem;
   border-radius: 20px;

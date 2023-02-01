@@ -1,12 +1,14 @@
-export interface ChatItem {
+export interface ChatRoom {
   nickname: string;
   profileImg: string;
-  roomId : string | number
+  roomId: string | number;
+  finalMessage: string;
 }
-export interface ChatBubbleModel {
-  id : number;
-  from: string;
+export interface Chat {
+  id: number;
+  nickname: string;
   profileImg: string;
-  message: string [];
+  message: string[];
+  date: string;
   time: string;
 }

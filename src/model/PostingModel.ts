@@ -25,6 +25,10 @@ export interface Form {
   postImg: string;
   title: string;
 }
+export interface NewPostForm {
+  requestCollaboRequestDto : CollaboForm
+  requestPostDto : Form
+}
 export interface CollaboForm {
   contents: string;
   musicPartList: string[];

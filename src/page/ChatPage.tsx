@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import ChatRoom from "../component/chat/ChatRoom";
+import ChatSection from "../component/chat/ChatSection";
 import ChatRoomList from "../component/chat/ChatRoomList";
 import Flex from "../component/elem/Flex";
 import Header from "../component/header/Header";
@@ -12,7 +12,7 @@ const ChatPage = () => {
       <Header />
       <ChatGrid>
         <ChatRoomList />
-        <ChatRoom />
+        <ChatSection />
       </ChatGrid>
       <MainAudioPlayer />
     </Flex>

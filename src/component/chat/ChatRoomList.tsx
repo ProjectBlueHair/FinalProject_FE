@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import { ChatItem } from "../../model/ChatModel";
+import { ChatRoom } from "../../model/ChatModel";
 import { StFlex } from "../elem/Flex";
 import ChatRoomItem from "./ChatRoomItem";
 
-const ChatItemList: ChatItem[] = [
-  { roomId: 0, nickname: "test1", profileImg: "testRandomPost/1.jpg" },
-  { roomId: 1, nickname: "test2", profileImg: "testRandomPost/2.jpg" },
+const ChatItemList: ChatRoom[] = [
+  // { roomId: 0, nickname: "test1", profileImg: "testRandomPost/1.jpg" },
+  // { roomId: 1, nickname: "test2", profileImg: "testRandomPost/2.jpg" },
 ];
 
 const ChatRoomList = () => {
