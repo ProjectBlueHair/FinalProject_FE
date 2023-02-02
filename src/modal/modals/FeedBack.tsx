@@ -7,11 +7,14 @@ import Img from "../../component/elem/Img";
 import Span from "../../component/elem/Span";
 import TextArea from "../../component/elem/Textarea";
 import { formStyle } from "../../component/posting/PostingForm";
+import { instanceAxios } from "../../dataManager/apiConfig";
 import useTextArea from "../../hook/useTextArea";
 import theme from "../../styles/theme";
 import useTypeModal from "../hooks/useTypeModal";
 import TypeModalWrapper from "../TypeModalWrapper";
-
+const postFeedback = (feedback: Object) => {
+  return instanceAxios.post(`/bugreport`, feedback);
+};
 const FeedBack = () => {
   const feedbackInput = useTextArea("");
   const { $openModal, $closeModal } = useTypeModal();
@@ -34,7 +37,11 @@ const FeedBack = () => {
             btnType="basic"
             disabled={feedbackInput.value.length === 0}
             onClick={() => {
-              $openModal({ type: "thank", props: {} });
+              $closeModal();
+              postFeedback({ contents: feedbackInput.value }).then((data) => {
+                console.log("fedback .. response",data);
+                $openModal({ type: "thank", props: {} });
+              });
             }}
           >
             피드백 보내기
