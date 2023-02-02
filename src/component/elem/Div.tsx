@@ -1,4 +1,5 @@
-import styled, { StyledComponent } from "styled-components";
+import { MouseEventHandler } from "react";
+import styled, { CSSProperties, StyledComponent } from "styled-components";
 
 interface DivProps {
   fc?: string;
@@ -8,6 +9,8 @@ interface DivProps {
   pd?: string;
   children?: React.ReactNode;
   type?: string;
+  onClick?: MouseEventHandler;
+  style?: CSSProperties
 }
 interface DivContainer {
   [key: string]: StyledComponent<"div", any, DivProps, never>;
@@ -25,6 +28,6 @@ const StDiv = styled.div<DivProps>`
   font-size: ${({ fs }) => fs || "inherit"};
   font-weight: ${({ fw }) => fw || "inherit"};
   color: ${({ fc }) => fc || "inherit"};
-  margin: ${({ mg }) => mg || "inherit"};
-  padding: ${({ pd }) => pd || "inherit"};
+  margin: ${({ mg }) => mg || "none"};
+  padding: ${({ pd }) => pd || "none"};
 `;

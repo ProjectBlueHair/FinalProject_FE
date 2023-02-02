@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import Flex from "../elem/Flex";
 import styled from "styled-components";
 import Img from "../elem/Img";
 import AudioPlayer, { RHAP_UI } from "react-h5-audio-player";
-import "./MainAudioPlayer.css";
 import {
   mute,
   pause,
@@ -16,40 +15,63 @@ import {
 } from "../../asset/pic";
 import { iconSize } from "../../styles/GlobalStyle";
 import {
+  __MainTogglePlay,
   __PlayerTogglePlay,
   __playNext,
   __PlayPrevious,
 } from "../../redux/slice/mainSlice";
-import { CurrentMusic } from "../../model/PostModel";
+import { CurrentMusic } from "../../model/MainModel";
 
 import { useAppDispatch, useAppSelector } from "../../redux/config";
+import { batch } from "react-redux";
 const MainAudioPlayer = () => {
   const audioPlayer = useRef<AudioPlayer>(null);
   const { post, isPlayingMain } = useAppSelector<CurrentMusic>(
     (state) => state.main.currentMusic
   );
+  console.log(
+    "current music ... post ...",
+    post,
+    "isPlayingMain .. ",
+    isPlayingMain
+  );
   const dispatch = useAppDispatch();
-
-  const onListenHandler = (e: Event) => {};
+  useEffect(() => {
+    return () => {
+      dispatch(__PlayerTogglePlay(false));
+      dispatch(__MainTogglePlay(false));
+    };
+  }, []);
   const onPlayHandler = () => {
+    console.log("onPlayHandler ... ");
+    console.log("onPlayHandler paused..?", audioPlayer.current!.audio.current!.paused);
+
     dispatch(__PlayerTogglePlay(true));
   };
   const onPauseHandler = () => {
+    console.log("onPauseHandler ... ");
     dispatch(__PlayerTogglePlay(false));
   };
   const onClickPrevious = () => {
+    console.log("onClickPrevious ... ");
     dispatch(__PlayPrevious(post.id));
   };
   const onClickNext = () => {
+    console.log("onClickNext ... ");
     dispatch(__playNext(post.id));
   };
   useEffect(() => {
+    console.log("isplyaing main currentmusic useEffect paused..?", audioPlayer.current!.audio.current!.paused);
+    if (!audioPlayer.current!.audio.current!.paused) {
+      audioPlayer.current!.audio.current!.pause();
+    }
     if (isPlayingMain) {
       audioPlayer.current!.audio.current!.play();
     } else {
       audioPlayer.current!.audio.current!.pause();
     }
   }, [isPlayingMain]);
+
 
   return (
     // musicbar wrap
@@ -97,17 +119,15 @@ const MainAudioPlayer = () => {
         </Flex>
 
         {/* flex row right grid [music btns, music bar, volume control] */}
-
         <AudioPlayer
-          crossOrigin="anonymous"
-          autoPlayAfterSrcChange={false}
           src={post?.musicFile}
+          crossOrigin="anonymous"
+          autoPlayAfterSrcChange={true}
           onPlay={onPlayHandler}
           onPause={onPauseHandler}
           onClickPrevious={onClickPrevious}
           onClickNext={onClickNext}
           autoPlay={false}
-          onListen={onListenHandler}
           ref={audioPlayer}
           layout="horizontal"
           showJumpControls={false}
@@ -122,9 +142,18 @@ const MainAudioPlayer = () => {
           ]}
           // customAdditionalControls={[]}
           customIcons={{
-            play: <Img className="playButton" type="icon" wd={iconSize} src={playPrimary} />,
+            play: (
+              <Img
+                onClick={() => console.log("PLAY btn clickd ...")}
+                className="playButton"
+                type="icon"
+                wd={iconSize}
+                src={playPrimary}
+              />
+            ),
             previous: (
               <Img
+                onClick={() => console.log("PAUSE btn clickd ...")}
                 className="subIcon"
                 type="icon"
                 wd={iconSize}
@@ -174,11 +203,9 @@ const Grid = styled.div`
     .playButton {
       margin-right: 2rem;
     }
-    .rhap_time{
+    .rhap_time {
       display: none;
     }
- 
-   
   }
 
   // audio player classes

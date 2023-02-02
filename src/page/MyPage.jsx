@@ -9,7 +9,7 @@ const MyPage = () => {
     <Flex direction="column" justify="flex-start" hg="100vh" gap="0">
       <Header />
       <MypageAll />
-      <MainAudioPlayer />
+      {/* <MainAudioPlayer /> */}
     </Flex>
   );
 };

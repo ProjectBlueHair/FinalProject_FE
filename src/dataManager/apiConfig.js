@@ -1,7 +1,9 @@
 import axios from "axios";
+import { reissuance } from "../util/Reissuance";
 import { getCookies, removeCookies, setCookie } from "./cookie";
 
 export const serverURL = process.env.REACT_APP_SERVER;
+export const socketURL = process.env.REACT_APP_SOCKET_SERVER;
 
 export const instanceAxios = axios.create({ baseURL: serverURL });
 export const reassuranceAxios = axios.create({ baseURL: serverURL });
@@ -9,10 +11,7 @@ export const reassuranceAxios = axios.create({ baseURL: serverURL });
 instanceAxios.interceptors.request.use((config) => {
   if (config === undefined) return;
   const acc = getCookies("accesstoken");
-  const ref = getCookies("refreshtoken");
   config.headers["AccessToken"] = `${acc}`;
-  config.headers["RefreshToken"] = `${ref}`;
-  config.headers["Access-Control-Allow-Origin"] = "*";
   return config;
 });
 
@@ -30,7 +29,7 @@ const addRefreshSubscriber = (callback) => {
 instanceAxios.interceptors.response.use(
   (res) => {
     const { data, config } = res;
-    console.log("res interceptor data", data);
+    // console.log("AXIOS INTERCEPTOR DATA", data);
     switch (data.customHttpStatus) {
       case 4003:
         throw new Error("처리할 수 없는 음원입니다");
@@ -43,30 +42,17 @@ instanceAxios.interceptors.response.use(
           "유효하지 않은 로그인 정보입니다. 재로그인이 필요합니다."
         );
       case 4041:
-        throw new Error("존재하지 않는 게시물입니다. ");
+        throw new Error("4041 : 존재하지 않는 게시물입니다. ");
       case 4015:
         if (!isTokenRefreshing) {
           isTokenRefreshing = true;
-          const RefreshToken = getCookies("refreshtoken");
-          const AccessToken = getCookies("accesstoken");
-          reassuranceAxios
-            .post(
-              "member/reissuance",
-              {},
-              {
-                headers: {
-                  AccessToken: AccessToken,
-                  RefreshToken: RefreshToken,
-                },
-              }
-            )
+          reissuance()
             .then((data) => {
-              console.log('going data', data.headers);
               const { accesstoken, refreshtoken } = data.headers;
               if (!accesstoken || !refreshtoken) {
                 removeCookies("accesstoken", { path: "/" });
                 removeCookies("refreshtoken", { path: "/" });
-                throw new Error(
+               throw new Error(
                   "로그인이 만료되었습니다. 다시 로그인 해주세요"
                 );
               }
@@ -82,7 +68,7 @@ instanceAxios.interceptors.response.use(
             })
             .catch((err) => {
               console.log("reassuarance err", err);
-              return Promise.reject(err);
+              throw new Error("로그인이 만료되었습니다. 다시 로그인 해주세요");
             });
         }
         const retryOriginalRequest = new Promise((resolve) => {
@@ -98,6 +84,7 @@ instanceAxios.interceptors.response.use(
     }
   },
   async (error) => {
+    console.log("AXIOS INTERCEPTOR ERROR :", error);
     return Promise.reject(error);
   }
 );

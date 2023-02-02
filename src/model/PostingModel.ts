@@ -8,7 +8,7 @@ export interface Audio {
   audioData: AudioData;
   isMute: boolean;
   isNewAudio: boolean;
-  isCollabo? : boolean
+  isCollaboRequested? : boolean
   isSolo: boolean;
   volume: number;
   isLoaded : boolean
@@ -22,8 +22,12 @@ export interface AudioData {
 export interface Form {
   contents: string;
   collaboNotice: string;
-  postImg: string | null;
+  postImg: string;
   title: string;
+}
+export interface NewPostForm {
+  requestCollaboRequestDto : CollaboForm
+  requestPostDto : Form
 }
 export interface CollaboForm {
   contents: string;
@@ -46,6 +50,10 @@ export interface CollaboReqeustedAudioData {
   musicFile: string;
   musicPart: string;
   nickname: string;
+}
+export interface CollaboReqeustedForm {
+  title: string;
+  explain: string;
 }
 export interface CollaboRequestData {
   audios: CollaboAudio[];

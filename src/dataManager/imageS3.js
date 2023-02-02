@@ -7,6 +7,7 @@ const BK = process.env.REACT_APP_BK;
 const SK = process.env.REACT_APP_SK;
 
 export const uploadFiles = (file) => {
+  console.log('filecheck',file);
   if (file === null || undefined) {
     return Promise.resolve(file);
   } else {
@@ -15,6 +16,7 @@ export const uploadFiles = (file) => {
     AWS.config.update({
       accessKeyId: AK,
       secretAccessKey: SK,
+      region:'ap-northeast-2'
     });
     return new AWS.S3.ManagedUpload({
       params: {

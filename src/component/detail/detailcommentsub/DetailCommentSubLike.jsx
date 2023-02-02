@@ -1,17 +1,24 @@
-import React from "react";
 import { useDispatch } from "react-redux";
-import Img from "../../elem/Img";
-import { like, redLike } from "../../../asset/pic";
-import styled from "styled-components";
-import { __getComment, __likeComment } from "../../../redux/slice/comment";
 import { useParams } from "react-router-dom";
+import styled from "styled-components";
+import { like, redLike } from "../../../asset/pic";
 import { getCookies } from "../../../dataManager/cookie";
+import useTypeModal from "../../../modal/hooks/useTypeModal";
+import { __getComment, __likeComment } from "../../../redux/slice/comment";
+import Img from "../../elem/Img";
 
 const DetailCommentSubLike = ({ re }) => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const { $openModal } = useTypeModal();
   const onNoSign = () => {
-    alert("로그인이 필요합니다");
+    $openModal({
+      type: "alert",
+      props: {
+        message: "로그인이 필요한 페이지 (기능) 입니다.",
+        type: "error",
+      },
+    });
   };
   const acToken = getCookies("accesstoken");
 
@@ -23,10 +30,18 @@ const DetailCommentSubLike = ({ re }) => {
     <CommentLikeTouch>
       {acToken ? (
         <button onClick={() => onLikeClick(re.id)}>
-          {re.liked ? (
-            <Img wd="2.4rem" src={redLike} />
+          {re?.isLiked ? (
+            <Img
+              wd="2.4rem"
+              src={redLike}
+              style={{ marginRight: "10px", cursor: "pointer" }}
+            />
           ) : (
-            <Img wd="2rem" src={like} />
+            <Img
+              wd="2rem"
+              src={like}
+              style={{ marginRight: "10px", cursor: "pointer" }}
+            />
           )}
         </button>
       ) : (
@@ -34,7 +49,7 @@ const DetailCommentSubLike = ({ re }) => {
           wd="2rem"
           src={like}
           onClick={onNoSign}
-          style={{ marginTop: "-5px", marginRight: "10px" }}
+          style={{ marginRight: "10px", cursor: "pointer" }}
         />
       )}
       <div>{re.likeCount}</div>
@@ -47,9 +62,8 @@ export default DetailCommentSubLike;
 const CommentLikeTouch = styled.div`
   display: flex;
   align-items: center;
-  margin-top: -0.5rem;
+  margin-top: 5px;
   button {
-    margin-top: -0.5rem;
     background-color: transparent;
     border: transparent;
   }

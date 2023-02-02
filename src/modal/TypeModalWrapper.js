@@ -1,6 +1,6 @@
 // components/Modal/Modal
 
-import React, { useRef, useEffect } from "react";
+import { useEffect, useRef } from "react";
 import styled from "styled-components";
 import useOutSideClick from "./hooks/useOutSideClick";
 import useTypeModal from "./hooks/useTypeModal";
@@ -22,6 +22,8 @@ function TypeModalWrapper({ children, type }) {
   const MODAL_WRAPPERS = {
     alarm: AlarmModalWrapper,
     alert: AlertModal,
+    feedback : FeedbackModalWrapper,
+    thank : ThankYou
   };
 
   const Wrapper = MODAL_WRAPPERS[type];
@@ -55,15 +57,40 @@ const AlarmModalWrapper = styled.div`
   border: 1px solid var(--ec-main-color);
   position: absolute;
   top: 16px;
-  right: 242px;
+  right: 180px;
   z-index: 9999;
   /* transform: translate(-50%, -50%); */
 `;
+
 
 const AlertModal = styled.div`
   z-index: 5;
   width: 40rem;
   height: 55rem;
+  border-radius: 10px;
+  background-color: #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.18);
+  transform: translate(-50%, -50%);
+`;
+const FeedbackModalWrapper = styled.div`
+  z-index: 5;
+  width: 45rem;
+  height: 70rem;
+  border-radius: 10px;
+  background-color: #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.18);
+  transform: translate(-50%, -50%);
+`;
+const ThankYou = styled.div`
+  z-index: 5;
+  width: 40rem;
+  height: 20rem;
   border-radius: 10px;
   background-color: #fff;
   position: absolute;

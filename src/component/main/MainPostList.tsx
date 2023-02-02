@@ -10,13 +10,9 @@ const MainPostList = () => {
   const [trigger, setTrigger] = useState(false);
 
   const dispatch = useAppDispatch();
-  const { posts, nextPage, isLoading, error } = useAppSelector<MainState>(
+  const { posts, nextPage, isLoading } = useAppSelector<MainState>(
     (state) => state.main
   );
-  console.log("POSTLIST POSTS", posts);
-  if (error) {
-    alert(''+error);
-  }
 
   let options = {
     root: scrollArea.current,
@@ -28,7 +24,6 @@ const MainPostList = () => {
     if (!isLoading) {
       dispatch(__getPostList(nextPage));
     }
-    return () => {};
   }, [trigger]);
 
   const callback: IntersectionObserverCallback = (entries, io) => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useRef } from "react";
 import Flex from "../elem/Flex";
 import Img from "../elem/Img";
@@ -8,20 +8,17 @@ import { iconSize } from "../../styles/GlobalStyle";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
   audioControlSelector,
-  __cleanUp,
   __seekTo,
   __togglePlay,
 } from "../../redux/slice/postingSlice";
 
 import styled from "styled-components";
-import useTypeModal from "../../modal/hooks/useTypeModal";
 import PlayLoading from "../elem/PlayLoading";
 
 const PostingTotalPlay = () => {
   const audioPlayer = useRef<AudioPlayer>(null);
   const dispatch = useAppDispatch();
   const progressConrol = useAppSelector(audioControlSelector);
-  const { $openModal, $closeModal } = useTypeModal();
   const [isLoading, setIsLoading] = useState(false);
   console.log("progressConrol.onLoad", progressConrol.onLoad);
 
@@ -43,7 +40,7 @@ const PostingTotalPlay = () => {
     dispatch(__seekTo(audioPlayer.current?.audio.current?.currentTime));
   };
   return (
-    <Flex>
+    <Fragment>
       {progressConrol.src ? (
         <ProgressWrapper>
           <AudioPlayer
@@ -90,7 +87,7 @@ const PostingTotalPlay = () => {
           />
         </ProgressWrapper>
       ) : null}
-    </Flex>
+    </Fragment>
   );
 };
 

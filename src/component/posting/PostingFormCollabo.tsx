@@ -3,8 +3,7 @@ import useInput from "../../hook/useInput";
 import {
   collaboRequestDataSelector,
   collaboRequest,
-  errorSelector,
-  titleSelector,
+  postingErrorSelector,
   __cleanUp,
   __getAudios,
   __getPostInfo,
@@ -16,22 +15,18 @@ import { formStyle } from "./PostingForm";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import { CollaboForm } from "../../model/PostingModel";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
-import { PATH } from "../../Router";
+import { useParams } from "react-router-dom";
 import { batch } from "react-redux";
 import Span from "../elem/Span";
 import useTypeModal from "../../modal/hooks/useTypeModal";
+import Button from "../elem/Button";
+import theme from "../../styles/theme";
+import Div from "../elem/Div";
 
 const PostingFormCollabo = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const error = useAppSelector(errorSelector);
   const { $openModal, $closeModal } = useTypeModal();
-  if (error) {
-    alert(error);
-    navigate(PATH.main);
-  }
 
   useEffect(() => {
     batch(() => {
@@ -42,7 +37,7 @@ const PostingFormCollabo = () => {
     return () => {
       dispatch(__cleanUp());
     };
-  }, []);
+  }, [id]);
 
   const collaboRequestData = useAppSelector(collaboRequestDataSelector);
   const descriptionInput = useInput("");
@@ -93,36 +88,78 @@ const PostingFormCollabo = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Flex gap="2.5rem" align="flex-start">
-        <Flex wd="100%" direction="column" gap="2rem" align="flex-start">
-          <label>
-            <div>설명</div>
+    <form style={{ width: "100%" }} onSubmit={handleSubmit}>
+      <Flex align="flex-start" gap="1.5rem">
+      <Flex
+          direction="column"
+          justify="flex-start"
+          wd="75%"
+          gap="2rem"
+          pd="1.5rem 2rem"
+          radius="20px"
+          bg={theme.color.rgbaBg2}
+        >
+          <Div style={{ ...formStyle }}>
+            <Span fc={theme.color.main}>콜라보 요청</Span>
             <TextArea
-              style={{ ...formStyle, height: "15rem", width: "70rem" }}
-              placeholder={"describe your music\n# for hash tag (eg. #rock)"}
+              bg="transparent"
+              placeholder={"업로드한 음악에 대한 설명을 넣어주세요"}
               {...descriptionInput}
             />
-          </label>
-          <Flex align="center" justify="flex-end" gap="2rem">
-            <Span fc="var(--ec-main-color)">
-              각 음원의 파트를 입력해 주세요 :)
-            </Span>
-            <TextButton
-              btnType="basic"
-              disabled={
-                descriptionInput.value === "" || !collaboRequestData.isValid
-                  ? true
-                  : false
-              }
-              type="submit"
-            >
-              콜라보요청하기
-            </TextButton>
-          </Flex>
+          </Div>
+        </Flex>
+        <Flex
+          align="center"
+          justify="flex-end"
+          flex="1"
+          bg={theme.color.rgbaBg2}
+          pd="1.3rem"
+          radius="20px"
+        >
+          <Button
+            btnType="basic"
+            disabled={
+              descriptionInput.value === "" || !collaboRequestData.isValid
+                ? true
+                : false
+            }
+            type="submit"
+          >
+            콜라보 요청
+          </Button>
         </Flex>
       </Flex>
     </form>
+    // <form onSubmit={handleSubmit}>
+    //   <Flex gap="2.5rem" align="flex-start">
+    //     <Flex wd="100%" direction="column" gap="2rem" align="flex-start">
+    //       <label>
+    //         <div>설명</div>
+    //         <TextArea
+    //           style={{ ...formStyle, height: "15rem", width: "70rem" }}
+    //           placeholder={"describe your music\n# for hash tag (eg. #rock)"}
+    //           {...descriptionInput}
+    //         />
+    //       </label>
+    //       <Flex align="center" justify="flex-end" gap="2rem">
+    //         <Span fc="var(--ec-main-color)">
+    //           각 음원의 파트를 입력해 주세요 :)
+    //         </Span>
+    //         <TextButton
+    //           btnType="basic"
+    //           disabled={
+    //             descriptionInput.value === "" || !collaboRequestData.isValid
+    //               ? true
+    //               : false
+    //           }
+    //           type="submit"
+    //         >
+    //           콜라보요청하기
+    //         </TextButton>
+    //       </Flex>
+    //     </Flex>
+    //   </Flex>
+    // </form>
   );
 };
 

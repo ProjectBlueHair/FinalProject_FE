@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Modal from "../modal/Modal";
 import styled from "styled-components";
 import useModal from "../modal/useModal";
@@ -6,9 +6,11 @@ import { instanceAxios } from "../../dataManager/apiConfig";
 import Img from "../elem/Img";
 import { log } from "../../asset/pic";
 import { uploadFiles } from "../../dataManager/imageS3";
+import useTypeModal from "../../modal/hooks/useTypeModal";
 
 const SignUpModal = ({ onClose }) => {
   const { closeModal } = useModal();
+  const { $openModal, $closeModal } = useTypeModal();
   const imgRef = useRef("");
   // 상태값
   const [nickname, setNickname] = useState("");
@@ -44,7 +46,13 @@ const SignUpModal = ({ onClose }) => {
     // 이미지 미리보기 로직
 
     if (fileSize < file.size) {
-      alert("업로드 가능한 최대 용량은 5MB입니다");
+      $openModal({
+        type: "alert",
+        props: {
+          message: "업로드 가능한 최대 용량은 5MB입니다",
+          type: "info",
+        },
+      });
     } else {
       setS3image(file);
       const reader = new FileReader();
@@ -121,12 +129,12 @@ const SignUpModal = ({ onClose }) => {
     },
     [password]
   );
-
+  console.log(isPwLength && isPwNum && isPwStr && isPwSymbol);
   // 비밀번호 체크
   const onChangePasswordCheck = useCallback((e) => {
     const passwordC = e.target.value;
     setPasswordCheck(passwordC);
-    if (password === passwordC && password.length === passwordC.length) {
+    if (password === passwordC) {
       setIsPasswordCheck(true);
       setPwMsg("");
     } else {
@@ -138,10 +146,22 @@ const SignUpModal = ({ onClose }) => {
   // 닉네임 중복처리
   const onNicknameCheck = () => {
     if (nickname.length === 0) {
-      alert("닉네임을 입력해주세요");
+      $openModal({
+        type: "alert",
+        props: {
+          message: "닉네임을 입력해주세요",
+          type: "info",
+        },
+      });
       return;
     } else if (nickname.length < 2 || nickname.length > 15) {
-      alert("2자이상, 15자 이내로 작성해 주세요");
+      $openModal({
+        type: "alert",
+        props: {
+          message: "2자이상, 15자 이내로 작성해 주세요",
+          type: "info",
+        },
+      });
     } else {
       NicknameCheck({
         nickname,
@@ -161,13 +181,30 @@ const SignUpModal = ({ onClose }) => {
         "member/validate/nickname",
         post
       );
-      console.log(data);
       if (data.customHttpStatus === 4092) {
-        alert(data.message);
+        $openModal({
+          type: "alert",
+          props: {
+            message: data.message,
+            type: "info",
+          },
+        });
       } else if (data.customHttpStatus === 4090) {
-        alert(data.message);
+        $openModal({
+          type: "alert",
+          props: {
+            message: data.message,
+            type: "info",
+          },
+        });
       } else {
-        alert(data.message + "입니다");
+        $openModal({
+          type: "alert",
+          props: {
+            message: data.message + "입니다",
+            type: "info",
+          },
+        });
         return data;
       }
     } catch (error) {}
@@ -176,10 +213,22 @@ const SignUpModal = ({ onClose }) => {
   // 이메일 중복처리
   const onEmailCheck = () => {
     if (email.length === 0) {
-      alert("이메일을 입력해 주세요");
+      $openModal({
+        type: "alert",
+        props: {
+          message: "이메일을 입력해 주세요",
+          type: "info",
+        },
+      });
       return;
     } else if (!emailRegex.test(email)) {
-      alert("올바른 이메일 형식이 아닙니다");
+      $openModal({
+        type: "alert",
+        props: {
+          message: "올바른 이메일 형식이 아닙니다",
+          type: "info",
+        },
+      });
       return;
     }
     emailCheck({
@@ -197,11 +246,29 @@ const SignUpModal = ({ onClose }) => {
     try {
       const { data } = await instanceAxios.post("member/validate/email", post);
       if (data.customHttpStatus === 4091) {
-        alert(data.message);
+        $openModal({
+          type: "alert",
+          props: {
+            message: data.message,
+            type: "info",
+          },
+        });
       } else if (data.customHttpStatus === 4090) {
-        alert(data.message);
+        $openModal({
+          type: "alert",
+          props: {
+            message: data.message,
+            type: "info",
+          },
+        });
       } else {
-        alert(data.message + "입니다");
+        $openModal({
+          type: "alert",
+          props: {
+            message: data.message + "입니다",
+            type: "info",
+          },
+        });
         return data;
       }
     } catch (error) {}
@@ -221,7 +288,6 @@ const SignUpModal = ({ onClose }) => {
   // 회원가입 버튼 클릭시 실행
   const onSignUpBtn = () => {
     uploadFiles(s3image).then((res) => {
-      console.log(res);
       const profileImg = res === null ? null : res.Location;
       postSignUp({
         nickname,
@@ -232,13 +298,31 @@ const SignUpModal = ({ onClose }) => {
         if (res === undefined) {
           return;
         } else {
-          alert(res.message);
+          $openModal({
+            type: "alert",
+            props: {
+              message: res.message,
+              type: "info",
+            },
+          });
           closeModal?.();
         }
       });
     });
   };
+  useEffect(() => {
+    if (password === passwordCheck) {
+      setIsPasswordCheck(true);
+    } else {
+      setIsPasswordCheck(false);
+    }
+  }, [password, passwordCheck]);
 
+  const UpHandler = (e) => {
+    if (e.key === "Enter") {
+      onSignUpBtn();
+    }
+  };
   return (
     <Modal onClose={onClose}>
       <SignUpTotal>
@@ -262,6 +346,7 @@ const SignUpModal = ({ onClose }) => {
                 onChange={onChangeNickname}
                 maxLength={15}
                 placeholder="닉네임을 입력해 주세요"
+                onKeyPress={UpHandler}
               />
               <button onClick={onNicknameCheck}>중복체크</button>
             </SignUpDivBox>
@@ -274,6 +359,7 @@ const SignUpModal = ({ onClose }) => {
                 placeholder="닉네임을 입력해 주세요"
                 readOnly={nickname}
                 style={{ color: "white" }}
+                onKeyPress={UpHandler}
               />
             </SignUpDivBox>
           )}
@@ -284,6 +370,7 @@ const SignUpModal = ({ onClose }) => {
                 type="email"
                 onChange={onChangeEmail}
                 placeholder="이메일을 입력해 주세요"
+                onKeyPress={UpHandler}
               />
               <button onClick={onEmailCheck}>중복체크</button>
             </SignUpDivBox>
@@ -295,6 +382,7 @@ const SignUpModal = ({ onClose }) => {
                 placeholder="이메일을 입력해 주세요"
                 readOnly={email}
                 style={{ color: "white" }}
+                onKeyPress={UpHandler}
               />
             </SignUpDivBox>
           )}
@@ -315,6 +403,7 @@ const SignUpModal = ({ onClose }) => {
                 onChange={onChangePassword}
                 placeholder="비밀번호를 입력해 주세요"
                 style={{ color: "white" }}
+                onKeyPress={UpHandler}
               />
             </SignUpDivBox>
           )}
@@ -365,17 +454,18 @@ const SignUpModal = ({ onClose }) => {
           </PasswordCheck>
           <SignUpTitle style={{ marginTop: "5px" }}>Password Check</SignUpTitle>
           {!(
-            isPasswordCheck &&
             isPwLength &&
             isPwSymbol &&
             isPwStr &&
-            isPwNum
+            isPwNum &&
+            isPasswordCheck
           ) ? (
             <SignUpDivBox>
               <input
                 type="password"
                 placeholder="비밀번호 한번더 확인해 주세요"
                 onChange={onChangePasswordCheck}
+                onKeyPress={UpHandler}
               ></input>
               <p style={{ color: "rgba(245, 15, 0, 0.6)" }}>{pwMsg}</p>
             </SignUpDivBox>
@@ -386,6 +476,7 @@ const SignUpModal = ({ onClose }) => {
                 placeholder="비밀번호 한번더 확인해 주세요"
                 onChange={onChangePasswordCheck}
                 style={{ color: "white" }}
+                onKeyPress={UpHandler}
               ></input>
             </SignUpDivBox>
           )}

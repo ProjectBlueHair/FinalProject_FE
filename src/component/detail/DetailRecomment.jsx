@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Img from "../elem/Img";
-import { more, like, view } from "../../asset/pic";
+import { like, view } from "../../asset/pic";
 import { instanceAxios } from "../../dataManager/apiConfig";
+import Img from "../elem/Img";
+import StLink from "../elem/Link";
 
 const DetailRecomment = () => {
   const [ReList, setReList] = useState();
+  const navigate = useNavigate();
   const detailReCom = async () => {
     try {
       const {
@@ -21,54 +24,66 @@ const DetailRecomment = () => {
     detailReCom();
   }, []);
 
+  const detailMove = (id) => {
+    navigate(`/detail/${id}`);
+    window.location.reload();
+  };
+
   return (
     <DetailReComCol>
+      <h1>추천 음악</h1>
       {ReList?.map((List) => (
         <DetailRightLine key={List.id}>
-          <DetailRightIn>
-            <RecommentImg>
-              <img src={List.postImg} alt="사진" />
-            </RecommentImg>
-            <RecommentText>
-              <RecommentTitle>
-                <div>{List.title}</div>
-                <Img wd="3rem" src={more} />
-              </RecommentTitle>
-              <RecommentTag>
-                <div>해시태그</div>
-                <div>해시태그</div>
-                <div>해시태그</div>
-                <div>해시태그</div>
-                <div>해시태그</div>
-              </RecommentTag>
-              <RecommentImgViewLike>
-                <RecommentProfile>
-                  {List.mainProfileList.map((imgurl, index) => {
-                    if (index < 3) {
-                      return (
-                        <img
-                          key={index}
-                          className={"img" + index}
-                          src={imgurl.profileImg}
-                          alt=""
-                        />
-                      );
-                    } else if (index < 4) {
-                      return <div key={imgurl.id}>+</div>;
-                    }
-                  })}
-                </RecommentProfile>
-                <div>
-                  <Img wd="1.3rem" src={view} />
-                  <span>{List.viewCount}</span>
-                </div>
-                <div>
-                  <Img wd="1rem" src={like} />
-                  <span>{List.likeCount}</span>
-                </div>
-              </RecommentImgViewLike>
-            </RecommentText>
-          </DetailRightIn>
+          <RecommentImg
+            src={List.postImg}
+            alt="사진"
+            onClick={() => detailMove(List.id)}
+            style={{ cursor: "pointer" }}
+          />
+          <RecommentText>
+            <RecommentTitle>
+              <div
+                onClick={() => detailMove(List.id)}
+                style={{ cursor: "pointer" }}
+              >
+                {List.title}
+              </div>
+              {/* <Img wd="3rem" src={more} onClick={moreClick} /> */}
+            </RecommentTitle>
+            <RecommentTag>
+              {List?.tagList?.map((re) => (
+                <StLink to={`/tag/${re}`}>
+                  <div>{re}</div>
+                </StLink>
+              ))}
+            </RecommentTag>
+            <RecommentImgViewLike>
+              <RecommentProfile>
+                {List.mainProfileList.map((imgurl, index) => {
+                  if (index < 3) {
+                    return (
+                      <img
+                        key={index}
+                        className={"img" + index}
+                        src={imgurl.profileImg}
+                        alt=""
+                      />
+                    );
+                  } else if (index < 4) {
+                    return <div key={imgurl.id}>+</div>;
+                  }
+                })}
+              </RecommentProfile>
+              <div>
+                <Img wd="1.3rem" src={view} style={{ marginRight: "5px" }} />
+                <span>{List.viewCount}</span>
+              </div>
+              <div>
+                <Img wd="1rem" src={like} style={{ marginRight: "5px" }} />
+                <span>{List.likeCount}</span>
+              </div>
+            </RecommentImgViewLike>
+          </RecommentText>
         </DetailRightLine>
       ))}
     </DetailReComCol>
@@ -79,36 +94,41 @@ export default DetailRecomment;
 const DetailReComCol = styled.div`
   display: flex;
   flex-direction: column;
-  width: 20%;
+  background-color: #f2f2f2;
+  padding: 20px;
+  margin-left: 10px;
+  border-radius: 20px;
+  width: 27%;
+  h1 {
+    margin-bottom: 10px;
+  }
 `;
 
 const DetailRightLine = styled.div`
   display: flex;
   justify-content: start;
   width: 100%;
+  margin-bottom: 10px;
+  border-radius: 20px;
+  background-color: white;
 `;
 
-const DetailRightIn = styled.div`
-  display: flex;
-  margin: 0 0 30px 30px;
-`;
-
-const RecommentImg = styled.div`
+const RecommentImg = styled.img`
   width: 12rem;
   height: 12rem;
   border: 1px solid #e7e7e7;
-  border-radius: 10px;
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
 `;
 
 const RecommentText = styled.div`
-  width: 23rem;
-  margin-left: 1rem;
+  width: 65%;
+  background-color: white;
+  border-radius: 20px;
   display: flex;
+  position: relative;
+  left: -15px;
+  padding: 0 0 0 25px;
   flex-direction: column;
   justify-content: center;
   div {
@@ -132,6 +152,8 @@ const RecommentTag = styled.div`
     padding: 1.5px 3px;
     font-size: 1rem;
     margin-right: 5px;
+    color: black;
+    background-color: rgba(0, 0, 0, 0.1);
   }
 `;
 

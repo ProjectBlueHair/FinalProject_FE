@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
 // import Img from "../../elem/Img";
 // import { more } from "../../../asset/pic";
-import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import { __getComment } from "../../../redux/slice/comment";
-import { useSelector } from "react-redux";
-import DetailUpDown from "./DetailCommentUpDown";
 import DetailDeleteAndUpdate from "./DetailCommentDeleteAndUpdate";
-import DetailCommentLike from "./DetailCommentLike";
+import DetailUpDown from "./DetailCommentUpDown";
 
 const DetailCommentView = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {
@@ -19,18 +18,22 @@ const DetailCommentView = () => {
   }, []);
 
   const mainCommentView = useSelector((state) => state.comment.comment);
-
+  const MypageMove = (name) => {
+    navigate(`/mypage/${name}`);
+  };
   return (
     <div>
       {mainCommentView?.map((mcv) => (
         <DetailComTotal key={mcv.id}>
-          <DetailComTopImg src={mcv.profileImg} />
+          <DetailComTopImg
+            src={mcv.profileImg}
+            onClick={() => MypageMove(mcv?.nickname)}
+          />
           <DetailComTop>
             <DetailDeleteAndUpdate mcv={mcv} />
-            <DetailCommentLike mcv={mcv} />
-            <DetailComUpDown>
+            <div>
               <DetailUpDown mcv={mcv} />
-            </DetailComUpDown>
+            </div>
           </DetailComTop>
         </DetailComTotal>
       ))}
@@ -40,29 +43,27 @@ const DetailCommentView = () => {
 
 export default DetailCommentView;
 
+// 댓글 전체 div
 const DetailComTotal = styled.div`
   display: flex;
-  width: 100%;
+  margin: 0 auto 10px;
+  width: 95%;
 `;
 
+// 댓글 이미지 원모양
 const DetailComTopImg = styled.img`
   width: 3.3rem;
   height: 3.3rem;
   border: 1px solid black;
   border-radius: 70%;
   margin-right: 1rem;
+  cursor: pointer;
 `;
 
+// 댓글 프로필우측 div 전체
 const DetailComTop = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
-`;
-
-const DetailComUpDown = styled.div`
-  button {
-    margin-right: 1rem;
-    background-color: transparent;
-    border: transparent;
-  }
+  width: 95%;
+  word-wrap: break-word;
 `;

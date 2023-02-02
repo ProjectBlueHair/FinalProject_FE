@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import Flex from "../elem/Flex";
-import Img from "../elem/Img";
+import { batch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import {
   account,
   follows,
@@ -8,34 +9,40 @@ import {
   message,
   notifications,
   search,
-  settings,
   upload,
 } from "../../asset/pic";
-import styled from "styled-components";
-import Input from "../elem/Input";
-import useModal from "../modal/useModal";
-import { useNavigate } from "react-router-dom";
-import useTypeModal from "../../modal/hooks/useTypeModal";
-import { PATH } from "../../Router";
+import { serverURL } from "../../dataManager/apiConfig";
 import { getCookies, removeCookies } from "../../dataManager/cookie";
+import { useStomp } from "../../hook/useStomp";
 import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
+import useTypeModal from "../../modal/hooks/useTypeModal";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
+  alarmSelector,
+  __clearAlarmCount,
+  __getAlarm,
+} from "../../redux/slice/mainSlice";
+import {
   userSelector,
+  __clearUser,
   __getGeneralUserInfo,
 } from "../../redux/slice/userSlice";
-import Span from "../elem/Span";
-import { instanceAxios, serverURL } from "../../dataManager/apiConfig";
+import { PATH } from "../../Router";
+import theme from "../../styles/theme";
 import Div from "../elem/Div";
-import { EventSourcePolyfill } from "event-source-polyfill";
+import Flex from "../elem/Flex";
+import Img from "../elem/Img";
+import Input from "../elem/Input";
+import Span from "../elem/Span";
+import useModal from "../modal/useModal";
+const iconSize = "4rem";
+let eventSource = null;
 const Header = () => {
   const navigate = useNavigate();
-  const iconSize = "4rem";
   const Sign = useRef(null);
   // 토글창 상태관리
   const [isOpen, setIsOpen] = useState(false);
   const { openModal } = useModal();
-  const { $openModal, $closeModal } = useTypeModal();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -50,54 +57,99 @@ const Header = () => {
   const onClickLogOut = () => {
     removeCookies("accesstoken", { path: "/" });
     removeCookies("refreshtoken", { path: "/" });
+    dispatch(__clearUser());
+    dispatch(__clearAlarmCount());
     setIsOpen(false);
     navigate("/");
   };
-  const acToken = getCookies("accesstoken");
+
   useToggleOutSideClick(Sign, setIsOpen);
-  const [isClicked, setIsClicked] = useState({ alarm: false });
-  const [unreadCount, setUnreadCount] = useState(0);
 
+  const { $openModal, $closeModal } = useTypeModal();
   const dispatch = useAppDispatch();
+  const AccessToken = getCookies("accesstoken");
   const user = useAppSelector(userSelector);
+  const alarmCount = useAppSelector(alarmSelector);
+  const connectEvent = () => {
+    let readyState = localStorage.getItem("readyState");
+    if (readyState === null) readyState = 2;
+    const isConnecting = Number(readyState) === 1 || Number(readyState) === 0;
 
-  useEffect(() => {
-    acToken && dispatch(__getGeneralUserInfo());
-  }, [user.nickname]);
-  const getAlarmCount = () => {
-    return instanceAxios.get("/notification/count");
-  };
-  useEffect(() => {
-    const RefreshToken = getCookies("refreshtoken");
-    const AccessToken = getCookies("accesstoken");
-    if (AccessToken) {
-      const es = new EventSourcePolyfill(`${serverURL}/subscribe`, {
-        headers: {
-          AccessToken: AccessToken,
-          RefreshToken: RefreshToken,
-          heartbeatTimeout : 3600 * 1000 // 1시간
-        },
-        
+    console.log(
+      "AccessToken && user.nickname && !isConnecting",
+      AccessToken && user.nickname && !isConnecting
+    );
+    if (AccessToken && user.nickname && !isConnecting) {
+      eventSource = new EventSource(`${serverURL}/subscribe/${user.nickname}`, {
+        withCredentials: true,
+        connection: "keep-alive",
       });
-      es.onmessage = (event) => {
-        console.log('event',event.data);
-        if (!event.data.includes("EventStream Created")) {
-          getAlarmCount().then((data) => {
-            console.log("count", data);
-            setUnreadCount(data.data.data.unreadNotificationCount);
-          });
-        }
+    }
+    if (eventSource) {
+      eventSource.onopen = () => {
+        console.log("on open ... ready state", eventSource.readyState);
+        localStorage.setItem("readyState", eventSource.readyState);
+      };
+      eventSource.onmessage = (event) => {
+        dispatch(__getAlarm());
+      };
+      eventSource.onerror = (e) => {
+        eventSource.close();
+        console.log("on error ... error message", e);
+        console.log("on error ... readystate", eventSource.readyState);
+        eventSource = new EventSource(
+          `${serverURL}/subscribe/${user.nickname}`,
+          {
+            withCredentials: true,
+            connection: "keep-alive",
+          }
+        );
+        console.log(
+          "on error ... after reconnect readystate",
+          eventSource.readyState
+        );
+        localStorage.setItem("readyState", eventSource.readyState);
       };
     }
-  }, []);
+  };
+  useEffect(() => {
+    if (!AccessToken && user.nickname) {
+      batch(() => {
+        dispatch(__clearUser());
+        dispatch(__clearAlarmCount());
+      });
+    }
+    if (AccessToken && !user.nickname) dispatch(__getGeneralUserInfo());
+    connectEvent();
+    return () => {
+      console.log("unmounting ... eventsource : ", eventSource);
+      eventSource?.close();
+      console.log("unmounting ... readystate", eventSource?.readyState);
+      localStorage.setItem("readyState", 2);
+    };
+  }, [user.nickname, AccessToken]);
 
+  const onClickSetPage = () => {
+    navigate("/setpage");
+  };
+
+  const onClickGuide = () => {
+    // 가이드 페이지 이동
+    window.open(
+      "https://protective-whale-78f.notion.site/bb305c9f0a75495290c2ed47348aff6f"
+    );
+  };
+
+  const onClickMypage = () => {
+    navigate(`/mypage/${user.nickname}`);
+  };
   return (
     <Grid>
       <Flex justify="space-between">
         <Img
           onClick={() => navigate(PATH.main)}
           cursor="pointer"
-          wd="20rem"
+          wd="18rem"
           src={mainLogo}
         />
         <Img
@@ -129,15 +181,17 @@ const Header = () => {
       </Flex>
 
       <Flex justify="flex-end" gap="1.5rem">
+        <Div
+          onClick={onClickGuide}
+          style={{ cursor: "pointer" }}
+          fs="1.6rem"
+          fw="700"
+        >
+          GUIDE
+        </Div>
         <Img
           onClick={() => {
-            $openModal({
-              type: "alert",
-              props: {
-                message: "채팅 기능은 곧 준비될 예정입니다 !",
-                type: "confirm",
-              },
-            });
+            navigate(PATH.chat);
           }}
           type="icon"
           wd={iconSize}
@@ -146,15 +200,14 @@ const Header = () => {
         <Flex direction="row" wd="none">
           <Img
             onClick={() => {
-              !isClicked.alarm ? $openModal({ type: "alarm" }) : $closeModal();
-              setIsClicked({ ...isClicked, alarm: !isClicked.alarm });
+              $openModal({ type: "alarm" });
             }}
             type="icon"
             wd={iconSize}
             src={notifications}
           />
           {/* <AlarmCount>4</AlarmCount> */}
-          {unreadCount ? <AlarmCount>{unreadCount}</AlarmCount> : null}
+          {alarmCount ? <AlarmCount>{alarmCount}</AlarmCount> : null}
         </Flex>
         <Img
           onClick={() => navigate("/post")}
@@ -162,79 +215,70 @@ const Header = () => {
           wd={iconSize}
           src={upload}
         />
-        <Img
-          onClick={() => {
-            $openModal({
-              type: "alert",
-              props: {
-                message: "설정 기능은 곧 준비될 예정입니다 !",
-                type: "confirm",
-              },
-            });
-          }}
-          type="icon"
-          wd={iconSize}
-          src={settings}
-        />
-        {user.profileImg ? (
-          <Img
-            cursor="pointer"
-            onClick={() => toggleMenu()}
-            type="shadowProfile"
-            src={user.profileImg}
-            hg="3.5rem"
-          />
-        ) : (
-          <Img
-            type="icon"
-            wd={iconSize}
-            src={account}
-            onClick={() => toggleMenu()}
-          />
-        )}
+        <div ref={Sign}>
+          {user.profileImg ? (
+            <Img
+              cursor="pointer"
+              onClick={() => toggleMenu()}
+              type="shadowProfile"
+              src={user.profileImg}
+              hg="3.5rem"
+            />
+          ) : (
+            <Div
+              onClick={onClickSignBtn}
+              style={{ cursor: "pointer" }}
+              fs="1.6rem"
+              fw="700"
+              fc={theme.color.main}
+            >
+              Login
+            </Div>
+          )}
+          {user.nickname ? (
+            <ToggleTotal>
+              {isOpen ? (
+                <ToggleDiv>
+                  <Span fc="var(--ec-main-color)" fw="700">
+                    {user.nickname}
+                  </Span>
+                  <button onClick={onClickLogOut}>로그아웃</button>
+                  <button onClick={onClickMypage}>마이페이지</button>
+                  <button onClick={onClickSetPage}>계정설정</button>
+                </ToggleDiv>
+              ) : (
+                ""
+              )}
+            </ToggleTotal>
+          ) : (
+            <div>
+              {isOpen ? (
+                <ToggleDiv2>
+                  <button onClick={onClickSignBtn}>로그인</button>
+                </ToggleDiv2>
+              ) : (
+                ""
+              )}
+            </div>
+          )}
+        </div>
       </Flex>
-      {user.nickname ? (
-        <>
-          {isOpen ? (
-            <ToggleDiv ref={Sign}>
-              <Span fc="var(--ec-main-color)" fw="700">
-                {user.nickname}
-              </Span>
-              <button onClick={onClickLogOut}>로그아웃</button>
-              <button>마이페이지</button>
-              <button>계정설정</button>
-            </ToggleDiv>
-          ) : (
-            ""
-          )}
-        </>
-      ) : (
-        <>
-          {isOpen ? (
-            <ToggleDiv2 ref={Sign}>
-              <button onClick={onClickSignBtn}>로그인</button>
-            </ToggleDiv2>
-          ) : (
-            ""
-          )}
-        </>
-      )}
     </Grid>
   );
 };
 
 export default Header;
 const Grid = styled.div`
-  padding: 2rem 2rem;
+  padding: 1.3rem 3rem;
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 1rem;
 `;
 const AlarmCount = styled.div`
-  position: absolute;
-  top: 20px;
-  right: 193px;
+  position: fixed;
+  top: 1.4rem;
+  right: 12.8rem;
   border-radius: 20px;
   color: white;
   padding: 0.3rem 0.7rem;
@@ -242,56 +286,86 @@ const AlarmCount = styled.div`
   font-size: 1.1rem;
 `;
 
+const ToggleTotal = styled.div`
+  position: relative;
+`;
+
 const ToggleDiv = styled.div`
   position: absolute;
-  right: 0;
-  top: 0;
+  right: 110%;
+  top: -30px;
   width: 100px;
-  height: 120px;
-  margin-top: 25px;
-  margin-right: 80px;
+  height: 130px;
+  /* margin-top: 25px;
+  margin-right: 75px; */
   background-color: white;
   border: 2px solid #ff4d00;
   border-radius: 10px;
-  z-index: 1;
+  z-index: 1000;
   padding: 10px 10px 0 0;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  animation: toggleDiv;
+  animation-duration: 0.5s;
   button {
     margin-top: 10px;
     background-color: white;
     border: white;
     font-size: 15px;
+    cursor: pointer;
     :hover {
       border-bottom: 1px solid #ff4d00;
+    }
+  }
+  @keyframes toggleDiv {
+    0% {
+      transform: scaleY(0.1);
+      transform-origin: 100% 0%;
+    }
+    100% {
+      transform: scaleY(1);
+      transform-origin: 100% 0%;
     }
   }
 `;
 
 const ToggleDiv2 = styled.div`
   position: absolute;
-  right: 0;
-  top: 0;
+  right: 5%;
+  top: 4%;
   width: 100px;
   height: 50px;
-  margin-top: 25px;
-  margin-right: 80px;
+  /* margin-top: 25px;
+  margin-right: 80px; */
   background-color: white;
   border: 2px solid #ff4d00;
   border-radius: 10px;
-  z-index: 1;
+  z-index: 1000;
   padding: 5px 10px 0 0;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  animation: toggleDiv2;
+  animation-duration: 0.5s;
   button {
     margin-top: 10px;
     background-color: white;
     border: white;
     font-size: 15px;
+    cursor: pointer;
     :hover {
       border-bottom: 1px solid #ff4d00;
+    }
+  }
+  @keyframes toggleDiv2 {
+    0% {
+      transform: scaleY(0.1);
+      transform-origin: 100% 0%;
+    }
+    100% {
+      transform: scaleY(1);
+      transform-origin: 100% 0%;
     }
   }
 `;

@@ -1,10 +1,10 @@
 import React, {
   CSSProperties,
   MouseEventHandler,
-  MutableRefObject,
+  MutableRefObject
 } from "react";
-import styled, { StyledComponentProps } from "styled-components";
-import { StyledComponent } from "styled-components";
+import styled, { StyledComponent } from "styled-components";
+import theme from "../../styles/theme";
 interface DivProps {
   display?: string;
   direction?: string;
@@ -20,7 +20,7 @@ interface DivProps {
   overFlow?: string;
   flexWrap?: string;
   flexGrow?: string;
-  bg?: string;
+  bg?: string | number;
   shadow?: string;
   radius?: string;
   border?: string;
@@ -34,8 +34,10 @@ interface DivProps {
   ref?: MutableRefObject<any>;
   cursor?: string;
   isNewAudio?: boolean;
+  isFormAudio?: boolean;
   onClick?: MouseEventHandler;
   style?: CSSProperties;
+  className?: string;
 }
 interface FlexContainer {
   [key: string]: StyledComponent<"div", any, DivProps, never>;
@@ -86,7 +88,9 @@ const FlexCard = styled(StFlex)`
 const AudioBarWrapper = styled(StFlex)`
   border-radius: 5rem;
   border: ${({ isNewAudio, theme }) =>
-    isNewAudio ? `1px solid ${theme.color.main}` : "none"};
+    isNewAudio ? `1px solid ${theme.color.rgbaBorder1}` : "none"};
+  background-color: ${(props) =>
+    props.isFormAudio ? theme.color.rgbaBg1 : "none"};
 `;
 const AudioBarRightWrapper = styled(StFlex)`
   flex: 1;

@@ -1,20 +1,26 @@
-import React from "react";
 import { useDispatch } from "react-redux";
-import Img from "../../elem/Img";
-import { like, redLike } from "../../../asset/pic";
-import styled from "styled-components";
-import { __getComment, __likeComment } from "../../../redux/slice/comment";
 import { useParams } from "react-router-dom";
+import styled from "styled-components";
+import { like, redLike } from "../../../asset/pic";
 import { getCookies } from "../../../dataManager/cookie";
+import useTypeModal from "../../../modal/hooks/useTypeModal";
+import { __getComment, __likeComment } from "../../../redux/slice/comment";
+import Img from "../../elem/Img";
 
 const DetailCommentLike = ({ mcv }) => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const { $openModal, $closeModal } = useTypeModal();
   const onNoSign = () => {
-    alert("로그인이 필요합니다");
+    $openModal({
+      type: "alert",
+      props: {
+        message: "로그인이 필요한 페이지 (기능) 입니다.",
+        type: "error",
+      },
+    });
   };
   const acToken = getCookies("accesstoken");
-  // 유저 정보
 
   const onLikeClick = async (comId) => {
     await dispatch(__likeComment(comId));
@@ -23,16 +29,11 @@ const DetailCommentLike = ({ mcv }) => {
   return (
     <CommentLikeTouch>
       {acToken === undefined ? (
-        <Img
-          wd="2rem"
-          src={like}
-          onClick={onNoSign}
-          style={{ marginTop: "-5px" }}
-        />
+        <Img wd="2rem" src={like} onClick={onNoSign} />
       ) : (
         <button onClick={() => onLikeClick(mcv.id)}>
           {mcv.liked ? (
-            <Img wd="2.3rem" src={redLike} />
+            <Img wd="2.1rem" src={redLike} />
           ) : (
             <Img wd="2rem" src={like} />
           )}
@@ -48,9 +49,10 @@ export default DetailCommentLike;
 const CommentLikeTouch = styled.div`
   display: flex;
   align-items: center;
-  margin-top: -0.5rem;
+  img {
+    cursor: pointer;
+  }
   button {
-    margin-top: -0.5rem;
     background-color: transparent;
     border: transparent;
   }
