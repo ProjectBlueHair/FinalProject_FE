@@ -68,13 +68,19 @@ const MypageRight = () => {
         <ArrayBtn onClick={leftClick}>
           <SlArrowLeft />
         </ArrayBtn>
-        <Tdiv>
-          {archiveList.map((L) => (
-            <div key={L.id}>
-              <MypagePlayList L={L} key={L.id} getArchive={getArchive} />
-            </div>
-          ))}
-        </Tdiv>
+
+        {archiveList.length === 0 ? (
+          <NotDataDiv>보관함이 비어 있습니다</NotDataDiv>
+        ) : (
+          <Tdiv>
+            {archiveList.map((L) => (
+              <div key={L.id}>
+                <MypagePlayList L={L} key={L.id} getArchive={getArchive} />
+              </div>
+            ))}
+          </Tdiv>
+        )}
+
         <ArrayBtn onClick={rightClick}>
           <SlArrowRight />
         </ArrayBtn>
@@ -83,11 +89,18 @@ const MypageRight = () => {
       <MypageTop style={{ marginTop: "5rem", alignItems: "baseline" }}>
         <h1>내가 작성한 게시물</h1>
       </MypageTop>
-      <MyRow2>
-        {archiveList2?.map((L, index) => (
-          <MypagePlayList2 L={L} key={index} getArchive2={getArchive2} />
-        ))}
-      </MyRow2>
+
+      {archiveList2.length === 0 ? (
+        <NotDataDiv style={{ marginTop: "50px" }}>
+          작성한 게시물이 없습니다
+        </NotDataDiv>
+      ) : (
+        <MyRow2>
+          {archiveList2?.map((L, index) => (
+            <MypagePlayList2 L={L} key={index} getArchive2={getArchive2} />
+          ))}
+        </MyRow2>
+      )}
     </MypageRightDiv>
   );
 };
@@ -162,4 +175,13 @@ const Tdiv = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   padding-left: 2.5rem;
+`;
+
+const NotDataDiv = styled.div`
+  width: 100%;
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgba(0, 0, 0, 0.2);
 `;

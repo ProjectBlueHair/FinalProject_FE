@@ -15,7 +15,7 @@ const DetailCommentSub = ({ mcv }) => {
   const { $openModal, $closeModal } = useTypeModal();
   useEffect(() => {
     dispatch(__getUserInfo());
-  }, []);
+  }, [id]);
   const userInformation = useSelector((state) => state.detail.userInfo.data);
 
   const onChangeCommentSub = (e) => {
