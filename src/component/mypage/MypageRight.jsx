@@ -51,6 +51,7 @@ const MypageRight = () => {
     }
     Sli.current.style.animation = "1s linear 0s 0 normal none running Lslide";
   };
+  console.log(Sli);
   const rightClick = () => {
     if (archiveList.length < 4) {
       setPage(Number(page + 0));
