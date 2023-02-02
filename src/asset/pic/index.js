@@ -47,6 +47,7 @@ export { default as checkfalse } from "./checkFalse.svg";
 export { default as fillHeart } from "./fillHeart.svg";
 export { default as kakaoIcon } from "./kakao.svg";
 export { default as googleIcon } from "./GoogleIcon.svg";
+export { default as mainLogoMini } from "./mainLogoMini.svg";
 //vector (without margin)
 export { default as skipPrevVector } from "./skip-prev-vector.svg";
 export { default as playVector } from "./play-vector.svg";

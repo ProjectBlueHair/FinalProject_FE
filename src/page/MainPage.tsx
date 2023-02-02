@@ -9,12 +9,6 @@ import { __cleanUp } from "../redux/slice/postingSlice";
 import { __mainCleanUp } from "../redux/slice/mainSlice";
 import ErrorCheck from "../util/ErrorCheck";
 const MainPage = () => {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    return () => {
-      // dispatch(__mainCleanUp());
-    };
-  }, []);
 
   return (
     <Flex direction="column" justify="flex-start" hg="100vh" gap="0">
