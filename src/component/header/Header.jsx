@@ -131,9 +131,15 @@ const Header = () => {
     navigate("/setpage");
   };
 
+  const onClickGuide = () => {
+    // 가이드 페이지 이동
+    window.open(
+      "https://protective-whale-78f.notion.site/bb305c9f0a75495290c2ed47348aff6f"
+    );
+  };
+
   const onClickMypage = () => {
     navigate(`/mypage/${user.nickname}`);
-    // window.location.reload();
   };
   return (
     <Grid>
@@ -173,6 +179,14 @@ const Header = () => {
       </Flex>
 
       <Flex justify="flex-end" gap="1.5rem">
+        <Div
+          onClick={onClickGuide}
+          style={{ cursor: "pointer" }}
+          fs="1.6rem"
+          fw="700"
+        >
+          GUIDE
+        </Div>
         <Img
           onClick={() => {
             navigate(PATH.chat);

@@ -1,19 +1,20 @@
 import { current } from "@reduxjs/toolkit";
 import { useEffect, useRef, useState } from "react";
 import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { instanceAxios } from "../../dataManager/apiConfig";
+import { __getGeneralUserInfo } from "../../redux/slice/userSlice";
 import MypagePlayList from "./MypagePlayList";
 import MypagePlayList2 from "./MypagePlayList2";
 
 const MypageRight = () => {
+  const dispatch = useDispatch();
   const [archiveList, setArchiveList] = useState([]);
   const [archiveList2, setArchiveList2] = useState([]);
   const { nickname } = useParams();
-  // const [limit, setLimit] = useState(4);
   const [page, setPage] = useState(0);
-  // const offset = (page - 1) * limit;
   const getArchive = async (name) => {
     try {
       const {
@@ -39,8 +40,8 @@ const MypageRight = () => {
   useEffect(() => {
     getArchive(nickname);
     getArchive2(nickname);
+    dispatch(__getGeneralUserInfo());
   }, [nickname, page]);
-  const Sli = useRef(null);
 
   const leftClick = () => {
     if (page < 0 || page === 0) {
@@ -48,7 +49,6 @@ const MypageRight = () => {
     } else {
       setPage(Number(page - 1));
     }
-    Sli.current.style.animation = "1s linear 0s 0 normal none running Lslide";
   };
   const rightClick = () => {
     if (archiveList.length < 4) {
@@ -58,6 +58,15 @@ const MypageRight = () => {
     }
   };
 
+  // // 슬라이더 구현
+  // const Slider = useRef(null);
+
+  // useEffect(() => {
+  //   const { current } = Slider;
+  //   current.style.animation = "SV 1s";
+  //   console.log(current.style.animation);
+  // }, [page]);
+
   return (
     <MypageRightDiv>
       <MypageTop>
@@ -65,29 +74,21 @@ const MypageRight = () => {
         {/* <button>더보기 {">"}</button> */}
       </MypageTop>
       <MyRow>
-        {page === 0 ? (
-          <div></div>
-        ) : (
-          <ArrayBtn onClick={leftClick}>
-            <SlArrowLeft />
-          </ArrayBtn>
-        )}
-        <Tdiv ref={Sli}>
+        <ArrayBtn onClick={leftClick}>
+          <SlArrowLeft />
+        </ArrayBtn>
+        <Tdiv>
           {archiveList.map((L) => (
             <div key={L.id}>
               <MypagePlayList L={L} key={L.id} getArchive={getArchive} />
             </div>
           ))}
         </Tdiv>
-
-        {archiveList.length < 4 ? (
-          ""
-        ) : (
-          <ArrayBtn onClick={rightClick}>
-            <SlArrowRight />
-          </ArrayBtn>
-        )}
+        <ArrayBtn onClick={rightClick}>
+          <SlArrowRight />
+        </ArrayBtn>
       </MyRow>
+
       <MypageTop style={{ marginTop: "5rem", alignItems: "baseline" }}>
         <h1>내가 작성한 게시물</h1>
       </MypageTop>
@@ -121,13 +122,12 @@ const MypageTop = styled.div`
 
 const MyRow = styled.div`
   width: 98%;
-  height: 250px;
   display: grid;
   grid-template-columns: 30px 1fr 30px;
   align-items: center;
   flex-wrap: wrap;
-  justify-items: center;
   gap: 1rem;
+  margin: 0 auto;
 `;
 
 const MyRow2 = styled.div`
@@ -164,20 +164,20 @@ const ArrayBtn = styled.button`
   :hover {
     background-color: #ff4d00;
   }
-  @keyframes Lslide {
-    0% {
-      opacity: 0;
-      transform: translateX(0);
-    }
-    100% {
-      opacity: 1;
-      transform: scaleX(1);
-    }
-  }
 `;
 
 const Tdiv = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  gap: 1rem;
+  padding-left: 2.5rem;
+  /* animation: SVa;
+  animation-duration: 3s;
+  @keyframes SVa {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  } */
 `;
