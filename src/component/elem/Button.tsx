@@ -1,18 +1,7 @@
-import React, { MouseEventHandler } from "react";
-import styled, { CSSProperties, StyledComponent } from "styled-components";
-interface ButtonProps {
-  btnType?: string;
-  style?: CSSProperties;
-  children?: React.ReactNode;
-  disabled?: boolean;
-  mg?: string;
-  pd?: string;
-  fc?: string;
-  fs?: string;
-  fw?: string;
-  type?: "submit" | "reset" | "button" | undefined;
-  onClick?: MouseEventHandler;
-}
+import React from "react";
+import styled, { StyledComponent } from "styled-components";
+import { ButtonProps } from "../../model/StyleModel";
+
 interface ButtonType {
   [key: string]: StyledComponent<"button", any, ButtonProps, never>;
 }
@@ -32,7 +21,7 @@ export default Button;
 const CursorPointer = styled.button<ButtonProps>`
   margin: ${({ mg }) => mg || "none"};
   padding: ${({ pd }) => pd || "none"};
-  font-size: ${({ fs }) => fs || "inherit"};
+  font-size: ${({ fs }) => fs || "1.4rem"};
   font-weight: ${({ fw }) => fw || "inherit"};
   color: ${(props) => props.fc || props.theme.color.primaryText};
   outline: none;
