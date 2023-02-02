@@ -17,11 +17,10 @@ import { getCookies } from "../../dataManager/cookie";
 import { useShare } from "../../hook/useShare";
 import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
 import useTypeModal from "../../modal/hooks/useTypeModal";
-import { __directMessage } from "../chat/chatSlice";
-import { PATH } from "../../Router";
 import { __putDetailFollow } from "../../redux/slice/detailSlice";
+import { PATH } from "../../Router";
+import { __directMessage } from "../chat/chatSlice";
 import Img from "../elem/Img";
-import MypageLeftBottom from "./MypageLeftBottom";
 export const kakaoJS = process.env.REACT_APP_KaKaoJSKey;
 
 const MypageLeft = () => {
@@ -140,7 +139,10 @@ const MypageLeft = () => {
             <MypageBtn
               onClick={() => {
                 dispatch(__directMessage(information?.nickname)).then(
-                  navigate(PATH.chat)
+                  (data) => {
+                    console.log("directmsg", data);
+                    navigate(PATH.chat);
+                  }
                 );
               }}
             >
