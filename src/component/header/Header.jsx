@@ -38,7 +38,6 @@ import useModal from "../modal/useModal";
 const iconSize = "4rem";
 let eventSource = null;
 const Header = () => {
-
   const navigate = useNavigate();
   const Sign = useRef(null);
   // 토글창 상태관리
@@ -76,7 +75,7 @@ const Header = () => {
     if (!AccessToken && user.nickname) {
       batch(() => {
         dispatch(__clearUser());
-        dispatch(__clearAlarmCount())
+        dispatch(__clearAlarmCount());
       });
     }
     if (AccessToken && !user.nickname) dispatch(__getGeneralUserInfo());
@@ -134,9 +133,15 @@ const Header = () => {
     navigate("/setpage");
   };
 
+  const onClickGuide = () => {
+    // 가이드 페이지 이동
+    window.open(
+      "https://protective-whale-78f.notion.site/bb305c9f0a75495290c2ed47348aff6f"
+    );
+  };
+
   const onClickMypage = () => {
     navigate(`/mypage/${user.nickname}`);
-    window.location.reload();
   };
   return (
     <Grid>
@@ -176,6 +181,14 @@ const Header = () => {
       </Flex>
 
       <Flex justify="flex-end" gap="1.5rem">
+        <Div
+          onClick={onClickGuide}
+          style={{ cursor: "pointer" }}
+          fs="1.6rem"
+          fw="700"
+        >
+          GUIDE
+        </Div>
         <Img
           onClick={() => {
             navigate(PATH.chat);
@@ -221,7 +234,6 @@ const Header = () => {
             >
               Login
             </Div>
-
           )}
           {user.nickname ? (
             <ToggleTotal>

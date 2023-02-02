@@ -7,6 +7,7 @@ import { getCookies } from "../../dataManager/cookie";
 import useTypeModal from "../../modal/hooks/useTypeModal";
 import { __getDetail, __postLike } from "../../redux/slice/detailSlice";
 import { __cleanUp, __getAudios } from "../../redux/slice/postingSlice";
+import { __getGeneralUserInfo } from "../../redux/slice/userSlice";
 import Img from "../elem/Img";
 import PostingAudioBars from "../posting/PostingAudioBars";
 import PostingTotalPlay from "../posting/PostingTotalPlay";
@@ -66,12 +67,6 @@ const DetailTop = () => {
       },
     });
   };
-
-  useEffect(() => {
-    if (acToken) {
-      dispatch(__getDetail(id));
-    }
-  }, [acToken]);
 
   return (
     <PlayTop>
