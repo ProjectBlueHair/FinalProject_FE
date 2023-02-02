@@ -101,13 +101,23 @@ const DetailFollow = () => {
               <FollowTotal key={index}>
                 <FollowTop>
                   <FollowImgText>
-                    <img src={collabo.profileImg} alt="" />
+                    <img
+                      src={collabo.profileImg}
+                      alt=""
+                      onClick={() => MypageMove(collabo?.nickname)}
+                      style={{ cursor: "pointer" }}
+                    />
                     <FollowMiddle>
                       <FollowWriteInstrument>
                         {collabo?.musicPartsList?.map((part, index) => (
                           <div key={index}>{part}</div>
                         ))}
-                        <span>{collabo.nickname}</span>
+                        <span
+                          onClick={() => MypageMove(collabo?.nickname)}
+                          style={{ cursor: "pointer" }}
+                        >
+                          {collabo.nickname}
+                        </span>
                       </FollowWriteInstrument>
                       <div style={{ marginTop: "10px" }}>
                         팔로워 {collabo.followerCount} 명
