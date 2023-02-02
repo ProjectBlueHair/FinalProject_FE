@@ -61,7 +61,7 @@ const DetailDayAndFollow = ({ detail }) => {
         window.Kakao.init(kakaoJS);
       }
     }
-  }, [status]);
+  }, [status, id]);
 
   const kakaoShare = () => {
     window.Kakao.Link.sendDefault({
@@ -195,9 +195,21 @@ const DetailDayAndFollow = ({ detail }) => {
             </div>
           </div>
         </DetailShareLine>
-        <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+        <div
+          style={{ display: "flex", gap: "10px", marginTop: "10px" }}
+          onClick={() => {
+            $openModal({
+              type: "alert",
+              props: {
+                message: "해당 기능은 곧 준비될 예정입니다 !",
+                type: "confirm",
+              },
+            });
+          }}
+        >
           {detail?.tagList.map((tag, index) => (
-            <StLink to={`/tag/${tag}`} key={index}>
+            // <StLink to={`/tag/${tag}`} key={index}>
+            <StLink key={index}>
               <div style={{ color: "#ff4d00" }}># {tag}</div>
             </StLink>
           ))}
