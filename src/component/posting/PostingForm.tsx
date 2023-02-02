@@ -135,7 +135,7 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
             <Span fc={theme.color.main}>설명</Span>
             <TextArea
               bg="transparent"
-              placeholder={"음악에 대한 설명을 넣어주세요"}
+              placeholder={"음악에 대한 설명을 넣어주세요 (해시태그 예시 : #piano)"}
               {...descriptionInput}
             />
           </Div>

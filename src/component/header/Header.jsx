@@ -175,7 +175,7 @@ const Header = () => {
           justify="flex-start"
           pd="0 0.5rem 0 2rem"
         >
-          <Input placeholder="검색" />
+          <Input placeholder="검색 기능은 준비중 입니다." />
           <Img wd={iconSize} src={search} />
         </Flex>
       </Flex>
