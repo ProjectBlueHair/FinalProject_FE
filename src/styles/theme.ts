@@ -11,6 +11,7 @@ export const color = {
   chatBubbleOther: "rgba(0, 0, 0, 0.1)",
   chatBubbleMine: "rgba(255, 77, 0, 0.1);",
   rgbaBorder1: "rgba(0, 0, 0, 0.1)",
+  whiteFilter : 'invert(100%) sepia(100%) saturate(2%) hue-rotate(291deg) brightness(108%) contrast(101%)'
 };
 export const theme = {
   color,

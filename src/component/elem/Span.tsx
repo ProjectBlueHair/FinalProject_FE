@@ -1,13 +1,8 @@
 import React from "react";
 import styled, {  StyledComponent } from "styled-components";
+import { SpanProps } from "../../model/StyleModel";
 
-interface SpanProps {
-  fc?: string;
-  fs?: string;
-  fw?: string;
-  children?: React.ReactNode;
-  type?: string;
-}
+
 interface SpanContainer {
   [key: string]: StyledComponent<"span", any, SpanProps, never>;
 }

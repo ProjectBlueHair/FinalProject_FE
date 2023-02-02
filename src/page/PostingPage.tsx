@@ -1,21 +1,19 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Flex, { StFlex } from "../component/elem/Flex";
 import Header from "../component/header/Header";
 import PostingAudioBars from "../component/posting/PostingAudioBars";
+import PostingCollaboRequested from "../component/posting/PostingCollabReqeusted";
+import PostingForm from "../component/posting/PostingForm";
 import PostingFormAudio from "../component/posting/PostingFormAudio";
+import PostingFormCollabo from "../component/posting/PostingFormCollabo";
 import PostingFormImage from "../component/posting/PostingFormImage";
 import PostingTitle from "../component/posting/PostingTitle";
 import PostingTotalPlay from "../component/posting/PostingTotalPlay";
-import PostingFormCollabo from "../component/posting/PostingFormCollabo";
-import PostingForm from "../component/posting/PostingForm";
-import PostingCollaboRequested from "../component/posting/PostingCollabReqeusted";
 import { PATH } from "../Router";
-import UserCheck from "../util/UserCheck";
 import ErrorCheck from "../util/ErrorCheck";
-import { useLocation } from "react-router-dom";
-import { useAppSelector } from "../redux/config";
-import { formSelector } from "../redux/slice/postingSlice";
+import UserCheck from "../util/UserCheck";
 export const AUDIO_BAR_GAP = "1.5rem";
 export const imgTitleBoxSize = "23rem";
 const PostingPage = () => {
@@ -25,7 +23,6 @@ const PostingPage = () => {
   const EDITPAGE = PATH.edit.split("/")[1] === CURRENT_PATH;
   const COLLABOPAGE = PATH.collabo.split("/")[1] === CURRENT_PATH;
   const COLLABOREQUESTED = PATH.collaboRequested.split("/")[1] === CURRENT_PATH;
-  const postImg = useAppSelector(formSelector.postImg);
 
   return (
     <Fragment>
@@ -57,20 +54,6 @@ const PostingPage = () => {
 };
 
 export default PostingPage;
-// export const PostingTopBackground = styled.div<{ postImg: string }>`
-//   display: flex;
-//   gap: 1rem;
-//   height: 40rem;
-//   flex-direction: row;
-//   align-items: flex-start;
-//   justify-content: center;
-//   width: 100%;
-//   background-image: linear-gradient(
-//       rgba(240, 240, 240, 0.5),
-//       rgba(255, 255, 255, 1)
-//     ),
-//     url(${(props) => props.postImg});
-// `;
 const PostingImageAndTitle = styled(StFlex)`
   direction: column;
   border-radius: 20px;

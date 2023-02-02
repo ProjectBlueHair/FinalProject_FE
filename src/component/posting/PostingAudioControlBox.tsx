@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import Cancel from "../../asset/icon/Cancel";
 import {
   collaboButton,
   muteButton,
   soloButton,
-  unMuteButton,
+  unMuteButton
 } from "../../asset/pic";
 import { Audio } from "../../model/PostingModel";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
+  __removeAudio,
   __setCollaboPart,
   __setMute,
   __setSolo,
-  __setVolume,
+  __setVolume
 } from "../../redux/slice/postingSlice";
 import { userSelector } from "../../redux/slice/userSlice";
+import theme from "../../styles/theme";
 import Flex from "../elem/Flex";
 import Img from "../elem/Img";
 import { StInput } from "../elem/Input";
@@ -38,6 +41,7 @@ const PostingAudioControlBox: React.FC<
     index?: number;
   }
 > = (props) => {
+
   const BOX_NICK_FS = "1.4rem";
   const BOX_ICON_WD = "2.2rem";
   const dispatch = useAppDispatch();
@@ -70,10 +74,10 @@ const PostingAudioControlBox: React.FC<
       overFlow="hidden"
     >
       <Flex gap="1rem" justify="flex-start">
-        {props.isNewAudio && !props.isCollabo ? (
+        {props.isNewAudio && !props.isCollaboRequested ? (
           <PartInput
             {...partStyle}
-            // value={value}
+            value={props.audioData.musicPart}
             onChange={(e) => {
               dispatch(
                 __setCollaboPart({ part: e.target.value, index: props.index })
@@ -84,9 +88,16 @@ const PostingAudioControlBox: React.FC<
         ) : (
           <PartDiv {...partStyle}>{props.audioData.musicPart}</PartDiv>
         )}
-        <Span fw="300" fc="white" fs={BOX_NICK_FS}>
+        <Span style={{ flex: 1 }} fw="300" fc="white" fs={BOX_NICK_FS}>
           {props.audioData.nickname || user.nickname}
         </Span>
+        {props.isNewAudio ? (
+          <Cancel
+            onClick={() => dispatch(__removeAudio(props.index))}
+            wd="1.7rem"
+            style={{ filter: theme.color.whiteFilter, cursor: "pointer" }}
+          />
+        ) : null}
       </Flex>
 
       <Flex align="center" gap="1rem" justify="flex-start">

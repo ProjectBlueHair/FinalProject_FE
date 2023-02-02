@@ -18,9 +18,11 @@ import {
 import { CurrentMusic, Post } from "../../model/MainModel";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import { useNavigate } from "react-router-dom";
+import useTypeModal from "../../modal/hooks/useTypeModal";
 const MainPost: React.FC<{ post: Post; index: number }> = (props) => {
   const profile_margin = "0 0 0 -1rem";
   const dispatch = useAppDispatch();
+  const { $openModal } = useTypeModal();
   const currentMusic = useAppSelector<CurrentMusic>(
     (state) => state.main.currentMusic
   );
@@ -89,14 +91,21 @@ const MainPost: React.FC<{ post: Post; index: number }> = (props) => {
             <Flex justify="flex-start" gap="0.4rem">
               <Img
                 filter={props.post.liked ? "none" : "rgba(0, 0, 0, 0.04)"}
-                onClick={() =>
-                  dispatch(
-                    __mainPostLike({
-                      postId: props.post.id,
-                      index: props.index,
-                    })
-                  )
-                }
+                onClick={() => {
+                  $openModal({
+                    type: "alert",
+                    props: {
+                      message: "해당 기능은 곧 준비될 예정입니다 !",
+                      type: "confirm",
+                    },
+                  });
+                }}
+                // dispatch(
+                //   __mainPostLike({
+                //     postId: props.post.id,
+                //     index: props.index,
+                //   })
+                // )
                 type="iconSmall"
                 wd="1.5rem"
                 src={props.post.liked ? fillHeart : like}

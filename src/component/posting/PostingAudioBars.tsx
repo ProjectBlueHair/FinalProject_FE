@@ -1,13 +1,12 @@
-import React from "react";
-import Flex from "../elem/Flex";
-import PostingAudioBar from "./PostingAudioBar";
+import { AUDIO_BAR_GAP } from "../../page/PostingPage";
 import { useAppSelector } from "../../redux/config";
 import {
   audioControlSelector,
-  audiosSelector,
+  audiosSelector
 } from "../../redux/slice/postingSlice";
+import Flex from "../elem/Flex";
+import PostingAudioBar from "./PostingAudioBar";
 import PostingAudioControlBox from "./PostingAudioControlBox";
-import { AUDIO_BAR_GAP } from "../../page/PostingPage";
 export const AUDIO_BAR_RADIUS = "4rem";
 export const AUDIO_BAR_HEIGHT = 67;
 
