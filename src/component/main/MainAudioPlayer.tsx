@@ -15,6 +15,7 @@ import {
 } from "../../asset/pic";
 import { iconSize } from "../../styles/GlobalStyle";
 import {
+  __MainTogglePlay,
   __PlayerTogglePlay,
   __playNext,
   __PlayPrevious,
@@ -22,6 +23,7 @@ import {
 import { CurrentMusic } from "../../model/MainModel";
 
 import { useAppDispatch, useAppSelector } from "../../redux/config";
+import { batch } from "react-redux";
 const MainAudioPlayer = () => {
   const audioPlayer = useRef<AudioPlayer>(null);
   const { post, isPlayingMain } = useAppSelector<CurrentMusic>(
@@ -35,10 +37,14 @@ const MainAudioPlayer = () => {
   );
 
   const dispatch = useAppDispatch();
-
+  useEffect(() => {
+    return () => {
+      dispatch(__PlayerTogglePlay(false));
+      dispatch(__MainTogglePlay(false));
+    };
+  }, []);
   const onPlayHandler = () => {
     console.log("onPlayHandler ... ");
-
     dispatch(__PlayerTogglePlay(true));
   };
   const onPauseHandler = () => {

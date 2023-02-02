@@ -38,7 +38,6 @@ import useModal from "../modal/useModal";
 const iconSize = "4rem";
 let eventSource = null;
 const Header = () => {
-
   const navigate = useNavigate();
   const Sign = useRef(null);
   // 토글창 상태관리
@@ -76,12 +75,10 @@ const Header = () => {
     if (!AccessToken && user.nickname) {
       batch(() => {
         dispatch(__clearUser());
-        dispatch(__clearAlarmCount())
+        dispatch(__clearAlarmCount());
       });
     }
     if (AccessToken && !user.nickname) dispatch(__getGeneralUserInfo());
-    console.log("access ... ", AccessToken);
-    // if (AccessToken === undefined) onClickLogOut();
     let readyState = localStorage.getItem("readyState");
     if (readyState === null) readyState = 2;
     const isConnecting = Number(readyState) === 1 || Number(readyState) === 0;
@@ -136,7 +133,7 @@ const Header = () => {
 
   const onClickMypage = () => {
     navigate(`/mypage/${user.nickname}`);
-    window.location.reload();
+    // window.location.reload();
   };
   return (
     <Grid>
@@ -221,7 +218,6 @@ const Header = () => {
             >
               Login
             </Div>
-
           )}
           {user.nickname ? (
             <ToggleTotal>
