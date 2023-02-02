@@ -1,4 +1,4 @@
-import { CSSProperties, MouseEventHandler } from "react";
+import { CSSProperties, KeyboardEventHandler, MouseEventHandler } from "react";
 
 export interface Props {
     mg?: string;
@@ -29,4 +29,5 @@ export interface Props {
   fw?: string;
   type?: "submit" | "reset" | "button" | undefined;
   onClick?: MouseEventHandler;
+  onKeyDown?: React.KeyboardEventHandler<Element>
 } 
