@@ -1,38 +1,43 @@
 import { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useStomp } from "../../hook/useStomp";
 import { Chat } from "../../model/ChatModel";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import { userSelector } from "../../redux/slice/userSlice";
+import { PATH } from "../../Router";
 import Div from "../elem/Div";
 import Flex, { StFlex } from "../elem/Flex";
 import Img, { ImgType } from "../elem/Img";
 import {
   chatSelector,
   connectionSelector,
-  roomIdSelector,
+  currentRoomIdSelector,
   __clearChat,
   __getChat,
   __updateChat,
 } from "./chatSlice";
 const ChatList = () => {
   const user = useAppSelector(userSelector);
-  const roomId = useAppSelector(roomIdSelector);
+  const currentRoomId = useAppSelector(currentRoomIdSelector);
   const connected = useAppSelector(connectionSelector);
-  console.log("roomid ... ", roomId);
+  console.log("roomid ... ", currentRoomId);
 
   const dispatch = useAppDispatch();
-  const { isConnected, subscribe, unsubscribe, subscriptions } = useStomp();
+  const { subscribe, unsubscribe, subscriptions } = useStomp();
   const chat = useAppSelector(chatSelector);
   const scrollRef = useRef<HTMLDivElement>(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     connected &&
-      roomId &&
-      subscribe({ path: "/topic/chat/room", roomId: roomId }, (body: Chat) => {
-        console.log("subscribe callback ... body", body);
-        dispatch(__updateChat(body));
-      });
+      currentRoomId &&
+      subscribe(
+        { path: "/topic/chat/room", roomId: currentRoomId },
+        (body: Chat) => {
+          console.log("subscribe callback ... body", body);
+          dispatch(__updateChat(body));
+        }
+      );
     return () => {
       if (subscriptions["/topic/chat/room"]) {
         unsubscribe("/topic/chat/room");
@@ -42,11 +47,11 @@ const ChatList = () => {
         dispatch(__clearChat());
       }
     };
-  }, [connected, roomId]);
+  }, [connected, currentRoomId]);
 
   useEffect(() => {
-    dispatch(__getChat(roomId));
-  }, [roomId]);
+    dispatch(__getChat(currentRoomId));
+  }, [currentRoomId]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -70,6 +75,9 @@ const ChatList = () => {
         ) : (
           <Flex key={index} justify="flex-start" gap="1rem" align="flex-start">
             <Img
+              onClick={() => {
+                navigate(`${PATH.mypage}/${chatItem.nickname}`);
+              }}
               wd="3rem"
               hg="3rem"
               type={ImgType.shadowProfile}

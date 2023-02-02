@@ -1,26 +1,25 @@
 import { useEffect } from "react";
 import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
-import { StFlex } from "../elem/Flex";
+import Div from "../elem/Div";
+import Flex, { StFlex } from "../elem/Flex";
 import ChatRoomItem from "./ChatRoomItem";
-import {
-  chatRoomsSelector,
-  currentRoomIdSelector,
-  __getChatRooms,
-} from "./chatSlice";
+import { chatRoomsSelector, __getChatRooms } from "./chatSlice";
 
 const ChatRoomList = () => {
   const dispatch = useAppDispatch();
   const chatRooms = useAppSelector(chatRoomsSelector);
   useEffect(() => {
     dispatch(__getChatRooms());
-  }, []);
+  }, [dispatch]);
 
   return (
     <ChatRoomListContainer>
-      {chatRooms.map((item, index) => (
-        <ChatRoomItem key={index} {...item} />
-      ))}
+      {chatRooms.length === 0 ? (
+        <Flex hg="100%">채팅방이 존재하지 않습니다</Flex>
+      ) : (
+        chatRooms.map((item, index) => <ChatRoomItem key={index} {...item} />)
+      )}
     </ChatRoomListContainer>
   );
 };
