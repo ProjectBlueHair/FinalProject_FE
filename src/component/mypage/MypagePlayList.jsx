@@ -23,6 +23,7 @@ const MypagePlayList = ({ L, getArchive }) => {
   const { nickname } = useParams();
   const [archiveDel, setArchiveDel] = useState(false);
   const Del = useRef(null);
+
   useEffect(() => {
     dispatch(__getUserInfo());
   }, []);
