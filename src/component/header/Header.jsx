@@ -70,15 +70,7 @@ const Header = () => {
   const AccessToken = getCookies("accesstoken");
   const user = useAppSelector(userSelector);
   const alarmCount = useAppSelector(alarmSelector);
-
-  useEffect(() => {
-    if (!AccessToken && user.nickname) {
-      batch(() => {
-        dispatch(__clearUser());
-        dispatch(__clearAlarmCount());
-      });
-    }
-    if (AccessToken && !user.nickname) dispatch(__getGeneralUserInfo());
+  const connectEvent = () => {
     let readyState = localStorage.getItem("readyState");
     if (readyState === null) readyState = 2;
     const isConnecting = Number(readyState) === 1 || Number(readyState) === 0;
@@ -119,6 +111,16 @@ const Header = () => {
         localStorage.setItem("readyState", eventSource.readyState);
       };
     }
+  };
+  useEffect(() => {
+    if (!AccessToken && user.nickname) {
+      batch(() => {
+        dispatch(__clearUser());
+        dispatch(__clearAlarmCount());
+      });
+    }
+    if (AccessToken && !user.nickname) dispatch(__getGeneralUserInfo());
+    connectEvent();
     return () => {
       console.log("unmounting ... eventsource : ", eventSource);
       eventSource?.close();

@@ -35,7 +35,6 @@ const MainAudioPlayer = () => {
     "isPlayingMain .. ",
     isPlayingMain
   );
-
   const dispatch = useAppDispatch();
   useEffect(() => {
     return () => {
@@ -45,6 +44,8 @@ const MainAudioPlayer = () => {
   }, []);
   const onPlayHandler = () => {
     console.log("onPlayHandler ... ");
+    console.log("onPlayHandler paused..?", audioPlayer.current!.audio.current!.paused);
+
     dispatch(__PlayerTogglePlay(true));
   };
   const onPauseHandler = () => {
@@ -60,14 +61,17 @@ const MainAudioPlayer = () => {
     dispatch(__playNext(post.id));
   };
   useEffect(() => {
-    console.log("isplyaing main", isPlayingMain);
-
+    console.log("isplyaing main currentmusic useEffect paused..?", audioPlayer.current!.audio.current!.paused);
+    if (!audioPlayer.current!.audio.current!.paused) {
+      audioPlayer.current!.audio.current!.pause();
+    }
     if (isPlayingMain) {
       audioPlayer.current!.audio.current!.play();
     } else {
       audioPlayer.current!.audio.current!.pause();
     }
   }, [isPlayingMain]);
+
 
   return (
     // musicbar wrap

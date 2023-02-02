@@ -5,7 +5,7 @@ import {
   collaboButton,
   muteButton,
   soloButton,
-  unMuteButton
+  unMuteButton,
 } from "../../asset/pic";
 import { Audio } from "../../model/PostingModel";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
@@ -14,7 +14,7 @@ import {
   __setCollaboPart,
   __setMute,
   __setSolo,
-  __setVolume
+  __setVolume,
 } from "../../redux/slice/postingSlice";
 import { userSelector } from "../../redux/slice/userSlice";
 import theme from "../../styles/theme";
@@ -41,7 +41,6 @@ const PostingAudioControlBox: React.FC<
     index?: number;
   }
 > = (props) => {
-
   const BOX_NICK_FS = "1.4rem";
   const BOX_ICON_WD = "2.2rem";
   const dispatch = useAppDispatch();
@@ -94,7 +93,8 @@ const PostingAudioControlBox: React.FC<
         {props.isNewAudio ? (
           <Cancel
             onClick={() => dispatch(__removeAudio(props.index))}
-            wd="1.7rem"
+            wd="1.4rem"
+            // style={{ filter: theme.color.whiteFilter, cursor: "pointer" }}
             style={{ filter: theme.color.whiteFilter, cursor: "pointer" }}
           />
         ) : null}
