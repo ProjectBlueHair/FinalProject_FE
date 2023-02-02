@@ -232,7 +232,7 @@ const Header = () => {
               fw="700"
               fc={theme.color.main}
             >
-              Login
+              LOGIN
             </Div>
           )}
           {user.nickname ? (
