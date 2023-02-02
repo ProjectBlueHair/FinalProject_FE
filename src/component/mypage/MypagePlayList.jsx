@@ -153,6 +153,16 @@ export default MypagePlayList;
 const MypageMusic = styled.div`
   flex-grow: 0;
   width: 90%;
+  animation: SV;
+  animation-duration: 1s;
+  @keyframes SV {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
   img {
     width: 100%;
     height: 15rem;
