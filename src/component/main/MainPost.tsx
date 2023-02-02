@@ -27,6 +27,13 @@ const MainPost: React.FC<{ post: Post; index: number }> = (props) => {
     (state) => state.main.currentMusic
   );
   const onClickPlayHandler = () => {
+    console.log(
+      "currentMusic.post.id",
+      currentMusic.post.id,
+      "props.post.id",
+      props.post.id
+    );
+
     currentMusic.post.id === props.post.id
       ? dispatch(__MainTogglePlay(!currentMusic.isPlayingPlayer))
       : dispatch(__playDifferentSrc(props.post.id));
