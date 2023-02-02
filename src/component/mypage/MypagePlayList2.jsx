@@ -24,15 +24,15 @@ const MypagePlayList = ({ L, getArchive2 }) => {
     dispatch(__getUserInfo());
   }, []);
   const dispatch = useAppDispatch();
-  const currentMusic = useAppSelector((state) => state.main.currentMusic);
+  // const currentMusic = useAppSelector((state) => state.main.currentMusic);
 
   // const user = useSelector((state) => state.user.user);
 
-  const onClickPlayBtn = () => {
-    currentMusic.post.id === L.id
-      ? dispatch(__MainTogglePlay(!currentMusic.isPlayingPlayer))
-      : dispatch(__playDifferentSrc(L.id));
-  };
+  // const onClickPlayBtn = () => {
+  //   currentMusic.post.id === L.id
+  //     ? dispatch(__MainTogglePlay(!currentMusic.isPlayingPlayer))
+  //     : dispatch(__playDifferentSrc(L.id));
+  // };
   return (
     <MypageMusic>
       <img
@@ -41,7 +41,7 @@ const MypagePlayList = ({ L, getArchive2 }) => {
         style={{ cursor: "pointer" }}
       />
       <RightRow>
-        <div>
+        {/* <div>
           <PlayBtn>
             <Img
               wd="1rem"
@@ -55,8 +55,8 @@ const MypagePlayList = ({ L, getArchive2 }) => {
               onClick={onClickPlayBtn}
               style={{ cursor: "pointer" }}
             />
-          </PlayBtn>
-        </div>
+          </PlayBtn> */}
+        {/* </div> */}
         <RightCol>
           <MoreBtn>
             <div>{L?.title}</div>
@@ -145,6 +145,7 @@ const RightProfileAndLike = styled.div`
 `;
 const RightProfile = styled.div`
   display: flex;
+  width: 30%;
   img {
     width: 2.5rem;
     height: 2.5rem;

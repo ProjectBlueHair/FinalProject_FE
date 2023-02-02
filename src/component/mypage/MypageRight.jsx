@@ -113,6 +113,7 @@ const MypageTop = styled.div`
 
 const MyRow = styled.div`
   width: 98%;
+  min-height: 250px;
   display: grid;
   grid-template-columns: 30px 1fr 30px;
   align-items: center;

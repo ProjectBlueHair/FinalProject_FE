@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/config";
 import { __getUserInfo } from "../../redux/slice/detailSlice";
 import {
   __MainTogglePlay,
-  __playDifferentSrc
+  __playDifferentSrc,
 } from "../../redux/slice/mainSlice";
 import Img from "../elem/Img";
 import StLink from "../elem/Link";
@@ -27,15 +27,15 @@ const MypagePlayList = ({ L, getArchive }) => {
     dispatch(__getUserInfo());
   }, []);
   const dispatch = useAppDispatch();
-  const currentMusic = useAppSelector((state) => state.main.currentMusic);
+  // const currentMusic = useAppSelector((state) => state.main.currentMusic);
 
   const user = useSelector((state) => state.user.user);
   useToggleOutSideClick(Del, setArchiveDel);
-  const onClickPlayBtn = () => {
-    currentMusic.post.id === L.id
-      ? dispatch(__MainTogglePlay(!currentMusic.isPlayingPlayer))
-      : dispatch(__playDifferentSrc(L.id));
-  };
+  // const onClickPlayBtn = () => {
+  //   currentMusic.post.id === L.id
+  //     ? dispatch(__MainTogglePlay(!currentMusic.isPlayingPlayer))
+  //     : dispatch(__playDifferentSrc(L.id));
+  // };
   const archiveDelete = async (nick) => {
     try {
       const { data } = await instanceAxios.delete(`post/archive/${nick}`);
@@ -62,7 +62,7 @@ const MypagePlayList = ({ L, getArchive }) => {
         style={{ cursor: "pointer" }}
       />
       <RightRow>
-        <div>
+        {/* <div>
           <PlayBtn>
             <Img
               wd="1rem"
@@ -76,7 +76,7 @@ const MypagePlayList = ({ L, getArchive }) => {
               onClick={onClickPlayBtn}
             />
           </PlayBtn>
-        </div>
+        </div> */}
         <RightCol>
           <MoreBtn>
             <div>{L?.title}</div>
