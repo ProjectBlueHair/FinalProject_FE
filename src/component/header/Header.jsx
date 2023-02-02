@@ -8,28 +8,32 @@ import {
   message,
   notifications,
   search,
-  settings,
   upload,
 } from "../../asset/pic";
+import { serverURL } from "../../dataManager/apiConfig";
 import { getCookies, removeCookies } from "../../dataManager/cookie";
 import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
 import useTypeModal from "../../modal/hooks/useTypeModal";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
-import { alarmSelector } from "../../redux/slice/mainSlice";
+import {
+  alarmSelector,
+  __clearAlarmCount,
+  __getAlarm,
+} from "../../redux/slice/mainSlice";
 import {
   userSelector,
   __clearUser,
   __getGeneralUserInfo,
 } from "../../redux/slice/userSlice";
 import { PATH } from "../../Router";
+import theme from "../../styles/theme";
+import Div from "../elem/Div";
 import Flex from "../elem/Flex";
 import Img from "../elem/Img";
 import Input from "../elem/Input";
 import Span from "../elem/Span";
 import useModal from "../modal/useModal";
 const iconSize = "4rem";
-// const EventSource = NativeEventSource || EventSourcePolyfill
-// global.EventSource = NativeEventSource || EventSourcePolyfill
 let eventSource = null;
 const Header = () => {
   const navigate = useNavigate();
@@ -52,6 +56,7 @@ const Header = () => {
     removeCookies("accesstoken", { path: "/" });
     removeCookies("refreshtoken", { path: "/" });
     dispatch(__clearUser());
+    dispatch(__clearAlarmCount());
     setIsOpen(false);
     navigate("/");
   };
@@ -67,49 +72,54 @@ const Header = () => {
   useEffect(() => {
     if (!AccessToken && user.nickname) dispatch(__clearUser());
     if (AccessToken && !user.nickname) dispatch(__getGeneralUserInfo());
-    // let readyState = localStorage.getItem("readyState");
-    // if (readyState === null) readyState = 2;
-    // const isConnecting = Number(readyState) === 1 || Number(readyState) === 0;
+    console.log('access ... ',AccessToken);
+    // if (AccessToken === undefined) onClickLogOut();
+    let readyState = localStorage.getItem("readyState");
+    if (readyState === null) readyState = 2;
+    const isConnecting = Number(readyState) === 1 || Number(readyState) === 0;
 
-    // console.log(
-    //   "AccessToken && user.nickname && !isConnecting",
-    //   AccessToken && user.nickname && !isConnecting
-    // );
-    // if (AccessToken && user.nickname && !isConnecting) {
-    //   eventSource = new EventSource(`${serverURL}/subscribe/${user.nickname}`, {
-    //     withCredentials: true,
-    //     connection : 'keep-alive'
-    //   });
-    // }
-    // if (eventSource) {
-    //   eventSource.onopen = () => {
-    //     console.log("on open ... ready state", eventSource.readyState);
-    //     localStorage.setItem("readyState", eventSource.readyState);
-    //   };
-    //   eventSource.onmessage = (event) => {
-    //     dispatch(__getAlarm());
-    //   };
-    //   eventSource.onerror = (e) => {
-    //     eventSource.close();
-    //     console.log("on error ... error message", e);
-    //     console.log("on error ... readystate", eventSource.readyState);
-    //     eventSource = new EventSource(`${serverURL}/subscribe/${user.nickname}`, {
-    //       withCredentials: true,
-    //       connection : 'keep-alive'
-    //     });
-    //     console.log(
-    //       "on error ... after reconnect readystate",
-    //       eventSource.readyState
-    //     );
-    //     localStorage.setItem("readyState", eventSource.readyState);
-    //   };
-    // }
-    // return () => {
-    //   console.log("unmounting ... eventsource : ", eventSource);
-    //   eventSource?.close();
-    //   console.log("unmounting ... readystate", eventSource?.readyState);
-    //   localStorage.setItem("readyState", 2);
-    // };
+    console.log(
+      "AccessToken && user.nickname && !isConnecting",
+      AccessToken && user.nickname && !isConnecting
+    );
+    if (AccessToken && user.nickname && !isConnecting) {
+      eventSource = new EventSource(`${serverURL}/subscribe/${user.nickname}`, {
+        withCredentials: true,
+        connection: "keep-alive",
+      });
+    }
+    if (eventSource) {
+      eventSource.onopen = () => {
+        console.log("on open ... ready state", eventSource.readyState);
+        localStorage.setItem("readyState", eventSource.readyState);
+      };
+      eventSource.onmessage = (event) => {
+        dispatch(__getAlarm());
+      };
+      eventSource.onerror = (e) => {
+        eventSource.close();
+        console.log("on error ... error message", e);
+        console.log("on error ... readystate", eventSource.readyState);
+        eventSource = new EventSource(
+          `${serverURL}/subscribe/${user.nickname}`,
+          {
+            withCredentials: true,
+            connection: "keep-alive",
+          }
+        );
+        console.log(
+          "on error ... after reconnect readystate",
+          eventSource.readyState
+        );
+        localStorage.setItem("readyState", eventSource.readyState);
+      };
+    }
+    return () => {
+      console.log("unmounting ... eventsource : ", eventSource);
+      eventSource?.close();
+      console.log("unmounting ... readystate", eventSource?.readyState);
+      localStorage.setItem("readyState", 2);
+    };
   }, [user.nickname, AccessToken]);
 
   const onClickSetPage = () => {
@@ -194,12 +204,21 @@ const Header = () => {
               hg="3.5rem"
             />
           ) : (
-            <Img
-              type="icon"
-              wd={iconSize}
-              src={account}
-              onClick={() => toggleMenu()}
-            />
+            <Div
+              onClick={onClickSignBtn}
+              style={{ cursor: "pointer" }}
+              fs="1.6rem"
+              fw="700"
+              fc={theme.color.main}
+            >
+              Login
+            </Div>
+            // <Img
+            //   type="icon"
+            //   wd={iconSize}
+            //   src={account}
+            //   onClick={() => toggleMenu()}
+            // />
           )}
           {user.nickname ? (
             <ToggleTotal>

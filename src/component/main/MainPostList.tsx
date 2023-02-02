@@ -10,12 +10,10 @@ const MainPostList = () => {
   const [trigger, setTrigger] = useState(false);
 
   const dispatch = useAppDispatch();
-  const { posts, nextPage, isLoading, error } = useAppSelector<MainState>(
+  const { posts, nextPage, isLoading } = useAppSelector<MainState>(
     (state) => state.main
   );
-  if (error) {
-    alert(''+error);
-  }
+
 
   let options = {
     root: scrollArea.current,

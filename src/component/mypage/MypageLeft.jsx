@@ -17,6 +17,8 @@ import { getCookies } from "../../dataManager/cookie";
 import { useShare } from "../../hook/useShare";
 import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
 import useTypeModal from "../../modal/hooks/useTypeModal";
+import { __directMessage } from "../chat/chatSlice";
+import { PATH } from "../../Router";
 import { __putDetailFollow } from "../../redux/slice/detailSlice";
 import Img from "../elem/Img";
 import MypageLeftBottom from "./MypageLeftBottom";
@@ -135,8 +137,15 @@ const MypageLeft = () => {
                 {isFollowed ? "팔로우취소" : "팔로우"}
               </MypageBtn>
             )}
-
-            <MypageBtn>다이렉트 메세지</MypageBtn>
+            <MypageBtn
+              onClick={() => {
+                dispatch(__directMessage(information?.nickname)).then(
+                  navigate(PATH.chat)
+                );
+              }}
+            >
+              다이렉트 메세지
+            </MypageBtn>
           </>
         )}
         <MypageBtn ref={shareds} onClick={() => setMyShare(!myShare)}>

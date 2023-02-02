@@ -9,6 +9,7 @@ import {
   CollaboRequested,
   CollaboRequestData,
   CollaboReqeustedForm,
+  NewPostForm,
 } from "../../model/PostingModel";
 import { instanceAxios } from "../../dataManager/apiConfig";
 import { Response } from "../../model/ResponseModel";
@@ -107,7 +108,7 @@ export const postingSlice = createSlice({
       state.progressControl.seekTo = payload;
     },
     __setMute: (state, { payload }) => {
-      state.audios[payload].volume = state.audios[payload].isMute ? 0.5 : 0.01;
+      state.audios[payload].volume = state.audios[payload].isMute ? 0.5 : 0.00001;
       state.audios[payload].isMute = !state.audios[payload].isMute;
     },
     __setSolo: (state, { payload }) => {
@@ -115,7 +116,7 @@ export const postingSlice = createSlice({
       //start solo
       if (!state.audios[payload].isSolo) {
         state.audios.forEach((audio, index) => {
-          state.audios[index].volume = index === soloIndex ? 0.5 : 0.01;
+          state.audios[index].volume = index === soloIndex ? 0.5 : 0.00001;
           state.audios[index].isSolo = index === soloIndex ? true : false;
         });
       }
@@ -129,7 +130,7 @@ export const postingSlice = createSlice({
     },
     __setVolume: (state, { payload }) => {
       state.audios[payload.index].isMute =
-        payload.volume === 0.01 ? true : false;
+        payload.volume === 0.00001 ? true : false;
       state.audios[payload.index].volume = payload.volume;
     },
     __cleanUp: () => {
@@ -238,6 +239,9 @@ export const __getCollaboRequested = createAsyncThunk(
 const config = { headers: { "Content-Type": "multipart/form-data" } };
 export const uploadPost = async (data: Form) => {
   return await instanceAxios.post(`/post`, data);
+};
+export const uploadNewPost = async (data: FormData) => {
+  return await instanceAxios.post(`/post/new`, data);
 };
 export const collaboRequest = async (data: any, postId: string | number) => {
   return await instanceAxios.post(`/post/${postId}/collabo`, data, config);

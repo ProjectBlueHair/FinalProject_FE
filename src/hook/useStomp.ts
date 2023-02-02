@@ -3,6 +3,7 @@ import { useCallback, useEffect } from "react";
 import SockJS from "sockjs-client";
 import { socketURL } from "../dataManager/apiConfig";
 import { getCookies } from "../dataManager/cookie";
+import { Chat } from "../model/ChatModel";
 
 interface ObjectType {
   [key: string]: any;
@@ -12,11 +13,10 @@ let stompClient: Client;
 let isConnected = false;
 const subscriptions: { [key: string]: StompSubscription } = {};
 
-export function useStomp(config?: StompConfig, callback?: () => void) {
+export const useStomp = (config?: StompConfig, callback?: () => void) => {
   const connect = useCallback(() => {
     if (!stompClient) {
       const socket = new SockJS(`${socketURL}/ws/chat`);
-      //   stompClient = new Client(config);
       stompClient = Stomp.over(() => {
         return socket;
       });
@@ -30,7 +30,7 @@ export function useStomp(config?: StompConfig, callback?: () => void) {
   }, []);
 
   const send = useCallback(
-    (path: string, body: ObjectType, headers?: ObjectType) => {
+    (path: string, body: Chat, headers?: ObjectType) => {
       stompClient.publish({
         destination: path,
         headers: { AccessToken: getCookies("accesstoken") },
@@ -41,16 +41,19 @@ export function useStomp(config?: StompConfig, callback?: () => void) {
   );
 
   const subscribe = useCallback(
-    <T>(path: string, callback: (msg: T) => void) => {
+    <T>(path: ObjectType, callback: (msg: T) => void) => {
       if (!stompClient) return;
+      console.log("subscribe.... ", subscriptions[path.path]);
 
-      if (subscriptions[path]) return;
-
-      const subscription = stompClient.subscribe(path, (message) => {
-        const body: T = JSON.parse(message.body);
-        callback(body);
-      });
-      subscriptions[path] = subscription;
+      if (subscriptions[path.path]) return;
+      const subscription = stompClient.subscribe(
+        `${path.path}/${path.roomId}`,
+        (message) => {
+          const body: T = JSON.parse(message.body);
+          callback(body);
+        }
+      );
+      subscriptions[path.path] = subscription;
     },
     []
   );
@@ -61,6 +64,7 @@ export function useStomp(config?: StompConfig, callback?: () => void) {
   }, []);
 
   const disconnect = useCallback(() => {
+    console.log('disconnect...');
     stompClient.deactivate();
   }, [stompClient]);
 
@@ -76,4 +80,4 @@ export function useStomp(config?: StompConfig, callback?: () => void) {
     send,
     isConnected,
   };
-}
+};
