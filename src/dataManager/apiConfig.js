@@ -52,7 +52,7 @@ instanceAxios.interceptors.response.use(
               if (!accesstoken || !refreshtoken) {
                 removeCookies("accesstoken", { path: "/" });
                 removeCookies("refreshtoken", { path: "/" });
-                throw new Error(
+               throw new Error(
                   "로그인이 만료되었습니다. 다시 로그인 해주세요"
                 );
               }
@@ -68,7 +68,7 @@ instanceAxios.interceptors.response.use(
             })
             .catch((err) => {
               console.log("reassuarance err", err);
-              return Promise.reject(err);
+              throw new Error("로그인이 만료되었습니다. 다시 로그인 해주세요");
             });
         }
         const retryOriginalRequest = new Promise((resolve) => {

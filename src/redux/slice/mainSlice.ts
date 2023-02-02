@@ -40,6 +40,7 @@ export const mainSlice = createSlice({
     },
     __playDifferentSrc: (state, action) => {
       const index = findPostIndex(state.posts, action.payload);
+      console.log('__playDifferentSrc ... index',index,'postid ...', action.payload);
       console.log("index", index);
       state.currentMusic = {
         ...state.currentMusic,
@@ -49,6 +50,8 @@ export const mainSlice = createSlice({
     },
     __playNext: (state, action) => {
       const index = findPostIndex(state.posts, action.payload);
+      console.log('__playNext ... index',index,'postid ...', action.payload);
+      
       if (index !== state.posts.length - 1) {
         state.currentMusic = {
           ...state.currentMusic,
@@ -59,6 +62,7 @@ export const mainSlice = createSlice({
     },
     __PlayPrevious: (state, action) => {
       const index = findPostIndex(state.posts, action.payload);
+      console.log('__PlayPrevious ... index',index,'postid ...', action.payload);
       if (index !== 0) {
         state.currentMusic = {
           ...state.currentMusic,

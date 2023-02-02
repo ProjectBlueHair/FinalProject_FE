@@ -38,7 +38,6 @@ import useModal from "../modal/useModal";
 const iconSize = "4rem";
 let eventSource = null;
 const Header = () => {
-  const { subscriptions } = useStomp();
 
   const navigate = useNavigate();
   const Sign = useRef(null);
