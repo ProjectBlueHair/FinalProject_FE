@@ -381,7 +381,7 @@ const SetTotal = () => {
                 props: {
                   message: res.message,
                   type: "info",
-                  to: "/",
+                  to: `/mypage/${nickname}`,
                 },
               });
               dispatch(__getGeneralUserInfo());
@@ -435,7 +435,7 @@ const SetTotal = () => {
                   props: {
                     message: res.message,
                     type: "info",
-                    to: "/",
+                    to: `/mypage/${nickname}`,
                   },
                 });
                 dispatch(__getGeneralUserInfo());
