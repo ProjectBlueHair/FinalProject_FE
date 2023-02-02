@@ -51,12 +51,13 @@ const DetailCommentSub = ({ mcv }) => {
     }
   };
   return (
-    <DetailSubView>
+    <div>
       {mcv.replyList?.map((re) => (
         <DetailComSubTotal key={re.id}>
           <DetailComTopSubImg
             src={re.profileImg}
             onClick={() => MypageMove(re.nickname)}
+            style={{ cursor: "pointer" }}
           />
           <DetailComSubTop>
             <DetailCommentSubDeleteUpdate re={re} />
@@ -81,25 +82,10 @@ const DetailCommentSub = ({ mcv }) => {
           </div>
         </SubCommentWrite>
       )}
-    </DetailSubView>
+    </div>
   );
 };
 export default DetailCommentSub;
-
-const DetailSubView = styled.div`
-  animation: Updown;
-  animation-duration: 0.5s;
-  @keyframes Updown {
-    0% {
-      transform: scaleY(0);
-      transform-origin: 100% 0%;
-    }
-    100% {
-      transform: scaleY(1);
-      transform-origin: 100% 0%;
-    }
-  }
-`;
 
 // 대댓글 각각 div
 const DetailComSubTotal = styled.div`
@@ -121,7 +107,7 @@ const DetailComTopSubImg = styled.img`
 const DetailComSubTop = styled.div`
   display: flex;
   flex-direction: column;
-  width: 95%;
+  width: 100%;
 `;
 
 // 대댓글 input 부분
@@ -134,13 +120,13 @@ const SubCommentWrite = styled.div`
   div {
     display: flex;
     align-items: center;
-    width: 95%;
+    width: 100%;
     height: 3rem;
     border: 1px solid black;
     border-radius: 2rem;
   }
   input {
-    width: 93%;
+    width: 95%;
     border: transparent;
     background-color: transparent;
     padding-left: 1rem;
@@ -149,5 +135,6 @@ const SubCommentWrite = styled.div`
   button {
     color: #ff4d00;
     border: transparent;
+    cursor: pointer;
   }
 `;

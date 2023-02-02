@@ -224,7 +224,7 @@ const Header = () => {
 
           )}
           {user.nickname ? (
-            <>
+            <ToggleTotal>
               {isOpen ? (
                 <ToggleDiv>
                   <Span fc="var(--ec-main-color)" fw="700">
@@ -237,9 +237,9 @@ const Header = () => {
               ) : (
                 ""
               )}
-            </>
+            </ToggleTotal>
           ) : (
-            <>
+            <div>
               {isOpen ? (
                 <ToggleDiv2>
                   <button onClick={onClickSignBtn}>로그인</button>
@@ -247,7 +247,7 @@ const Header = () => {
               ) : (
                 ""
               )}
-            </>
+            </div>
           )}
         </div>
       </Flex>
@@ -274,14 +274,18 @@ const AlarmCount = styled.div`
   font-size: 1.1rem;
 `;
 
+const ToggleTotal = styled.div`
+  position: relative;
+`;
+
 const ToggleDiv = styled.div`
   position: absolute;
-  right: 0;
-  top: 0;
+  right: 110%;
+  top: -30px;
   width: 100px;
-  height: 120px;
-  margin-top: 25px;
-  margin-right: 75px;
+  height: 130px;
+  /* margin-top: 25px;
+  margin-right: 75px; */
   background-color: white;
   border: 2px solid #ff4d00;
   border-radius: 10px;
@@ -297,6 +301,7 @@ const ToggleDiv = styled.div`
     background-color: white;
     border: white;
     font-size: 15px;
+    cursor: pointer;
     :hover {
       border-bottom: 1px solid #ff4d00;
     }
@@ -315,12 +320,12 @@ const ToggleDiv = styled.div`
 
 const ToggleDiv2 = styled.div`
   position: absolute;
-  right: 0;
-  top: 0;
+  right: 5%;
+  top: 4%;
   width: 100px;
   height: 50px;
-  margin-top: 25px;
-  margin-right: 80px;
+  /* margin-top: 25px;
+  margin-right: 80px; */
   background-color: white;
   border: 2px solid #ff4d00;
   border-radius: 10px;
@@ -336,6 +341,7 @@ const ToggleDiv2 = styled.div`
     background-color: white;
     border: white;
     font-size: 15px;
+    cursor: pointer;
     :hover {
       border-bottom: 1px solid #ff4d00;
     }

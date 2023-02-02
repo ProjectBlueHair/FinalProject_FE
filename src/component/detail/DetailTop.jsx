@@ -91,7 +91,7 @@ const DetailTop = () => {
                   wd="2.1rem"
                   src={like}
                   onClick={onNoSign}
-                  style={{ marginRight: "1rem" }}
+                  style={{ marginRight: "1rem", cursor: "pointer" }}
                 />
               ) : (
                 <button onClick={onLikeClick}>
@@ -99,10 +99,14 @@ const DetailTop = () => {
                     <Img
                       wd="2rem"
                       src={redLike}
-                      style={{ marginRight: "1rem" }}
+                      style={{ marginRight: "1rem", cursor: "pointer" }}
                     />
                   ) : (
-                    <Img wd="2rem" src={like} style={{ marginRight: "1rem" }} />
+                    <Img
+                      wd="2rem"
+                      src={like}
+                      style={{ marginRight: "1rem", cursor: "pointer" }}
+                    />
                   )}
                 </button>
               )}

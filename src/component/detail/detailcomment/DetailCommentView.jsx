@@ -57,6 +57,7 @@ const DetailComTopImg = styled.img`
   border: 1px solid black;
   border-radius: 70%;
   margin-right: 1rem;
+  cursor: pointer;
 `;
 
 // 댓글 프로필우측 div 전체

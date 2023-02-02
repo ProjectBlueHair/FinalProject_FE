@@ -112,7 +112,7 @@ const CommentWriteBox = styled.div`
   align-items: center;
   border-radius: 30px;
   input {
-    width: 90%;
+    width: 91%;
     height: 3rem;
     margin: 1rem 2rem;
     border: transparent;
@@ -122,5 +122,6 @@ const CommentWriteBox = styled.div`
     border: transparent;
     background-color: transparent;
     color: #ff4d00;
+    cursor: pointer;
   }
 `;

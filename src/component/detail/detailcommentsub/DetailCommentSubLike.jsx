@@ -31,9 +31,17 @@ const DetailCommentSubLike = ({ re }) => {
       {acToken ? (
         <button onClick={() => onLikeClick(re.id)}>
           {re?.isLiked ? (
-            <Img wd="2.4rem" src={redLike} style={{ marginRight: "10px" }} />
+            <Img
+              wd="2.4rem"
+              src={redLike}
+              style={{ marginRight: "10px", cursor: "pointer" }}
+            />
           ) : (
-            <Img wd="2rem" src={like} style={{ marginRight: "10px" }} />
+            <Img
+              wd="2rem"
+              src={like}
+              style={{ marginRight: "10px", cursor: "pointer" }}
+            />
           )}
         </button>
       ) : (
@@ -41,7 +49,7 @@ const DetailCommentSubLike = ({ re }) => {
           wd="2rem"
           src={like}
           onClick={onNoSign}
-          style={{ marginRight: "10px" }}
+          style={{ marginRight: "10px", cursor: "pointer" }}
         />
       )}
       <div>{re.likeCount}</div>

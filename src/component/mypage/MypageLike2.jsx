@@ -6,14 +6,14 @@ import useTypeModal from "../../modal/hooks/useTypeModal";
 import { __postLike } from "../../redux/slice/detailSlice";
 import Img from "../elem/Img";
 
-const MypageLike = ({ L, getArchive }) => {
+const MypageLike = ({ L, getArchive2 }) => {
   const dispatch = useDispatch();
   const { nickname } = useParams();
   const acToken = getCookies("accesstoken");
   const { $openModal, $closeModal } = useTypeModal();
   const MyLikes = async (Likes) => {
     await dispatch(__postLike(Likes));
-    getArchive(nickname);
+    getArchive2(nickname);
   };
 
   const NotLike = () => {
