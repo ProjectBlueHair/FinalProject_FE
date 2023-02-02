@@ -59,15 +59,6 @@ const MypageRight = () => {
     }
   };
 
-  // // 슬라이더 구현
-  // const Slider = useRef(null);
-
-  // useEffect(() => {
-  //   const { current } = Slider;
-  //   current.style.animation = "SV 1s";
-  //   console.log(current.style.animation);
-  // }, [page]);
-
   return (
     <MypageRightDiv>
       <MypageTop>
@@ -171,14 +162,4 @@ const Tdiv = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   padding-left: 2.5rem;
-  /* animation: SVa;
-  animation-duration: 3s;
-  @keyframes SVa {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-  } */
 `;
