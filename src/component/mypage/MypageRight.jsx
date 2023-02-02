@@ -15,7 +15,6 @@ const MypageRight = () => {
   const [archiveList2, setArchiveList2] = useState([]);
   const { nickname } = useParams();
   const [page, setPage] = useState(0);
-
   const getArchive = async (name) => {
     try {
       const {

@@ -10,6 +10,7 @@ import MyPage from "./page/MyPage";
 import SetPage from "./page/SetPage";
 import KakaoLoginHandler from "./component/sign/KakaoLoginHandler";
 import ChatPage from "./page/ChatPage";
+import FeedBackForAdmin from "./page/FeedBackForAdmin";
 
 export const PATH = {
   main: "/",
@@ -22,6 +23,7 @@ export const PATH = {
   collabo: "/collabo",
   collaboRequested: "/collaboRequested",
   chat: "/chat",
+  feedback: "/feedback",
 };
 
 const Router = () => {
@@ -40,15 +42,12 @@ const Router = () => {
           <Route path={`${PATH.edit}/:id`} element={<PostingPage />} />
           <Route path={`${PATH.collabo}/:id`} element={<PostingPage />} />
           <Route path={`${PATH.chat}`} element={<ChatPage />} />
+          <Route path={`${PATH.feedback}`} element={<FeedBackForAdmin />} />
           <Route path="/login/kakao" element={<KakaoLoginHandler />} />
           <Route
             path={`${PATH.collaboRequested}/:id/:postId`}
             element={<PostingPage />}
           />
-          {/* <Route
-            path={`${PATH.collaboRequested}/:id`}
-            element={<PostingPage />}
-          /> */}
         </Routes>
       </BrowserRouter>
     </>

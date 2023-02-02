@@ -79,8 +79,6 @@ const Header = () => {
       });
     }
     if (AccessToken && !user.nickname) dispatch(__getGeneralUserInfo());
-    console.log("access ... ", AccessToken);
-    // if (AccessToken === undefined) onClickLogOut();
     let readyState = localStorage.getItem("readyState");
     if (readyState === null) readyState = 2;
     const isConnecting = Number(readyState) === 1 || Number(readyState) === 0;

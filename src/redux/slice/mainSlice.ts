@@ -40,7 +40,12 @@ export const mainSlice = createSlice({
     },
     __playDifferentSrc: (state, action) => {
       const index = findPostIndex(state.posts, action.payload);
-      console.log('__playDifferentSrc ... index',index,'postid ...', action.payload);
+      console.log(
+        "__playDifferentSrc ... index",
+        index,
+        "postid ...",
+        action.payload
+      );
       console.log("index", index);
       state.currentMusic = {
         ...state.currentMusic,
@@ -50,8 +55,8 @@ export const mainSlice = createSlice({
     },
     __playNext: (state, action) => {
       const index = findPostIndex(state.posts, action.payload);
-      console.log('__playNext ... index',index,'postid ...', action.payload);
-      
+      console.log("__playNext ... index", index, "postid ...", action.payload);
+
       if (index !== state.posts.length - 1) {
         state.currentMusic = {
           ...state.currentMusic,
@@ -62,7 +67,12 @@ export const mainSlice = createSlice({
     },
     __PlayPrevious: (state, action) => {
       const index = findPostIndex(state.posts, action.payload);
-      console.log('__PlayPrevious ... index',index,'postid ...', action.payload);
+      console.log(
+        "__PlayPrevious ... index",
+        index,
+        "postid ...",
+        action.payload
+      );
       if (index !== 0) {
         state.currentMusic = {
           ...state.currentMusic,
@@ -75,7 +85,7 @@ export const mainSlice = createSlice({
       return initialState;
     },
     __clearAlarmCount: (state) => {
-      state.alarmCount = 0
+      state.alarmCount = 0;
     },
   },
   extraReducers: (builder) => {
@@ -177,6 +187,6 @@ export const {
   __PlayPrevious,
   __playNext,
   __mainCleanUp,
-  __clearAlarmCount
+  __clearAlarmCount,
 } = mainSlice.actions;
 export default mainSlice.reducer;

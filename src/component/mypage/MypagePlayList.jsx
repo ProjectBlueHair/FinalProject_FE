@@ -9,9 +9,8 @@ import useTypeModal from "../../modal/hooks/useTypeModal";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import { __getUserInfo } from "../../redux/slice/detailSlice";
 import {
-  __getPostList,
   __MainTogglePlay,
-  __playDifferentSrc,
+  __playDifferentSrc
 } from "../../redux/slice/mainSlice";
 import Img from "../elem/Img";
 import StLink from "../elem/Link";
