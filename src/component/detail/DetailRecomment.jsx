@@ -38,10 +38,16 @@ const DetailRecomment = () => {
             src={List.postImg}
             alt="사진"
             onClick={() => detailMove(List.id)}
+            style={{ cursor: "pointer" }}
           />
           <RecommentText>
             <RecommentTitle>
-              <div onClick={() => detailMove(List.id)}>{List.title}</div>
+              <div
+                onClick={() => detailMove(List.id)}
+                style={{ cursor: "pointer" }}
+              >
+                {List.title}
+              </div>
               {/* <Img wd="3rem" src={more} onClick={moreClick} /> */}
             </RecommentTitle>
             <RecommentTag>

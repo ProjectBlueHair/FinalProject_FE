@@ -1,7 +1,6 @@
-import React from "react";
 import styled from "styled-components";
-import Img from "../elem/Img";
 import { like, view } from "../../asset/pic";
+import Img from "../elem/Img";
 
 const MypageLeftBottom = () => {
   return (

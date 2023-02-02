@@ -53,13 +53,17 @@ const DetailFollow = () => {
                 src={collabo.profileImg}
                 alt=""
                 onClick={() => MypageMove(collabo?.nickname)}
+                style={{ cursor: "pointer" }}
               />
               <FollowMiddle>
                 <FollowWriteInstrument>
                   {collabo?.musicPartsList?.map((part, index) => (
                     <div key={index}>{part}</div>
                   ))}
-                  <span onClick={() => MypageMove(collabo?.nickname)}>
+                  <span
+                    onClick={() => MypageMove(collabo?.nickname)}
+                    style={{ cursor: "pointer" }}
+                  >
                     {collabo.nickname}
                   </span>
                 </FollowWriteInstrument>
@@ -210,5 +214,6 @@ const FollowBtn = styled.div`
     background-color: transparent;
     border: 2px solid #ff4d00;
     border-radius: 20px;
+    cursor: pointer;
   }
 `;

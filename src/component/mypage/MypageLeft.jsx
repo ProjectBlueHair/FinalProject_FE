@@ -13,6 +13,7 @@ import {
 import styled from "styled-components";
 import { facebook, insta, kakaoIcon, linkedIn, twitter } from "../../asset/pic";
 import { instanceAxios } from "../../dataManager/apiConfig";
+import { getCookies } from "../../dataManager/cookie";
 import { useShare } from "../../hook/useShare";
 import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
 import useTypeModal from "../../modal/hooks/useTypeModal";
@@ -35,7 +36,6 @@ const MypageLeft = () => {
       const {
         data: { data },
       } = await instanceAxios.get(encodeURI(`member/mypage/${nickname}`));
-      console.log("2", data);
       setInformation(data);
     } catch (error) {
       console.log(error);
@@ -45,7 +45,7 @@ const MypageLeft = () => {
     mySetInformation();
   }, []);
   const [information, setInformation] = useState();
-  console.log("2", information);
+  const acToken = getCookies("accesstoken");
   const myFollowingMemberNickname = information?.nickname;
   const isFollowed = information?.isFollowed;
 
@@ -55,13 +55,23 @@ const MypageLeft = () => {
     );
     mySetInformation();
   };
-  console.log(myShare);
+
   const urlShareClick = () => {
     $openModal({
       type: "alert",
       props: {
         message: "URL주소가 복사가 되었습니다!",
         type: "info",
+      },
+    });
+  };
+
+  const NotFollow = () => {
+    $openModal({
+      type: "alert",
+      props: {
+        message: "로그인이 필요한 페이지 (기능) 입니다.",
+        type: "error",
       },
     });
   };
@@ -118,9 +128,14 @@ const MypageLeft = () => {
           </>
         ) : (
           <>
-            <MypageBtn onClick={mypageFollow}>
-              {isFollowed ? "팔로우취소" : "팔로우"}
-            </MypageBtn>
+            {acToken === undefined ? (
+              <MypageBtn onClick={NotFollow}>팔로우</MypageBtn>
+            ) : (
+              <MypageBtn onClick={mypageFollow}>
+                {isFollowed ? "팔로우취소" : "팔로우"}
+              </MypageBtn>
+            )}
+
             <MypageBtn>다이렉트 메세지</MypageBtn>
           </>
         )}
@@ -157,7 +172,11 @@ const MypageLeft = () => {
                   onClick={kakaoShare}
                   style={{ backgroundColor: "transparent" }}
                 >
-                  <Img wd="2rem" src={kakaoIcon} />
+                  <Img
+                    wd="2rem"
+                    src={kakaoIcon}
+                    style={{ cursor: "pointer" }}
+                  />
                 </button>
               </MypageShare>
             ) : (
@@ -219,11 +238,11 @@ const MypageLeft = () => {
           <Hr />
         </div>
         <MypageAbout>
-          <div>about me</div>
+          <div>내 정보</div>
           <div>{information?.aboutMe}</div>
         </MypageAbout>
       </MypageLeftDiv>
-      <MyLeftMoreView>
+      {/* <MyLeftMoreView>
         <MoreViewDiv>
           <div>비슷한 아티스트</div>
           <button>더보기 {">"}</button>
@@ -231,7 +250,7 @@ const MypageLeft = () => {
         <MypageLeftBottom />
         <MypageLeftBottom />
         <MypageLeftBottom />
-      </MyLeftMoreView>
+      </MyLeftMoreView> */}
     </LeftTotalDiv>
   );
 };
@@ -253,6 +272,7 @@ const MypageLeftDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
 `;
 
 const MypageProfile = styled.img`
@@ -274,6 +294,7 @@ const MypageBtn = styled.button`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 `;
 
 const ShareDiv = styled.div`
@@ -318,30 +339,33 @@ const RowView = styled.div`
     display: flex;
     align-items: center;
   }
-`;
-
-const MyLeftMoreView = styled.div`
-  width: 90%;
-  margin: 0 1rem;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  margin-top: 20px;
-  padding: 10px;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-`;
-
-const MoreViewDiv = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  font-size: 13px;
-  button {
-    border: transparent;
-    background-color: transparent;
+  img {
+    cursor: pointer;
   }
 `;
+
+// const MyLeftMoreView = styled.div`
+//   width: 90%;
+//   margin: 0 1rem;
+//   border: 1px solid rgba(0, 0, 0, 0.2);
+//   border-radius: 10px;
+//   margin-top: 20px;
+//   padding: 10px;
+//   display: flex;
+//   justify-content: center;
+//   flex-direction: column;
+// `;
+
+// const MoreViewDiv = styled.div`
+//   width: 100%;
+//   display: flex;
+//   justify-content: space-between;
+//   font-size: 13px;
+//   button {
+//     border: transparent;
+//     background-color: transparent;
+//   }
+// `;
 
 const MypageShare = styled.div`
   width: 100%;

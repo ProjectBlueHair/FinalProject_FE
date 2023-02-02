@@ -11,11 +11,11 @@ const DetailUpDown = ({ mcv }) => {
       <div>
         <UpDownBtn onClick={() => setComUpDown(!comUpDown)}>
           {comUpDown ? (
-            <span style={{ color: "gray" }}>
+            <span style={{ color: "gray", cursor: "pointer" }}>
               <AiOutlineUp /> 댓글닫기
             </span>
           ) : (
-            <span style={{ color: "gray" }}>
+            <span style={{ color: "gray", cursor: "pointer" }}>
               <AiOutlineDown />
               댓글 보기
             </span>

@@ -57,7 +57,12 @@ const DetailCommentSubDeleteUpdate = ({ re }) => {
     return (
       <SubAllDiv>
         <DetailComSubHeader>
-          <div onClick={() => MypageMove(re.nickname)}>{re.nickname}</div>
+          <div
+            onClick={() => MypageMove(re.nickname)}
+            style={{ cursor: "pointer" }}
+          >
+            {re.nickname}
+          </div>
           {re?.nickname !== userInformation?.nickname ? (
             ""
           ) : contentSubOpen ? (
@@ -66,10 +71,18 @@ const DetailCommentSubDeleteUpdate = ({ re }) => {
                 wd="2rem"
                 src={more}
                 onClick={() => setContentSubOpen(!contentSubOpen)}
+                style={{ cursor: "pointer" }}
               />
               <MoreSubBtn ref={moreSubRef}>
-                <button onClick={onSubUp}>수정</button>
-                <button onClick={() => onSubCommentDelete(re.id)}>삭제</button>
+                <button onClick={onSubUp} style={{ cursor: "pointer" }}>
+                  수정
+                </button>
+                <button
+                  onClick={() => onSubCommentDelete(re.id)}
+                  style={{ cursor: "pointer" }}
+                >
+                  삭제
+                </button>
               </MoreSubBtn>
             </span>
           ) : (
@@ -77,6 +90,7 @@ const DetailCommentSubDeleteUpdate = ({ re }) => {
               wd="2rem"
               src={more}
               onClick={() => setContentSubOpen(!contentSubOpen)}
+              style={{ cursor: "pointer" }}
             />
           )}
         </DetailComSubHeader>
@@ -106,8 +120,18 @@ const DetailCommentSubDeleteUpdate = ({ re }) => {
         <ContentSubBTW>
           <DetailCommentSubLike re={re} />
           <SubUpClear>
-            <button onClick={() => setSubUPDEL(false)}>취소</button>
-            <button onClick={() => onUpdateSubCom(re.id)}>수정하기</button>
+            <button
+              onClick={() => setSubUPDEL(false)}
+              style={{ cursor: "pointer" }}
+            >
+              취소
+            </button>
+            <button
+              onClick={() => onUpdateSubCom(re.id)}
+              style={{ cursor: "pointer" }}
+            >
+              수정하기
+            </button>
           </SubUpClear>
         </ContentSubBTW>
       </div>

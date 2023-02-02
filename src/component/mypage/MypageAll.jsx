@@ -16,6 +16,5 @@ export default MypageAll;
 const MypageTotalDiv = styled.div`
   display: flex;
   width: 100%;
-  overflow: auto;
-  /* border: 1px solid black; */
+  overflow-y: hidden;
 `;

@@ -15,14 +15,10 @@ import {
 } from "../../redux/slice/mainSlice";
 import Img from "../elem/Img";
 import StLink from "../elem/Link";
-import MypageLike from "./MypageLike";
+import MypageLike2 from "./MypageLike2";
 
-const MypagePlayList = ({ L, getArchive }) => {
+const MypagePlayList = ({ L, getArchive2 }) => {
   const navigate = useNavigate();
-  const { $openModal } = useTypeModal();
-  const { nickname } = useParams();
-  const [archiveDel, setArchiveDel] = useState(false);
-  const Del = useRef(null);
   useEffect(() => {
     dispatch(__getPostList());
     dispatch(__getUserInfo());
@@ -30,31 +26,13 @@ const MypagePlayList = ({ L, getArchive }) => {
   const dispatch = useAppDispatch();
   const currentMusic = useAppSelector((state) => state.main.currentMusic);
 
-  const user = useSelector((state) => state.user.user);
-  useToggleOutSideClick(Del, setArchiveDel);
+  // const user = useSelector((state) => state.user.user);
+
   const onClickPlayBtn = () => {
     currentMusic.post.id === L.id
       ? dispatch(__MainTogglePlay(!currentMusic.isPlayingPlayer))
       : dispatch(__playDifferentSrc(L.id));
   };
-  const archiveDelete = async (nick) => {
-    try {
-      const { data } = await instanceAxios.delete(`post/archive/${nick}`);
-      if (data.customHttpStatus === 2000) {
-        $openModal({
-          type: "alert",
-          props: {
-            message: data.message,
-            type: "info",
-          },
-        });
-        getArchive(user?.nickname);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <MypageMusic>
       <img
@@ -75,39 +53,30 @@ const MypagePlayList = ({ L, getArchive }) => {
                   : playButtonSecond
               }
               onClick={onClickPlayBtn}
+              style={{ cursor: "pointer" }}
             />
           </PlayBtn>
         </div>
         <RightCol>
           <MoreBtn>
             <div>{L?.title}</div>
-            <div>
-              {user.nickname === nickname ? (
-                <div ref={Del}>
-                  <Img
-                    wd="1rem"
-                    src={more}
-                    onClick={() => setArchiveDel(!archiveDel)}
-                    style={{ cursor: "pointer" }}
-                  />
-                  <div>
-                    {archiveDel ? (
-                      <ArchiveBox
-                        onClick={() => archiveDelete(L.id)}
-                        style={{ cursor: "pointer" }}
-                      >
-                        삭제
-                      </ArchiveBox>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                </div>
-              ) : (
-                ""
-              )}
-            </div>
+            {/* {user.nickname === nickname ? (
+              <Img
+                wd="1rem"
+                src={more}
+                onClick={() => setArchiveDel(!archiveDel)}
+              />
+            ) : (
+              ""
+            )} */}
           </MoreBtn>
+          {/* <div ref={Del}>
+            {archiveDel ? (
+              <ArchiveBox onClick={() => archiveDelete(L.id)}>삭제</ArchiveBox>
+            ) : (
+              ""
+            )}
+          </div> */}
 
           <RightProfileAndLike>
             <RightProfile>
@@ -132,7 +101,7 @@ const MypagePlayList = ({ L, getArchive }) => {
                 <div>{L?.viewCount}</div>
               </div>
               <div>
-                <MypageLike L={L} getArchive={getArchive} />
+                <MypageLike2 L={L} getArchive2={getArchive2} />
               </div>
             </RightViewLike>
           </RightProfileAndLike>
@@ -152,8 +121,9 @@ const MypagePlayList = ({ L, getArchive }) => {
 export default MypagePlayList;
 
 const MypageMusic = styled.div`
+  flex-basis: 250px;
   flex-grow: 0;
-  width: 90%;
+  width: 80%;
   img {
     width: 100%;
     height: 15rem;
@@ -232,7 +202,6 @@ const PlayBtn = styled.div`
   width: 5rem;
   height: 5rem;
   img {
-    cursor: pointer;
     height: 5rem;
   }
 `;
@@ -244,13 +213,12 @@ const RightCol = styled.div`
 `;
 
 const MoreBtn = styled.div`
-  width: 95%;
+  width: 100%;
   display: flex;
-  padding-top: 10px;
-  position: relative;
+  align-items: center;
   justify-content: space-between;
   img {
-    width: 2rem;
+    width: 3rem;
     height: 2rem;
   }
 `;
@@ -274,11 +242,10 @@ const ArchiveBox = styled.div`
   height: 3rem;
   border: 1px solid black;
   position: absolute;
+  margin-left: 135px;
   border: 1px solid #ff4d00;
   border-radius: 10px;
   display: flex;
-  z-index: 1000;
-  background-color: white;
   justify-content: center;
   align-items: center;
 `;

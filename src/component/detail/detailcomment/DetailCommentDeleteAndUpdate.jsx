@@ -55,7 +55,12 @@ const DetailDeleteAndUpdate = ({ mcv }) => {
     return (
       <div>
         <DetailComHeader>
-          <div onClick={() => MypageMove(mcv?.nickname)}>{mcv?.nickname}</div>
+          <div
+            onClick={() => MypageMove(mcv?.nickname)}
+            style={{ cursor: "pointer" }}
+          >
+            {mcv?.nickname}
+          </div>
           {userInformation?.nickname !== mcv?.nickname ? (
             ""
           ) : contentOpen ? (
@@ -64,10 +69,18 @@ const DetailDeleteAndUpdate = ({ mcv }) => {
                 wd="2rem"
                 src={more}
                 onClick={() => setContentOpen(!contentOpen)}
+                style={{ cursor: "pointer" }}
               />
               <MoreBtn ref={moreRef}>
-                <button onClick={onComUpdateNo}>수정</button>
-                <button onClick={() => onComDelete(mcv.id)}>삭제</button>
+                <button onClick={onComUpdateNo} style={{ cursor: "pointer" }}>
+                  수정
+                </button>
+                <button
+                  onClick={() => onComDelete(mcv.id)}
+                  style={{ cursor: "pointer" }}
+                >
+                  삭제
+                </button>
               </MoreBtn>
             </span>
           ) : (
@@ -75,6 +88,7 @@ const DetailDeleteAndUpdate = ({ mcv }) => {
               wd="2rem"
               src={more}
               onClick={() => setContentOpen(!contentOpen)}
+              style={{ cursor: "pointer" }}
             />
           )}
         </DetailComHeader>
@@ -101,8 +115,18 @@ const DetailDeleteAndUpdate = ({ mcv }) => {
         <ContentBTW>
           <DetailCommentLike mcv={mcv} />
           <UpClear>
-            <button onClick={() => setcomUpdate(false)}>취소</button>
-            <button onClick={() => onComUpdateYes(mcv.id)}>수정하기</button>
+            <button
+              onClick={() => setcomUpdate(false)}
+              style={{ cursor: "pointer" }}
+            >
+              취소
+            </button>
+            <button
+              onClick={() => onComUpdateYes(mcv.id)}
+              style={{ cursor: "pointer" }}
+            >
+              수정하기
+            </button>
           </UpClear>
         </ContentBTW>
       </div>

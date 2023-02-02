@@ -502,7 +502,11 @@ const SetTotal = () => {
               accept="image/*"
             />
             <label htmlFor="upload"></label>
-            <img src={preImg} onClick={() => imgRef.current.click()} />
+            <img
+              src={preImg}
+              onClick={() => imgRef.current.click()}
+              style={{ cursor: "pointer" }}
+            />
           </SetProfile>
           <div>
             <TextDiv>
@@ -804,6 +808,8 @@ const OffBtn = styled.button`
   width: 10%;
   height: 30px;
   border-radius: 20px;
+  padding: 0 10px;
+  cursor: pointer;
   background-color: #ff4d00;
   border: transparent;
   color: white;
@@ -811,6 +817,7 @@ const OffBtn = styled.button`
 `;
 
 const LinkButton = styled.button`
+  cursor: pointer;
   height: 30px;
   width: 92%;
   border-radius: 20px;
@@ -842,6 +849,7 @@ const TextDiv = styled.div`
     height: 30px;
     border-radius: 20px;
     border: transparent;
+    cursor: pointer;
     margin-left: 10px;
     :hover {
       background-color: #ff4d00;
@@ -912,6 +920,9 @@ const AlarmCheck = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 20px;
+  img {
+    cursor: pointer;
+  }
   div {
     margin-left: 10px;
   }
@@ -924,6 +935,7 @@ const SetBottom = styled.div`
   justify-content: end;
   gap: 10px;
   button {
+    cursor: pointer;
     width: 70px;
     height: 3rem;
     border-radius: 20px;

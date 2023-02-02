@@ -49,6 +49,9 @@ export default DetailCommentLike;
 const CommentLikeTouch = styled.div`
   display: flex;
   align-items: center;
+  img {
+    cursor: pointer;
+  }
   button {
     background-color: transparent;
     border: transparent;

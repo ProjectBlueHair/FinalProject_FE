@@ -12,6 +12,8 @@ import {
 } from "react-share";
 import styled from "styled-components";
 import { collaboPlus, kakaoIcon, report, save, share } from "../../asset/pic";
+import { instanceAxios } from "../../dataManager/apiConfig";
+import { getCookies } from "../../dataManager/cookie";
 import { useShare } from "../../hook/useShare";
 import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
 import useTypeModal from "../../modal/hooks/useTypeModal";
@@ -31,6 +33,8 @@ const DetailDayAndFollow = ({ detail }) => {
   const navigate = useNavigate();
   const shortContent = detail?.contents.slice(0, textLimit.current);
   const [shareOpen, setShareOpen] = useState(false);
+  const acToken = getCookies("accesstoken");
+
   const onShare = () => {
     setShareOpen(!shareOpen);
   };
@@ -87,16 +91,59 @@ const DetailDayAndFollow = ({ detail }) => {
       },
     });
   };
+  const logBtn = () => {
+    $openModal({
+      type: "alert",
+      props: {
+        message: "로그인이 필요한 페이지 (기능) 입니다.",
+        type: "error",
+      },
+    });
+  };
+
+  const onArchive = async () => {
+    try {
+      const { data } = await instanceAxios.post(`post/archive/${id}`);
+      console.log(data);
+      if (data.customHttpStatus === 2000) {
+        $openModal({
+          type: "alert",
+          props: {
+            message: data.message,
+            type: "info",
+          },
+        });
+      } else {
+        $openModal({
+          type: "alert",
+          props: {
+            message: data.message,
+            type: "error",
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <DetailLeftTotal>
       <DetailMiddleTop>
         <DetailShareLine>
           <div>
-            <div onClick={NotTouch}>
-              <Img wd="3rem" src={save} />
-              <div>보관함 추가</div>
-            </div>
+            {acToken === undefined ? (
+              <div onClick={logBtn}>
+                <Img wd="3rem" src={save} />
+                <div>보관함 추가</div>
+              </div>
+            ) : (
+              <div onClick={onArchive}>
+                <Img wd="3rem" src={save} />
+                <div>보관함 추가</div>
+              </div>
+            )}
+
             <div onClick={onShare} ref={shared}>
               <Img wd="3rem" src={share} />
               <div style={{ width: "30px" }}>공유</div>
@@ -167,6 +214,7 @@ const DetailDayAndFollow = ({ detail }) => {
                     alignItems: "center",
                     gap: "5px",
                     marginTop: "5px",
+                    cursor: "pointer",
                   }}
                 >
                   <AiOutlineUp /> 간략히
@@ -178,6 +226,7 @@ const DetailDayAndFollow = ({ detail }) => {
                     alignItems: "center",
                     gap: "5px",
                     marginTop: "5px",
+                    cursor: "pointer",
                   }}
                 >
                   <AiOutlineDown /> 더보기
@@ -214,10 +263,15 @@ const DetailShareLine = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+  /* cursor: pointer; */
   div {
     display: flex;
     align-items: center;
     gap: 5px;
+    cursor: pointer;
+  }
+  img {
+    cursor: pointer;
   }
 `;
 
@@ -238,6 +292,7 @@ const ShareDiv = styled.div`
   padding: 10px;
   display: flex;
   justify-content: space-around;
+  cursor: pointer;
   button {
     border: transparent;
     display: flex;
