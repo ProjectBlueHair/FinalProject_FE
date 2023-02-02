@@ -248,7 +248,7 @@ const SetTotal = () => {
       $openModal({
         type: "alert",
         props: {
-          message: "2자이상, 15자 이내로 작성해 주세요",
+          message: "닉네임 2글자이상, 15글자 이내로 작성해 주세요",
           type: "info",
         },
       });
@@ -307,7 +307,7 @@ const SetTotal = () => {
       if (!PWREX.test(newPassword)) {
         setPasswordCheck(false);
         setPasswordMsg(
-          "대,소문자 + 숫자 + 특수기호 각각 1개 이상, 8글자 이상 15이하 필요합니다"
+          "대,소문자 + 숫자 + 특수기호 각각 1개 이상, 8글자 이상 15글자 이하로 입력해 주세요"
         );
       } else {
         setPasswordCheck(true);
@@ -450,17 +450,27 @@ const SetTotal = () => {
   // put 통신
   const putSave = async (put) => {
     try {
-      const { data } = await instanceAxios.put("member/setting", put);
-      if (data.customHttpStatus === 2000) {
-        return data;
-      } else {
+      if (put.nickname.length < 2 || put.nickname.length > 15) {
         $openModal({
           type: "alert",
           props: {
-            message: data.message,
+            message: "닉네임 2글자이상, 15글자 이내로 작성해 주세요",
             type: "info",
           },
         });
+      } else {
+        const { data } = await instanceAxios.put("member/setting", put);
+        if (data.customHttpStatus === 2000) {
+          return data;
+        } else {
+          $openModal({
+            type: "alert",
+            props: {
+              message: data.message,
+              type: "info",
+            },
+          });
+        }
       }
     } catch (error) {
       console.log(error);
@@ -524,6 +534,8 @@ const SetTotal = () => {
                     type="text"
                     style={{ width: "82%" }}
                     onChange={usernameChange}
+                    minLength={2}
+                    maxLength={15}
                   />
                   <button onClick={usernameCheck}>중복 체크</button>
                 </div>
@@ -548,6 +560,8 @@ const SetTotal = () => {
                     <input
                       type="password"
                       onChange={passwordChecking}
+                      maxLength={15}
+                      minLength={8}
                       style={{
                         backgroundColor: "#ff4d00",
                         color: "white",
@@ -582,7 +596,6 @@ const SetTotal = () => {
                   변경할 때 만 클릭 후 이용해 주세요!
                 </button>
               )}
-              {/* {} */}
             </TextDiv>
             {/*<TextDiv>
                <div>New Password Confirm</div>

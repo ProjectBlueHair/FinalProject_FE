@@ -237,7 +237,15 @@ const Header = () => {
             <ToggleTotal>
               {isOpen ? (
                 <ToggleDiv>
-                  <Span fc="var(--ec-main-color)" fw="700">
+                  <Span
+                    fc="var(--ec-main-color)"
+                    fw="500"
+                    style={{
+                      wordBreak: "break-all",
+                      width: "80%",
+                      textAlign: "right",
+                    }}
+                  >
                     {user.nickname}
                   </Span>
                   <button onClick={onClickLogOut}>로그아웃</button>
@@ -293,9 +301,7 @@ const ToggleDiv = styled.div`
   right: 110%;
   top: -30px;
   width: 100px;
-  height: 130px;
-  /* margin-top: 25px;
-  margin-right: 75px; */
+  height: 150px;
   background-color: white;
   border: 2px solid #ff4d00;
   border-radius: 10px;

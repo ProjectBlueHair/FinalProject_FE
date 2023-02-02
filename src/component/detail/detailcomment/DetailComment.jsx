@@ -14,7 +14,7 @@ const DetailComment = () => {
   useEffect(() => {
     dispatch(__getUserInfo());
     dispatch(__getComment(id));
-  }, []);
+  }, [id]);
   const userInformation = useSelector((state) => state.detail.userInfo.data);
 
   const [mainContent, setMainContent] = useState("");
