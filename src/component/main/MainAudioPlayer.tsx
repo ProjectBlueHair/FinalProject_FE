@@ -122,7 +122,7 @@ const MainAudioPlayer = () => {
         <AudioPlayer
           src={post?.musicFile}
           crossOrigin="anonymous"
-          autoPlayAfterSrcChange={true}
+          autoPlayAfterSrcChange={false}
           onPlay={onPlayHandler}
           onPause={onPauseHandler}
           onClickPrevious={onClickPrevious}
