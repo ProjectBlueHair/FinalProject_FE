@@ -24,8 +24,10 @@ import { CurrentMusic } from "../../model/MainModel";
 
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import { batch } from "react-redux";
+import useTypeModal from "../../modal/hooks/useTypeModal";
 const MainAudioPlayer = () => {
   const audioPlayer = useRef<AudioPlayer>(null);
+  const{$openModal} = useTypeModal()
   const { post, isPlayingMain } = useAppSelector<CurrentMusic>(
     (state) => state.main.currentMusic
   );
@@ -35,7 +37,6 @@ const MainAudioPlayer = () => {
     "isPlayingMain .. ",
     isPlayingMain
   );
-
   const dispatch = useAppDispatch();
   useEffect(() => {
     return () => {
@@ -45,6 +46,8 @@ const MainAudioPlayer = () => {
   }, []);
   const onPlayHandler = () => {
     console.log("onPlayHandler ... ");
+    console.log("onPlayHandler paused..?", audioPlayer.current!.audio.current!.paused);
+
     dispatch(__PlayerTogglePlay(true));
   };
   const onPauseHandler = () => {
@@ -60,14 +63,17 @@ const MainAudioPlayer = () => {
     dispatch(__playNext(post.id));
   };
   useEffect(() => {
-    console.log("isplyaing main", isPlayingMain);
-
+    console.log("isplyaing main currentmusic useEffect paused..?", audioPlayer.current!.audio.current!.paused);
+    if (!audioPlayer.current!.audio.current!.paused) {
+      audioPlayer.current!.audio.current!.pause();
+    }
     if (isPlayingMain) {
       audioPlayer.current!.audio.current!.play();
     } else {
       audioPlayer.current!.audio.current!.pause();
     }
   }, [isPlayingMain]);
+
 
   return (
     // musicbar wrap
@@ -118,7 +124,7 @@ const MainAudioPlayer = () => {
         <AudioPlayer
           src={post?.musicFile}
           crossOrigin="anonymous"
-          autoPlayAfterSrcChange={true}
+          autoPlayAfterSrcChange={false}
           onPlay={onPlayHandler}
           onPause={onPauseHandler}
           onClickPrevious={onClickPrevious}
@@ -171,12 +177,31 @@ const MainAudioPlayer = () => {
           customControlsSection={[
             <div>
               <Img
+                onClick={()=>{
+                  $openModal({
+                    type: "alert",
+                    props: {
+                      message: "해당 기능은 준비중입니다.",
+                      type: "confirm",
+                    },
+                  });
+                }}
                 className="subIcon"
                 type="icon"
                 wd={iconSize}
                 src={shuffle}
               />
-              <Img className="subIcon" wd={iconSize} src={repeat} />
+              <Img 
+                      onClick={()=>{
+                        $openModal({
+                          type: "alert",
+                          props: {
+                            message: "해당 기능은 준비중입니다.",
+                            type: "confirm",
+                          },
+                        });
+                      }}
+              type="icon" className="subIcon" wd={iconSize} src={repeat} />
             </div>,
             RHAP_UI.VOLUME,
           ]}

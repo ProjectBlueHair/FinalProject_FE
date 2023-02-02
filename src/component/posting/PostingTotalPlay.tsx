@@ -21,14 +21,15 @@ const PostingTotalPlay = () => {
   const progressConrol = useAppSelector(audioControlSelector);
   const [isLoading, setIsLoading] = useState(false);
   console.log("progressConrol.onLoad", progressConrol.onLoad);
-
+  const doNothing = () => {
+    console.log("do nothing");
+  };
   useEffect(() => {
     if (!progressConrol.onLoad && !isLoading) {
       setIsLoading(true);
     } else {
       setIsLoading(false);
     }
-
   }, [progressConrol.onLoad]);
   const handlePlay = () => {
     dispatch(__togglePlay(true));
@@ -42,7 +43,9 @@ const PostingTotalPlay = () => {
   return (
     <Fragment>
       {progressConrol.src ? (
-        <ProgressWrapper>
+        <ProgressWrapper
+          style={isLoading ? { pointerEvents: "none", cursor: "default" } : {}}
+        >
           <AudioPlayer
             autoPlayAfterSrcChange={false}
             src={progressConrol.src}
@@ -69,7 +72,9 @@ const PostingTotalPlay = () => {
                 <PlayLoading />
               ) : (
                 <Img
-                  onClick={()=>{handlePlay()}}
+                  onClick={() => {
+                    handlePlay();
+                  }}
                   mg="0 2rem 0 0"
                   type="icon"
                   wd={iconSize}
@@ -77,10 +82,15 @@ const PostingTotalPlay = () => {
                 />
               ),
               pause: (
-                <Img 
-                onClick={()=>{handlePause()}}
-
-                mg="0 2rem 0 0" type="icon" wd={iconSize} src={pause} />
+                <Img
+                  onClick={() => {
+                    handlePause();
+                  }}
+                  mg="0 2rem 0 0"
+                  type="icon"
+                  wd={iconSize}
+                  src={pause}
+                />
               ),
             }}
             customControlsSection={[]}

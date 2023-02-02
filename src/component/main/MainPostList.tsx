@@ -14,7 +14,6 @@ const MainPostList = () => {
     (state) => state.main
   );
 
-
   let options = {
     root: scrollArea.current,
     rootMargin: "20px",
@@ -25,7 +24,6 @@ const MainPostList = () => {
     if (!isLoading) {
       dispatch(__getPostList(nextPage));
     }
-    return () => {};
   }, [trigger]);
 
   const callback: IntersectionObserverCallback = (entries, io) => {

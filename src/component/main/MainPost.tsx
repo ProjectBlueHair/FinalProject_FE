@@ -27,6 +27,13 @@ const MainPost: React.FC<{ post: Post; index: number }> = (props) => {
     (state) => state.main.currentMusic
   );
   const onClickPlayHandler = () => {
+    console.log(
+      "currentMusic.post.id",
+      currentMusic.post.id,
+      "props.post.id",
+      props.post.id
+    );
+
     currentMusic.post.id === props.post.id
       ? dispatch(__MainTogglePlay(!currentMusic.isPlayingPlayer))
       : dispatch(__playDifferentSrc(props.post.id));
@@ -42,6 +49,7 @@ const MainPost: React.FC<{ post: Post; index: number }> = (props) => {
       gap="1.5rem"
     >
       <Img
+        style={{ cursor: "pointer" }}
         onClick={() => navigate(`/detail/${props.post.id}`)}
         hg="20rem"
         type="radius"
@@ -92,20 +100,13 @@ const MainPost: React.FC<{ post: Post; index: number }> = (props) => {
               <Img
                 filter={props.post.liked ? "none" : "rgba(0, 0, 0, 0.04)"}
                 onClick={() => {
-                  $openModal({
-                    type: "alert",
-                    props: {
-                      message: "해당 기능은 곧 준비될 예정입니다 !",
-                      type: "confirm",
-                    },
-                  });
+                  dispatch(
+                    __mainPostLike({
+                      postId: props.post.id,
+                      index: props.index,
+                    })
+                  );
                 }}
-                // dispatch(
-                //   __mainPostLike({
-                //     postId: props.post.id,
-                //     index: props.index,
-                //   })
-                // )
                 type="iconSmall"
                 wd="1.5rem"
                 src={props.post.liked ? fillHeart : like}
@@ -122,9 +123,19 @@ const MainPost: React.FC<{ post: Post; index: number }> = (props) => {
         align="center"
         gap="0.5rem"
         pd="0 1rem"
+        onClick={() => {
+          $openModal({
+            type: "alert",
+            props: {
+              message: "해당 기능은 곧 준비될 예정입니다 !",
+              type: "confirm",
+            },
+          });
+        }}
       >
         {props.post.tagList?.map((tag, index) => (
-          <StLink key={index} to={`/tag/${tag}`}>
+          // <StLink key={index} to={`/tag/${tag}`}>
+          <StLink key={index}>
             <TagCard># {tag}</TagCard>
           </StLink>
         ))}

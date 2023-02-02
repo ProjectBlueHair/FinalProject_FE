@@ -10,7 +10,6 @@ const ErrorCheck = () => {
   const { $openModal } = useTypeModal();
   const postingError = useAppSelector(postingErrorSelector);
   const mainError = useAppSelector(mainErrorSelector);
-  console.log("error check... main", mainError, "posting", postingError);
   const needRedirect = ("" + postingError)?.includes("4041");
   if (postingError || mainError) {
     $openModal({

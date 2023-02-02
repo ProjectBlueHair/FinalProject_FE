@@ -10,7 +10,7 @@ import UserCheck from "../util/UserCheck";
 const ChatPage = () => {
   return (
     <Flex direction="column" justify="flex-start" hg="100vh">
-      <UserCheck/>
+      <UserCheck />
       <Header />
       <ChatGrid>
         <ChatRoomList />
@@ -19,7 +19,7 @@ const ChatPage = () => {
           <ChatForm />
         </ChatSectionContainer>
       </ChatGrid>
-      <MainAudioPlayer />
+      {/* <MainAudioPlayer /> */}
     </Flex>
   );
 };
@@ -44,4 +44,3 @@ const ChatSectionContainer = styled(StFlex)`
   align-items: flex-start;
   justify-content: flex-start;
 `;
-

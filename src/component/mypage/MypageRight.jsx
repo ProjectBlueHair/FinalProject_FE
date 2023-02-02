@@ -58,15 +58,6 @@ const MypageRight = () => {
     }
   };
 
-  // // 슬라이더 구현
-  // const Slider = useRef(null);
-
-  // useEffect(() => {
-  //   const { current } = Slider;
-  //   current.style.animation = "SV 1s";
-  //   console.log(current.style.animation);
-  // }, [page]);
-
   return (
     <MypageRightDiv>
       <MypageTop>

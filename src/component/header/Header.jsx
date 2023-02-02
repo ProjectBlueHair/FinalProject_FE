@@ -29,6 +29,7 @@ import {
 } from "../../redux/slice/userSlice";
 import { PATH } from "../../Router";
 import theme from "../../styles/theme";
+import Button from "../elem/Button";
 import Div from "../elem/Div";
 import Flex from "../elem/Flex";
 import Img from "../elem/Img";
@@ -70,15 +71,7 @@ const Header = () => {
   const AccessToken = getCookies("accesstoken");
   const user = useAppSelector(userSelector);
   const alarmCount = useAppSelector(alarmSelector);
-
-  useEffect(() => {
-    if (!AccessToken && user.nickname) {
-      batch(() => {
-        dispatch(__clearUser());
-        dispatch(__clearAlarmCount());
-      });
-    }
-    if (AccessToken && !user.nickname) dispatch(__getGeneralUserInfo());
+  const connectEvent = () => {
     let readyState = localStorage.getItem("readyState");
     if (readyState === null) readyState = 2;
     const isConnecting = Number(readyState) === 1 || Number(readyState) === 0;
@@ -119,6 +112,16 @@ const Header = () => {
         localStorage.setItem("readyState", eventSource.readyState);
       };
     }
+  };
+  useEffect(() => {
+    if (!AccessToken && user.nickname) {
+      batch(() => {
+        dispatch(__clearUser());
+        dispatch(__clearAlarmCount());
+      });
+    }
+    if (AccessToken && !user.nickname) dispatch(__getGeneralUserInfo());
+    connectEvent();
     return () => {
       console.log("unmounting ... eventsource : ", eventSource);
       eventSource?.close();
@@ -173,20 +176,30 @@ const Header = () => {
           justify="flex-start"
           pd="0 0.5rem 0 2rem"
         >
-          <Input placeholder="검색" />
+          <Input placeholder="검색 기능은 준비중 입니다." />
           <Img wd={iconSize} src={search} />
         </Flex>
       </Flex>
 
       <Flex justify="flex-end" gap="1.5rem">
-        <Div
+        <Button
+          onClick={() =>
+            window.open(
+              "https://docs.google.com/forms/d/e/1FAIpQLSelo9QpMlPgcwqvHt6TLrBuoOYcXMiv30ya5R7je1WCXFLz2A/viewform"
+            )
+          }
+          style={{ cursor: "pointer", fontSize: "1.6rem" }}
+          fw="700"
+        >
+          EVENT
+        </Button>
+        <Button
           onClick={onClickGuide}
-          style={{ cursor: "pointer" }}
-          fs="1.6rem"
+          style={{ cursor: "pointer", fontSize: "1.6rem" }}
           fw="700"
         >
           GUIDE
-        </Div>
+        </Button>
         <Img
           onClick={() => {
             navigate(PATH.chat);
@@ -223,15 +236,14 @@ const Header = () => {
               hg="3.5rem"
             />
           ) : (
-            <Div
+            <Button
               onClick={onClickSignBtn}
-              style={{ cursor: "pointer" }}
-              fs="1.6rem"
+              style={{ cursor: "pointer", fontSize: "1.6rem" }}
               fw="700"
               fc={theme.color.main}
             >
-              Login
-            </Div>
+              LOGIN
+            </Button>
           )}
           {user.nickname ? (
             <ToggleTotal>

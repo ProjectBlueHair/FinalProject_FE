@@ -5,7 +5,7 @@ import {
   collaboButton,
   muteButton,
   soloButton,
-  unMuteButton
+  unMuteButton,
 } from "../../asset/pic";
 import { Audio } from "../../model/PostingModel";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
@@ -14,10 +14,11 @@ import {
   __setCollaboPart,
   __setMute,
   __setSolo,
-  __setVolume
+  __setVolume,
 } from "../../redux/slice/postingSlice";
 import { userSelector } from "../../redux/slice/userSlice";
 import theme from "../../styles/theme";
+import Div from "../elem/Div";
 import Flex from "../elem/Flex";
 import Img from "../elem/Img";
 import { StInput } from "../elem/Input";
@@ -41,7 +42,6 @@ const PostingAudioControlBox: React.FC<
     index?: number;
   }
 > = (props) => {
-
   const BOX_NICK_FS = "1.4rem";
   const BOX_ICON_WD = "2.2rem";
   const dispatch = useAppDispatch();
@@ -88,13 +88,19 @@ const PostingAudioControlBox: React.FC<
         ) : (
           <PartDiv {...partStyle}>{props.audioData.musicPart}</PartDiv>
         )}
-        <Span style={{ flex: 1 }} fw="300" fc="white" fs={BOX_NICK_FS}>
+        <Span
+          style={{ flex: 1, overflow: "hidden" }}
+          fw="300"
+          fc="white"
+          fs={BOX_NICK_FS}
+        >
           {props.audioData.nickname || user.nickname}
         </Span>
-        {props.isNewAudio ? (
+        {props.isNewAudio && !props.isCollaboRequested ? (
           <Cancel
             onClick={() => dispatch(__removeAudio(props.index))}
-            wd="1.7rem"
+            wd="1.4rem"
+            // style={{ filter: theme.color.whiteFilter, cursor: "pointer" }}
             style={{ filter: theme.color.whiteFilter, cursor: "pointer" }}
           />
         ) : null}
