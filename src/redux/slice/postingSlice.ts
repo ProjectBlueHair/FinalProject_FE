@@ -1,18 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { AppState } from "../config";
-import {
-  ProgressControl,
-  Audio,
-  Form,
-  CollaboAudio,
-  AudioData,
-  CollaboRequested,
-  CollaboRequestData,
-  CollaboReqeustedForm,
-  NewPostForm,
-} from "../../model/PostingModel";
 import { instanceAxios } from "../../dataManager/apiConfig";
+import {
+  Audio, AudioData, CollaboAudio, CollaboReqeustedForm, CollaboRequestData, CollaboRequested, Form, ProgressControl
+} from "../../model/PostingModel";
 import { Response } from "../../model/ResponseModel";
+import { AppState } from "../config";
 
 export const formSelector = {
   title: (state: AppState) => state.posting.form.title,
@@ -40,6 +32,7 @@ export interface PostingState {
   isLoading: boolean; // 공통
   error: any; // 공통
 }
+
 const initialState = {
   form: { contents: "", collaboNotice: "", postImg: "", title: "" },
   audios: [] as Audio[],
@@ -50,11 +43,11 @@ const initialState = {
     onLoad: false,
   },
   audio: {
-    audioData: {} as AudioData,
+    audioData: { musicPart: "" } as AudioData,
     isMute: false,
     isNewAudio: false,
     volume: 0.5,
-    isCollabo: false,
+    isCollaboRequested: false,
     isSolo: false,
     isLoaded: false,
   } as Audio,
@@ -82,6 +75,26 @@ export const postingSlice = createSlice({
         state.collaboRequestData.audios.push({ src: musicFile, part: "" });
       });
     },
+    __removeAudio: (state, { payload }) => {
+      const originalAudiosLength =
+        state.audios.length - state.collaboRequestData.audios.length;
+      console.log(
+        "...removeAudio .. originalAudiosLength",
+        originalAudiosLength
+      );
+      console.log("...removeAudio .. payload", payload);
+      console.log(
+        "...removeAudio .. payload - originalAudiosLength",
+        payload - originalAudiosLength
+      );
+
+      state.audios.splice(payload, 1);
+      state.collaboRequestData.audios.splice(payload - originalAudiosLength, 1);
+      state.progressControl.src =
+        state.audios.length > 0
+          ? state.audios[0].audioData.musicFile
+          : undefined;
+    },
     __audioOnLoaded: (state, { payload }) => {
       state.audios[payload].isLoaded = true;
       const fullyLoaded = state.audios
@@ -90,6 +103,7 @@ export const postingSlice = createSlice({
       state.progressControl.onLoad = fullyLoaded === -1;
     },
     __setCollaboPart: (state, { payload }) => {
+      state.audios[payload.index].audioData.musicPart = payload.part;
       const originalAudiosLength =
         state.audios.length - state.collaboRequestData.audios.length;
       state.collaboRequestData.audios[
@@ -108,7 +122,9 @@ export const postingSlice = createSlice({
       state.progressControl.seekTo = payload;
     },
     __setMute: (state, { payload }) => {
-      state.audios[payload].volume = state.audios[payload].isMute ? 0.5 : 0.00001;
+      state.audios[payload].volume = state.audios[payload].isMute
+        ? 0.5
+        : 0.00001;
       state.audios[payload].isMute = !state.audios[payload].isMute;
     },
     __setSolo: (state, { payload }) => {
@@ -184,7 +200,7 @@ export const postingSlice = createSlice({
           payload.musicList.forEach((audio: AudioData) => {
             state.audios = state.audios.concat({
               ...state.audio,
-              isCollabo: true,
+              isCollaboRequested: true,
               isNewAudio: true,
               audioData: audio,
             });
@@ -260,5 +276,6 @@ export const {
   __setCollaboPart,
   __audioOnLoaded,
   __form,
+  __removeAudio,
 } = postingSlice.actions;
 export default postingSlice.reducer;

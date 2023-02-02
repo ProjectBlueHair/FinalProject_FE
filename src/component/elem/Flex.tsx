@@ -1,10 +1,9 @@
 import React, {
   CSSProperties,
   MouseEventHandler,
-  MutableRefObject,
+  MutableRefObject
 } from "react";
-import styled, { StyledComponentProps } from "styled-components";
-import { StyledComponent } from "styled-components";
+import styled, { StyledComponent } from "styled-components";
 import theme from "../../styles/theme";
 interface DivProps {
   display?: string;

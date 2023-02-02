@@ -8,7 +8,7 @@ export interface Audio {
   audioData: AudioData;
   isMute: boolean;
   isNewAudio: boolean;
-  isCollabo? : boolean
+  isCollaboRequested? : boolean
   isSolo: boolean;
   volume: number;
   isLoaded : boolean
