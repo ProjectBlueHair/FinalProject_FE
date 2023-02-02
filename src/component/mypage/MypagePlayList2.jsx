@@ -20,7 +20,6 @@ import MypageLike2 from "./MypageLike2";
 const MypagePlayList = ({ L, getArchive2 }) => {
   const navigate = useNavigate();
   useEffect(() => {
-    dispatch(__getPostList());
     dispatch(__getUserInfo());
   }, []);
   const dispatch = useAppDispatch();
