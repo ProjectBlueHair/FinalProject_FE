@@ -61,7 +61,9 @@ export const mainSlice = createSlice({
         state.currentMusic = {
           ...state.currentMusic,
           post: state.posts[index + 1],
-          isPlayingMain: true,
+          isPlayingMain: false,
+          isPlayingPlayer:false,
+        
         };
       }
     },
@@ -77,7 +79,9 @@ export const mainSlice = createSlice({
         state.currentMusic = {
           ...state.currentMusic,
           post: state.posts[index - 1],
-          isPlayingMain: true,
+          isPlayingMain: false,
+          isPlayingPlayer:false,
+
         };
       }
     },
