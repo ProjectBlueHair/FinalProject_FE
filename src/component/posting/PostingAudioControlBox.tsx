@@ -90,7 +90,7 @@ const PostingAudioControlBox: React.FC<
         <Span style={{ flex: 1 }} fw="300" fc="white" fs={BOX_NICK_FS}>
           {props.audioData.nickname || user.nickname}
         </Span>
-        {props.isNewAudio ? (
+        {props.isNewAudio && !props.isCollaboRequested ? (
           <Cancel
             onClick={() => dispatch(__removeAudio(props.index))}
             wd="1.4rem"

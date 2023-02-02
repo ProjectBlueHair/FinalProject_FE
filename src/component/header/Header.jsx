@@ -183,8 +183,19 @@ const Header = () => {
 
       <Flex justify="flex-end" gap="1.5rem">
         <Button
+          onClick={() =>
+            window.open(
+              "https://docs.google.com/forms/d/e/1FAIpQLSelo9QpMlPgcwqvHt6TLrBuoOYcXMiv30ya5R7je1WCXFLz2A/viewform"
+            )
+          }
+          style={{ cursor: "pointer", fontSize: "1.6rem" }}
+          fw="700"
+        >
+          EVENT
+        </Button>
+        <Button
           onClick={onClickGuide}
-          style={{ cursor: "pointer", fontSize:'1.6rem' }}
+          style={{ cursor: "pointer", fontSize: "1.6rem" }}
           fw="700"
         >
           GUIDE
@@ -227,7 +238,7 @@ const Header = () => {
           ) : (
             <Button
               onClick={onClickSignBtn}
-              style={{ cursor: "pointer", fontSize:'1.6rem' }}
+              style={{ cursor: "pointer", fontSize: "1.6rem" }}
               fw="700"
               fc={theme.color.main}
             >
