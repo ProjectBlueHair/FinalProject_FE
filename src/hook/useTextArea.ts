@@ -8,10 +8,12 @@ const useTextArea = (initialValue: string) => {
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setValue(e.target.value);
     };
+    
 
     return {
         value,
-        onChange: handleChange
+        onChange: handleChange,
+        setValue
     };
 };
 

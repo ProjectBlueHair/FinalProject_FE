@@ -24,8 +24,10 @@ import { CurrentMusic } from "../../model/MainModel";
 
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import { batch } from "react-redux";
+import useTypeModal from "../../modal/hooks/useTypeModal";
 const MainAudioPlayer = () => {
   const audioPlayer = useRef<AudioPlayer>(null);
+  const{$openModal} = useTypeModal()
   const { post, isPlayingMain } = useAppSelector<CurrentMusic>(
     (state) => state.main.currentMusic
   );
@@ -175,12 +177,31 @@ const MainAudioPlayer = () => {
           customControlsSection={[
             <div>
               <Img
+                onClick={()=>{
+                  $openModal({
+                    type: "alert",
+                    props: {
+                      message: "해당 기능은 준비중입니다.",
+                      type: "confirm",
+                    },
+                  });
+                }}
                 className="subIcon"
                 type="icon"
                 wd={iconSize}
                 src={shuffle}
               />
-              <Img className="subIcon" wd={iconSize} src={repeat} />
+              <Img 
+                      onClick={()=>{
+                        $openModal({
+                          type: "alert",
+                          props: {
+                            message: "해당 기능은 준비중입니다.",
+                            type: "confirm",
+                          },
+                        });
+                      }}
+              type="icon" className="subIcon" wd={iconSize} src={repeat} />
             </div>,
             RHAP_UI.VOLUME,
           ]}
