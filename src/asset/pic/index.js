@@ -55,4 +55,4 @@ export { default as skipNextVector } from "./skip-next-vector.svg";
 export { default as volumeVector } from "./volume-vector.svg";
 export { default as mute } from "./mute.svg";
 export { default as pause } from "./pause.svg";
-export { default as cancel } from "./minus.svg";
+export { default as cancel } from "./minusCircle.svg";
