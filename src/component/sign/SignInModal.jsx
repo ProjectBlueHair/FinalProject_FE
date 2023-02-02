@@ -167,7 +167,17 @@ const SignInModal = ({ onClose }) => {
             <Img cursor="pointer" wd="35rem" src={kakaoIcon} />
           </button>
           <button>
-            <Img cursor="pointer" wd="35rem" src={googleIcon} />
+            <Img 
+            onClick={()=>{
+              $openModal({
+                type: "alert",
+                props: {
+                  message: "해당 기능은 곧 준비될 예정입니다 !",
+                  type: "confirm",
+                },
+              });
+            }}
+            cursor="pointer" wd="35rem" src={googleIcon} />
           </button>
         </SocialLogin>
         <SocialLogin>

@@ -12,7 +12,6 @@ const App = () => {
   }
   return (
     <ThemeProvider theme={theme}>
-      <ErrorCheck />
       <GlobalStyle />
       <Router />
     </ThemeProvider>
