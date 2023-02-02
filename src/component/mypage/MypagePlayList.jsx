@@ -137,9 +137,20 @@ const MypagePlayList = ({ L, getArchive }) => {
           </RightProfileAndLike>
         </RightCol>
       </RightRow>
-      <HashDiv>
+      <HashDiv
+        onClick={() => {
+          $openModal({
+            type: "alert",
+            props: {
+              message: "해당 기능은 곧 준비될 예정입니다 !",
+              type: "confirm",
+            },
+          });
+        }}
+      >
         {L?.tagList?.map((tags, index) => (
-          <StLink to={`/tag/${tags}`} key={index}>
+          // <StLink to={`/tag/${tags}`} key={index}>
+          <StLink key={index}>
             <button># {tags}</button>
           </StLink>
         ))}
