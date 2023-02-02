@@ -3,7 +3,6 @@ import Flex from "../elem/Flex";
 import styled from "styled-components";
 import Img from "../elem/Img";
 import AudioPlayer, { RHAP_UI } from "react-h5-audio-player";
-import "./MainAudioPlayer.css";
 import {
   mute,
   pause,
@@ -28,22 +27,35 @@ const MainAudioPlayer = () => {
   const { post, isPlayingMain } = useAppSelector<CurrentMusic>(
     (state) => state.main.currentMusic
   );
+  console.log(
+    "current music ... post ...",
+    post,
+    "isPlayingMain .. ",
+    isPlayingMain
+  );
+
   const dispatch = useAppDispatch();
 
-  const onListenHandler = (e: Event) => {};
   const onPlayHandler = () => {
+    console.log("onPlayHandler ... ");
+
     dispatch(__PlayerTogglePlay(true));
   };
   const onPauseHandler = () => {
+    console.log("onPauseHandler ... ");
     dispatch(__PlayerTogglePlay(false));
   };
   const onClickPrevious = () => {
+    console.log("onClickPrevious ... ");
     dispatch(__PlayPrevious(post.id));
   };
   const onClickNext = () => {
+    console.log("onClickNext ... ");
     dispatch(__playNext(post.id));
   };
   useEffect(() => {
+    console.log("isplyaing main", isPlayingMain);
+
     if (isPlayingMain) {
       audioPlayer.current!.audio.current!.play();
     } else {
@@ -97,17 +109,15 @@ const MainAudioPlayer = () => {
         </Flex>
 
         {/* flex row right grid [music btns, music bar, volume control] */}
-
         <AudioPlayer
-          crossOrigin="anonymous"
-          autoPlayAfterSrcChange={false}
           src={post?.musicFile}
+          crossOrigin="anonymous"
+          autoPlayAfterSrcChange={true}
           onPlay={onPlayHandler}
           onPause={onPauseHandler}
           onClickPrevious={onClickPrevious}
           onClickNext={onClickNext}
           autoPlay={false}
-          onListen={onListenHandler}
           ref={audioPlayer}
           layout="horizontal"
           showJumpControls={false}
@@ -124,6 +134,7 @@ const MainAudioPlayer = () => {
           customIcons={{
             play: (
               <Img
+                onClick={() => console.log("PLAY btn clickd ...")}
                 className="playButton"
                 type="icon"
                 wd={iconSize}
@@ -132,6 +143,7 @@ const MainAudioPlayer = () => {
             ),
             previous: (
               <Img
+                onClick={() => console.log("PAUSE btn clickd ...")}
                 className="subIcon"
                 type="icon"
                 wd={iconSize}

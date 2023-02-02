@@ -10,16 +10,16 @@ interface TextAreaProps {
   style?: CSSProperties;
   id?: string;
   readonly?: boolean;
-  bg?:string
-  border?: string
-  radius?: string
+  bg?: string;
+  border?: string;
+  radius?: string;
   mhg?: string;
   pd?: string;
   mg?: string;
-  fs? : string
-  fc? : string
-  fw? : string
-  hg? : string
+  fs?: string;
+  fc?: string;
+  fw?: string;
+  hg?: string;
 }
 interface TextAreaContainer {
   [key: string]: StyledComponent<"textarea", any, TextAreaProps, never>;
@@ -51,9 +51,9 @@ export const StTextarea = styled.textarea.attrs({
   min-height: ${({ mhg }) => mhg || "none"};
   padding: ${({ pd }) => pd || "none"};
   margin: ${({ mg }) => mg || "none"};
-  background-color : ${(props) => props.bg || 'none'};
-  border : ${(props) => props.border || ''};
-  border-radius : ${(props) => props.radius || ''};
+  background-color: ${(props) => props.bg || "none"};
+  border: ${(props) => props.border || ""};
+  border-radius: ${(props) => props.radius || ""};
   color: ${(props) => props.theme.color.primaryText};
   &:focus {
     outline: none;

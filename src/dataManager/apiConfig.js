@@ -1,4 +1,5 @@
 import axios from "axios";
+import { reissuance } from "../util/Reissuance";
 import { getCookies, removeCookies, setCookie } from "./cookie";
 
 export const serverURL = process.env.REACT_APP_SERVER;
@@ -45,25 +46,13 @@ instanceAxios.interceptors.response.use(
       case 4015:
         if (!isTokenRefreshing) {
           isTokenRefreshing = true;
-          const RefreshToken = getCookies("refreshtoken");
-          const AccessToken = getCookies("accesstoken");
-          reassuranceAxios
-            .post(
-              "member/reissuance",
-              {},
-              {
-                headers: {
-                  AccessToken: AccessToken,
-                  RefreshToken: RefreshToken,
-                },
-              }
-            )
+          reissuance()
             .then((data) => {
               const { accesstoken, refreshtoken } = data.headers;
               if (!accesstoken || !refreshtoken) {
                 removeCookies("accesstoken", { path: "/" });
                 removeCookies("refreshtoken", { path: "/" });
-                throw new Error(
+               throw new Error(
                   "로그인이 만료되었습니다. 다시 로그인 해주세요"
                 );
               }
@@ -79,7 +68,7 @@ instanceAxios.interceptors.response.use(
             })
             .catch((err) => {
               console.log("reassuarance err", err);
-              return Promise.reject(err);
+              throw new Error("로그인이 만료되었습니다. 다시 로그인 해주세요");
             });
         }
         const retryOriginalRequest = new Promise((resolve) => {

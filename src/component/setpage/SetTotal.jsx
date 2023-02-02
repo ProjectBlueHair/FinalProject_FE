@@ -16,6 +16,7 @@ import { removeCookies, setCookie } from "../../dataManager/cookie";
 import { uploadFiles } from "../../dataManager/imageS3";
 import useTypeModal from "../../modal/hooks/useTypeModal";
 import { __getUserInfo } from "../../redux/slice/detailSlice";
+import { __getGeneralUserInfo } from "../../redux/slice/userSlice";
 import { reissuance } from "../../util/Reissuance";
 import Img from "../elem/Img";
 
@@ -383,6 +384,7 @@ const SetTotal = () => {
                   to: "/",
                 },
               });
+              dispatch(__getGeneralUserInfo());
             })
             .catch((e) => {
               throw new Error("재발행 실패");
@@ -436,6 +438,7 @@ const SetTotal = () => {
                     to: "/",
                   },
                 });
+                dispatch(__getGeneralUserInfo());
               })
               .catch((e) => {
                 throw new Error("재발행 실패");

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { batch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {
@@ -12,6 +13,7 @@ import {
 } from "../../asset/pic";
 import { serverURL } from "../../dataManager/apiConfig";
 import { getCookies, removeCookies } from "../../dataManager/cookie";
+import { useStomp } from "../../hook/useStomp";
 import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
 import useTypeModal from "../../modal/hooks/useTypeModal";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
@@ -36,6 +38,7 @@ import useModal from "../modal/useModal";
 const iconSize = "4rem";
 let eventSource = null;
 const Header = () => {
+
   const navigate = useNavigate();
   const Sign = useRef(null);
   // 토글창 상태관리
@@ -70,9 +73,14 @@ const Header = () => {
   const alarmCount = useAppSelector(alarmSelector);
 
   useEffect(() => {
-    if (!AccessToken && user.nickname) dispatch(__clearUser());
+    if (!AccessToken && user.nickname) {
+      batch(() => {
+        dispatch(__clearUser());
+        dispatch(__clearAlarmCount())
+      });
+    }
     if (AccessToken && !user.nickname) dispatch(__getGeneralUserInfo());
-    console.log('access ... ',AccessToken);
+    console.log("access ... ", AccessToken);
     // if (AccessToken === undefined) onClickLogOut();
     let readyState = localStorage.getItem("readyState");
     if (readyState === null) readyState = 2;
@@ -213,12 +221,7 @@ const Header = () => {
             >
               Login
             </Div>
-            // <Img
-            //   type="icon"
-            //   wd={iconSize}
-            //   src={account}
-            //   onClick={() => toggleMenu()}
-            // />
+
           )}
           {user.nickname ? (
             <>

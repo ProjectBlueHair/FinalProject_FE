@@ -32,7 +32,7 @@ const ChatForm = () => {
   return (
     <Flex align="flex-start" gap="1rem">
       <ChatTextArea {...messageInput} />
-      <Button onClick={handleSubmit} pd="1rem 2rem" btnType="basic">
+      <Button disabled={messageInput.value.length===0} onClick={handleSubmit} pd="1rem 2rem" btnType="basic">
         전송하기
       </Button>
     </Flex>
