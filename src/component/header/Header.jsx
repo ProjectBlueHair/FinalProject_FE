@@ -29,6 +29,7 @@ import {
 } from "../../redux/slice/userSlice";
 import { PATH } from "../../Router";
 import theme from "../../styles/theme";
+import Button from "../elem/Button";
 import Div from "../elem/Div";
 import Flex from "../elem/Flex";
 import Img from "../elem/Img";
@@ -181,14 +182,13 @@ const Header = () => {
       </Flex>
 
       <Flex justify="flex-end" gap="1.5rem">
-        <Div
+        <Button
           onClick={onClickGuide}
-          style={{ cursor: "pointer" }}
-          fs="1.6rem"
+          style={{ cursor: "pointer", fontSize:'1.6rem' }}
           fw="700"
         >
           GUIDE
-        </Div>
+        </Button>
         <Img
           onClick={() => {
             navigate(PATH.chat);
@@ -225,15 +225,14 @@ const Header = () => {
               hg="3.5rem"
             />
           ) : (
-            <Div
+            <Button
               onClick={onClickSignBtn}
-              style={{ cursor: "pointer" }}
-              fs="1.6rem"
+              style={{ cursor: "pointer", fontSize:'1.6rem' }}
               fw="700"
               fc={theme.color.main}
             >
               LOGIN
-            </Div>
+            </Button>
           )}
           {user.nickname ? (
             <ToggleTotal>

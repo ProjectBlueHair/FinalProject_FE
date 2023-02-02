@@ -17,3 +17,16 @@ export interface Props {
     type?: string;
     style? : CSSProperties
   }
+ export interface ButtonProps {
+  btnType?: string;
+  style?: CSSProperties;
+  children?: React.ReactNode;
+  disabled?: boolean;
+  mg?: string;
+  pd?: string;
+  fc?: string;
+  fs?: string;
+  fw?: string;
+  type?: "submit" | "reset" | "button" | undefined;
+  onClick?: MouseEventHandler;
+} 
