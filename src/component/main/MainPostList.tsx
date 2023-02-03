@@ -42,13 +42,9 @@ const MainPostList = () => {
   return (
     <ScrollContainer ref={scrollArea}>
       <PostListContainer>
-        {posts.length === 0 ? (
-          <ServerDown />
-        ) : (
-          posts?.map((post, index) => (
-            <MainPost key={post.id} post={post} index={index} />
-          ))
-        )}
+        {posts?.map((post, index) => (
+          <MainPost key={post.id} post={post} index={index} />
+        ))}
         <div data-name="target" ref={target}></div>
       </PostListContainer>
       {isLoading && <Loading />}
