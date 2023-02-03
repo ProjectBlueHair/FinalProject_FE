@@ -59,3 +59,15 @@ export interface ImgProps {
   className?: string
 
 }
+export interface DivProps {
+  fc?: string;
+  fs?: string;
+  fw?: string;
+  mg?: string;
+  pd?: string;
+  children?: React.ReactNode;
+  type?: string;
+  onClick?: MouseEventHandler;
+  style?: CSSProperties
+  cursor? : string
+}

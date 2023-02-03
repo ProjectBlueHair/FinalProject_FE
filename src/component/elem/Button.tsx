@@ -1,6 +1,7 @@
 import React from "react";
 import styled, { StyledComponent } from "styled-components";
 import { ButtonProps } from "../../model/StyleModel";
+import theme from "../../styles/theme";
 
 interface ButtonType {
   [key: string]: StyledComponent<"button", any, ButtonProps, never>;
@@ -10,6 +11,7 @@ const Button: React.FC<ButtonProps> = (props) => {
   const ButtonType: ButtonType = {
     pointer: CursorPointer,
     basic: BasicButton,
+    link:LinkButton
   };
 
   const Button = !props.btnType ? CursorPointer : ButtonType[props.btnType];
@@ -63,6 +65,26 @@ const BasicButton = styled(CursorPointer)`
     color: ${({ theme }) => theme.color.rgbaText1};
     background-color: ${({ theme }) => theme.color.rgbaBg1};
     cursor: default;
+  }
+  &:focus {
+    outline: none;
+  }
+`;
+
+const LinkButton = styled(CursorPointer)`
+  color: ${(props)=>props.fc || theme.color.main};
+  background-color: ${({ theme }) => theme.color.rgbaBg1};
+  padding: ${({ pd }) => pd || "1.2rem 3.5rem"};
+  border-radius: 20rem;
+
+  &:active:enabled {
+    color: #ffffff;
+    background-color: ${(props) => props.theme.color.main};
+  }
+  &:hover:enabled {
+    color: #ffffff;
+    background-color: ${({ theme }) => theme.color.main};
+    opacity: 0.9;
   }
   &:focus {
     outline: none;

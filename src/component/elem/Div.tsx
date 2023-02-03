@@ -1,17 +1,7 @@
-import { MouseEventHandler } from "react";
-import styled, { CSSProperties, StyledComponent } from "styled-components";
+import styled, { StyledComponent } from "styled-components";
+import { DivProps } from "../../model/StyleModel";
 
-interface DivProps {
-  fc?: string;
-  fs?: string;
-  fw?: string;
-  mg?: string;
-  pd?: string;
-  children?: React.ReactNode;
-  type?: string;
-  onClick?: MouseEventHandler;
-  style?: CSSProperties
-}
+
 interface DivContainer {
   [key: string]: StyledComponent<"div", any, DivProps, never>;
 }

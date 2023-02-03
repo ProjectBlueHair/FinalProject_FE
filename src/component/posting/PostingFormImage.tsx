@@ -1,20 +1,9 @@
-import React, {
-  Fragment,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
 import useTypeModal from "../../modal/hooks/useTypeModal";
 import { imgTitleBoxSize } from "../../page/PostingPage";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
-import {
-  formSelector,
-  loadingSelector,
-  __addNewAudio,
-  __form,
-} from "../../redux/slice/postingSlice";
+import { formSelector, __form } from "../../redux/slice/postingSlice";
 import theme from "../../styles/theme";
 import Div from "../elem/Div";
 import Flex, { StFlex } from "../elem/Flex";
@@ -37,7 +26,7 @@ const PostingFormImage: React.FC<{ className?: string }> = (props) => {
             cursor: "pointer",
             fontSize: "1.2rem",
           }}
-          fc={theme.color.secondaryText}
+          fc={theme.color.thirdText}
         >
           또는 클릭해서 파일 추가하기
         </Div>
@@ -55,24 +44,23 @@ const PostingFormImage: React.FC<{ className?: string }> = (props) => {
   const dispatch = useAppDispatch();
   const postImg = useAppSelector(formSelector.postImg);
   const { $openModal } = useTypeModal();
-  const isImage = (file: File) => {
-    return file.type.split("/")[0] === "image";
+  const imageTypeCheck = (file: File) => {
+    if (file.type.split("/")[0] !== "image") {
+      setText(defaultText());
+      return $openModal({
+        type: "alert",
+        props: {
+          message: "유효하지 않은 이미지 형식입니다.",
+          type: "error",
+        },
+      });
+    }
   };
-
   const handleDrop = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
     if (event.dataTransfer.files) {
-      if (!isImage(event.dataTransfer.files[0])) {
-        setText(defaultText());
-        return $openModal({
-          type: "alert",
-          props: {
-            message: "유효하지 않은 이미지 형식입니다.",
-            type: "error",
-          },
-        });
-      }
+      imageTypeCheck(event.dataTransfer.files[0]);
       dispatch(
         __form({ postImg: URL.createObjectURL(event.dataTransfer.files[0]) })
       );
@@ -82,16 +70,7 @@ const PostingFormImage: React.FC<{ className?: string }> = (props) => {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      if (!isImage(event.target.files[0])) {
-        setText(defaultText());
-        return $openModal({
-          type: "alert",
-          props: {
-            message: "유효하지 않은 이미지 형식입니다.",
-            type: "error",
-          },
-        });
-      }
+      imageTypeCheck(event.target.files[0]);
       dispatch(__form({ postImg: URL.createObjectURL(event.target.files[0]) }));
       setText(defaultText());
     }

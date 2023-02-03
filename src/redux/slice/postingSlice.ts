@@ -55,7 +55,7 @@ const initialState = {
     onLoad: false,
   },
   audio: {
-    audioData: {musicFile:''} as AudioData,
+    audioData: { musicFile: "" } as AudioData,
     isMute: false,
     isNewAudio: false,
     volume: 0.5,
@@ -78,26 +78,30 @@ export const postingSlice = createSlice({
       console.log("state.form", state.form);
     },
     __addNewAudio: (state, { payload }) => {
+      console.log('__addNewAudio ..',payload);
+      
+      const arr = [...state.audios]
       payload.forEach((musicFile: NewAudio) => {
-        state.audios.push({
+        arr.push({
           ...state.audio,
           isNewAudio: true,
           duration: musicFile.duration,
           audioData: { ...state.audio.audioData, musicFile: musicFile.url },
         });
-        const audiosCopy = [...state.audios];
-        audiosCopy.sort((a, b) => {
-          return b.duration - a.duration;
-        });
-        state.progressControl = {
-          ...state.progressControl,
-          src: audiosCopy[0].audioData.musicFile,
-          seekTo: 0,
-          onLoad: false,
-        };
 
         state.collaboRequestData.audios.push({ src: musicFile.url, part: "" });
       });
+      const audiosCopy = [...arr];
+      audiosCopy.sort((a, b) => {
+        return b.duration - a.duration;
+      });
+      state.progressControl = {
+        ...state.progressControl,
+        src: audiosCopy[0].audioData.musicFile,
+        seekTo: 0,
+        onLoad: false,
+      };
+      state.audios = arr
     },
     __removeAudio: (state, { payload }) => {
       const originalAudiosLength =
@@ -143,7 +147,7 @@ export const postingSlice = createSlice({
       state.progressControl.isPlaying = payload;
     },
     __seekTo: (state, { payload }) => {
-      state.progressControl.seekTo =payload
+      state.progressControl.seekTo = payload;
     },
     __setMute: (state, { payload }) => {
       state.audios[payload].volume = state.audios[payload].isMute

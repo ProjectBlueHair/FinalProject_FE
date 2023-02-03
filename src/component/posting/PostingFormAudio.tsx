@@ -9,7 +9,7 @@ import Flex, { StFlex } from "../elem/Flex";
 import Span from "../elem/Span";
 import { AUDIO_BAR_HEIGHT, AUDIO_BAR_RADIUS } from "./PostingAudioBars";
 
-const PostingFormAudio = () => {
+const PostingFormAudio: React.FC<{ isCollabo: boolean }> = (props) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const defaultText = () => {
     return (
@@ -25,11 +25,14 @@ const PostingFormAudio = () => {
             fontSize: "1.2rem",
             fontWeight: "400",
           }}
-          fc={theme.color.secondaryText}
+          fc={theme.color.thirdText}
         >
-          또는 클릭해서 파일 추가하기{" "}
+          또는 클릭해서 파일 추가하기
           <Span>(현재 .wav 형식만 가능합니다.)</Span>
         </Div>
+        {props.isCollabo ? (
+          <Div>업로드 후에는 원곡자의 음원 재생 길이에 맞춰집니다.</Div>
+        ) : null}
       </Flex>
     );
   };

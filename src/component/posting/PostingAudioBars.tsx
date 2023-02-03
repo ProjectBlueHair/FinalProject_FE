@@ -12,6 +12,8 @@ export const AUDIO_BAR_HEIGHT = 67;
 
 const PostingAudioBars = () => {
   const audios = useAppSelector(audiosSelector);
+  console.log('postingaudiobars .. ',audios);
+  
   const progressControl = useAppSelector(audioControlSelector);
 
   return (
