@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
 import useTypeModal from "../../modal/hooks/useTypeModal";
-import { useAppDispatch, useAppSelector } from "../../redux/config";
-import { loadingSelector, __addNewAudio } from "../../redux/slice/postingSlice";
+import { useAppDispatch } from "../../redux/config";
+import { __addNewAudio } from "../../redux/slice/postingSlice";
 import theme from "../../styles/theme";
 import Div from "../elem/Div";
 import Flex, { StFlex } from "../elem/Flex";
@@ -23,7 +23,7 @@ const PostingFormAudio = () => {
             textDecoration: "underline",
             cursor: "pointer",
             fontSize: "1.2rem",
-            fontWeight:'400'
+            fontWeight: "400",
           }}
           fc={theme.color.secondaryText}
         >
@@ -42,48 +42,57 @@ const PostingFormAudio = () => {
   };
   const [text, setText] = useState(defaultText());
   const dispatch = useAppDispatch();
-  const { $openModal, $closeModal } = useTypeModal();
-
-  const handleDrop = useCallback((event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-    if (event.dataTransfer.files) {
-      const files = event.dataTransfer.files;
-      console.log("files", files);
-      const arr = [];
-      for (let i = 0; i < files.length; i++) {
-        const type = files[i].type.split("/")[1];
-        console.log("type", type);
-
-        if (type !== "wav" && type !== "x-wav") {
-          setText(defaultText());
-          return alert("유효하지 않은 오디오 형식입니다.");
-        }
-
-        arr.push(URL.createObjectURL(files[i]));
-      }
-      dispatch(__addNewAudio(arr));
+  const { $openModal } = useTypeModal();
+  const typeCheck = (file: File) => {
+    const type = file.type.split("/")[1];
+    if (type !== "wav" && type !== "x-wav") {
       setText(defaultText());
+      return $openModal({
+        type: "alert",
+        props: {
+          message: "유효하지 않은 오디오 형식입니다.",
+          type: "error",
+        },
+      });
     }
-  }, []);
+  };
+  const getAudioData = (file: File) => {
+    return new Promise((resolve) => {
+      const url = URL.createObjectURL(file);
+      const audio = new Audio(url);
+      audio.onloadedmetadata = () => {
+        resolve({ url: url, duration: audio.duration });
+      };
+    });
+  };
+  const handleDrop = useCallback(
+    async (event: React.DragEvent<HTMLDivElement>) => {
+      event.preventDefault();
+      event.stopPropagation();
+      if (event.dataTransfer.files) {
+        const files = event.dataTransfer.files;
+        console.log("files", files);
+        const arr = [];
+        for (let i = 0; i < files.length; i++) {
+          typeCheck(files[i]);
+          arr.push(await getAudioData(files[i]));
+        }
+        dispatch(__addNewAudio(arr));
+        setText(defaultText());
+      }
+    },
+    []
+  );
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const files = event.target.files;
     if (files) {
       const arr = [];
       for (let i = 0; i < files.length; i++) {
-        const type = files[i].type.split("/")[1];
-        if (type !== "wav" && type !== "x-wav") {
-          setText(defaultText());
-          return $openModal({
-            type: "alert",
-            props: {
-              message: "유효하지 않은 오디오 형식입니다.",
-              type: "error",
-            },
-          });
-        }
-        arr.push(URL.createObjectURL(files[i]));
+        typeCheck(files[i]);
+        arr.push(await getAudioData(files[i]));
       }
       dispatch(__addNewAudio(arr));
       setText(defaultText());
@@ -95,12 +104,9 @@ const PostingFormAudio = () => {
       onDrop={handleDrop}
       onDragOver={(event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
-
         setText(alertText());
       }}
       onDragLeave={(event: React.DragEvent<HTMLDivElement>) => {
-        // event.preventDefault()
-        console.log("bye");
         setText(defaultText());
       }}
     >
