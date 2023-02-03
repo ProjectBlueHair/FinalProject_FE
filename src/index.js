@@ -15,8 +15,8 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <QueryClientProvider client={queryClient}>
     <Provider store={store}>
-      {/* <App /> */}
-      <ServerDown/>
+      <App />
+      {/* <ServerDown/> */}
       <ModalContainer />
     </Provider>
   </QueryClientProvider>
