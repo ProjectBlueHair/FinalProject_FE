@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import MainPost from "./MainPost";
-import { MainState, __getPostList } from "../../redux/slice/mainSlice";
+import ServerDown from "../../page/ServerDown";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
+import { MainState, __getPostList } from "../../redux/slice/mainSlice";
+import MainPost from "./MainPost";
 const MainPostList = () => {
   const target = useRef<HTMLDivElement>(null);
   const scrollArea = useRef(null);
@@ -41,9 +42,13 @@ const MainPostList = () => {
   return (
     <ScrollContainer ref={scrollArea}>
       <PostListContainer>
-        {posts?.map((post, index) => (
-          <MainPost key={post.id} post={post} index={index} />
-        ))}
+        {posts.length === 0 ? (
+          <ServerDown />
+        ) : (
+          posts?.map((post, index) => (
+            <MainPost key={post.id} post={post} index={index} />
+          ))
+        )}
         <div data-name="target" ref={target}></div>
       </PostListContainer>
       {isLoading && <Loading />}
