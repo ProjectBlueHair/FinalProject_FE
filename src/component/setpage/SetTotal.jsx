@@ -358,6 +358,7 @@ const SetTotal = () => {
         nickname,
         password,
       }).then((res) => {
+        console.log(res);
         res &&
           reissuance()
             .then((data) => {
@@ -381,7 +382,7 @@ const SetTotal = () => {
                 props: {
                   message: res.message,
                   type: "info",
-                  to: `/mypage/${nickname}`,
+                  to: `/mypage/${res.data}`,
                 },
               });
               dispatch(__getGeneralUserInfo());
@@ -412,6 +413,7 @@ const SetTotal = () => {
           nickname,
           password,
         }).then((res) => {
+          console.log(res);
           res &&
             reissuance()
               .then((data) => {
@@ -435,7 +437,7 @@ const SetTotal = () => {
                   props: {
                     message: res.message,
                     type: "info",
-                    to: `/mypage/${nickname}`,
+                    to: `/mypage/${res.data}`,
                   },
                 });
                 dispatch(__getGeneralUserInfo());
@@ -449,8 +451,9 @@ const SetTotal = () => {
   };
   // put 통신
   const putSave = async (put) => {
+    console.log("2", put);
     try {
-      if (put.nickname.length < 2 || put.nickname.length > 15) {
+      if (put?.nickname?.length < 2 || put?.nickname?.length > 15) {
         $openModal({
           type: "alert",
           props: {
