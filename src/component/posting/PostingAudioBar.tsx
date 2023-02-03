@@ -44,8 +44,7 @@ const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
   const wavesurfer = useRef<WaveSurfer | null>(null);
   const waveformRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
-  const playControl = useAppSelector(audioControlSelector);
-
+  
   useEffect(() => {
     const options = formWaveSurferOptions(
       waveformRef.current as HTMLDivElement
@@ -67,18 +66,18 @@ const PostingAudioBar: React.FC<Audio & { index: number } & ProgressControl> = (
   }, [props.volume]);
 
   useEffect(() => {
-    console.log("is playing", playControl.isPlaying);
+    console.log("is playing", props.isPlaying);
     console.log("wavesurfer.current", wavesurfer.current);
-    playControl.isPlaying
+    props.isPlaying
       ? wavesurfer.current?.play()
       : wavesurfer.current?.pause();
-  }, [playControl.isPlaying]);
+  }, [props.isPlaying]);
 
   useEffect(() => {
-    if (playControl.seekTo) {
-      wavesurfer.current?.setCurrentTime(playControl.seekTo);
+    if (props.seekTo) {
+      wavesurfer.current?.setCurrentTime(props.seekTo);
     }
-  }, [playControl.seekTo]);
+  }, [props.seekTo]);
   return (
     <Flex justify="flex-start" wd="98%">
       <div

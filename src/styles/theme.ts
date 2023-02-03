@@ -2,6 +2,7 @@ export const color = {
   main: "#FF4D00",
   primaryText: "#2F1B1A",
   secondaryText: "#8E8E8E",
+  thirdText: "#4C4C4C",
   primaryBg: "#FFFFFF",
   secondaryBg: "#8E8E8E",
   rgbaText1: "rgba(0, 0, 0, 0.4)",

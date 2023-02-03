@@ -1,7 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { instanceAxios } from "../../dataManager/apiConfig";
 import {
-  Audio, AudioData, CollaboAudio, CollaboReqeustedForm, CollaboRequestData, CollaboRequested, Form, ProgressControl
+  Audio,
+  AudioData,
+  CollaboAudio,
+  CollaboReqeustedForm,
+  CollaboRequestData,
+  CollaboRequested,
+  Form,
+  NewAudio,
+  ProgressControl,
 } from "../../model/PostingModel";
 import { Response } from "../../model/ResponseModel";
 import { AppState } from "../config";
@@ -16,6 +24,10 @@ export const formSelector = {
 export const audiosSelector = (state: AppState) => state.posting.audios;
 export const audioControlSelector = (state: AppState) =>
   state.posting.progressControl;
+// export const seekToSelector = (state: AppState) =>
+//   state.posting.progressControl.seekTo;
+// export const isPlayingSelector = (state: AppState) =>
+//   state.posting.progressControl.isPlaying;
 export const collaboRequestDataSelector = (state: AppState) =>
   state.posting.collaboRequestData;
 export const loadingSelector = (state: AppState) => state.posting.isLoading;
@@ -43,13 +55,14 @@ const initialState = {
     onLoad: false,
   },
   audio: {
-    audioData: { musicPart: "" } as AudioData,
+    audioData: { musicFile: "" } as AudioData,
     isMute: false,
     isNewAudio: false,
     volume: 0.5,
     isCollaboRequested: false,
     isSolo: false,
     isLoaded: false,
+    duration: 0,
   } as Audio,
   collaboRequestedForm: { title: "", explain: "" },
   collaboRequestData: { isValid: false, audios: [] as CollaboAudio[] },
@@ -65,15 +78,30 @@ export const postingSlice = createSlice({
       console.log("state.form", state.form);
     },
     __addNewAudio: (state, { payload }) => {
-      state.progressControl.src = state.progressControl.src || payload[0];
-      payload.forEach((musicFile: string) => {
-        state.audios.push({
+      console.log('__addNewAudio ..',payload);
+      
+      const arr = [...state.audios]
+      payload.forEach((musicFile: NewAudio) => {
+        arr.push({
           ...state.audio,
           isNewAudio: true,
-          audioData: { ...state.audio.audioData, musicFile: musicFile },
+          duration: musicFile.duration,
+          audioData: { ...state.audio.audioData, musicFile: musicFile.url },
         });
-        state.collaboRequestData.audios.push({ src: musicFile, part: "" });
+
+        state.collaboRequestData.audios.push({ src: musicFile.url, part: "" });
       });
+      const audiosCopy = [...arr];
+      audiosCopy.sort((a, b) => {
+        return b.duration - a.duration;
+      });
+      state.progressControl = {
+        ...state.progressControl,
+        src: audiosCopy[0].audioData.musicFile,
+        seekTo: 0,
+        onLoad: false,
+      };
+      state.audios = arr
     },
     __removeAudio: (state, { payload }) => {
       const originalAudiosLength =

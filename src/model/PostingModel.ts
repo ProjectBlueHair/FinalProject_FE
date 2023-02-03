@@ -4,7 +4,7 @@ export interface ProgressControl {
   src: string | undefined;
   onLoad : boolean
 }
-export interface Audio {
+export interface Audio { // audio control model
   audioData: AudioData;
   isMute: boolean;
   isNewAudio: boolean;
@@ -12,12 +12,16 @@ export interface Audio {
   isSolo: boolean;
   volume: number;
   isLoaded : boolean
+  duration :number
 }
-//what we receive from server
-export interface AudioData {
+export interface AudioData { //__getAudios response DTO model
   musicFile: string;
   musicPart: string;
   nickname: string;
+}
+export interface NewAudio {
+  url : string
+  duration : number
 }
 export interface Form {
   contents: string;

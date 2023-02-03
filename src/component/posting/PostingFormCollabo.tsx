@@ -22,6 +22,7 @@ import useTypeModal from "../../modal/hooks/useTypeModal";
 import Button from "../elem/Button";
 import theme from "../../styles/theme";
 import Div from "../elem/Div";
+import SupportLinks from "./SupportLinks";
 
 const PostingFormCollabo = () => {
   const { id } = useParams();
@@ -90,7 +91,7 @@ const PostingFormCollabo = () => {
   return (
     <form style={{ width: "100%" }} onSubmit={handleSubmit}>
       <Flex align="flex-start" gap="1.5rem">
-      <Flex
+        <Flex
           direction="column"
           justify="flex-start"
           wd="75%"
@@ -109,12 +110,13 @@ const PostingFormCollabo = () => {
           </Div>
         </Flex>
         <Flex
-          align="center"
-          justify="flex-end"
-          flex="1"
+          hg="100%"
+          align="flex-start"
           bg={theme.color.rgbaBg2}
           pd="1.3rem"
           radius="20px"
+          gap="2rem"
+          wd="none"
         >
           <Button
             btnType="basic"
@@ -128,38 +130,9 @@ const PostingFormCollabo = () => {
             콜라보 요청
           </Button>
         </Flex>
+        {/* <SupportLinks /> */}
       </Flex>
     </form>
-    // <form onSubmit={handleSubmit}>
-    //   <Flex gap="2.5rem" align="flex-start">
-    //     <Flex wd="100%" direction="column" gap="2rem" align="flex-start">
-    //       <label>
-    //         <div>설명</div>
-    //         <TextArea
-    //           style={{ ...formStyle, height: "15rem", width: "70rem" }}
-    //           placeholder={"describe your music\n# for hash tag (eg. #rock)"}
-    //           {...descriptionInput}
-    //         />
-    //       </label>
-    //       <Flex align="center" justify="flex-end" gap="2rem">
-    //         <Span fc="var(--ec-main-color)">
-    //           각 음원의 파트를 입력해 주세요 :)
-    //         </Span>
-    //         <TextButton
-    //           btnType="basic"
-    //           disabled={
-    //             descriptionInput.value === "" || !collaboRequestData.isValid
-    //               ? true
-    //               : false
-    //           }
-    //           type="submit"
-    //         >
-    //           콜라보요청하기
-    //         </TextButton>
-    //       </Flex>
-    //     </Flex>
-    //   </Flex>
-    // </form>
   );
 };
 

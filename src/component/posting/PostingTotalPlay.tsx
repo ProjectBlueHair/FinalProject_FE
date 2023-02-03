@@ -21,9 +21,8 @@ const PostingTotalPlay = () => {
   const progressConrol = useAppSelector(audioControlSelector);
   const [isLoading, setIsLoading] = useState(false);
   console.log("progressConrol.onLoad", progressConrol.onLoad);
-  const doNothing = () => {
-    console.log("do nothing");
-  };
+  console.log("progressConrol.onLoad", progressConrol.onLoad);
+
   useEffect(() => {
     if (!progressConrol.onLoad && !isLoading) {
       setIsLoading(true);
@@ -31,10 +30,15 @@ const PostingTotalPlay = () => {
       setIsLoading(false);
     }
   }, [progressConrol.onLoad]);
+
+
   const handlePlay = () => {
     dispatch(__togglePlay(true));
   };
   const handlePause = () => {
+    dispatch(__togglePlay(false));
+  };
+  const handleEnded = () => {
     dispatch(__togglePlay(false));
   };
   const handleSeeking = () => {
@@ -50,6 +54,7 @@ const PostingTotalPlay = () => {
             autoPlayAfterSrcChange={false}
             src={progressConrol.src}
             muted={true}
+            onEnded={handleEnded}
             // onPlay={handlePlay} // safari에서 유저 interaction으로 인식 안해서 재생 안됨. 따라서 이미지에다가 onClick이벤트에 핸들러를 넣어줌
             // onPause={handlePause}
             onSeeking={handleSeeking}
