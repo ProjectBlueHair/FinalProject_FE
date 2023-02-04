@@ -163,7 +163,7 @@ export default MypagePlayList;
 
 const MypageMusic = styled.div`
   flex-grow: 0;
-  width: 90%;
+  width: 95%;
   animation: SV;
   animation-duration: 1s;
   @keyframes SV {
@@ -193,6 +193,7 @@ const RightProfileAndLike = styled.div`
   margin-top: 5px;
   align-items: center;
 `;
+
 const RightProfile = styled.div`
   display: flex;
   img {
@@ -264,10 +265,10 @@ const RightCol = styled.div`
 `;
 
 const MoreBtn = styled.div`
-  width: 95%;
+  width: 100%;
   display: flex;
-  padding-top: 10px;
   position: relative;
+  margin-top: 5px;
   justify-content: space-between;
   img {
     width: 2rem;

@@ -135,7 +135,17 @@ export default MypagePlayList;
 const MypageMusic = styled.div`
   flex-basis: 250px;
   flex-grow: 0;
-  width: 80%;
+  width: 95%;
+  animation: SV;
+  animation-duration: 1s;
+  @keyframes SV {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
   img {
     width: 100%;
     height: 15rem;
@@ -228,6 +238,7 @@ const RightCol = styled.div`
 const MoreBtn = styled.div`
   width: 100%;
   display: flex;
+  margin-top: 5px;
   align-items: center;
   justify-content: space-between;
   img {
