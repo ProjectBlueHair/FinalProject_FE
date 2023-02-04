@@ -17,7 +17,8 @@ const SignUpModal = ({ onClose }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
-
+  const [prevNickname, setPrevNickname] = useState("");
+  const [prevEmail, setPrevEmail] = useState("");
   // 이미지 전송전 파일
   const [s3image, setS3image] = useState(null);
 
@@ -63,7 +64,7 @@ const SignUpModal = ({ onClose }) => {
     }
   };
 
-  // 이메일과 비밀번호 정규식
+  // 이메일 정규식
   const emailRegex =
     /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
   // 닉네임
@@ -76,6 +77,23 @@ const SignUpModal = ({ onClose }) => {
       setIsNickname(true);
     }
   }, []);
+
+  console.log(email);
+  console.log(isEmail);
+  console.log(onCheckEmail);
+  console.log(prevEmail);
+  useEffect(() => {
+    if (nickname !== prevNickname) {
+      setOnCheckNickname(false);
+    } else {
+      setOnCheckNickname(true);
+    }
+    if (email !== prevEmail) {
+      setOnCheckEmail(false);
+    } else {
+      setOnCheckEmail(true);
+    }
+  }, [nickname, email]);
 
   // 이메일
   const onChangeEmail = useCallback((e) => {
@@ -129,7 +147,6 @@ const SignUpModal = ({ onClose }) => {
     },
     [password]
   );
-  console.log(isPwLength && isPwNum && isPwStr && isPwSymbol);
   // 비밀번호 체크
   const onChangePasswordCheck = useCallback((e) => {
     const passwordC = e.target.value;
@@ -176,20 +193,13 @@ const SignUpModal = ({ onClose }) => {
   };
 
   const NicknameCheck = async (post) => {
+    setPrevNickname(post.nickname);
     try {
       const { data } = await instanceAxios.post(
         "member/validate/nickname",
         post
       );
-      if (data.customHttpStatus === 4092) {
-        $openModal({
-          type: "alert",
-          props: {
-            message: data.message,
-            type: "info",
-          },
-        });
-      } else if (data.customHttpStatus === 4090) {
+      if (data.customHttpStatus === (4092 || 4090)) {
         $openModal({
           type: "alert",
           props: {
@@ -220,7 +230,6 @@ const SignUpModal = ({ onClose }) => {
           type: "info",
         },
       });
-      return;
     } else if (!emailRegex.test(email)) {
       $openModal({
         type: "alert",
@@ -229,7 +238,6 @@ const SignUpModal = ({ onClose }) => {
           type: "info",
         },
       });
-      return;
     }
     emailCheck({
       email,
@@ -243,17 +251,10 @@ const SignUpModal = ({ onClose }) => {
   };
 
   const emailCheck = async (post) => {
+    setPrevEmail(post.email);
     try {
       const { data } = await instanceAxios.post("member/validate/email", post);
-      if (data.customHttpStatus === 4091) {
-        $openModal({
-          type: "alert",
-          props: {
-            message: data.message,
-            type: "info",
-          },
-        });
-      } else if (data.customHttpStatus === 4090) {
+      if (data.customHttpStatus === (4091 || 4090 || 4000)) {
         $openModal({
           type: "alert",
           props: {
@@ -311,12 +312,16 @@ const SignUpModal = ({ onClose }) => {
     });
   };
   useEffect(() => {
-    if (password === passwordCheck) {
+    if (passwordCheck === "" || null || undefined) {
+      setIsPasswordCheck(false);
+      setPwMsg("");
+    } else if (password === passwordCheck) {
       setIsPasswordCheck(true);
     } else {
       setIsPasswordCheck(false);
+      setPwMsg("비밀번호가 일치하지 않습니다!");
     }
-  }, [password, passwordCheck]);
+  }, [password, passwordCheck, isPasswordCheck, passwordCheck]);
 
   const UpHandler = (e) => {
     if (e.key === "Enter") {
@@ -339,7 +344,7 @@ const SignUpModal = ({ onClose }) => {
         </SignUpImgDiv>
         <SignUpMiddleDiv>
           <SignUpTitle>Nickname</SignUpTitle>
-          {!(onCheckNickname && isNickname) ? (
+          {(onCheckNickname && isNickname) === false ? (
             <SignUpDivBox>
               <input
                 type="text"
@@ -357,10 +362,15 @@ const SignUpModal = ({ onClose }) => {
                 onChange={onChangeNickname}
                 maxLength={15}
                 placeholder="닉네임을 입력해 주세요"
-                readOnly={nickname}
                 style={{ color: "white" }}
                 onKeyPress={UpHandler}
               />
+              <button
+                onClick={onNicknameCheck}
+                style={{ border: "1px solid white", color: "white" }}
+              >
+                중복체크
+              </button>
             </SignUpDivBox>
           )}
           <SignUpTitle>E-mail</SignUpTitle>
@@ -380,10 +390,15 @@ const SignUpModal = ({ onClose }) => {
                 type="email"
                 onChange={onChangeEmail}
                 placeholder="이메일을 입력해 주세요"
-                readOnly={email}
                 style={{ color: "white" }}
                 onKeyPress={UpHandler}
               />
+              <button
+                onClick={onEmailCheck}
+                style={{ border: "1px solid white", color: "white" }}
+              >
+                중복체크
+              </button>
             </SignUpDivBox>
           )}
 
@@ -453,13 +468,11 @@ const SignUpModal = ({ onClose }) => {
             )}
           </PasswordCheck>
           <SignUpTitle style={{ marginTop: "5px" }}>Password Check</SignUpTitle>
-          {!(
-            isPwLength &&
+          {(isPwLength &&
             isPwSymbol &&
             isPwStr &&
             isPwNum &&
-            isPasswordCheck
-          ) ? (
+            isPasswordCheck) === false ? (
             <SignUpDivBox>
               <input
                 type="password"
