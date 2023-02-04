@@ -78,10 +78,10 @@ const SignUpModal = ({ onClose }) => {
     }
   }, []);
 
-  console.log(email);
+  // console.log(email);
   console.log(isEmail);
   console.log(onCheckEmail);
-  console.log(prevEmail);
+  // console.log(prevEmail);
   useEffect(() => {
     if (nickname !== prevNickname) {
       setOnCheckNickname(false);
@@ -184,7 +184,7 @@ const SignUpModal = ({ onClose }) => {
         nickname,
       }).then((res) => {
         if (res === undefined) {
-          return setOnCheckNickname(false);
+          return;
         } else {
           return setOnCheckNickname(true);
         }
@@ -199,7 +199,17 @@ const SignUpModal = ({ onClose }) => {
         "member/validate/nickname",
         post
       );
-      if (data.customHttpStatus === (4092 || 4090)) {
+      if (data.customHttpStatus === 4092) {
+        setOnCheckNickname(false);
+        $openModal({
+          type: "alert",
+          props: {
+            message: data.message,
+            type: "info",
+          },
+        });
+      } else if (data.customHttpStatus === 4090) {
+        setOnCheckNickname(false);
         $openModal({
           type: "alert",
           props: {
@@ -230,20 +240,12 @@ const SignUpModal = ({ onClose }) => {
           type: "info",
         },
       });
-    } else if (!emailRegex.test(email)) {
-      $openModal({
-        type: "alert",
-        props: {
-          message: "올바른 이메일 형식이 아닙니다",
-          type: "info",
-        },
-      });
     }
     emailCheck({
       email,
     }).then((res) => {
       if (res === undefined) {
-        return setOnCheckEmail(false);
+        return;
       } else {
         return setOnCheckEmail(true);
       }
@@ -254,7 +256,27 @@ const SignUpModal = ({ onClose }) => {
     setPrevEmail(post.email);
     try {
       const { data } = await instanceAxios.post("member/validate/email", post);
-      if (data.customHttpStatus === (4091 || 4090 || 4000)) {
+      console.log(data);
+      if (data.customHttpStatus === 4091) {
+        setOnCheckEmail(false);
+        $openModal({
+          type: "alert",
+          props: {
+            message: data.message,
+            type: "info",
+          },
+        });
+      } else if (data.customHttpStatus === 4090) {
+        setOnCheckEmail(false);
+        $openModal({
+          type: "alert",
+          props: {
+            message: data.message,
+            type: "info",
+          },
+        });
+      } else if (data.customHttpStatus === 4000) {
+        setOnCheckEmail(false);
         $openModal({
           type: "alert",
           props: {
@@ -374,7 +396,7 @@ const SignUpModal = ({ onClose }) => {
             </SignUpDivBox>
           )}
           <SignUpTitle>E-mail</SignUpTitle>
-          {!(onCheckEmail && isEmail) ? (
+          {(onCheckEmail && isEmail) === false ? (
             <SignUpDivBox>
               <input
                 type="email"
