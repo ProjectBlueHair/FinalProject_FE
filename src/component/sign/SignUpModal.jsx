@@ -193,7 +193,6 @@ const SignUpModal = ({ onClose }) => {
   };
 
   const NicknameCheck = async (post) => {
-    setPrevNickname(post.nickname);
     try {
       const { data } = await instanceAxios.post(
         "member/validate/nickname",
@@ -218,6 +217,7 @@ const SignUpModal = ({ onClose }) => {
           },
         });
       } else {
+        setPrevNickname(post.nickname);
         $openModal({
           type: "alert",
           props: {
@@ -253,10 +253,8 @@ const SignUpModal = ({ onClose }) => {
   };
 
   const emailCheck = async (post) => {
-    setPrevEmail(post.email);
     try {
       const { data } = await instanceAxios.post("member/validate/email", post);
-      console.log(data);
       if (data.customHttpStatus === 4091) {
         setOnCheckEmail(false);
         $openModal({
@@ -285,6 +283,7 @@ const SignUpModal = ({ onClose }) => {
           },
         });
       } else {
+        setPrevEmail(post.email);
         $openModal({
           type: "alert",
           props: {
