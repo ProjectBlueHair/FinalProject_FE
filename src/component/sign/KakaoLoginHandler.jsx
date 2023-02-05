@@ -17,7 +17,6 @@ const KakaoLoginHandler = () => {
         path: "/",
         maxAge: 1800,
       });
-      alert("로그인 성공");
       navigate("/");
     } else {
       alert("로그인 실패");

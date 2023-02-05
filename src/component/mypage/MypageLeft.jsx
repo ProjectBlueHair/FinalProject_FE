@@ -44,7 +44,7 @@ const MypageLeft = () => {
   };
   useEffect(() => {
     mySetInformation();
-  }, []);
+  }, [nickname]);
   const [information, setInformation] = useState();
   const acToken = getCookies("accesstoken");
   const myFollowingMemberNickname = information?.nickname;
@@ -196,7 +196,7 @@ const MypageLeft = () => {
           </ShareDiv>
         </MypageBtn>
 
-        <div style={{ marginTop: "1rem" }}>{information?.email}</div>
+        {/* <div style={{ marginTop: "1rem" }}>{information?.email}</div> */}
         <RowView style={{ marginTop: "2rem" }}>
           <button
             onClick={() => {
@@ -278,7 +278,7 @@ const MypageLeftDiv = styled.div`
   margin: 0 1rem;
   padding-top: 5rem;
   width: 90%;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   display: flex;
   flex-direction: column;
