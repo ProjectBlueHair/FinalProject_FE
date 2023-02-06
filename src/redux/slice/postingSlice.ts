@@ -23,6 +23,8 @@ export const formSelector = {
 };
 export const audioControlSelector = (state: AppState) =>
   state.posting.progressControl;
+export const totalPlayHandleSelector = (state: AppState) =>
+  state.posting.progressControl.totalPlayHandle;
 export const audiosSelector = (state: AppState) => state.posting.audios;
 export const postingErrorSelector = (state: AppState) => state.posting.error;
 export const collaboRequestDataSelector = (state: AppState) =>
@@ -51,6 +53,7 @@ const initialState = {
     seekTo: 0,
     src: undefined,
     onLoad: false,
+    totalPlayHandle: { play: false, seekTo: 0 },
   },
   audio: {
     audioData: { musicFile: "" } as AudioData,
@@ -94,20 +97,11 @@ export const postingSlice = createSlice({
         onLoad: false,
         isPlaying: false,
       };
+      state.progressControl.totalPlayHandle = { play: false, seekTo: 0 };
     },
     __removeAudio: (state, { payload }) => {
       const originalAudiosLength =
         state.audios.length - state.collaboRequestData.audios.length;
-      console.log(
-        "...removeAudio .. originalAudiosLength",
-        originalAudiosLength
-      );
-      console.log("...removeAudio .. payload", payload);
-      console.log(
-        "...removeAudio .. payload - originalAudiosLength",
-        payload - originalAudiosLength
-      );
-
       state.audios.splice(payload, 1);
       state.collaboRequestData.audios.splice(payload - originalAudiosLength, 1);
       state.progressControl.src =
@@ -140,6 +134,13 @@ export const postingSlice = createSlice({
     },
     __seekTo: (state, { payload }) => {
       state.progressControl.seekTo = payload;
+    },
+    __endPlay: (state) => {
+      state.progressControl = {
+        ...state.progressControl,
+        isPlaying: false,
+        seekTo: 0,
+      };
     },
     __setMute: (state, { payload }) => {
       state.audios[payload].volume = state.audios[payload].isMute
@@ -296,6 +297,7 @@ export const {
   __setCollaboPart,
   __audioOnLoaded,
   __form,
+  __endPlay,
   __removeAudio,
 } = postingSlice.actions;
 export default postingSlice.reducer;

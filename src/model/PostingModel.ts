@@ -2,26 +2,29 @@ export interface ProgressControl {
   isPlaying: boolean;
   seekTo: number;
   src: string | undefined;
-  onLoad : boolean
+  onLoad: boolean;
+  totalPlayHandle: { play: boolean; seekTo: number };
 }
-export interface Audio { // audio control model
+export interface Audio {
+  // audio control model
   audioData: AudioData;
   isMute: boolean;
   isNewAudio: boolean;
-  isCollaboRequested? : boolean
+  isCollaboRequested?: boolean;
   isSolo: boolean;
   volume: number;
-  isLoaded : boolean
-  duration :number
+  isLoaded: boolean;
+  duration: number;
 }
-export interface AudioData { //__getAudios response DTO model
+export interface AudioData {
+  //__getAudios response DTO model
   musicFile: string;
   musicPart: string;
   nickname: string;
 }
 export interface NewAudio {
-  url : string
-  duration : number
+  url: string;
+  duration: number;
 }
 export interface Form {
   contents: string;
@@ -30,8 +33,8 @@ export interface Form {
   title: string;
 }
 export interface NewPostForm {
-  requestCollaboRequestDto : CollaboForm
-  requestPostDto : Form
+  requestCollaboRequestDto: CollaboForm;
+  requestPostDto: Form;
 }
 export interface CollaboForm {
   contents: string;

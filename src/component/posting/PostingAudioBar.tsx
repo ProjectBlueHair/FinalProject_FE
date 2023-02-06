@@ -8,17 +8,20 @@ import WaveSurfer from "wavesurfer.js";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import Flex from "../elem/Flex";
 import { AUDIO_BAR_HEIGHT } from "./PostingAudioBars";
+import { log } from "console";
 
 const PostingAudioBar: React.FC<Audio & { index: number }> = (props) => {
   const formWaveSurferOptions = (ref: HTMLDivElement) => ({
     // 재생 속도
     audioRate: 1,
+
     // 바 가로 길이
     barWidth: 3,
     // 웨이브 높이
     height: AUDIO_BAR_HEIGHT - 5,
     // ref css요소같은거 연동? 해줌
     container: ref,
+
     // 커서 줄색상 (없애는게 좋아보임)
     cursorColor: "transparent",
     // 실행된 부분 색상
@@ -56,7 +59,9 @@ const PostingAudioBar: React.FC<Audio & { index: number }> = (props) => {
         wavesurfer.current.setVolume(props.volume);
       }
     });
-
+    wavesurfer.current.on("finish", function () {
+      wavesurfer.current?.play(0);
+    });
     return () => wavesurfer.current?.destroy();
   }, [props.audioData.musicFile]);
 
@@ -72,6 +77,7 @@ const PostingAudioBar: React.FC<Audio & { index: number }> = (props) => {
 
   useEffect(() => {
     const duration = wavesurfer.current?.getDuration();
+
     wavesurfer.current?.setCurrentTime(
       duration ? progressControl.seekTo % duration : progressControl.seekTo
     );
