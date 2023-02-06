@@ -50,8 +50,7 @@ export const mainSlice = createSlice({
       state.currentMusic = {
         ...state.currentMusic,
         post: state.posts[index],
-        isPlayingMain: false,
-        isPlayingPlayer: false,
+        isPlayingMain: true,
       };
     },
     __playNext: (state, action) => {
@@ -62,8 +61,7 @@ export const mainSlice = createSlice({
         state.currentMusic = {
           ...state.currentMusic,
           post: state.posts[index + 1],
-          isPlayingMain: false,
-          isPlayingPlayer: false,
+          isPlayingMain: true,
         };
       }
     },
@@ -79,8 +77,7 @@ export const mainSlice = createSlice({
         state.currentMusic = {
           ...state.currentMusic,
           post: state.posts[index - 1],
-          isPlayingMain: false,
-          isPlayingPlayer: false,
+          isPlayingMain: true,
         };
       }
     },

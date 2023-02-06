@@ -3,34 +3,31 @@ import { batch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {
-  account,
   follows,
   mainLogo,
   message,
   notifications,
   search,
-  upload,
+  upload
 } from "../../asset/pic";
 import { serverURL } from "../../dataManager/apiConfig";
 import { getCookies, removeCookies } from "../../dataManager/cookie";
-import { useStomp } from "../../hook/useStomp";
 import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
 import useTypeModal from "../../modal/hooks/useTypeModal";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
   alarmSelector,
   __clearAlarmCount,
-  __getAlarm,
+  __getAlarm
 } from "../../redux/slice/mainSlice";
 import {
   userSelector,
   __clearUser,
-  __getGeneralUserInfo,
+  __getGeneralUserInfo
 } from "../../redux/slice/userSlice";
 import { PATH } from "../../Router";
 import theme from "../../styles/theme";
 import Button from "../elem/Button";
-import Div from "../elem/Div";
 import Flex from "../elem/Flex";
 import Img from "../elem/Img";
 import Input from "../elem/Input";
@@ -75,11 +72,6 @@ const Header = () => {
     let readyState = localStorage.getItem("readyState");
     if (readyState === null) readyState = 2;
     const isConnecting = Number(readyState) === 1 || Number(readyState) === 0;
-
-    console.log(
-      "AccessToken && user.nickname && !isConnecting",
-      AccessToken && user.nickname && !isConnecting
-    );
     if (AccessToken && user.nickname && !isConnecting) {
       eventSource = new EventSource(`${serverURL}/subscribe/${user.nickname}`, {
         withCredentials: true,
@@ -88,7 +80,6 @@ const Header = () => {
     }
     if (eventSource) {
       eventSource.onopen = () => {
-        console.log("on open ... ready state", eventSource.readyState);
         localStorage.setItem("readyState", eventSource.readyState);
       };
       eventSource.onmessage = (event) => {
@@ -96,18 +87,12 @@ const Header = () => {
       };
       eventSource.onerror = (e) => {
         eventSource.close();
-        console.log("on error ... error message", e);
-        console.log("on error ... readystate", eventSource.readyState);
         eventSource = new EventSource(
           `${serverURL}/subscribe/${user.nickname}`,
           {
             withCredentials: true,
             connection: "keep-alive",
           }
-        );
-        console.log(
-          "on error ... after reconnect readystate",
-          eventSource.readyState
         );
         localStorage.setItem("readyState", eventSource.readyState);
       };
@@ -123,9 +108,7 @@ const Header = () => {
     if (AccessToken && !user.nickname) dispatch(__getGeneralUserInfo());
     connectEvent();
     return () => {
-      console.log("unmounting ... eventsource : ", eventSource);
       eventSource?.close();
-      console.log("unmounting ... readystate", eventSource?.readyState);
       localStorage.setItem("readyState", 2);
     };
   }, [user.nickname, AccessToken]);
