@@ -1,3 +1,4 @@
+import { log } from "console";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import ServerDown from "../../page/ServerDown";
@@ -17,7 +18,7 @@ const MainPostList = () => {
 
   let options = {
     root: scrollArea.current,
-    rootMargin: "20px",
+    rootMargin: "0px",
     threshold: 1,
   };
 
@@ -30,6 +31,7 @@ const MainPostList = () => {
   const callback: IntersectionObserverCallback = (entries, io) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
+        console.log("triggered....");
         setTrigger((prev) => !prev);
       }
     });
