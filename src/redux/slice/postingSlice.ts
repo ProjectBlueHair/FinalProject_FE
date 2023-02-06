@@ -21,19 +21,17 @@ export const formSelector = {
   contents: (state: AppState) => state.posting.form.contents,
   form: (state: AppState) => state.posting.form,
 };
-export const audiosSelector = (state: AppState) => state.posting.audios;
 export const audioControlSelector = (state: AppState) =>
   state.posting.progressControl;
-// export const seekToSelector = (state: AppState) =>
-//   state.posting.progressControl.seekTo;
-// export const isPlayingSelector = (state: AppState) =>
-//   state.posting.progressControl.isPlaying;
+export const totalPlayHandleSelector = (state: AppState) =>
+  state.posting.progressControl.totalPlayHandle;
+export const audiosSelector = (state: AppState) => state.posting.audios;
+export const postingErrorSelector = (state: AppState) => state.posting.error;
 export const collaboRequestDataSelector = (state: AppState) =>
   state.posting.collaboRequestData;
-export const loadingSelector = (state: AppState) => state.posting.isLoading;
-export const postingErrorSelector = (state: AppState) => state.posting.error;
 export const CollaboRequestedFormSelector = (state: AppState) =>
   state.posting.collaboRequestedForm;
+export const loadingSelector = (state: AppState) => state.posting.isLoading;
 export interface PostingState {
   form: Form;
   collaboRequestedForm: CollaboReqeustedForm; // 콜라보 승인 컴포넌트
@@ -48,14 +46,15 @@ export interface PostingState {
 const initialState = {
   form: { contents: "", collaboNotice: "", postImg: "", title: "" },
   audios: [] as Audio[],
+  collaboRequestedForm: { title: "", explain: "" },
+  collaboRequestData: { isValid: false, audios: [] as CollaboAudio[] },
   progressControl: {
     isPlaying: false,
     seekTo: 0,
     src: undefined,
     onLoad: false,
+    totalPlayHandle: { play: false, seekTo: 0 },
   },
-  collaboRequestedForm: { title: "", explain: "" },
-  collaboRequestData: { isValid: false, audios: [] as CollaboAudio[] },
   audio: {
     audioData: { musicFile: "" } as AudioData,
     isMute: false,
@@ -77,9 +76,9 @@ export const postingSlice = createSlice({
       state.form = { ...state.form, ...payload };
     },
     __addNewAudio: (state, { payload }) => {
-      const arr = [...state.audios];
+      console.log("__addNewAudio");
       payload.forEach((musicFile: NewAudio) => {
-        arr.push({
+        state.audios.push({
           ...state.audio,
           isNewAudio: true,
           duration: musicFile.duration,
@@ -87,7 +86,7 @@ export const postingSlice = createSlice({
         });
         state.collaboRequestData.audios.push({ src: musicFile.url, part: "" });
       });
-      const audiosCopy = [...arr];
+      const audiosCopy = [...state.audios];
       audiosCopy.sort((a, b) => {
         return b.duration - a.duration;
       });
@@ -96,22 +95,13 @@ export const postingSlice = createSlice({
         src: audiosCopy[0].audioData.musicFile,
         seekTo: 0,
         onLoad: false,
+        isPlaying: false,
       };
-      state.audios = arr;
+      state.progressControl.totalPlayHandle = { play: false, seekTo: 0 };
     },
     __removeAudio: (state, { payload }) => {
       const originalAudiosLength =
         state.audios.length - state.collaboRequestData.audios.length;
-      console.log(
-        "...removeAudio .. originalAudiosLength",
-        originalAudiosLength
-      );
-      console.log("...removeAudio .. payload", payload);
-      console.log(
-        "...removeAudio .. payload - originalAudiosLength",
-        payload - originalAudiosLength
-      );
-
       state.audios.splice(payload, 1);
       state.collaboRequestData.audios.splice(payload - originalAudiosLength, 1);
       state.progressControl.src =
@@ -144,6 +134,13 @@ export const postingSlice = createSlice({
     },
     __seekTo: (state, { payload }) => {
       state.progressControl.seekTo = payload;
+    },
+    __endPlay: (state) => {
+      state.progressControl = {
+        ...state.progressControl,
+        isPlaying: false,
+        seekTo: 0,
+      };
     },
     __setMute: (state, { payload }) => {
       state.audios[payload].volume = state.audios[payload].isMute
@@ -300,6 +297,7 @@ export const {
   __setCollaboPart,
   __audioOnLoaded,
   __form,
+  __endPlay,
   __removeAudio,
 } = postingSlice.actions;
 export default postingSlice.reducer;

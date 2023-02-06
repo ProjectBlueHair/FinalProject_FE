@@ -93,7 +93,7 @@ export const Loading = styled.div`
 
   &:after {
     content: " ";
-    display: block;
+    display: block; 
     width: 64px;
     height: 64px;
     margin: 8px;
