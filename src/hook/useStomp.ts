@@ -16,7 +16,7 @@ let isConnected = false;
 const subscriptions: { [key: string]: StompSubscription } = {};
 
 export const useStomp = (config?: StompConfig, callback?: () => void) => {
-const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const connect = useCallback(() => {
     if (!stompClient) {
       const socket = new SockJS(`${socketURL}/ws/chat`);
@@ -28,7 +28,7 @@ const dispatch = useAppDispatch()
     stompClient.onConnect = (frame) => {
       console.log("useStomp ... onConnect", frame);
       isConnected = true;
-      dispatch(__stompConnected(true))
+      dispatch(__stompConnected(true));
       callback && callback();
     };
   }, []);
@@ -68,10 +68,9 @@ const dispatch = useAppDispatch()
   }, []);
 
   const disconnect = useCallback(() => {
-    console.log('disconnect...');
+    console.log("disconnect...");
     stompClient.deactivate();
-    dispatch(__stompConnected(false))
-
+    dispatch(__stompConnected(false));
   }, [stompClient]);
 
   useEffect(() => {

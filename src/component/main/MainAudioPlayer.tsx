@@ -1,8 +1,6 @@
-import React, { useEffect, useRef } from "react";
-import Flex from "../elem/Flex";
-import styled from "styled-components";
-import Img from "../elem/Img";
+import { useEffect, useRef } from "react";
 import AudioPlayer, { RHAP_UI } from "react-h5-audio-player";
+import styled from "styled-components";
 import {
   mute,
   pause,
@@ -13,41 +11,32 @@ import {
   skipPrev,
   volume,
 } from "../../asset/pic";
-import { iconSize } from "../../styles/GlobalStyle";
+import { CurrentMusic } from "../../model/MainModel";
 import {
   __MainTogglePlay,
   __PlayerTogglePlay,
   __playNext,
   __PlayPrevious,
 } from "../../redux/slice/mainSlice";
-import { CurrentMusic } from "../../model/MainModel";
+import { iconSize } from "../../styles/GlobalStyle";
+import Flex from "../elem/Flex";
+import Img from "../elem/Img";
 
-import { useAppDispatch, useAppSelector } from "../../redux/config";
-import { batch } from "react-redux";
 import useTypeModal from "../../modal/hooks/useTypeModal";
+import { useAppDispatch, useAppSelector } from "../../redux/config";
 const MainAudioPlayer = () => {
   const audioPlayer = useRef<AudioPlayer>(null);
-  const{$openModal} = useTypeModal()
+  const { $openModal } = useTypeModal();
   const { post, isPlayingMain } = useAppSelector<CurrentMusic>(
     (state) => state.main.currentMusic
   );
-  console.log(
-    "current music ... post ...",
-    post,
-    "isPlayingMain .. ",
-    isPlayingMain
-  );
   const dispatch = useAppDispatch();
-  useEffect(() => {
-    return () => {
-      dispatch(__PlayerTogglePlay(false));
-      dispatch(__MainTogglePlay(false));
-    };
-  }, []);
   const onPlayHandler = () => {
     console.log("onPlayHandler ... ");
-    console.log("onPlayHandler paused..?", audioPlayer.current!.audio.current!.paused);
-
+    console.log(
+      "onPlayHandler paused..?",
+      audioPlayer.current!.audio.current!.paused
+    );
     dispatch(__PlayerTogglePlay(true));
   };
   const onPauseHandler = () => {
@@ -63,17 +52,13 @@ const MainAudioPlayer = () => {
     dispatch(__playNext(post.id));
   };
   useEffect(() => {
-    console.log("isplyaing main currentmusic useEffect paused..?", audioPlayer.current!.audio.current!.paused);
-    if (!audioPlayer.current!.audio.current!.paused) {
-      audioPlayer.current!.audio.current!.pause();
-    }
+    console.log("isplyaing main currentmusic useEffect paused..?");
     if (isPlayingMain) {
       audioPlayer.current!.audio.current!.play();
     } else {
       audioPlayer.current!.audio.current!.pause();
     }
   }, [isPlayingMain]);
-
 
   return (
     // musicbar wrap
@@ -177,7 +162,7 @@ const MainAudioPlayer = () => {
           customControlsSection={[
             <div>
               <Img
-                onClick={()=>{
+                onClick={() => {
                   $openModal({
                     type: "alert",
                     props: {
@@ -191,17 +176,21 @@ const MainAudioPlayer = () => {
                 wd={iconSize}
                 src={shuffle}
               />
-              <Img 
-                      onClick={()=>{
-                        $openModal({
-                          type: "alert",
-                          props: {
-                            message: "해당 기능은 준비중입니다.",
-                            type: "confirm",
-                          },
-                        });
-                      }}
-              type="icon" className="subIcon" wd={iconSize} src={repeat} />
+              <Img
+                onClick={() => {
+                  $openModal({
+                    type: "alert",
+                    props: {
+                      message: "해당 기능은 준비중입니다.",
+                      type: "confirm",
+                    },
+                  });
+                }}
+                type="icon"
+                className="subIcon"
+                wd={iconSize}
+                src={repeat}
+              />
             </div>,
             RHAP_UI.VOLUME,
           ]}
