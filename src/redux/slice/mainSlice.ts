@@ -137,7 +137,7 @@ export const __getPostList = createAsyncThunk(
   async (payload: number, thunkAPI) => {
     try {
       console.log("payload,,,", payload);
-      const { data } = await instanceAxios.get(`/post?page=${Number(payload)}&size=10`);
+      const { data } = await instanceAxios.get(`/post?page=${Number(payload)}&size=15`);
       return data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);

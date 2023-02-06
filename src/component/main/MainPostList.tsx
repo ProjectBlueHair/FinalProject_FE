@@ -18,7 +18,7 @@ const MainPostList = () => {
 
   let options = {
     root: scrollArea.current,
-    rootMargin: "230px",
+    rootMargin: "30px",
     threshold: 1,
   };
 
@@ -93,7 +93,7 @@ export const Loading = styled.div`
 
   &:after {
     content: " ";
-    display: block; 
+    display: block;
     width: 64px;
     height: 64px;
     margin: 8px;
