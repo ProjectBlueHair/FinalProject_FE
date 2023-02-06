@@ -49,47 +49,27 @@ export const mainSlice = createSlice({
     },
     __playDifferentSrc: (state, action) => {
       const index = findPostIndex(state.posts, action.payload);
-      console.log(
-        "__playDifferentSrc ... index",
-        index,
-        "postid ...",
-        action.payload
-      );
-      console.log("index", index);
       state.currentMusic = {
         ...state.currentMusic,
         post: state.posts[index],
         isPlayingMain: true,
-        // isPlayingPlayer: false,
       };
     },
     __playNext: (state, action) => {
       const index = findPostIndex(state.posts, action.payload);
-      console.log("__playNext ...", state.currentMusic.isPlayingPlayer);
-
       if (index !== state.posts.length - 1) {
         state.currentMusic = {
           ...state.currentMusic,
           post: state.posts[index + 1],
-          // isPlayingMain: state.currentMusic.isPlayingMain,
-          // isPlayingPlayer: false,
         };
       }
     },
     __PlayPrevious: (state, action) => {
       const index = findPostIndex(state.posts, action.payload);
-      console.log(
-        "__PlayPrevious ... index",
-        index,
-        "postid ...",
-        action.payload
-      );
       if (index !== 0) {
         state.currentMusic = {
           ...state.currentMusic,
           post: state.posts[index - 1],
-          // isPlayingMain: state.currentMusic.isPlayingMain,
-          // isPlayingPlayer: false,
         };
       }
     },
@@ -103,9 +83,16 @@ export const mainSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(__getPostList.pending, (state) => {
-        state.isLoading = state.currentMusic.isPlayingMain;
+        state.isLoading =true
       })
       .addCase(__getPostList.fulfilled, (state, { payload }) => {
+        console.log(
+          "_getpostlist ...",
+          payload,
+          "nextpage ... ",
+          state.nextPage
+        );
+
         state.isLoading = false;
         if (state.nextPage === 0) {
           state.currentMusic = {
@@ -149,7 +136,8 @@ export const __getPostList = createAsyncThunk(
   "__getPostList",
   async (payload: number, thunkAPI) => {
     try {
-      const { data } = await instanceAxios.get(`/post?page=${Number(payload)}`);
+      console.log("payload,,,", payload);
+      const { data } = await instanceAxios.get(`/post?page=${Number(payload)}&size=10`);
       return data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);

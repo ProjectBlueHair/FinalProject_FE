@@ -54,6 +54,8 @@ const initialState = {
     src: undefined,
     onLoad: false,
   },
+  collaboRequestedForm: { title: "", explain: "" },
+  collaboRequestData: { isValid: false, audios: [] as CollaboAudio[] },
   audio: {
     audioData: { musicFile: "" } as AudioData,
     isMute: false,
@@ -64,8 +66,6 @@ const initialState = {
     isLoaded: false,
     duration: 0,
   } as Audio,
-  collaboRequestedForm: { title: "", explain: "" },
-  collaboRequestData: { isValid: false, audios: [] as CollaboAudio[] },
   isLoading: false,
   error: null,
 } as PostingState;
@@ -75,12 +75,9 @@ export const postingSlice = createSlice({
   reducers: {
     __form: (state, { payload }) => {
       state.form = { ...state.form, ...payload };
-      console.log("state.form", state.form);
     },
     __addNewAudio: (state, { payload }) => {
-      console.log('__addNewAudio ..',payload);
-      
-      const arr = [...state.audios]
+      const arr = [...state.audios];
       payload.forEach((musicFile: NewAudio) => {
         arr.push({
           ...state.audio,
@@ -88,7 +85,6 @@ export const postingSlice = createSlice({
           duration: musicFile.duration,
           audioData: { ...state.audio.audioData, musicFile: musicFile.url },
         });
-
         state.collaboRequestData.audios.push({ src: musicFile.url, part: "" });
       });
       const audiosCopy = [...arr];
@@ -101,7 +97,7 @@ export const postingSlice = createSlice({
         seekTo: 0,
         onLoad: false,
       };
-      state.audios = arr
+      state.audios = arr;
     },
     __removeAudio: (state, { payload }) => {
       const originalAudiosLength =
