@@ -48,7 +48,6 @@ const MainAudioPlayer = () => {
     dispatch(__playNext(currentmusic.post.id));
   };
   useEffect(() => {
-    console.log("isplyaing main currentmusic useEffect paused..?");
     if (currentmusic.isPlayingMain) {
       audioPlayer.current!.audio.current!.play();
     } else {

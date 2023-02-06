@@ -14,7 +14,7 @@ const PostingAudioBars = () => {
   const audios = useAppSelector(audiosSelector);
   console.log('postingaudiobars .. ',audios);
   
-  const progressControl = useAppSelector(audioControlSelector);
+  // const progressControl = useAppSelector(audioControlSelector);
 
   return (
     <Flex direction="column" gap={AUDIO_BAR_GAP}>
@@ -28,7 +28,7 @@ const PostingAudioBars = () => {
         >
           <PostingAudioControlBox index={index} {...audio} />
           <Flex type="audioBarRight">
-            <PostingAudioBar {...audio} {...progressControl} index={index} />
+            <PostingAudioBar {...audio}  index={index} />
           </Flex>
         </Flex>
       ))}

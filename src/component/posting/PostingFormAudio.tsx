@@ -59,7 +59,7 @@ const PostingFormAudio: React.FC<{ isCollabo: boolean }> = (props) => {
       });
     }
   };
-  const getAudioData = (file: File) => {
+  const getInputAudioData = (file: File) => {
     return new Promise((resolve) => {
       const url = URL.createObjectURL(file);
       const audio = new Audio(url);
@@ -78,7 +78,7 @@ const PostingFormAudio: React.FC<{ isCollabo: boolean }> = (props) => {
         const arr = [];
         for (let i = 0; i < files.length; i++) {
           typeCheck(files[i]);
-          arr.push(await getAudioData(files[i]));
+          arr.push(await getInputAudioData(files[i]));
         }
         dispatch(__addNewAudio(arr));
         setText(defaultText());
@@ -95,7 +95,7 @@ const PostingFormAudio: React.FC<{ isCollabo: boolean }> = (props) => {
       const arr = [];
       for (let i = 0; i < files.length; i++) {
         typeCheck(files[i]);
-        arr.push(await getAudioData(files[i]));
+        arr.push(await getInputAudioData(files[i]));
       }
       dispatch(__addNewAudio(arr));
       setText(defaultText());

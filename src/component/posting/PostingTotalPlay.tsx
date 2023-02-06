@@ -21,7 +21,6 @@ const PostingTotalPlay = () => {
   const progressConrol = useAppSelector(audioControlSelector);
   const [isLoading, setIsLoading] = useState(false);
   console.log("progressConrol.onLoad", progressConrol.onLoad);
-  console.log("progressConrol.onLoad", progressConrol.onLoad);
 
   useEffect(() => {
     if (!progressConrol.onLoad && !isLoading) {

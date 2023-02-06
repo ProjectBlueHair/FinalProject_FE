@@ -77,9 +77,9 @@ export const postingSlice = createSlice({
       state.form = { ...state.form, ...payload };
     },
     __addNewAudio: (state, { payload }) => {
-      const arr = [...state.audios];
+      console.log('__addNewAudio');
       payload.forEach((musicFile: NewAudio) => {
-        arr.push({
+        state.audios.push({
           ...state.audio,
           isNewAudio: true,
           duration: musicFile.duration,
@@ -87,7 +87,7 @@ export const postingSlice = createSlice({
         });
         state.collaboRequestData.audios.push({ src: musicFile.url, part: "" });
       });
-      const audiosCopy = [...arr];
+      const audiosCopy = [...state.audios];
       audiosCopy.sort((a, b) => {
         return b.duration - a.duration;
       });
@@ -96,8 +96,8 @@ export const postingSlice = createSlice({
         src: audiosCopy[0].audioData.musicFile,
         seekTo: 0,
         onLoad: false,
+        isPlaying: false,
       };
-      state.audios = arr;
     },
     __removeAudio: (state, { payload }) => {
       const originalAudiosLength =
