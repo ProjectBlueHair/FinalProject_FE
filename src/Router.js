@@ -24,6 +24,7 @@ export const PATH = {
   collaboRequested: "/collaboRequested",
   chat: "/chat",
   feedback: "/feedback",
+  mypage: "/mypage",
 };
 
 const Router = () => {
@@ -34,7 +35,7 @@ const Router = () => {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/detail/:id" element={<Detail />} />
-          <Route path="/mypage/:nickname" element={<MyPage />} />
+          <Route path={`${PATH.mypage}/:nickname`} element={<MyPage />} />
           <Route path="/setpage" element={<SetPage />} />
           <Route path={`${PATH.tag}/:tag`} element={<Tag />} />
           <Route path={"/posttest"} element={<PostingPage />} />

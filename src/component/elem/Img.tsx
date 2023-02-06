@@ -1,32 +1,7 @@
 import React from "react";
-import styled, { css, StyledComponent } from "styled-components";
-interface ImgProps {
-  wd?: string;
-  hg?: string;
-  mhg?: string;
-  pd?: string;
-  mg?: string | number;
-  overFlow?: string;
-  bg?: string;
-  shadow?: string;
-  radius?: string;
-  border?: string;
-  borderBottom?: string;
-  borderTop?: string;
-  borderRight?: string;
-  borderLeft?: string;
-  type?: string;
-  z?:string | number;
-  cursor?:string
-  id?:string;
-  filter? : string
-  src?:any;
-  onClick?:any
-  key?: string | number
-  children?: React.ReactNode;
-  className?: string
+import styled, { StyledComponent } from "styled-components";
+import { ImgProps } from "../../model/StyleModel";
 
-}
 interface ImgWrapper {
   [key: string]: StyledComponent<"img", any, ImgProps, never> | StyledComponent<"div", any, ImgProps, never> ;
 }

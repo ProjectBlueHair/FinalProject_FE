@@ -31,7 +31,7 @@ const DetailDeleteAndUpdate = ({ mcv }) => {
   // 유저 정보
   useEffect(() => {
     dispatch(__getUserInfo());
-  }, []);
+  }, [id]);
   const userInformation = useSelector((state) => state.detail.userInfo.data);
 
   // 수정

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { KeyboardEventHandler, useState } from "react";
 import styled from "styled-components";
 import { useStomp } from "../../hook/useStomp";
 import useTextArea from "../../hook/useTextArea";
@@ -13,6 +13,7 @@ import {
   serverURL,
   socketURL,
 } from "../../dataManager/apiConfig";
+import { keyboardKey } from "@testing-library/user-event";
 
 const ChatForm = () => {
   const user = useAppSelector(userSelector);
@@ -28,11 +29,27 @@ const ChatForm = () => {
       time: "",
       date: "",
     });
+    messageInput.setValue('')
+  };
+  const keyDownHandler = (event: React.KeyboardEvent<Element>) => {
+
+    if (event.key === "Enter") {
+      event.preventDefault()
+      handleSubmit();
+    }
   };
   return (
     <Flex align="flex-start" gap="1rem">
-      <ChatTextArea {...messageInput} />
-      <Button disabled={messageInput.value.length===0} onClick={handleSubmit} pd="1rem 2rem" btnType="basic">
+      <ChatTextArea
+        {...messageInput}
+        onKeyDown={keyDownHandler as React.KeyboardEventHandler<Element>}
+      />
+      <Button
+        disabled={messageInput.value.length === 0}
+        onClick={handleSubmit}
+        pd="1rem 2rem"
+        btnType="basic"
+      >
         전송하기
       </Button>
     </Flex>

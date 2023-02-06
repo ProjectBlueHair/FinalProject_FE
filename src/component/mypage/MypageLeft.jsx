@@ -17,11 +17,10 @@ import { getCookies } from "../../dataManager/cookie";
 import { useShare } from "../../hook/useShare";
 import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
 import useTypeModal from "../../modal/hooks/useTypeModal";
-import { __directMessage } from "../chat/chatSlice";
-import { PATH } from "../../Router";
 import { __putDetailFollow } from "../../redux/slice/detailSlice";
+import { PATH } from "../../Router";
+import { __directMessage } from "../chat/chatSlice";
 import Img from "../elem/Img";
-import MypageLeftBottom from "./MypageLeftBottom";
 export const kakaoJS = process.env.REACT_APP_KaKaoJSKey;
 
 const MypageLeft = () => {
@@ -45,7 +44,7 @@ const MypageLeft = () => {
   };
   useEffect(() => {
     mySetInformation();
-  }, []);
+  }, [nickname]);
   const [information, setInformation] = useState();
   const acToken = getCookies("accesstoken");
   const myFollowingMemberNickname = information?.nickname;
@@ -140,7 +139,10 @@ const MypageLeft = () => {
             <MypageBtn
               onClick={() => {
                 dispatch(__directMessage(information?.nickname)).then(
-                  navigate(PATH.chat)
+                  (data) => {
+                    console.log("directmsg", data);
+                    navigate(PATH.chat);
+                  }
                 );
               }}
             >
@@ -194,7 +196,7 @@ const MypageLeft = () => {
           </ShareDiv>
         </MypageBtn>
 
-        <div style={{ marginTop: "1rem" }}>{information?.email}</div>
+        {/* <div style={{ marginTop: "1rem" }}>{information?.email}</div> */}
         <RowView style={{ marginTop: "2rem" }}>
           <button
             onClick={() => {
@@ -276,7 +278,7 @@ const MypageLeftDiv = styled.div`
   margin: 0 1rem;
   padding-top: 5rem;
   width: 90%;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   display: flex;
   flex-direction: column;

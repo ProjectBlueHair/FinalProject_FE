@@ -19,6 +19,7 @@ import MypageLike2 from "./MypageLike2";
 
 const MypagePlayList = ({ L, getArchive2 }) => {
   const navigate = useNavigate();
+  const { $openModal } = useTypeModal();
 
   useEffect(() => {
     dispatch(__getUserInfo());
@@ -107,9 +108,20 @@ const MypagePlayList = ({ L, getArchive2 }) => {
           </RightProfileAndLike>
         </RightCol>
       </RightRow>
-      <HashDiv>
+      <HashDiv
+        onClick={() => {
+          $openModal({
+            type: "alert",
+            props: {
+              message: "해당 기능은 곧 준비될 예정입니다 !",
+              type: "confirm",
+            },
+          });
+        }}
+      >
         {L?.tagList?.map((tags, index) => (
-          <StLink to={`/tag/${tags}`} key={index}>
+          // <StLink to={`/tag/${tags}`} key={index}>
+          <StLink key={index}>
             <button># {tags}</button>
           </StLink>
         ))}
@@ -123,7 +135,17 @@ export default MypagePlayList;
 const MypageMusic = styled.div`
   flex-basis: 250px;
   flex-grow: 0;
-  width: 80%;
+  width: 95%;
+  animation: SV;
+  animation-duration: 1s;
+  @keyframes SV {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
   img {
     width: 100%;
     height: 15rem;
@@ -216,6 +238,7 @@ const RightCol = styled.div`
 const MoreBtn = styled.div`
   width: 100%;
   display: flex;
+  margin-top: 5px;
   align-items: center;
   justify-content: space-between;
   img {

@@ -21,6 +21,7 @@ const SignInModal = ({ onClose }) => {
   const onClickSignUpModal = () => {
     openModal({ type: "signUp" });
   };
+  const [to, setTo] = useState(false);
 
   const [signIn, setSignIn] = useState({
     email: "",
@@ -58,6 +59,7 @@ const SignInModal = ({ onClose }) => {
           type: "info",
         },
       });
+      setTo(true);
     } else if (signIn.password === "") {
       $openModal({
         type: "alert",
@@ -66,6 +68,7 @@ const SignInModal = ({ onClose }) => {
           type: "info",
         },
       });
+      setTo(true);
     } else {
       postSignIn(signIn).then((res) => {
         if (res === undefined) {
@@ -78,6 +81,7 @@ const SignInModal = ({ onClose }) => {
               type: "info",
             },
           });
+          setTo(true);
         } else if (res.data.customHttpStatus === 4040) {
           $openModal({
             type: "alert",
@@ -86,6 +90,7 @@ const SignInModal = ({ onClose }) => {
               type: "info",
             },
           });
+          setTo(true);
         } else if (res.data.customHttpStatus === 4000) {
           $openModal({
             type: "alert",
@@ -94,6 +99,7 @@ const SignInModal = ({ onClose }) => {
               type: "info",
             },
           });
+          setTo(true);
         } else {
           setCookie("accesstoken", res.headers.accesstoken, {
             path: "/",
@@ -103,15 +109,7 @@ const SignInModal = ({ onClose }) => {
             path: "/",
             maxAge: 1800,
           });
-
           dispatch(__getGeneralUserInfo());
-          // $openModal({
-          //   type: "alert",
-          //   props: {
-          //     message: res.data.message,
-          //     type: "info",
-          //   },
-          // });
           closeModal?.();
         }
       });
@@ -127,11 +125,13 @@ const SignInModal = ({ onClose }) => {
 
   const HKP = (e) => {
     $closeModal();
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && to === false) {
       onClickSignIn();
+    } else {
+      setTo(false);
     }
   };
-
+  console.log(to);
   return (
     <Modal onClose={onClose}>
       <SignInTotal>
@@ -167,17 +167,20 @@ const SignInModal = ({ onClose }) => {
             <Img cursor="pointer" wd="35rem" src={kakaoIcon} />
           </button>
           <button>
-            <Img 
-            onClick={()=>{
-              $openModal({
-                type: "alert",
-                props: {
-                  message: "해당 기능은 곧 준비될 예정입니다 !",
-                  type: "confirm",
-                },
-              });
-            }}
-            cursor="pointer" wd="35rem" src={googleIcon} />
+            <Img
+              onClick={() => {
+                $openModal({
+                  type: "alert",
+                  props: {
+                    message: "해당 기능은 곧 준비될 예정입니다 !",
+                    type: "confirm",
+                  },
+                });
+              }}
+              cursor="pointer"
+              wd="35rem"
+              src={googleIcon}
+            />
           </button>
         </SocialLogin>
         <SocialLogin>

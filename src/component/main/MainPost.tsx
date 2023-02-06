@@ -49,6 +49,7 @@ const MainPost: React.FC<{ post: Post; index: number }> = (props) => {
       gap="1.5rem"
     >
       <Img
+        style={{ cursor: "pointer" }}
         onClick={() => navigate(`/detail/${props.post.id}`)}
         hg="20rem"
         type="radius"

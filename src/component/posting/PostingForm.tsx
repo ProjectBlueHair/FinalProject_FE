@@ -7,8 +7,10 @@ import { CollaboForm, Form, NewPostForm } from "../../model/PostingModel";
 import { Response } from "../../model/ResponseModel";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
-  collaboRequestDataSelector, formSelector,
-  uploadNewPost, __cleanUp
+  collaboRequestDataSelector,
+  formSelector,
+  uploadNewPost,
+  __cleanUp,
 } from "../../redux/slice/postingSlice";
 import theme from "../../styles/theme";
 import Button from "../elem/Button";
@@ -16,12 +18,13 @@ import Div from "../elem/Div";
 import Flex from "../elem/Flex";
 import Span from "../elem/Span";
 import TextArea from "../elem/Textarea";
+import SupportLinks from "./SupportLinks";
 
 export const formStyle = {
   border: "1px solid rgba(0,0,0,0.1)",
   borderRadius: "10px",
   width: "100%",
-  height: "11rem",
+  height: "50%",
   maxHeight: "none",
   fontSize: "1.4rem",
   padding: "6px 12px",
@@ -121,11 +124,13 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
 
   return (
     <form style={{ width: "100%" }} onSubmit={handleSubmit}>
-      <Flex align="flex-start" gap="1.5rem">
+      <Flex align="flex-start" gap="1.5rem" hg="25rem">
         <Flex
           direction="column"
           justify="flex-start"
-          wd="75%"
+          // wd="60%"
+          flex="1"
+          hg="100%"
           gap="2rem"
           pd="1.5rem 2rem"
           radius="20px"
@@ -135,7 +140,9 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
             <Span fc={theme.color.main}>설명</Span>
             <TextArea
               bg="transparent"
-              placeholder={"음악에 대한 설명을 넣어주세요 (해시태그 예시 : #piano)"}
+              placeholder={
+                "음악에 대한 설명을 넣어주세요 (해시태그 예시 : #piano)"
+              }
               {...descriptionInput}
             />
           </Div>
@@ -149,12 +156,13 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
           </Div>
         </Flex>
         <Flex
-          align="center"
-          justify="flex-end"
-          flex="1"
+          hg="100%"
+          align="flex-start"
           bg={theme.color.rgbaBg2}
           pd="1.3rem"
           radius="20px"
+          gap="2rem"
+          wd="none"
         >
           <Button
             btnType="basic"
@@ -168,6 +176,7 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
             업로드 하기
           </Button>
         </Flex>
+        <SupportLinks />
       </Flex>
     </form>
   );

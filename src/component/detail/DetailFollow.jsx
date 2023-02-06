@@ -18,7 +18,7 @@ const DetailFollow = () => {
   useEffect(() => {
     dispatch(__getDetailCollabo(id));
     dispatch(__getUserInfo());
-  }, []);
+  }, [id]);
   const userInfo = useSelector((state) => state.user.user);
   console.log("3", userInfo.nickname);
   //작곡가 프로필/ 이름/ 악기 이름
@@ -42,7 +42,6 @@ const DetailFollow = () => {
     navigate(`/mypage/${name}`);
   };
 
-  console.log(detailCollabo);
   return (
     <FollowAll>
       {detailFollowOne?.map((collabo, index) => (
@@ -91,9 +90,15 @@ const DetailFollow = () => {
         followMore ? (
           <div
             onClick={moreClicker}
-            style={{ display: "flex", alignItems: "center", gap: "5px" }}
+            style={{
+              width: "11.5rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "5px",
+              cursor: "pointer",
+            }}
           >
-            <AiOutlineDown /> 더보기
+            <AiOutlineDown /> 공동 작업자 보기
           </div>
         ) : (
           <>
@@ -101,13 +106,23 @@ const DetailFollow = () => {
               <FollowTotal key={index}>
                 <FollowTop>
                   <FollowImgText>
-                    <img src={collabo.profileImg} alt="" />
+                    <img
+                      src={collabo.profileImg}
+                      alt=""
+                      onClick={() => MypageMove(collabo?.nickname)}
+                      style={{ cursor: "pointer" }}
+                    />
                     <FollowMiddle>
                       <FollowWriteInstrument>
                         {collabo?.musicPartsList?.map((part, index) => (
                           <div key={index}>{part}</div>
                         ))}
-                        <span>{collabo.nickname}</span>
+                        <span
+                          onClick={() => MypageMove(collabo?.nickname)}
+                          style={{ cursor: "pointer" }}
+                        >
+                          {collabo.nickname}
+                        </span>
                       </FollowWriteInstrument>
                       <div style={{ marginTop: "10px" }}>
                         팔로워 {collabo.followerCount} 명
@@ -131,7 +146,13 @@ const DetailFollow = () => {
             ))}
             <div
               onClick={moreClicker}
-              style={{ display: "flex", alignItems: "center", gap: "5px" }}
+              style={{
+                width: "5rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "5px",
+                cursor: "pointer",
+              }}
             >
               <AiOutlineUp />
               닫기

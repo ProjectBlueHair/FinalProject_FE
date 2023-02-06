@@ -26,7 +26,7 @@ const DetailCommentSubDeleteUpdate = ({ re }) => {
 
   useEffect(() => {
     dispatch(__getUserInfo());
-  }, []);
+  }, [id]);
   const userInformation = useSelector((state) => state.detail.userInfo.data);
 
   const onChangeSubComment = (e) => {

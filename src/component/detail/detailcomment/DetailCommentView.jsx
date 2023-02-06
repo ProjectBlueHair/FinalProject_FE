@@ -15,7 +15,7 @@ const DetailCommentView = () => {
 
   useEffect(() => {
     dispatch(__getComment(id));
-  }, []);
+  }, [id]);
 
   const mainCommentView = useSelector((state) => state.comment.comment);
   const MypageMove = (name) => {
