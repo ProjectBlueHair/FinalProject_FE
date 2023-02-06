@@ -48,8 +48,6 @@ const PostingFormAudio: React.FC<{ isCollabo: boolean }> = (props) => {
   const { $openModal } = useTypeModal();
   const typeCheck = (file: File) => {
     const type = file.type.split("/")[1];
-
-    
     if (type !== "wav" && type !== "x-wav") {
       setText(defaultText());
       return $openModal({

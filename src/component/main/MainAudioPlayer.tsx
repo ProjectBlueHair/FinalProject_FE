@@ -27,16 +27,12 @@ import { useAppDispatch, useAppSelector } from "../../redux/config";
 const MainAudioPlayer = () => {
   const audioPlayer = useRef<AudioPlayer>(null);
   const { $openModal } = useTypeModal();
-  const { post, isPlayingMain } = useAppSelector<CurrentMusic>(
+  const currentmusic = useAppSelector<CurrentMusic>(
     (state) => state.main.currentMusic
   );
   const dispatch = useAppDispatch();
   const onPlayHandler = () => {
     console.log("onPlayHandler ... ");
-    console.log(
-      "onPlayHandler paused..?",
-      audioPlayer.current!.audio.current!.paused
-    );
     dispatch(__PlayerTogglePlay(true));
   };
   const onPauseHandler = () => {
@@ -45,20 +41,20 @@ const MainAudioPlayer = () => {
   };
   const onClickPrevious = () => {
     console.log("onClickPrevious ... ");
-    dispatch(__PlayPrevious(post.id));
+    dispatch(__PlayPrevious(currentmusic.post.id));
   };
   const onClickNext = () => {
     console.log("onClickNext ... ");
-    dispatch(__playNext(post.id));
+    dispatch(__playNext(currentmusic.post.id));
   };
   useEffect(() => {
     console.log("isplyaing main currentmusic useEffect paused..?");
-    if (isPlayingMain) {
+    if (currentmusic.isPlayingMain) {
       audioPlayer.current!.audio.current!.play();
     } else {
       audioPlayer.current!.audio.current!.pause();
     }
-  }, [isPlayingMain]);
+  }, [currentmusic]);
 
   return (
     // musicbar wrap
@@ -75,7 +71,7 @@ const MainAudioPlayer = () => {
             radius="10px"
             wd="6rem"
             hg="5rem"
-            src={post?.postImg}
+            src={currentmusic.post?.postImg}
           />
           {/* flexColumn [title, profile] */}
           <Flex
@@ -84,22 +80,22 @@ const MainAudioPlayer = () => {
             gap="var(--ec-gap1)"
             wd="none"
           >
-            <div>{post?.title}</div>
+            <div>{currentmusic.post?.title}</div>
             {/* flexRow [profile img, nickname]*/}
             <Flex justify="flex-start" gap="var(--ec-gap2)" wd="none">
               <Img
                 type="shadowProfile"
                 wd="3rem"
                 src={
-                  post?.mainProfileList &&
-                  post.mainProfileList.length &&
-                  post.mainProfileList[0].profileImg
+                  currentmusic.post?.mainProfileList &&
+                  currentmusic.post.mainProfileList.length &&
+                  currentmusic.post.mainProfileList[0].profileImg
                 }
               />
               <div>
-                {post?.mainProfileList &&
-                  post.mainProfileList.length &&
-                  post.mainProfileList[0].nickname}
+                {currentmusic.post?.mainProfileList &&
+                  currentmusic.post.mainProfileList.length &&
+                  currentmusic.post.mainProfileList[0].nickname}
               </div>
             </Flex>
           </Flex>
@@ -107,7 +103,7 @@ const MainAudioPlayer = () => {
 
         {/* flex row right grid [music btns, music bar, volume control] */}
         <AudioPlayer
-          src={post?.musicFile}
+          src={currentmusic.post?.musicFile}
           crossOrigin="anonymous"
           autoPlayAfterSrcChange={false}
           onPlay={onPlayHandler}
@@ -160,38 +156,38 @@ const MainAudioPlayer = () => {
             pause: <Img type="icon" wd={iconSize} src={pause} />,
           }}
           customControlsSection={[
-            <div>
-              <Img
-                onClick={() => {
-                  $openModal({
-                    type: "alert",
-                    props: {
-                      message: "해당 기능은 준비중입니다.",
-                      type: "confirm",
-                    },
-                  });
-                }}
-                className="subIcon"
-                type="icon"
-                wd={iconSize}
-                src={shuffle}
-              />
-              <Img
-                onClick={() => {
-                  $openModal({
-                    type: "alert",
-                    props: {
-                      message: "해당 기능은 준비중입니다.",
-                      type: "confirm",
-                    },
-                  });
-                }}
-                type="icon"
-                className="subIcon"
-                wd={iconSize}
-                src={repeat}
-              />
-            </div>,
+            // <div>
+            //   <Img
+            //     onClick={() => {
+            //       $openModal({
+            //         type: "alert",
+            //         props: {
+            //           message: "해당 기능은 준비중입니다.",
+            //           type: "confirm",
+            //         },
+            //       });
+            //     }}
+            //     className="subIcon"
+            //     type="icon"
+            //     wd={iconSize}
+            //     src={shuffle}
+            //   />
+            //   <Img
+            //     onClick={() => {
+            //       $openModal({
+            //         type: "alert",
+            //         props: {
+            //           message: "해당 기능은 준비중입니다.",
+            //           type: "confirm",
+            //         },
+            //       });
+            //     }}
+            //     type="icon"
+            //     className="subIcon"
+            //     wd={iconSize}
+            //     src={repeat}
+            //   />
+            // </div>,
             RHAP_UI.VOLUME,
           ]}
         />

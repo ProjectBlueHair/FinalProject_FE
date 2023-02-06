@@ -130,7 +130,7 @@ const PostingFormCollabo = () => {
             콜라보 요청
           </Button>
         </Flex>
-        {/* <SupportLinks /> */}
+        <SupportLinks />
       </Flex>
     </form>
   );
