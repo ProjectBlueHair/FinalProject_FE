@@ -18,7 +18,7 @@ const MainPostList = () => {
 
   let options = {
     root: scrollArea.current,
-    rootMargin: "0px",
+    rootMargin: "230px",
     threshold: 1,
   };
 
