@@ -5,6 +5,7 @@ import { AppState } from "../config";
 import { CurrentMusic, LikeModel, Post } from "../../model/MainModel";
 import { useAppSelector } from "../config";
 import { __postLike } from "./detailSlice";
+import { act } from "react-dom/test-utils";
 
 export interface MainState {
   posts: Post[];
@@ -33,10 +34,18 @@ export const mainSlice = createSlice({
   initialState,
   reducers: {
     __MainTogglePlay: (state, action) => {
-      state.currentMusic.isPlayingMain = action.payload;
+      state.currentMusic = {
+        ...state.currentMusic,
+        isPlayingMain: action.payload,
+        isPlayingPlayer: action.payload,
+      };
     },
     __PlayerTogglePlay: (state, action) => {
-      state.currentMusic.isPlayingPlayer = action.payload;
+      state.currentMusic = {
+        ...state.currentMusic,
+        isPlayingMain: action.payload,
+        isPlayingPlayer: action.payload,
+      };
     },
     __playDifferentSrc: (state, action) => {
       const index = findPostIndex(state.posts, action.payload);
@@ -50,20 +59,20 @@ export const mainSlice = createSlice({
       state.currentMusic = {
         ...state.currentMusic,
         post: state.posts[index],
-        isPlayingMain: false,
-        isPlayingPlayer: false,
+        isPlayingMain: true,
+        // isPlayingPlayer: false,
       };
     },
     __playNext: (state, action) => {
       const index = findPostIndex(state.posts, action.payload);
-      console.log("__playNext ... index", index, "postid ...", action.payload);
+      console.log("__playNext ...", state.currentMusic.isPlayingPlayer);
 
       if (index !== state.posts.length - 1) {
         state.currentMusic = {
           ...state.currentMusic,
           post: state.posts[index + 1],
-          isPlayingMain: false,
-          isPlayingPlayer: false,
+          // isPlayingMain: state.currentMusic.isPlayingMain,
+          // isPlayingPlayer: false,
         };
       }
     },
@@ -79,8 +88,8 @@ export const mainSlice = createSlice({
         state.currentMusic = {
           ...state.currentMusic,
           post: state.posts[index - 1],
-          isPlayingMain: false,
-          isPlayingPlayer: false,
+          // isPlayingMain: state.currentMusic.isPlayingMain,
+          // isPlayingPlayer: false,
         };
       }
     },
@@ -94,7 +103,7 @@ export const mainSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(__getPostList.pending, (state) => {
-        state.isLoading = true;
+        state.isLoading = state.currentMusic.isPlayingMain;
       })
       .addCase(__getPostList.fulfilled, (state, { payload }) => {
         state.isLoading = false;

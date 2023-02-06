@@ -43,7 +43,6 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
 
   useEffect(() => {
     return () => {
-      console.log("posting form cleaning");
       dispatch(__cleanUp());
     };
   }, []);
