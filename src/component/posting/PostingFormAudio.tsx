@@ -73,9 +73,8 @@ const PostingFormAudio: React.FC<{ isCollabo: boolean }> = (props) => {
     async (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
       event.stopPropagation();
-      if (event.dataTransfer.files) {
-        const files = event.dataTransfer.files;
-        console.log("files", files);
+      const files = event.dataTransfer.files;
+      if (files && files.length > 0) {
         const arr = [];
         for (let i = 0; i < files.length; i++) {
           typeCheck(files[i]);
@@ -101,7 +100,7 @@ const PostingFormAudio: React.FC<{ isCollabo: boolean }> = (props) => {
       }
       dispatch(__addNewAudio(arr));
       setText(defaultText());
-    } 
+    }
   };
 
   return (

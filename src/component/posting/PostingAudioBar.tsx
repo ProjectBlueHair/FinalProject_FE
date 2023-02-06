@@ -65,24 +65,17 @@ const PostingAudioBar: React.FC<Audio & { index: number }> = (props) => {
   }, [props.volume]);
 
   useEffect(() => {
-    console.log("is playing", progressControl.isPlaying);
-    console.log("wavesurfer.current", wavesurfer.current);
     progressControl.isPlaying
       ? wavesurfer.current?.play()
       : wavesurfer.current?.pause();
   }, [progressControl.isPlaying]);
 
   useEffect(() => {
-    wavesurfer.current?.setCurrentTime(progressControl.seekTo);
+    const duration = wavesurfer.current?.getDuration();
+    wavesurfer.current?.setCurrentTime(
+      duration ? progressControl.seekTo % duration : progressControl.seekTo
+    );
   }, [progressControl.seekTo]);
-  // useEffect(() => {
-  //   // if (progressControl.seekTo) {
-  //   wavesurfer.current?.setCurrentTime(progressControl.seekTo);
-  //   // }
-  //   progressControl.isPlaying
-  //     ? wavesurfer.current?.play()
-  //     : wavesurfer.current?.pause();
-  // }, [progressControl]);
 
   return (
     <Flex justify="flex-start" wd="98%">
