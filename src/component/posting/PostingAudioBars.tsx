@@ -1,9 +1,6 @@
 import { AUDIO_BAR_GAP } from "../../page/PostingPage";
 import { useAppSelector } from "../../redux/config";
-import {
-  audioControlSelector,
-  audiosSelector,
-} from "../../redux/slice/postingSlice";
+import { audiosSelector } from "../../redux/slice/postingSlice";
 import Flex from "../elem/Flex";
 import PostingAudioBar from "./PostingAudioBar";
 import PostingAudioControlBox from "./PostingAudioControlBox";
@@ -12,10 +9,7 @@ export const AUDIO_BAR_HEIGHT = 67;
 
 const PostingAudioBars = () => {
   const audios = useAppSelector(audiosSelector);
-  console.log('postingaudiobars .. ',audios);
-  
-  // const progressControl = useAppSelector(audioControlSelector);
-
+  console.log("postingaudiobars .. ", audios);
   return (
     <Flex direction="column" gap={AUDIO_BAR_GAP}>
       {audios.map((audio, index) => (
@@ -28,7 +22,7 @@ const PostingAudioBars = () => {
         >
           <PostingAudioControlBox index={index} {...audio} />
           <Flex type="audioBarRight">
-            <PostingAudioBar {...audio}  index={index} />
+            <PostingAudioBar {...audio} index={index} />
           </Flex>
         </Flex>
       ))}

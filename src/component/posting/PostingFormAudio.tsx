@@ -1,3 +1,4 @@
+import { log } from "console";
 import React, { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
 import useTypeModal from "../../modal/hooks/useTypeModal";
@@ -91,7 +92,8 @@ const PostingFormAudio: React.FC<{ isCollabo: boolean }> = (props) => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const files = event.target.files;
-    if (files) {
+    if (files && files.length > 0) {
+      console.log("file .. ", files.length);
       const arr = [];
       for (let i = 0; i < files.length; i++) {
         typeCheck(files[i]);
@@ -99,7 +101,7 @@ const PostingFormAudio: React.FC<{ isCollabo: boolean }> = (props) => {
       }
       dispatch(__addNewAudio(arr));
       setText(defaultText());
-    }
+    } 
   };
 
   return (
