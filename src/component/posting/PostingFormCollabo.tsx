@@ -90,17 +90,18 @@ const PostingFormCollabo = () => {
 
   return (
     <form style={{ width: "100%" }} onSubmit={handleSubmit}>
-      <Flex align="flex-start" gap="1.5rem">
+      <Flex align="flex-start" gap="1.5rem" hg="25rem">
         <Flex
           direction="column"
           justify="flex-start"
-          wd="75%"
+          flex="1"
+          hg="100%"
           gap="2rem"
           pd="1.5rem 2rem"
           radius="20px"
           bg={theme.color.rgbaBg2}
         >
-          <Div style={{ ...formStyle }}>
+          <Div style={{ ...formStyle, height: "100%" }}>
             <Span fc={theme.color.main}>콜라보 요청</Span>
             <TextArea
               bg="transparent"

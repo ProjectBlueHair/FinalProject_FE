@@ -1,11 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { instanceAxios } from "../../dataManager/apiConfig";
 import { AppState } from "../config";
-
 import { CurrentMusic, LikeModel, Post } from "../../model/MainModel";
-import { useAppSelector } from "../config";
-import { __postLike } from "./detailSlice";
-import { act } from "react-dom/test-utils";
 
 export interface MainState {
   posts: Post[];

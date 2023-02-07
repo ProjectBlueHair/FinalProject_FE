@@ -8,9 +8,7 @@ import MainPost from "./MainPost";
 const MainPostList = () => {
   const target = useRef<HTMLDivElement>(null);
   const scrollArea = useRef(null);
-
   const [trigger, setTrigger] = useState(false);
-
   const dispatch = useAppDispatch();
   const { posts, nextPage, isLoading } = useAppSelector<MainState>(
     (state) => state.main
