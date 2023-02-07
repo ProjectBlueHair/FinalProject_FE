@@ -25,41 +25,20 @@
 
 <p align=justify>
 
-<img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
-<img src="https://img.shields.io/badge/redis-DC382D?style=for-the-badge&logo=redis&logoColor=white">
-<img src="https://img.shields.io/badge/githubactions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white">
-<img src="https://img.shields.io/badge/Spring boot-6DB33F?style=for-the-badge&logo=SpringBoot&logoColor=white">
-<img src="https://img.shields.io/badge/Spring Security-6DB33F?style=for-the-badge&logo=Gradle&logoColor=white">
-<img src="https://img.shields.io/badge/GRADLE-02303A?style=for-the-badge&logo=Spring Security&logoColor=white">
-<img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON Web Tokens&logoColor=white">
-<img src="https://img.shields.io/badge/QueryDSL-0769AD?style=for-the-badge&logo=jQuery&logoColor=white">
-<img src="https://img.shields.io/badge/Elastic Search-005571?style=for-the-badge&logo=Elasticsearch&logoColor=white">
-<img src="https://img.shields.io/badge/Socket.io-010101?style=for-the-badge&logo=Socket.io&logoColor=white">
-<img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
+<img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=white">
+<img src="https://img.shields.io/badge/Typescript-3178C6?style=for-the-badge&logo=TypeScript&logoColor=white">
+<img src="https://img.shields.io/badge/styledcomponents
+-DB7093?style=for-the-badge&logo=styled-components&logoColor=white">
+<img src="https://img.shields.io/badge/ReduxToolkit-764ABC?style=for-the-badge&logo=Redux&logoColor=white">
 <img src="https://img.shields.io/badge/aws-232F3E?style=for-the-badge&logo=Amazon AWS&logoColor=white">
-<img src="https://img.shields.io/badge/RDS-527FFF?style=for-the-badge&logo=Amazon RDS&logoColor=white">
 <img src="https://img.shields.io/badge/S3-569A31?style=for-the-badge&logo=Amazon S3&logoColor=white">
-<img src="https://img.shields.io/badge/EC2-FF9900?style=for-the-badge&logo=Amazon EC2&logoColor=white">
-<img src="https://img.shields.io/badge/ngnix-009639?style=for-the-badge&logo=nginx&logoColor=white">
-<img src="https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=Swagger&logoColor=white">
+
+<img src="https://img.shields.io/badge/githubactions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white">
 </p>
 
 ## 📋서비스 아키텍쳐
 ![완성 시 다이어그램](https://user-images.githubusercontent.com/117705848/216903563-c2306d28-bc6b-4700-a6a4-b005fd96e63f.png)
 
-
-## ⚙ERD
-
-![oncounter_erd](https://user-images.githubusercontent.com/117705848/216895267-e178ba24-67da-4f99-82c5-5906a5ef55c9.png)
-   
-   
-## 📌API 명세서
-
-* [oncounter Swagger UI](http://3.38.16.236:8080/swagger-ui/index.html)
-
-<img width="966" alt="스크린샷 2023-02-06 오전 11 55 42" src="https://user-images.githubusercontent.com/117705848/216873264-61b82913-06d5-44af-9e20-c2624410f6be.png">
-<img width="962" alt="스크린샷 2023-02-06 오전 11 56 02" src="https://user-images.githubusercontent.com/117705848/216873274-300df40c-0662-4ff8-89ac-6fe3660a0a77.png">
-<img width="963" alt="스크린샷 2023-02-06 오전 11 56 47" src="https://user-images.githubusercontent.com/117705848/216873289-ca2d5d9a-4e75-4da6-bdad-ac0ac5e1955c.png">
 
 ## 💡주요 기능
 ### 메인페이지
