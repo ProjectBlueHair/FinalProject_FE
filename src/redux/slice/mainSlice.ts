@@ -140,6 +140,18 @@ export const __getPostList = createAsyncThunk(
     }
   }
 );
+export const __getTaggedList = createAsyncThunk(
+  "__getTaggedList",
+  async (payload: string, thunkAPI) => {
+    try {
+      console.log("__getTaggedList,,,", payload);
+      const { data } = await instanceAxios.get(`/post?page=${Number(payload)}&size=15`);
+      return data.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 export const __mainPostLike = createAsyncThunk(
   "__mainPostLike",
   async (payload: { postId: string | number; index: number }, thunkAPI) => {

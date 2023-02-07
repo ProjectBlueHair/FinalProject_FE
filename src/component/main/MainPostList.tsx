@@ -1,11 +1,15 @@
-import { log } from "console";
 import { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import ServerDown from "../../page/ServerDown";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
-import { MainState, __getPostList } from "../../redux/slice/mainSlice";
+import {
+  MainState,
+  __getPostList,
+  __getTaggedList,
+} from "../../redux/slice/mainSlice";
 import MainPost from "./MainPost";
 const MainPostList = () => {
+  const { tag } = useParams();
   const target = useRef<HTMLDivElement>(null);
   const scrollArea = useRef(null);
   const [trigger, setTrigger] = useState(false);
