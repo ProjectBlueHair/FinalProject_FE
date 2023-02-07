@@ -20,7 +20,6 @@ const DetailFollow = () => {
     dispatch(__getUserInfo());
   }, [id]);
   const userInfo = useSelector((state) => state.user.user);
-  console.log("3", userInfo.nickname);
   //작곡가 프로필/ 이름/ 악기 이름
   const detailCollabo = useSelector((state) => state.detail.collabo.data);
   const detailFollowOne = detailCollabo?.slice(0, 1);
@@ -77,7 +76,15 @@ const DetailFollow = () => {
               ) : userInfo.nickname === collabo.nickname ? (
                 ""
               ) : (
-                <button onClick={() => FollowClick(collabo)}>
+                <button
+                  onClick={() => FollowClick(collabo)}
+                  style={{
+                    backgroundColor: collabo?.isFollowed
+                      ? "#ff4d00"
+                      : "transparent",
+                    color: collabo?.isFollowed ? "white" : "black",
+                  }}
+                >
                   {collabo?.isFollowed ? "팔로우 취소" : "팔로우"}
                 </button>
               )}
@@ -91,7 +98,7 @@ const DetailFollow = () => {
           <div
             onClick={moreClicker}
             style={{
-              width: "11.5rem",
+              width: "13rem",
               display: "flex",
               alignItems: "center",
               gap: "5px",
@@ -135,7 +142,15 @@ const DetailFollow = () => {
                     ) : userInfo.nickname === collabo.nickname ? (
                       ""
                     ) : (
-                      <button onClick={() => FollowClick(collabo)}>
+                      <button
+                        onClick={() => FollowClick(collabo)}
+                        style={{
+                          backgroundColor: collabo?.isFollowed
+                            ? "#ff4d00"
+                            : "transparent",
+                          color: collabo?.isFollowed ? "white" : "black",
+                        }}
+                      >
                         {collabo?.isFollowed ? "팔로우 취소" : "팔로우"}
                       </button>
                     )}

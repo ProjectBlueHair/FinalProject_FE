@@ -104,7 +104,6 @@ const DetailDayAndFollow = ({ detail }) => {
   const onArchive = async () => {
     try {
       const { data } = await instanceAxios.post(`post/archive/${id}`);
-      console.log(data);
       if (data.customHttpStatus === 2000) {
         $openModal({
           type: "alert",

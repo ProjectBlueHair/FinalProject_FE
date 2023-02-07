@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { elementScrollIntoView } from "seamless-scroll-polyfill";
@@ -29,26 +29,23 @@ const SetTotal = () => {
       const {
         data: { data },
       } = await instanceAxios.get("member/setting");
-      // input 값들
-      setAboutMe(data.aboutMe);
-      // 알림부분
-      setLikeNotify(data.likeNotify);
-      setCommentNotify(data.commentNotify);
-      setDmNotify(data.dmNotify);
-      setFollowNotify(data.followNotify);
-      // 링크 부분 true/false
-      setFacebookActivated(data.facebookActivated);
-      setInstagramActivated(data.instagramActivated);
-      setLinkedinActivated(data.linkedinActivated);
-      setTwitterActivated(data.twitterActivated);
-      // 링크 부분 URL
-      setFacebookURL(data.facebookURL);
-      setInstagramURL(data.instagramURL);
-      setLinkedinURL(data.linkedinURL);
-      setTwitterURL(data.twitterURL);
+      updateEvent({ aboutMe: data.aboutMe });
+      updateEvent({ likeNotify: data.likeNotify });
+      updateEvent({ commentNotify: data.commentNotify });
+      updateEvent({ dmNotify: data.dmNotify });
+      updateEvent({ followNotify: data.followNotify });
+      updateEvent({ facebookActivated: data.facebookActivated });
+      updateEvent({ instagramActivated: data.instagramActivated });
+      updateEvent({ linkedinActivated: data.linkedinActivated });
+      updateEvent({ twitterActivated: data.twitterActivated });
+      updateEvent({ facebookURL: data.facebookURL });
+      updateEvent({ instagramURL: data.instagramURL });
+      updateEvent({ linkedinURL: data.linkedinURL });
+      updateEvent({ twitterURL: data.twitterURL });
       // 이미지 미리보기
-      setPreImg(data.profileImg);
-      setJobList(data.jobList);
+      updateEvent({ preImg: data.profileImg });
+      // setPreImg(data.profileImg);
+      updateEvent({ jobList: data.jobList });
     } catch (error) {
       console.log(error);
     }
@@ -61,58 +58,46 @@ const SetTotal = () => {
 
   const userEmail = useSelector((state) => state.user.user?.email);
 
-  // 계정 설정, 알람설정 색상변경 (통신 X)
+  const [event, updateEvent] = useReducer(
+    (prev, next) => {
+      return { ...prev, ...next };
+    },
+    {
+      facebookActivated: null,
+      instagramActivated: null,
+      linkedinActivated: null,
+      twitterActivated: null,
+      facebookURL: null,
+      instagramURL: null,
+      linkedinURL: null,
+      twitterURL: null,
+      aboutMe: "",
+      likeNotify: null,
+      commentNotify: null,
+      dmNotify: null,
+      followNotify: null,
+      jobList: [],
+      preImg: "",
+      nickname: null,
+      password: null,
+    }
+  );
+
   const [account, setAccount] = useState(true);
   const [alarm, setAlarm] = useState(false);
 
-  // 링크쪽 상태값들
-  const [facebookActivated, setFacebookActivated] = useState(null);
-  const [instagramActivated, setInstagramActivated] = useState(null);
-  const [linkedinActivated, setLinkedinActivated] = useState(null);
-  const [twitterActivated, setTwitterActivated] = useState(null);
-
-  // 링크 URL
-  const [facebookURL, setFacebookURL] = useState(null);
-  const [instagramURL, setInstagramURL] = useState(null);
-  const [linkedinURL, setLinkedinURL] = useState(null);
-  const [twitterURL, setTwitterURL] = useState(null);
-
-  // 알림쪽 상태값들
-  const [likeNotify, setLikeNotify] = useState(null);
-  const [commentNotify, setCommentNotify] = useState(null);
-  const [dmNotify, setDmNotify] = useState(null);
-  const [followNotify, setFollowNotify] = useState(null);
-
-  // 이미지 관련 로직
   const [proImg, setProImg] = useState(null);
-  const [preImg, setPreImg] = useState(null);
   const imgRef = useRef("");
 
-  // input 값 관리
-  const [aboutMe, setAboutMe] = useState("");
-  const [jobList, setJobList] = useState("");
-
-  // 각각의 inpput값 관리
-  const [nickname, setNickname] = useState(null);
-  const [password, setpassword] = useState(null);
-  const [pwConfirm, setPwConfirm] = useState("");
-
-  // 닉네임 중복체크 / 패스워드 체크 / 패스워드 조건 메세지
-  const [userCheck, setUserCheck] = useState(false);
   const [passwordCheck, setPasswordCheck] = useState(false);
   const [passwordMsg, setPasswordMsg] = useState("");
-  // const [pwConfirmCheck, setPwConfirmCheck] = useState(false);
-  // const [pwConfiromMsg, setPwConfirmMsg] = useState("");
 
-  // const 아이디 비밀번호 클릭시 인풋창 보이게만들기
   const [nameView, setNameView] = useState(false);
   const [passwordView, setPasswordView] = useState(false);
 
   const setPageImg = (e) => {
     const file = e.target.files[0];
-    // 용량 5MB제한
     const fileSize = 5 * 1024 * 1024;
-    // 이미지 미리보기 로직
 
     if (fileSize < file.size) {
       $openModal({
@@ -127,20 +112,17 @@ const SetTotal = () => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
-        setPreImg(reader.result);
+        updateEvent({ proImg: reader.result });
       };
     }
   };
 
-  // 좌측 버튼 부분들
-  // 계정 설정이동
   const onAccount = () => {
     let acc = document.querySelector("#MoveAccount");
     elementScrollIntoView(acc, { behavior: "smooth" });
     setAlarm(false);
     setAccount(true);
   };
-  // 알람 설정 이동
   const onAlarm = () => {
     let acc = document.querySelector("#MoveAlarm");
     elementScrollIntoView(acc, { behavior: "smooth" });
@@ -148,94 +130,49 @@ const SetTotal = () => {
     setAccount(false);
   };
 
-  // 페이스북 상태값
-  const onFacebook = () => {
-    setFacebookActivated(true);
-  };
   const offFacebook = () => {
-    setFacebookActivated(false);
-    setFacebookURL("https://www.facebook.com/");
-  };
-  // 인스타 상태값
-  const onInsta = () => {
-    setInstagramActivated(true);
+    updateEvent({ facebookActivated: false });
+    updateEvent({ facebookURL: "https://www.facebook.com/" });
   };
   const offInsta = () => {
-    setInstagramActivated(false);
-    setInstagramURL("https://www.instagram.com/");
-  };
-  // 링크드인 상태값
-  const onLinked = () => {
-    setLinkedinActivated(true);
+    updateEvent({ instagramActivated: false });
+    updateEvent({ instagramURL: "https://www.instagram.com/" });
   };
   const offLinked = () => {
-    setLinkedinActivated(false);
-    setLinkedinURL("https://www.linkedin.com/");
-  };
-  // 트위터 상태값
-  const onTwitter = () => {
-    setTwitterActivated(true);
+    updateEvent({ linkedinActivated: false });
+    updateEvent({ linkedinURL: "https://www.linkedin.com/" });
   };
   const offTwitter = () => {
-    setTwitterActivated(false);
-    setTwitterURL("https://twitter.com/");
+    updateEvent({ twitterActivated: false });
+    updateEvent({ twitterURL: "https://twitter.com/" });
   };
 
-  // 페이스북 input 값
-  const facebookChange = (e) => {
-    setFacebookURL(e.target.value);
-  };
-  // 인스트 input 값
-  const instaChange = (e) => {
-    setInstagramURL(e.target.value);
-  };
-  // 링크드인 input 값
-  const linkedChange = (e) => {
-    setLinkedinURL(e.target.value);
-  };
-  // 트위터 input 값
-  const twitterChange = (e) => {
-    setTwitterURL(e.target.value);
-  };
-  // 유저 네임 input 값
   const usernameChange = (e) => {
     const name = e.target.value;
     if (name === "" || name === undefined) {
-      setNickname(null);
+      updateEvent({ nickname: null });
     } else {
-      setNickname(name);
+      updateEvent({ nickname: name });
     }
   };
-  // 직업 input 값
   const jobChange = (e) => {
-    const job = e.target.value;
-    setJobList(job.replace(/ /g, "").split(","));
+    const job = e.target.value.replace(/ /g, "").split(",");
+    updateEvent({ jobList: job });
   };
-
-  // 내정보 input 값
-  const MyInformation = (e) => {
-    setAboutMe(e.target.value);
-  };
-
-  // 좋아요 알람
   const likedClick = () => {
-    setLikeNotify(!likeNotify);
+    updateEvent({ likeNotify: !event.likeNotify });
   };
-  // 댓글 알람
   const commentsClick = () => {
-    setCommentNotify(!commentNotify);
+    updateEvent({ commentNotify: !event.commentNotify });
   };
-  // DM 알람
   const DMClick = () => {
-    setDmNotify(!dmNotify);
+    updateEvent({ dmNotify: !event.dmNotify });
   };
-  // follow 알람
   const followClick = () => {
-    setFollowNotify(!followNotify);
+    updateEvent({ followNotify: !event.followNotify });
   };
-  // 유저네임 중복체크
-  const usernameCheck = useCallback(() => {
-    if (nickname?.length === 0 || nickname === null) {
+  const usernameCheck = () => {
+    if (event.nickname?.length === 0 || event.nickname === null) {
       $openModal({
         type: "alert",
         props: {
@@ -244,7 +181,7 @@ const SetTotal = () => {
         },
       });
       return;
-    } else if (nickname?.length < 2 || nickname?.length > 15) {
+    } else if (event.nickname.length < 2 || event.nickname.length > 15) {
       $openModal({
         type: "alert",
         props: {
@@ -253,24 +190,15 @@ const SetTotal = () => {
         },
       });
     } else {
-      usernameChecking({
-        nickname,
-      }).then((res) => {
-        if (res === undefined) {
-          setUserCheck(false);
-        } else {
-          setUserCheck(true);
-        }
-      });
+      usernameChecking(event.nickname);
     }
-  }, [nickname]);
+  };
 
   const usernameChecking = async (post) => {
     try {
-      const { data } = await instanceAxios.post(
-        "member/validate/nickname",
-        post
-      );
+      const { data } = await instanceAxios.post("member/validate/nickname", {
+        nickname: post,
+      });
       if (data.customHttpStatus === 2000) {
         $openModal({
           type: "alert",
@@ -298,9 +226,9 @@ const SetTotal = () => {
     (e) => {
       const newPassword = e.target.value;
       if (newPassword === "" || newPassword === undefined) {
-        setpassword(null);
+        updateEvent({ password: null });
       } else {
-        setpassword(newPassword);
+        updateEvent({ password: newPassword });
       }
 
       const PWREX = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,15}$/;
@@ -314,56 +242,18 @@ const SetTotal = () => {
         setPasswordMsg("");
       }
     },
-    [password]
+    [event.password]
   );
-  // 패스워드 체크
-  // const passwordConfirm = useCallback(
-  //   (e) => {
-  //     const PWConfirmValue = e.target.value;
-  //     setPwConfirm(PWConfirmValue);
-  //     if (
-  //       password === PWConfirmValue &&
-  //       password.length === PWConfirmValue.length
-  //     ) {
-  //       setPwConfirmCheck(true);
-  //       setPwConfirmMsg("");
-  //     } else {
-  //       setPwConfirmCheck(false);
-  //       setPwConfirmMsg("비밀번호가 일치하지 않습니다");
-  //     }
-  //   },
-  //   [password]
-  // );
 
-  // 저장 버튼 클릭시 정상적으로 이미지 이동 처리 완료
   const onSave = () => {
     if (proImg === null) {
-      const profileImg = preImg;
-      putSave({
-        profileImg,
-        facebookActivated,
-        instagramActivated,
-        linkedinActivated,
-        twitterActivated,
-        facebookURL,
-        instagramURL,
-        linkedinURL,
-        twitterURL,
-        likeNotify,
-        commentNotify,
-        dmNotify,
-        followNotify,
-        aboutMe,
-        jobList,
-        nickname,
-        password,
-      }).then((res) => {
-        console.log(res);
+      const profileImg = event.preImg;
+      updateEvent({ profileImg: profileImg });
+      putSave(event).then((res) => {
         res &&
           reissuance()
             .then((data) => {
               const { accesstoken, refreshtoken } = data.headers;
-              console.log("access", accesstoken);
               if (!accesstoken || !refreshtoken) {
                 removeCookies("accesstoken", { path: "/" });
                 removeCookies("refreshtoken", { path: "/" });
@@ -394,31 +284,12 @@ const SetTotal = () => {
     } else {
       uploadFiles(proImg).then((res) => {
         const profileImg = res.Location;
-        putSave({
-          profileImg,
-          facebookActivated,
-          instagramActivated,
-          linkedinActivated,
-          twitterActivated,
-          facebookURL,
-          instagramURL,
-          linkedinURL,
-          twitterURL,
-          likeNotify,
-          commentNotify,
-          dmNotify,
-          followNotify,
-          aboutMe,
-          jobList,
-          nickname,
-          password,
-        }).then((res) => {
-          console.log(res);
+        updateEvent({ profileImg: profileImg });
+        putSave(event).then((res) => {
           res &&
             reissuance()
               .then((data) => {
                 const { accesstoken, refreshtoken } = data.headers;
-                console.log("access", accesstoken);
                 if (!accesstoken || !refreshtoken) {
                   removeCookies("accesstoken", { path: "/" });
                   removeCookies("refreshtoken", { path: "/" });
@@ -451,7 +322,7 @@ const SetTotal = () => {
   };
   // put 통신
   const putSave = async (put) => {
-    console.log("2", put);
+    console.log("33", put);
     try {
       if (put?.nickname?.length < 2 || put?.nickname?.length > 15) {
         $openModal({
@@ -479,7 +350,7 @@ const SetTotal = () => {
       console.log(error);
     }
   };
-
+  console.log(event);
   return (
     <SetTotalDiv>
       <SetLeftDiv>
@@ -519,7 +390,7 @@ const SetTotal = () => {
             />
             <label htmlFor="upload"></label>
             <img
-              src={preImg}
+              src={event.preImg}
               onClick={() => imgRef.current.click()}
               style={{ cursor: "pointer" }}
             />
@@ -536,6 +407,7 @@ const SetTotal = () => {
                   <input
                     type="text"
                     style={{ width: "82%" }}
+                    value={event.nickname}
                     onChange={usernameChange}
                     minLength={2}
                     maxLength={15}
@@ -600,36 +472,6 @@ const SetTotal = () => {
                 </button>
               )}
             </TextDiv>
-            {/*<TextDiv>
-               <div>New Password Confirm</div>
-              {pwConfirmCheck ? (
-                <>
-                  <input
-                    type="password"
-                    onChange={passwordConfirm}
-                    style={{
-                      backgroundColor: "#ff4d00",
-                      color: "white",
-                      border: "transparent",
-                    }}
-                  />
-                  <p>{pwConfiromMsg}</p>
-                </>
-              ) : (
-                <>
-                  <input type="password" onChange={passwordConfirm} />
-                  <p
-                    style={{
-                      color: "#ff4d00",
-                      fontSize: "10px",
-                      marginLeft: "10px",
-                    }}
-                  >
-                    {pwConfiromMsg}
-                  </p>
-                </>
-              )}
-            </TextDiv> */}
             <TextDiv>
               <div>
                 직업
@@ -644,7 +486,7 @@ const SetTotal = () => {
                   , 작사가 )
                 </span>
               </div>
-              <input type="text" value={jobList} onChange={jobChange} />
+              <input type="text" value={event.jobList} onChange={jobChange} />
             </TextDiv>
             <div style={{ marginBottom: "10px" }}>
               링크
@@ -660,66 +502,84 @@ const SetTotal = () => {
             <Social>
               <div>
                 <Img wd="2rem" src={facebook} />
-                {facebookActivated ? (
+                {event.facebookActivated ? (
                   <>
                     <input
                       type="text"
-                      value={facebookURL}
-                      onChange={facebookChange}
+                      value={event.facebookURL}
+                      onChange={(e) =>
+                        updateEvent({ facebookURL: e.target.value })
+                      }
                     />
                     <OffBtn onClick={offFacebook}>링크 해제</OffBtn>
                   </>
                 ) : (
-                  <LinkButton onClick={onFacebook}>
+                  <LinkButton
+                    onClick={() => updateEvent({ facebookActivated: true })}
+                  >
                     링크 클릭해 주세요~
                   </LinkButton>
                 )}
               </div>
               <div>
                 <Img wd="2rem" src={insta} />
-                {instagramActivated ? (
+                {event.instagramActivated ? (
                   <>
                     <input
                       type="text"
-                      value={instagramURL}
-                      onChange={instaChange}
+                      value={event.instagramURL}
+                      onChange={(e) =>
+                        updateEvent({ instagramURL: e.target.value })
+                      }
                     />
                     <OffBtn onClick={offInsta}>링크 해제</OffBtn>
                   </>
                 ) : (
-                  <LinkButton onClick={onInsta}>링크 클릭해 주세요~</LinkButton>
+                  <LinkButton
+                    onClick={() => updateEvent({ instagramActivated: true })}
+                  >
+                    링크 클릭해 주세요~
+                  </LinkButton>
                 )}
               </div>
               <div>
                 <Img wd="2rem" src={linkedIn} />
-                {linkedinActivated ? (
+                {event.linkedinActivated ? (
                   <>
                     <input
                       type="text"
-                      value={linkedinURL}
-                      onChange={linkedChange}
+                      value={event.linkedinURL}
+                      onChange={(e) =>
+                        updateEvent({ linkedinURL: e.target.value })
+                      }
                     />
                     <OffBtn onClick={offLinked}>링크 해제</OffBtn>
                   </>
                 ) : (
-                  <LinkButton onClick={onLinked}>
+                  <LinkButton
+                    onClick={() => updateEvent({ linkedinActivated: true })}
+                  >
                     링크 클릭해 주세요~
                   </LinkButton>
                 )}
               </div>
               <div>
                 <Img wd="2rem" src={twitter} />
-                {twitterActivated ? (
+                {event.twitterActivated ? (
                   <>
                     <input
                       type="text"
-                      value={twitterURL}
-                      onChange={twitterChange}
+                      value={event.twitterURL}
+                      onChange={(e) =>
+                        updateEvent({ twitterURL: e.target.value })
+                      }
                     />
                     <OffBtn onClick={offTwitter}>링크 해제</OffBtn>
                   </>
                 ) : (
-                  <LinkButton onClick={onTwitter}>
+                  <LinkButton
+                    onClick={() => updateEvent({ twitterActivated: true })}
+                  >
                     링크 클릭해 주세요~
                   </LinkButton>
                 )}
@@ -728,15 +588,16 @@ const SetTotal = () => {
             <div style={{ marginBottom: "5px" }}>내정보</div>
             <MyInformationInput
               type="text"
-              value={aboutMe}
-              onChange={MyInformation}
+              value={event.aboutMe}
+              // onChange={MyInformation}
+              onChange={(e) => updateEvent({ aboutMe: e.target.value })}
             />
           </div>
         </SetRowDiv>
         <HrLine id="MoveAlarm">알림 설정</HrLine>
         <AlarmDiv>
           <AlarmCheck>
-            {likeNotify ? (
+            {event.likeNotify ? (
               <Img wd="2rem" src={checktrue} onClick={likedClick} />
             ) : (
               <Img wd="2rem" src={checkfalse} onClick={likedClick} />
@@ -744,7 +605,7 @@ const SetTotal = () => {
             <div>좋아요</div>
           </AlarmCheck>
           <AlarmCheck>
-            {commentNotify ? (
+            {event.commentNotify ? (
               <Img wd="2rem" src={checktrue} onClick={commentsClick} />
             ) : (
               <Img wd="2rem" src={checkfalse} onClick={commentsClick} />
@@ -752,7 +613,7 @@ const SetTotal = () => {
             <div>댓글</div>
           </AlarmCheck>
           <AlarmCheck>
-            {dmNotify ? (
+            {event.dmNotify ? (
               <Img wd="2rem" src={checktrue} onClick={DMClick} />
             ) : (
               <Img wd="2rem" src={checkfalse} onClick={DMClick} />
@@ -760,7 +621,7 @@ const SetTotal = () => {
             <div>DM</div>
           </AlarmCheck>
           <AlarmCheck>
-            {followNotify ? (
+            {event.followNotify ? (
               <Img wd="2rem" src={checktrue} onClick={followClick} />
             ) : (
               <Img wd="2rem" src={checkfalse} onClick={followClick} />
