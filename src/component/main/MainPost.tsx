@@ -26,6 +26,7 @@ const MainPost: React.FC<{ post: Post; index: number }> = (props) => {
   const currentMusic = useAppSelector<CurrentMusic>(
     (state) => state.main.currentMusic
   );
+  
   const onClickPlayHandler = () => {
     currentMusic.post.id === props.post.id
       ? dispatch(__MainTogglePlay(!currentMusic.isPlayingPlayer))

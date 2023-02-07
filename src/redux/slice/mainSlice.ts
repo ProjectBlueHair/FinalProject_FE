@@ -1,11 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { instanceAxios } from "../../dataManager/apiConfig";
 import { AppState } from "../config";
-
 import { CurrentMusic, LikeModel, Post } from "../../model/MainModel";
-import { useAppSelector } from "../config";
-import { __postLike } from "./detailSlice";
-import { act } from "react-dom/test-utils";
 
 export interface MainState {
   posts: Post[];
@@ -137,7 +133,19 @@ export const __getPostList = createAsyncThunk(
   async (payload: number, thunkAPI) => {
     try {
       console.log("payload,,,", payload);
-      const { data } = await instanceAxios.get(`/post?page=${Number(payload)}&size=10`);
+      const { data } = await instanceAxios.get(`/post?page=${Number(payload)}&size=15`);
+      return data.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+export const __getTaggedList = createAsyncThunk(
+  "__getTaggedList",
+  async (payload: string, thunkAPI) => {
+    try {
+      console.log("__getTaggedList,,,", payload);
+      const { data } = await instanceAxios.get(`/post?page=${Number(payload)}&size=15`);
       return data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);

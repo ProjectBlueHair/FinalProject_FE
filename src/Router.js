@@ -1,16 +1,14 @@
-import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Detail from "./page/Detail";
 import Tag from "./component/tag/Tag";
+import TypeModalContainer from "./modal/TypeModalContainer";
+import Detail from "./page/Detail";
 import MainPage from "./page/MainPage";
 import PostingPage from "./page/PostingPage";
-import TypeModalContainer from "./modal/TypeModalContainer";
-
-import MyPage from "./page/MyPage";
-import SetPage from "./page/SetPage";
 import KakaoLoginHandler from "./component/sign/KakaoLoginHandler";
 import ChatPage from "./page/ChatPage";
 import FeedBackForAdmin from "./page/FeedBackForAdmin";
+import MyPage from "./page/MyPage";
+import SetPage from "./page/SetPage";
 
 export const PATH = {
   main: "/",
@@ -33,6 +31,7 @@ const Router = () => {
       <BrowserRouter>
         <TypeModalContainer />
         <Routes>
+          <Route path="/:tag" element={<MainPage />} />
           <Route path="/" element={<MainPage />} />
           <Route path="/detail/:id" element={<Detail />} />
           <Route path={`${PATH.mypage}/:nickname`} element={<MyPage />} />

@@ -21,7 +21,6 @@ const PostingAudioBar: React.FC<Audio & { index: number }> = (props) => {
     height: AUDIO_BAR_HEIGHT - 5,
     // ref css요소같은거 연동? 해줌
     container: ref,
-
     // 커서 줄색상 (없애는게 좋아보임)
     cursorColor: "transparent",
     // 실행된 부분 색상

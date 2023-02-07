@@ -127,7 +127,6 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
         <Flex
           direction="column"
           justify="flex-start"
-          // wd="60%"
           flex="1"
           hg="100%"
           gap="2rem"
