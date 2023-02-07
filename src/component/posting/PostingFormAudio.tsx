@@ -1,3 +1,4 @@
+import { log } from "console";
 import React, { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
 import useTypeModal from "../../modal/hooks/useTypeModal";
@@ -48,8 +49,6 @@ const PostingFormAudio: React.FC<{ isCollabo: boolean }> = (props) => {
   const { $openModal } = useTypeModal();
   const typeCheck = (file: File) => {
     const type = file.type.split("/")[1];
-
-    
     if (type !== "wav" && type !== "x-wav") {
       setText(defaultText());
       return $openModal({
@@ -61,7 +60,7 @@ const PostingFormAudio: React.FC<{ isCollabo: boolean }> = (props) => {
       });
     }
   };
-  const getAudioData = (file: File) => {
+  const getInputAudioData = (file: File) => {
     return new Promise((resolve) => {
       const url = URL.createObjectURL(file);
       const audio = new Audio(url);
@@ -74,13 +73,12 @@ const PostingFormAudio: React.FC<{ isCollabo: boolean }> = (props) => {
     async (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
       event.stopPropagation();
-      if (event.dataTransfer.files) {
-        const files = event.dataTransfer.files;
-        console.log("files", files);
+      const files = event.dataTransfer.files;
+      if (files && files.length > 0) {
         const arr = [];
         for (let i = 0; i < files.length; i++) {
           typeCheck(files[i]);
-          arr.push(await getAudioData(files[i]));
+          arr.push(await getInputAudioData(files[i]));
         }
         dispatch(__addNewAudio(arr));
         setText(defaultText());
@@ -93,11 +91,12 @@ const PostingFormAudio: React.FC<{ isCollabo: boolean }> = (props) => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const files = event.target.files;
-    if (files) {
+    if (files && files.length > 0) {
+      console.log("file .. ", files.length);
       const arr = [];
       for (let i = 0; i < files.length; i++) {
         typeCheck(files[i]);
-        arr.push(await getAudioData(files[i]));
+        arr.push(await getInputAudioData(files[i]));
       }
       dispatch(__addNewAudio(arr));
       setText(defaultText());

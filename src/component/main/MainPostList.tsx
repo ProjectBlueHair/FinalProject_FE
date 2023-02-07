@@ -1,15 +1,18 @@
 import { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import ServerDown from "../../page/ServerDown";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
-import { MainState, __getPostList } from "../../redux/slice/mainSlice";
+import {
+  MainState,
+  __getPostList,
+  __getTaggedList,
+} from "../../redux/slice/mainSlice";
 import MainPost from "./MainPost";
 const MainPostList = () => {
+  const { tag } = useParams();
   const target = useRef<HTMLDivElement>(null);
   const scrollArea = useRef(null);
-
   const [trigger, setTrigger] = useState(false);
-
   const dispatch = useAppDispatch();
   const { posts, nextPage, isLoading } = useAppSelector<MainState>(
     (state) => state.main
@@ -17,7 +20,7 @@ const MainPostList = () => {
 
   let options = {
     root: scrollArea.current,
-    rootMargin: "20px",
+    rootMargin: "30px",
     threshold: 1,
   };
 
@@ -30,6 +33,7 @@ const MainPostList = () => {
   const callback: IntersectionObserverCallback = (entries, io) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
+        console.log("triggered....");
         setTrigger((prev) => !prev);
       }
     });

@@ -1,32 +1,28 @@
 import React, { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
   collaboApprove,
   CollaboRequestedFormSelector,
-  postingErrorSelector,
   __cleanUp,
   __getAudios,
   __getCollaboRequested,
   __getPostInfo,
 } from "../../redux/slice/postingSlice";
 import Flex from "../elem/Flex";
-import TextButton from "../elem/Button";
 import { formStyle } from "./PostingForm";
-import { useAppDispatch, useAppSelector } from "../../redux/config";
-
-import { useNavigate, useParams } from "react-router-dom";
+import { batch } from "react-redux";
+import { useParams } from "react-router-dom";
+import useTypeModal from "../../modal/hooks/useTypeModal";
 import { Response } from "../../model/ResponseModel";
 import { PATH } from "../../Router";
-import { batch } from "react-redux";
-import useTypeModal from "../../modal/hooks/useTypeModal";
-import Button from "../elem/Button";
 import theme from "../../styles/theme";
+import Button from "../elem/Button";
 import Div from "../elem/Div";
 import Span from "../elem/Span";
 
 const PostingCollaboRequested = () => {
   const { id, postId } = useParams();
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   useEffect(() => {
     batch(() => {
       dispatch(__getPostInfo(Number(postId)));
@@ -101,7 +97,6 @@ const PostingCollaboRequested = () => {
         </Flex>
       </Flex>
     </form>
-
   );
 };
 

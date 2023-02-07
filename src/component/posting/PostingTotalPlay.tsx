@@ -1,16 +1,16 @@
-import React, { Fragment, useEffect, useState } from "react";
-import { useRef } from "react";
-import Flex from "../elem/Flex";
-import Img from "../elem/Img";
+import { Fragment, useEffect, useRef, useState } from "react";
 import AudioPlayer, { RHAP_UI } from "react-h5-audio-player";
 import { pause, playPrimary } from "../../asset/pic";
-import { iconSize } from "../../styles/GlobalStyle";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
   audioControlSelector,
+  totalPlayHandleSelector,
+  __endPlay,
   __seekTo,
   __togglePlay,
 } from "../../redux/slice/postingSlice";
+import { iconSize } from "../../styles/GlobalStyle";
+import Img from "../elem/Img";
 
 import styled from "styled-components";
 import PlayLoading from "../elem/PlayLoading";
@@ -19,9 +19,8 @@ const PostingTotalPlay = () => {
   const audioPlayer = useRef<AudioPlayer>(null);
   const dispatch = useAppDispatch();
   const progressConrol = useAppSelector(audioControlSelector);
+  const totalPlayHandle = useAppSelector(totalPlayHandleSelector);
   const [isLoading, setIsLoading] = useState(false);
-  console.log("progressConrol.onLoad", progressConrol.onLoad);
-  console.log("progressConrol.onLoad", progressConrol.onLoad);
 
   useEffect(() => {
     if (!progressConrol.onLoad && !isLoading) {
@@ -30,7 +29,13 @@ const PostingTotalPlay = () => {
       setIsLoading(false);
     }
   }, [progressConrol.onLoad]);
-
+  useEffect(() => {
+    if (audioPlayer.current && audioPlayer.current.audio.current) {
+      console.log("checking 2");
+      audioPlayer.current.audio.current.currentTime = 0;
+      audioPlayer.current.audio.current.pause();
+    }
+  }, [totalPlayHandle]);
 
   const handlePlay = () => {
     dispatch(__togglePlay(true));
@@ -39,7 +44,14 @@ const PostingTotalPlay = () => {
     dispatch(__togglePlay(false));
   };
   const handleEnded = () => {
-    dispatch(__togglePlay(false));
+    // time out 안해주면 왼쪽 현재 시간만 00:00으로 바뀌고 프로그레스바 UI 까지는 업데이트가 안됨
+    setTimeout(() => {
+      if (audioPlayer.current && audioPlayer.current.audio.current) {
+        console.log("checking 2");
+        audioPlayer.current.audio.current.currentTime = 0;
+      }
+    }, 50);
+    dispatch(__endPlay());
   };
   const handleSeeking = () => {
     dispatch(__seekTo(audioPlayer.current?.audio.current?.currentTime));

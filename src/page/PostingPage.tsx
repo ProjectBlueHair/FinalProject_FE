@@ -24,6 +24,7 @@ const PostingPage = () => {
   const COLLABOPAGE = PATH.collabo.split("/")[1] === CURRENT_PATH;
   const COLLABOREQUESTED = PATH.collaboRequested.split("/")[1] === CURRENT_PATH;
 
+
   return (
     <Fragment>
       <Header />
@@ -42,7 +43,9 @@ const PostingPage = () => {
           <PostingAudioSection>
             <PostingTotalPlay />
             <PostingAudioBars />
-            {COLLABOREQUESTED ? null : <PostingFormAudio isCollabo={COLLABOPAGE}/>}
+            {COLLABOREQUESTED ? null : (
+              <PostingFormAudio isCollabo={COLLABOPAGE} />
+            )}
           </PostingAudioSection>
         </Flex>
         {POSTPAGE && <PostingForm isEdit={EDITPAGE} />}

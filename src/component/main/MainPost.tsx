@@ -26,14 +26,8 @@ const MainPost: React.FC<{ post: Post; index: number }> = (props) => {
   const currentMusic = useAppSelector<CurrentMusic>(
     (state) => state.main.currentMusic
   );
+  
   const onClickPlayHandler = () => {
-    console.log(
-      "currentMusic.post.id",
-      currentMusic.post.id,
-      "props.post.id",
-      props.post.id
-    );
-
     currentMusic.post.id === props.post.id
       ? dispatch(__MainTogglePlay(!currentMusic.isPlayingPlayer))
       : dispatch(__playDifferentSrc(props.post.id));
@@ -51,7 +45,7 @@ const MainPost: React.FC<{ post: Post; index: number }> = (props) => {
       <Img
         style={{ cursor: "pointer" }}
         onClick={() => navigate(`/detail/${props.post.id}`)}
-        hg="20rem"
+        hg="23rem"
         type="radius"
         src={props.post?.postImg}
       />
