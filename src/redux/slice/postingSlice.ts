@@ -33,7 +33,7 @@ export const CollaboRequestedFormSelector = (state: AppState) =>
   state.posting.collaboRequestedForm;
 export const loadingSelector = (state: AppState) => state.posting.isLoading;
 export interface PostingState {
-  form: Form;
+  form: Form; // postingForm component
   collaboRequestedForm: CollaboReqeustedForm; // 콜라보 승인 컴포넌트
   progressControl: ProgressControl; // total play 컴포넌트
   audios: Audio[]; // audio bars 컴포넌트

@@ -8,6 +8,7 @@ export interface MainState {
   nextPage: number;
   currentMusic: CurrentMusic;
   alarmCount: number;
+  tag : string;
   isLoading: boolean;
   error: unknown;
 }
@@ -16,6 +17,7 @@ const initialState = {
   nextPage: 0,
   currentMusic: { post: {}, isPlayingMain: false, isPlayingPlayer: false },
   alarmCount: 0,
+  tag : '',
   isLoading: false,
   error: null,
 } as MainState;
@@ -79,16 +81,10 @@ export const mainSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(__getPostList.pending, (state) => {
-        state.isLoading =true
+        state.isLoading = true;
       })
       .addCase(__getPostList.fulfilled, (state, { payload }) => {
-        console.log(
-          "_getpostlist ...",
-          payload,
-          "nextpage ... ",
-          state.nextPage
-        );
-
+        console.log('__getPostList fulfilled payload : ', payload);
         state.isLoading = false;
         if (state.nextPage === 0) {
           state.currentMusic = {
@@ -133,19 +129,9 @@ export const __getPostList = createAsyncThunk(
   async (payload: number, thunkAPI) => {
     try {
       console.log("payload,,,", payload);
-      const { data } = await instanceAxios.get(`/post?page=${Number(payload)}&size=15`);
-      return data.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error);
-    }
-  }
-);
-export const __getTaggedList = createAsyncThunk(
-  "__getTaggedList",
-  async (payload: string, thunkAPI) => {
-    try {
-      console.log("__getTaggedList,,,", payload);
-      const { data } = await instanceAxios.get(`/post?page=${Number(payload)}&size=15`);
+      const { data } = await instanceAxios.get(
+        `/post?page=${Number(payload)}&size=15`
+      );
       return data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -187,7 +173,6 @@ export const __readAlarm = createAsyncThunk(
     }
   }
 );
-
 export const {
   __MainTogglePlay,
   __playDifferentSrc,

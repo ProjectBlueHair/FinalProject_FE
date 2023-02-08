@@ -4,29 +4,23 @@ import styled from "styled-components";
 import {
   mute,
   pause,
-  playPrimary,
-  repeat,
-  shuffle,
-  skipNext,
+  playPrimary, skipNext,
   skipPrev,
-  volume,
+  volume
 } from "../../asset/pic";
 import { CurrentMusic } from "../../model/MainModel";
 import {
-  __MainTogglePlay,
   __PlayerTogglePlay,
   __playNext,
-  __PlayPrevious,
+  __PlayPrevious
 } from "../../redux/slice/mainSlice";
 import { iconSize } from "../../styles/GlobalStyle";
 import Flex from "../elem/Flex";
 import Img from "../elem/Img";
 
-import useTypeModal from "../../modal/hooks/useTypeModal";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 const MainAudioPlayer = () => {
   const audioPlayer = useRef<AudioPlayer>(null);
-  const { $openModal } = useTypeModal();
   const currentmusic = useAppSelector<CurrentMusic>(
     (state) => state.main.currentMusic
   );
