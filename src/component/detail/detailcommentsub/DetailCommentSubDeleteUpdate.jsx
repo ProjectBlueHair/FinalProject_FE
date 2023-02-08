@@ -71,12 +71,9 @@ const DetailCommentSubDeleteUpdate = ({ re }) => {
                 wd="2rem"
                 src={more}
                 onClick={() => setContentSubOpen(!contentSubOpen)}
-                style={{ cursor: "pointer" }}
               />
               <MoreSubBtn ref={moreSubRef}>
-                <button onClick={onSubUp} style={{ cursor: "pointer" }}>
-                  수정
-                </button>
+                <button onClick={onSubUp}>수정</button>
                 <button
                   onClick={() => onSubCommentDelete(re.id)}
                   style={{ cursor: "pointer" }}
@@ -184,13 +181,16 @@ const MoreSubBtn = styled.div`
   align-items: center;
   justify-content: center;
   button {
+    cursor: pointer;
     border: 1px solid transparent;
     background-color: transparent;
     width: 4rem;
+    font-size: 17px;
     :hover {
       border: transparent;
-      border-bottom: 1px solid #ff4d00;
-      width: 30px;
+      background-color: #ff4d00;
+      border-radius: 20px;
+      color: white;
     }
   }
 `;
