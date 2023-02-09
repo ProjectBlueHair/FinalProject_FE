@@ -63,9 +63,9 @@ const DetailRecomment = () => {
                 });
               }}
             >
-              {List?.tagList?.map((re) => (
+              {List?.tagList?.map((re, index) => (
                 // <StLink to={`/tag/${re}`}>
-                <StLink>
+                <StLink key={index}>
                   <div>{re}</div>
                 </StLink>
               ))}
@@ -83,7 +83,7 @@ const DetailRecomment = () => {
                       />
                     );
                   } else if (index < 4) {
-                    return <div key={imgurl.id}>+</div>;
+                    return <div key={index}>+</div>;
                   }
                 })}
               </RecommentProfile>

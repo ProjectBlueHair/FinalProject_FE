@@ -1,8 +1,6 @@
 import { current } from "@reduxjs/toolkit";
 import { useEffect, useRef, useState } from "react";
 import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { instanceAxios } from "../../dataManager/apiConfig";
@@ -12,7 +10,6 @@ import MypagePlayList from "./MypagePlayList";
 import MypagePlayList2 from "./MypagePlayList2";
 
 const MypageRight = () => {
-  const dispatch = useDispatch();
   const [archiveList, setArchiveList] = useState([]);
   const [archiveList2, setArchiveList2] = useState([]);
   const { nickname } = useParams();
@@ -45,7 +42,6 @@ const MypageRight = () => {
   useEffect(() => {
     getArchive(nickname);
     getArchive2(nickname);
-    dispatch(__getGeneralUserInfo());
   }, [nickname, page, pageTwo]);
 
   const leftClick = () => {
