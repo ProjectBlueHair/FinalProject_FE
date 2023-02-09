@@ -6,6 +6,7 @@ export const serverURL = process.env.REACT_APP_SERVER;
 export const socketURL = process.env.REACT_APP_SOCKET_SERVER;
 export const searchKEY = process.env.REACT_APP_SEARCH_KEY;
 export const searchURL = process.env.REACT_APP_SEARCH_URL;
+
 export const instanceAxios = axios.create({ baseURL: serverURL });
 export const searchAxios = axios.create({ baseURL: searchURL });
 

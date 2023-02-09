@@ -22,20 +22,37 @@ function TypeModalWrapper({ children, type }) {
   const MODAL_WRAPPERS = {
     alarm: AlarmModalWrapper,
     alert: AlertModal,
-    feedback : FeedbackModalWrapper,
-    thank : ThankYou
+    feedback: FeedbackModalWrapper,
+    thank: ThankYou,
+    search: SearchModal,
   };
 
   const Wrapper = MODAL_WRAPPERS[type];
 
-  return (
+  return type === "search" ? (
     <Overlay>
       <Wrapper ref={modalRef}>{children}</Wrapper>
     </Overlay>
+  ) : (
+    <OverlayTransparent>
+      <Wrapper ref={modalRef}>{children}</Wrapper>
+    </OverlayTransparent>
   );
 }
 export default TypeModalWrapper;
 const Overlay = styled.div`
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  top: 65px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.37);
+  z-index: 99999;
+`;
+
+const OverlayTransparent = styled.div`
   position: fixed;
   width: 100%;
   height: 100vh;
@@ -44,7 +61,7 @@ const Overlay = styled.div`
   left: 0;
   right: 0;
   background: transparent;
-  z-index: 19999;
+  z-index: 99999;
 `;
 
 const AlarmModalWrapper = styled.div`
@@ -61,12 +78,23 @@ const AlarmModalWrapper = styled.div`
   z-index: 9999;
   /* transform: translate(-50%, -50%); */
 `;
-
+const SearchModal = styled.div`
+  width: 60rem;
+  height: 78%;
+  border-radius: 5px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  background-color: #fff;
+  position: absolute;
+  top: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+`;
 
 const AlertModal = styled.div`
   z-index: 5;
   width: 40rem;
-  height: 55rem;
+  height: 60rem;
   border-radius: 10px;
   background-color: #fff;
   position: absolute;
