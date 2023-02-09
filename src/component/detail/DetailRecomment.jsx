@@ -2,24 +2,49 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { like, view } from "../../asset/pic";
-import { searchAxios } from "../../dataManager/apiConfig";
+import { searchAxios, searchURL } from "../../dataManager/apiConfig";
 import useTypeModal from "../../modal/hooks/useTypeModal";
 import Img from "../elem/Img";
 import StLink from "../elem/Link";
 
-const DetailRecomment = () => {
+const DetailRecomment = ({ detail }) => {
+  const Title = detail?.title;
   const [ReList, setReList] = useState();
   const { $openModal } = useTypeModal();
   const navigate = useNavigate();
+
   const detailReCom = async () => {
+    const a = {
+      query: {
+        more_like_this: {
+          fields: ["title", "contents"],
+          like: Title,
+          min_term_freq: 1,
+          max_query_terms: 10,
+          min_doc_freq: 1,
+        },
+      },
+      _source: {
+        include: [
+          "title",
+          "nickname",
+          "post_img",
+          "like_count",
+          "view_count",
+          "id",
+        ],
+      },
+      sort: {
+        view_count: "desc",
+      },
+      size: 5,
+    };
     try {
       const {
         data: {
           hits: { hits },
         },
-      } = await searchAxios.post(
-        "https://search-oncounter-es-id3ni4o2o6i3v27hoj4eitkrqi.ap-northeast-2.es.amazonaws.com/post/_search?size=10"
-      );
+      } = await searchAxios.post(`${searchURL}`, a);
       setReList(hits);
     } catch (error) {
       console.log(error);
@@ -28,7 +53,7 @@ const DetailRecomment = () => {
 
   useEffect(() => {
     detailReCom();
-  }, []);
+  }, [Title]);
 
   const detailMove = (id) => {
     navigate(`/detail/${id}`);
@@ -38,38 +63,60 @@ const DetailRecomment = () => {
   return (
     <DetailReComCol>
       <h1>추천 음악</h1>
-      {ReList?.map((List, index) => (
-        <DetailRightLine key={index}>
-          <RecommentImg
-            src={List?._source.post_img}
-            alt="사진"
-            onClick={() => detailMove(List?._source.id)}
-            style={{ cursor: "pointer" }}
-          />
-          <RecommentText>
-            <RecommentTitle>
-              <div
-                onClick={() => detailMove(List?._source.id)}
-                style={{ cursor: "pointer" }}
-              >
-                {List?._source.title}
-              </div>
-              {/* <Img wd="3rem" src={more} onClick={moreClick} /> */}
-            </RecommentTitle>
-            <RecommentImgViewLike>
-              <div>{List?._source.nickname}</div>
-              <div>
-                <Img wd="1.3rem" src={view} style={{ marginRight: "5px" }} />
-                <span>{List?._source.view_count}</span>
-              </div>
-              <div>
-                <Img wd="1rem" src={like} style={{ marginRight: "5px" }} />
-                <span>{List?._source.like_count}</span>
-              </div>
-            </RecommentImgViewLike>
-          </RecommentText>
-        </DetailRightLine>
-      ))}
+      {ReList?.length === 1 ? (
+        <div
+          style={{ width: "100%", display: "flex", justifyContent: "center" }}
+        >
+          <SearchList>추천 음악이 없습니다!</SearchList>
+        </div>
+      ) : (
+        <>
+          {ReList?.map((List, index) =>
+            List?._source.title === Title ? (
+              ""
+            ) : (
+              <DetailRightLine key={index}>
+                <RecommentImg
+                  src={List?._source.post_img}
+                  alt="사진"
+                  onClick={() => detailMove(List?._source.id)}
+                  style={{ cursor: "pointer" }}
+                />
+                <RecommentText>
+                  <RecommentTitle>
+                    <div
+                      onClick={() => detailMove(List?._source.id)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      {List?._source.title}
+                    </div>
+                    {/* <Img wd="3rem" src={more} onClick={moreClick} /> */}
+                  </RecommentTitle>
+                  <RecommentImgViewLike>
+                    <div>{List?._source.nickname}</div>
+                    <div>
+                      <Img
+                        wd="1.3rem"
+                        src={view}
+                        style={{ marginRight: "5px" }}
+                      />
+                      <span>{List?._source.view_count}</span>
+                    </div>
+                    <div>
+                      <Img
+                        wd="1rem"
+                        src={like}
+                        style={{ marginRight: "5px" }}
+                      />
+                      <span>{List?._source.like_count}</span>
+                    </div>
+                  </RecommentImgViewLike>
+                </RecommentText>
+              </DetailRightLine>
+            )
+          )}
+        </>
+      )}
     </DetailReComCol>
   );
 };
@@ -86,6 +133,13 @@ const DetailReComCol = styled.div`
   h1 {
     margin-bottom: 10px;
   }
+`;
+
+const SearchList = styled.div`
+  width: 100%;
+  display: flex;
+  word-break: keep-all;
+  font-size: 20px;
 `;
 
 const DetailRightLine = styled.div`
