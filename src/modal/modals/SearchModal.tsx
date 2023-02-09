@@ -93,7 +93,7 @@ const SearchModal = () => {
         </Flex>
         <Flex direction="column" pd="2rem 0 0">
           {searchState.length === 0 ? (
-            <Div>검색 결과가 없습니다.</Div>
+            <Div>{ search.value.length >0 ? '검색 결과가 없습니다.' : '검색어를 입력해주세요.'}</Div>
           ) : (
             searchState?.map((item, index) => (
               <SearchItem

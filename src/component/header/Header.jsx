@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { IoIosClose } from "react-icons/io";
+import { useSelector } from "react-redux";
 import { batch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -7,12 +9,11 @@ import {
   mainLogo,
   message,
   notifications,
-  search,
+  searchMain,
   upload,
 } from "../../asset/pic";
 import { serverURL } from "../../dataManager/apiConfig";
 import { getCookies, removeCookies } from "../../dataManager/cookie";
-import useInput from "../../hook/useInput";
 import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
 import useTypeModal from "../../modal/hooks/useTypeModal";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
@@ -23,6 +24,7 @@ import {
   __getAlarm,
   __typeSearch,
 } from "../../redux/slice/mainSlice";
+import { typeModalSelector } from "../../modal/typeModalSlice";
 import {
   userSelector,
   __clearUser,
@@ -72,6 +74,7 @@ const Header = () => {
   const user = useAppSelector(userSelector);
   const alarmCount = useAppSelector(alarmSelector);
   const searchObj = useAppSelector(searchSelector);
+  const modalList = useSelector(typeModalSelector);
 
   const connectEvent = () => {
     let readyState = localStorage.getItem("readyState");
@@ -158,24 +161,40 @@ const Header = () => {
         />
       </Flex>
 
-      <Flex>
+      <Flex data-name="searchElement">
         <Flex
+          data-name="searchElement"
           type="card"
           shadow="none"
           justify="flex-start"
+          hg="4rem"
           pd="0 0.5rem 0 2rem"
         >
           <Input
+            data-name="searchElement"
             value={searchObj.value}
             onChange={(e) => {
               dispatch(__typeSearch(e.target.value));
             }}
             onClick={() => {
-              $openModal({ type: "search" });
+              modalList.length === 0 && $openModal({ type: "search" });
             }}
             placeholder="검색"
           />
-          <Img wd={iconSize} src={search} />
+          {searchObj.value.length > 0 ? (
+            <IoIosClose
+              data-name="searchElement"
+              cursor={"pointer"}
+              onClick={() => {
+                dispatch(__typeSearch(""));
+                // $openModal({ type: "search" });
+              }}
+              size={"4rem"}
+              color={theme.color.main}
+            />
+          ) : (
+            <Img data-name="searchElement" wd={iconSize} src={searchMain} />
+          )}
         </Flex>
       </Flex>
 

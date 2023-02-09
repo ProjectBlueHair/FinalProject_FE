@@ -10,11 +10,11 @@ import ThankYou from "./modals/ThankYou";
 import SearchModal from "./modals/SearchModal";
 const MODAL_COMPONENTS = {
   alarm: AlarmModal,
-  loading : LoadingModal, 
-  alert : AlertModal,
-  feedback : FeedBack,
-  thank : ThankYou,
-  search : SearchModal
+  loading: LoadingModal,
+  alert: AlertModal,
+  feedback: FeedBack,
+  thank: ThankYou,
+  search: SearchModal,
 };
 
 function TypeModalContainer() {
