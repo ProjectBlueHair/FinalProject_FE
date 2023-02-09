@@ -35,7 +35,7 @@ import theme from "../../styles/theme";
 import Button from "../elem/Button";
 import Flex from "../elem/Flex";
 import Img from "../elem/Img";
-import Input from "../elem/Input";
+import Input, { StInput } from "../elem/Input";
 import Span from "../elem/Span";
 import useModal from "../modal/useModal";
 const iconSize = "4rem";
@@ -75,6 +75,7 @@ const Header = () => {
   const alarmCount = useAppSelector(alarmSelector);
   const searchObj = useAppSelector(searchSelector);
   const modalList = useSelector(typeModalSelector);
+  const searchRef = useRef(null);
 
   const connectEvent = () => {
     let readyState = localStorage.getItem("readyState");
@@ -170,7 +171,8 @@ const Header = () => {
           hg="4rem"
           pd="0 0.5rem 0 2rem"
         >
-          <Input
+          <SearchInput
+            ref={searchRef}
             data-name="searchElement"
             value={searchObj.value}
             onChange={(e) => {
@@ -187,7 +189,7 @@ const Header = () => {
               cursor={"pointer"}
               onClick={() => {
                 dispatch(__typeSearch(""));
-                // $openModal({ type: "search" });
+                searchRef.current.focus();
               }}
               size={"4rem"}
               color={theme.color.main}
@@ -311,6 +313,7 @@ const Grid = styled.div`
   grid-template-columns: 1fr 1fr 1fr;
   gap: 1rem;
 `;
+const SearchInput = styled(StInput)``;
 const AlarmCount = styled.div`
   position: fixed;
   top: 1.4rem;
