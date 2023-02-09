@@ -83,13 +83,7 @@ const DetailDayAndFollow = ({ detail }) => {
   };
 
   const NotTouch = () => {
-    $openModal({
-      type: "alert",
-      props: {
-        message: "준비중인 페이지 (기능) 입니다.",
-        type: "info",
-      },
-    });
+    $openModal({ type: "feedback", props: {} });
   };
   const logBtn = () => {
     $openModal({
