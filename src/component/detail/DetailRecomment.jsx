@@ -8,6 +8,7 @@ import Img from "../elem/Img";
 import StLink from "../elem/Link";
 
 const DetailRecomment = () => {
+  const searchURL = process.env.REACT_APP_SEARCHURL;
   const [ReList, setReList] = useState();
   const { $openModal } = useTypeModal();
   const navigate = useNavigate();
@@ -17,9 +18,7 @@ const DetailRecomment = () => {
         data: {
           hits: { hits },
         },
-      } = await searchAxios.post(
-        "https://search-oncounter-es-id3ni4o2o6i3v27hoj4eitkrqi.ap-northeast-2.es.amazonaws.com/post/_search?size=10"
-      );
+      } = await searchAxios.post(`${searchURL}?size=10`);
       setReList(hits);
     } catch (error) {
       console.log(error);
