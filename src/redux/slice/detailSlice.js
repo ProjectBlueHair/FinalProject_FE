@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import { instanceAxios } from "../../dataManager/apiConfig";
 
 const initialState = {
@@ -6,6 +6,7 @@ const initialState = {
   collabo: [],
   music: [],
   userInfo: [],
+  error: "",
 };
 
 export const __getDetail = createAsyncThunk(
@@ -61,6 +62,7 @@ export const __putDetailFollow = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       await instanceAxios.put("member/follow", payload);
+      return thunkAPI.fulfillWithValue(payload);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -72,6 +74,7 @@ export const __postLike = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       await instanceAxios.post(`post/like/${payload}`);
+      return thunkAPI.fulfillWithValue(payload);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -81,19 +84,62 @@ export const __postLike = createAsyncThunk(
 export const detailSlice = createSlice({
   name: "detail",
   initialState,
-  extraReducers: {
-    [__getDetail.fulfilled]: (state, action) => {
-      state.detail = action.payload;
-    },
-    [__getDetailCollabo.fulfilled]: (state, action) => {
-      state.collabo = action.payload;
-    },
-    [__getDetailMusic.fulfilled]: (state, action) => {
-      state.music = action.payload;
-    },
-    [__getUserInfo.fulfilled]: (state, action) => {
-      state.userInfo = action.payload;
-    },
+  extraReducers: (builder) => {
+    builder
+      .addCase(__getDetail.pending, (_state) => {})
+      .addCase(__getDetail.fulfilled, (state, action) => {
+        state.detail = action.payload;
+      })
+      .addCase(__getDetail.rejected, (state, action) => {
+        state.error = action.payload;
+      })
+      .addCase(__getDetailCollabo.pending, (_state) => {})
+      .addCase(__getDetailCollabo.fulfilled, (state, action) => {
+        state.collabo = action.payload;
+      })
+      .addCase(__getDetailCollabo.rejected, (state, action) => {
+        state.error = action.payload;
+      })
+      .addCase(__getDetailMusic.pending, (_state) => {})
+      .addCase(__getDetailMusic.fulfilled, (state, action) => {
+        state.music = action.payload;
+      })
+      .addCase(__getDetailMusic.rejected, (state, action) => {
+        state.error = action.payload;
+      })
+      .addCase(__getUserInfo.pending, (_state) => {})
+      .addCase(__getUserInfo.fulfilled, (state, action) => {
+        state.userInfo = action.payload;
+      })
+      .addCase(__getUserInfo.rejected, (state, action) => {
+        state.error = action.payload;
+      })
+      .addCase(__putDetailFollow.pending, (_state) => {})
+      .addCase(__putDetailFollow.fulfilled, (state, action) => {
+        state.collabo.data?.map((collabo) => {
+          if (collabo.nickname === action.payload.myFollowingMemberNickname) {
+            if (collabo.isFollowed === false) {
+              collabo.followerCount = collabo.followerCount + 1;
+            } else {
+              collabo.followerCount = collabo.followerCount - 1;
+            }
+            collabo.isFollowed = !collabo.isFollowed;
+          } else {
+            return collabo;
+          }
+        });
+      })
+      .addCase(__putDetailFollow, (state, action) => {
+        state.error = action.payload;
+      });
+    // .addCase(__postLike.pending, (_state) => {})
+    // .addCase(__postLike.fulfilled, (state, action) => {
+    //   console.log(current(state));
+    //   console.log(action.payload);
+    // })
+    // .addCase(__postLike.rejected, (state, action) => {
+    //   state.error = action.payload;
+    // });
   },
 });
 
