@@ -22,9 +22,8 @@ const DetailCommentLike = ({ mcv }) => {
   };
   const acToken = getCookies("accesstoken");
 
-  const onLikeClick = async (comId) => {
-    await dispatch(__likeComment(comId));
-    dispatch(__getComment(id));
+  const onLikeClick = (comId) => {
+    dispatch(__likeComment(comId));
   };
   return (
     <CommentLikeTouch>
