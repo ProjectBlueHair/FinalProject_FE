@@ -8,7 +8,8 @@ export interface MainState {
   nextPage: number;
   currentMusic: CurrentMusic;
   alarmCount: number;
-  tag : string;
+  search: { isOpen: boolean; value: string };
+  tag: string;
   isLoading: boolean;
   error: unknown;
 }
@@ -17,12 +18,14 @@ const initialState = {
   nextPage: 0,
   currentMusic: { post: {}, isPlayingMain: false, isPlayingPlayer: false },
   alarmCount: 0,
-  tag : '',
+  search: { isOpen: false, value: "" },
+  tag: "",
   isLoading: false,
   error: null,
 } as MainState;
 
 export const alarmSelector = (state: AppState) => state.main.alarmCount;
+export const searchSelector = (state: AppState) => state.main.search;
 export const mainErrorSelector = (state: AppState) => state.main.error;
 const findPostIndex = (posts: Post[], payload: string | number) => {
   return posts.findIndex((post) => post.id === payload);
@@ -77,6 +80,12 @@ export const mainSlice = createSlice({
     __clearAlarmCount: (state) => {
       state.alarmCount = 0;
     },
+    __typeSearch: (state, { payload }) => {
+      state.search.value = payload;
+    },
+    __openSearch: (state, { payload }) => {
+      state.search.isOpen = payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -84,7 +93,7 @@ export const mainSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(__getPostList.fulfilled, (state, { payload }) => {
-        console.log('__getPostList fulfilled payload : ', payload);
+        console.log("__getPostList fulfilled payload : ", payload);
         state.isLoading = false;
         if (state.nextPage === 0) {
           state.currentMusic = {
@@ -176,6 +185,7 @@ export const __readAlarm = createAsyncThunk(
 export const {
   __MainTogglePlay,
   __playDifferentSrc,
+  __typeSearch,
   __PlayerTogglePlay,
   __PlayPrevious,
   __playNext,
