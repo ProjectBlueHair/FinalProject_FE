@@ -1,14 +1,13 @@
 import React, { useEffect, useRef } from "react";
+import WaveSurfer from "wavesurfer.js";
+import { Audio } from "../../model/PostingModel";
+import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
   audioControlSelector,
-  __audioOnLoaded,
+  __audioOnLoaded
 } from "../../redux/slice/postingSlice";
-import { Audio, ProgressControl } from "../../model/PostingModel";
-import WaveSurfer from "wavesurfer.js";
-import { useAppDispatch, useAppSelector } from "../../redux/config";
 import Flex from "../elem/Flex";
 import { AUDIO_BAR_HEIGHT } from "./PostingAudioBars";
-import { log } from "console";
 
 const PostingAudioBar: React.FC<Audio & { index: number }> = (props) => {
   const formWaveSurferOptions = (ref: HTMLDivElement) => ({
@@ -51,6 +50,7 @@ const PostingAudioBar: React.FC<Audio & { index: number }> = (props) => {
       waveformRef.current as HTMLDivElement
     );
     wavesurfer.current = WaveSurfer.create(options);
+    console.log('audio file', props.audioData.musicFile)
     wavesurfer.current.load(props.audioData.musicFile);
     wavesurfer.current.on("ready", function () {
       if (wavesurfer.current) {

@@ -29,6 +29,7 @@ const PostingTotalPlay = () => {
       setIsLoading(false);
     }
   }, [progressConrol.onLoad]);
+  
   useEffect(() => {
     if (audioPlayer.current && audioPlayer.current.audio.current) {
       console.log("checking 2");

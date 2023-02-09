@@ -23,13 +23,14 @@ const rootReducer = combineReducers({
   user: userSlice.reducer,
   chat: chatSlice.reducer,
 });
-export type AppState = ReturnType<typeof rootReducer>;
 
 const store = configureStore({
   reducer: rootReducer,
 });
+
 type TypedDispatch<T> = ThunkDispatch<T, any, AnyAction>;
 
+export type AppState = ReturnType<typeof rootReducer>;
 export const useAppDispatch = () => useDispatch<TypedDispatch<AppState>>();
 export const useAppSelector: TypedUseSelectorHook<AppState> = useSelector;
 

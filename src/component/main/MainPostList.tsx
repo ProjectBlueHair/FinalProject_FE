@@ -4,8 +4,7 @@ import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
   MainState,
-  __getPostList,
-  __getTaggedList,
+  __getPostList
 } from "../../redux/slice/mainSlice";
 import MainPost from "./MainPost";
 const MainPostList = () => {
@@ -27,6 +26,9 @@ const MainPostList = () => {
   useEffect(() => {
     if (!isLoading) {
       dispatch(__getPostList(nextPage));
+    }
+    return ()=>{
+      console.log('unmount')
     }
   }, [trigger]);
 
