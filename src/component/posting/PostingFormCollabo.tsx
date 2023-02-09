@@ -23,9 +23,12 @@ import Button from "../elem/Button";
 import theme from "../../styles/theme";
 import Div from "../elem/Div";
 import SupportLinks from "./SupportLinks";
+import { useGetAudiosQuery } from "../../service/audios";
 
 const PostingFormCollabo = () => {
   const { id } = useParams();
+  // const { data, error, isLoading } = useGetAudiosQuery(Number(id));
+
   const dispatch = useAppDispatch();
   const { $openModal, $closeModal } = useTypeModal();
 
@@ -34,7 +37,6 @@ const PostingFormCollabo = () => {
       dispatch(__getAudios(Number(id)));
       dispatch(__getPostInfo(Number(id)));
     });
-
     return () => {
       dispatch(__cleanUp());
     };

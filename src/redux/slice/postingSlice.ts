@@ -12,6 +12,7 @@ import {
   ProgressControl,
 } from "../../model/PostingModel";
 import { Response } from "../../model/ResponseModel";
+import { audiosApi } from "../../service/audios";
 import { AppState } from "../config";
 
 export const formSelector = {
@@ -201,6 +202,7 @@ export const postingSlice = createSlice({
           state.progressControl.src = payload[0].musicFile;
         }
       )
+
       .addCase(__getAudios.rejected, (state, { payload }) => {
         state.error = payload;
       })
@@ -232,7 +234,22 @@ export const postingSlice = createSlice({
         console.log("__getCollaboRequested", payload);
 
         state.error = payload;
-      });
+      })
+      .addMatcher(
+        audiosApi.endpoints.getAudios.matchFulfilled,
+        (state, { payload }: { payload: AudioData[] }) => {
+          console.log("audioData ...", payload);
+          state.isLoading = false;
+          payload.forEach((audio) => {
+            state.audios = state.audios.concat({
+              ...state.audio,
+              isNewAudio: false,
+              audioData: audio,
+            });
+          });
+          state.progressControl.src = payload[0].musicFile;
+        }
+      );
   },
 });
 export const __getAudios = createAsyncThunk(
@@ -252,7 +269,6 @@ export const __getPostInfo = createAsyncThunk(
     try {
       const { data } = await instanceAxios.get(`/post/details/${payload}`);
       console.log("postinfo(detail)", data);
-
       return data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);

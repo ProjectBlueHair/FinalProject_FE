@@ -1,4 +1,9 @@
-import { AnyAction, combineReducers, configureStore } from "@reduxjs/toolkit";
+import {
+  AnyAction,
+  combineReducers,
+  configureStore,
+  getDefaultMiddleware,
+} from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
@@ -11,6 +16,7 @@ import { typeModalSlice } from "../../modal/typeModalSlice";
 import { collaboSlice } from "../slice/collaboSlice";
 import { userSlice } from "../slice/userSlice";
 import { chatSlice } from "../../component/chat/chatSlice";
+import { audiosApi } from "../../service/audios";
 
 const rootReducer = combineReducers({
   modal: modalSlice.reducer,
@@ -22,10 +28,12 @@ const rootReducer = combineReducers({
   collabo: collaboSlice.reducer,
   user: userSlice.reducer,
   chat: chatSlice.reducer,
+  [audiosApi.reducerPath]: audiosApi.reducer,
 });
-
 const store = configureStore({
   reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(audiosApi.middleware),
 });
 
 type TypedDispatch<T> = ThunkDispatch<T, any, AnyAction>;
