@@ -19,6 +19,8 @@ jobs:
            echo "REACT_APP_KaKaoREDIRECT=$REACT_APP_KaKaoREDIRECT" >> .env.production
            echo "REACT_APP_KaKaoJSKey=$REACT_APP_KaKaoJSKey" >> .env.production
            echo "REACT_APP_SOCKET_SERVER=$REACT_APP_SOCKET_SERVER" >> .env.production
+           echo "REACT_APP_SEARCH_URL=$REACT_APP_SEARCH_URL" >> .env.production
+           echo "REACT_APP_SEARCH_KEY=$REACT_APP_SEARCH_KEY" >> .env.production
         env:
           REACT_APP_SERVER: ${{ secrets.REACT_APP_SERVER }}
           REACT_APP_AK: ${{ secrets.REACT_APP_AK }}
@@ -28,6 +30,8 @@ jobs:
           REACT_APP_KaKaoREDIRECT: ${{ secrets.REACT_APP_KaKaoREDIRECT_PROD }}
           REACT_APP_KaKaoJSKey: ${{ secrets.REACT_APP_KaKaoJSKey }}
           REACT_APP_SOCKET_SERVER: ${{ secrets.REACT_APP_SOCKET_SERVER }}
+          REACT_APP_SEARCH_URL: ${{ secrets.REACT_APP_SEARCH_URL }}
+          REACT_APP_SEARCH_KEY: ${{ secrets.REACT_APP_SEARCH_KEY }}
 
       - name: Install dependencies
         run: yarn install
