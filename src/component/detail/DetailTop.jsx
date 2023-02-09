@@ -117,7 +117,7 @@ const DetailTop = () => {
       </DetailTopView>
       <DetailBottom>
         <DetailDayAndFollow detail={detail} />
-        <DetailRecomment />
+        <DetailRecomment detail={detail} />
       </DetailBottom>
     </PlayTop>
   );

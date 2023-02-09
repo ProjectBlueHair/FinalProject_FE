@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
-import Div from "../elem/Div";
 import Flex, { StFlex } from "../elem/Flex";
 import ChatRoomItem from "./ChatRoomItem";
 import { chatRoomsSelector, __getChatRooms } from "./chatSlice";

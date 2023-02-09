@@ -19,6 +19,7 @@ import { CurrentMusic, Post } from "../../model/MainModel";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import { useNavigate } from "react-router-dom";
 import useTypeModal from "../../modal/hooks/useTypeModal";
+import { PATH } from "../../Router";
 const MainPost: React.FC<{ post: Post; index: number }> = (props) => {
   const profile_margin = "0 0 0 -1rem";
   const dispatch = useAppDispatch();
@@ -126,6 +127,7 @@ const MainPost: React.FC<{ post: Post; index: number }> = (props) => {
             },
           });
         }}
+
       >
         {props.post.tagList?.map((tag, index) => (
           // <StLink key={index} to={`/tag/${tag}`}>

@@ -1,23 +1,17 @@
-import React, { KeyboardEventHandler, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { useStomp } from "../../hook/useStomp";
 import useTextArea from "../../hook/useTextArea";
+import { useAppSelector } from "../../redux/config";
+import { userSelector } from "../../redux/slice/userSlice";
 import Button from "../elem/Button";
 import Flex from "../elem/Flex";
 import { StTextarea } from "../elem/Textarea";
-import { chatSelector, roomIdSelector } from "./chatSlice";
-import { userSelector } from "../../redux/slice/userSlice";
-import { useAppSelector } from "../../redux/config";
-import {
-  instanceAxios,
-  serverURL,
-  socketURL,
-} from "../../dataManager/apiConfig";
-import { keyboardKey } from "@testing-library/user-event";
+import { currentRoomIdSelector } from "./chatSlice";
 
 const ChatForm = () => {
   const user = useAppSelector(userSelector);
-  const roomId = useAppSelector(roomIdSelector);
+  const roomId = useAppSelector(currentRoomIdSelector);
   const { send } = useStomp();
   const messageInput = useTextArea("");
 

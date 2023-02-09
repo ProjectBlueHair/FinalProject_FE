@@ -3,7 +3,6 @@ import { instanceAxios } from "../../dataManager/apiConfig";
 import { Chat, ChatRoom, ChatState } from "../../model/ChatModel";
 import { AppState } from "../../redux/config";
 
-export const roomIdSelector = (state: AppState) => state.chat.currentRoomId;
 export const chatSelector = (state: AppState) => state.chat.chat;
 export const chatRoomsSelector = (state: AppState) => state.chat.chatRooms;
 export const currentRoomIdSelector = (state: AppState) =>
@@ -22,7 +21,6 @@ export const chatSlice = createSlice({
   reducers: {
     __selectChatRoom: (state, { payload }) => {
       console.log("__selectChatRoom payload ... ", payload);
-      // state.chat = []
       state.currentRoomId = payload;
     },
     __updateChat: (state, { payload }: { payload: Chat }) => {

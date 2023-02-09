@@ -8,22 +8,25 @@ import {
   message,
   notifications,
   search,
-  upload
+  upload,
 } from "../../asset/pic";
 import { serverURL } from "../../dataManager/apiConfig";
 import { getCookies, removeCookies } from "../../dataManager/cookie";
+import useInput from "../../hook/useInput";
 import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
 import useTypeModal from "../../modal/hooks/useTypeModal";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
   alarmSelector,
+  searchSelector,
   __clearAlarmCount,
-  __getAlarm
+  __getAlarm,
+  __typeSearch,
 } from "../../redux/slice/mainSlice";
 import {
   userSelector,
   __clearUser,
-  __getGeneralUserInfo
+  __getGeneralUserInfo,
 } from "../../redux/slice/userSlice";
 import { PATH } from "../../Router";
 import theme from "../../styles/theme";
@@ -68,6 +71,8 @@ const Header = () => {
   const AccessToken = getCookies("accesstoken");
   const user = useAppSelector(userSelector);
   const alarmCount = useAppSelector(alarmSelector);
+  const searchObj = useAppSelector(searchSelector);
+
   const connectEvent = () => {
     let readyState = localStorage.getItem("readyState");
     if (readyState === null) readyState = 2;
@@ -127,6 +132,7 @@ const Header = () => {
   const onClickMypage = () => {
     navigate(`/mypage/${user.nickname}`);
   };
+
   return (
     <Grid>
       <Flex justify="space-between">
@@ -159,7 +165,16 @@ const Header = () => {
           justify="flex-start"
           pd="0 0.5rem 0 2rem"
         >
-          <Input placeholder="검색 기능은 준비중 입니다." />
+          <Input
+            value={searchObj.value}
+            onChange={(e) => {
+              dispatch(__typeSearch(e.target.value));
+            }}
+            onClick={() => {
+              $openModal({ type: "search" });
+            }}
+            placeholder="검색"
+          />
           <Img wd={iconSize} src={search} />
         </Flex>
       </Flex>
@@ -195,6 +210,7 @@ const Header = () => {
           <Img
             onClick={() => {
               $openModal({ type: "alarm" });
+              // dispatch(__openSearch)
             }}
             type="icon"
             wd={iconSize}

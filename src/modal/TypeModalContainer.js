@@ -7,12 +7,14 @@ import LoadingModal from "./modals/LoadingModal";
 import AlertModal from "./modals/AlertModal";
 import FeedBack from "./modals/FeedBack";
 import ThankYou from "./modals/ThankYou";
+import SearchModal from "./modals/SearchModal";
 const MODAL_COMPONENTS = {
   alarm: AlarmModal,
   loading : LoadingModal, 
   alert : AlertModal,
   feedback : FeedBack,
-  thank : ThankYou
+  thank : ThankYou,
+  search : SearchModal
 };
 
 function TypeModalContainer() {

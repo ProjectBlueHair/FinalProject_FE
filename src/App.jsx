@@ -3,7 +3,6 @@ import GlobalStyle from "./styles/GlobalStyle";
 
 import Router from "./Router";
 import theme from "./styles/theme";
-import ErrorCheck from "./util/ErrorCheck";
 
 const App = () => {
   if (process.env.NODE_ENV === "production") {

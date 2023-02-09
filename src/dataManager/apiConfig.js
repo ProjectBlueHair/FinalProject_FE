@@ -4,9 +4,17 @@ import { getCookies, removeCookies, setCookie } from "./cookie";
 
 export const serverURL = process.env.REACT_APP_SERVER;
 export const socketURL = process.env.REACT_APP_SOCKET_SERVER;
+export const searchKEY = process.env.REACT_APP_SEARCH_KEY;
+export const searchURL = process.env.REACT_APP_SEARCH_URL;
 
 export const instanceAxios = axios.create({ baseURL: serverURL });
-export const reassuranceAxios = axios.create({ baseURL: serverURL });
+export const searchAxios = axios.create({ baseURL: searchURL });
+
+searchAxios.interceptors.request.use((config) => {
+  if (config === undefined) return;
+  config.headers["Authorization"] = searchKEY;
+  return config;
+});
 
 instanceAxios.interceptors.request.use((config) => {
   if (config === undefined) return;
@@ -29,10 +37,11 @@ const addRefreshSubscriber = (callback) => {
 instanceAxios.interceptors.response.use(
   (res) => {
     const { data, config } = res;
-    // console.log("AXIOS INTERCEPTOR DATA", data);
     switch (data.customHttpStatus) {
       case 4003:
-        throw new Error("채널 수(2채널) 혹은 비트 수(8비트 또는 16비트)가 맞지 않아 처리할 수 없습니다");
+        throw new Error(
+          "채널 수(2채널) 혹은 비트 수(8비트 또는 16비트)가 맞지 않아 처리할 수 없습니다"
+        );
       case 4011: //토큰 없음 : undefined인 case 존재
         removeCookies("accesstoken", { path: "/" });
         removeCookies("refreshtoken", { path: "/" });
@@ -52,7 +61,7 @@ instanceAxios.interceptors.response.use(
               if (!accesstoken || !refreshtoken) {
                 removeCookies("accesstoken", { path: "/" });
                 removeCookies("refreshtoken", { path: "/" });
-               throw new Error(
+                throw new Error(
                   "로그인이 만료되었습니다. 다시 로그인 해주세요"
                 );
               }

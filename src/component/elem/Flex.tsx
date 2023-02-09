@@ -16,6 +16,9 @@ interface DivProps {
   mhg?: string;
   pd?: string;
   mg?: string;
+  fc? : string;
+  fw? : string;
+  fs? : string;
   flex?: string;
   overFlow?: string;
   flexWrap?: string;
@@ -57,6 +60,10 @@ const Flex: React.FC<DivProps> = (props) => {
 export default Flex;
 export const StFlex = styled.div<DivProps>`
   display: flex;
+  font-size: ${({ fs }) => fs || "inherit"};
+  font-weight: ${({ fw }) => fw || "inherit"};
+
+  color: ${({ fc }) => fc || "inherit"};
   flex-direction: ${({ direction }) => direction || "row"};
   align-items: ${({ align }) => align || "center"};
   justify-content: ${({ justify }) => justify || "center"};

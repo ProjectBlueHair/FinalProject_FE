@@ -108,7 +108,7 @@ const MypageLeft = () => {
       },
     });
   };
-
+  console.log(information);
   return (
     <LeftTotalDiv>
       <MypageLeftDiv>
@@ -117,9 +117,13 @@ const MypageLeft = () => {
           {information?.nickname}
         </h1>
         <RowView>
-          {information?.jobList.map((job, index) => (
-            <span key={index}>{job}</span>
-          ))}
+          {information?.jobList.map((job, index) => {
+            if (job === "") {
+              return;
+            } else {
+              return <span key={index}>{job}</span>;
+            }
+          })}
         </RowView>
         {information?.isMine ? (
           <>
@@ -132,7 +136,13 @@ const MypageLeft = () => {
             {acToken === undefined ? (
               <MypageBtn onClick={NotFollow}>팔로우</MypageBtn>
             ) : (
-              <MypageBtn onClick={mypageFollow}>
+              <MypageBtn
+                onClick={mypageFollow}
+                style={{
+                  backgroundColor: isFollowed ? "#ff4d00" : "transparent",
+                  color: isFollowed ? "white" : "black",
+                }}
+              >
                 {isFollowed ? "팔로우취소" : "팔로우"}
               </MypageBtn>
             )}
@@ -197,7 +207,22 @@ const MypageLeft = () => {
         </MypageBtn>
 
         {/* <div style={{ marginTop: "1rem" }}>{information?.email}</div> */}
-        <RowView style={{ marginTop: "2rem" }}>
+        <RowView style={{ marginTop: "1rem" }}>
+          <button>
+            <div>팔로워</div>
+            <div style={{ marginLeft: "10px" }}>
+              {information?.followerCount}
+            </div>
+          </button>
+          <button>
+            <div>팔로잉</div>
+            <div style={{ marginLeft: "10px" }}>
+              {information?.followingCount}
+            </div>
+          </button>
+        </RowView>
+        <div style={{ color: "rgba(0,0,0,.5)" }}>My Social Link</div>
+        <RowView style={{ marginTop: "1rem" }}>
           <button
             onClick={() => {
               window.location.assign(information?.facebookURL);
@@ -227,29 +252,11 @@ const MypageLeft = () => {
             <Img wd="2rem" src={twitter} />
           </button>
         </RowView>
-        <RowView style={{ marginTop: "1rem" }}>
-          <button>
-            <div>팔로워</div>
-            <div style={{ marginLeft: "10px" }}>
-              {information?.followerCount}
-            </div>
-          </button>
-          <button>
-            <div>팔로잉</div>
-            <div style={{ marginLeft: "10px" }}>
-              {information?.followingCount}
-            </div>
-          </button>
-        </RowView>
-        {/* <div>라인생기는 줄</div>
-        <div>경력</div>
-        <div>라인생기는 줄</div>
-        <div>수상</div> */}
         <div>
           <Hr />
         </div>
         <MypageAbout>
-          <div>내 정보</div>
+          <div>About me</div>
           <div>{information?.aboutMe}</div>
         </MypageAbout>
       </MypageLeftDiv>
