@@ -34,7 +34,6 @@ const DetailFollow = () => {
       myFollowingMemberNickname: fol.nickname,
     };
     await dispatch(__putDetailFollow(follow));
-    dispatch(__getDetailCollabo(id));
   };
 
   const MypageMove = (name) => {
@@ -48,7 +47,7 @@ const DetailFollow = () => {
           <FollowTop>
             <FollowImgText>
               <img
-                src={collabo.profileImg}
+                src={collabo?.profileImg}
                 alt=""
                 onClick={() => MypageMove(collabo?.nickname)}
                 style={{ cursor: "pointer" }}
@@ -114,7 +113,7 @@ const DetailFollow = () => {
                 <FollowTop>
                   <FollowImgText>
                     <img
-                      src={collabo.profileImg}
+                      src={collabo?.profileImg}
                       alt=""
                       onClick={() => MypageMove(collabo?.nickname)}
                       style={{ cursor: "pointer" }}
@@ -128,7 +127,7 @@ const DetailFollow = () => {
                           onClick={() => MypageMove(collabo?.nickname)}
                           style={{ cursor: "pointer" }}
                         >
-                          {collabo.nickname}
+                          {collabo?.nickname}
                         </span>
                       </FollowWriteInstrument>
                       <div style={{ marginTop: "10px" }}>
