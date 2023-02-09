@@ -44,7 +44,7 @@ const DetailRecomment = ({ detail }) => {
         data: {
           hits: { hits },
         },
-      } = await searchAxios.post(`${searchURL}`, a);
+      } = await searchAxios.post(`${searchURL}post/_search?`, a);
       setReList(hits);
     } catch (error) {
       console.log(error);
