@@ -4,9 +4,16 @@ import { getCookies, removeCookies, setCookie } from "./cookie";
 
 export const serverURL = process.env.REACT_APP_SERVER;
 export const socketURL = process.env.REACT_APP_SOCKET_SERVER;
+export const searchKEY = process.env.REACT_APP_SEARCHKEY;
 
 export const instanceAxios = axios.create({ baseURL: serverURL });
-export const reassuranceAxios = axios.create({ baseURL: serverURL });
+export const searchAxios = axios.create({ baseURL: serverURL });
+
+searchAxios.interceptors.request.use((config) => {
+  if (config === undefined) return;
+  config.headers["Authorization"] = searchKEY;
+  return config;
+});
 
 instanceAxios.interceptors.request.use((config) => {
   if (config === undefined) return;
@@ -52,7 +59,7 @@ instanceAxios.interceptors.response.use(
               if (!accesstoken || !refreshtoken) {
                 removeCookies("accesstoken", { path: "/" });
                 removeCookies("refreshtoken", { path: "/" });
-               throw new Error(
+                throw new Error(
                   "로그인이 만료되었습니다. 다시 로그인 해주세요"
                 );
               }

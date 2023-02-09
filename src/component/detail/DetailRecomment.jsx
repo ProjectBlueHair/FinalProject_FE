@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { like, view } from "../../asset/pic";
-import { instanceAxios } from "../../dataManager/apiConfig";
+import { searchAxios } from "../../dataManager/apiConfig";
 import useTypeModal from "../../modal/hooks/useTypeModal";
 import Img from "../elem/Img";
 import StLink from "../elem/Link";
@@ -14,9 +14,13 @@ const DetailRecomment = () => {
   const detailReCom = async () => {
     try {
       const {
-        data: { data },
-      } = await instanceAxios.get("/post");
-      setReList(data);
+        data: {
+          hits: { hits },
+        },
+      } = await searchAxios.post(
+        "https://search-oncounter-es-id3ni4o2o6i3v27hoj4eitkrqi.ap-northeast-2.es.amazonaws.com/post/_search?size=10"
+      );
+      setReList(hits);
     } catch (error) {
       console.log(error);
     }
@@ -30,70 +34,37 @@ const DetailRecomment = () => {
     navigate(`/detail/${id}`);
     window.location.reload();
   };
-
+  console.log(ReList);
   return (
     <DetailReComCol>
       <h1>추천 음악</h1>
-      {ReList?.map((List) => (
-        <DetailRightLine key={List.id}>
+      {ReList?.map((List, index) => (
+        <DetailRightLine key={index}>
           <RecommentImg
-            src={List.postImg}
+            src={List?._source.post_img}
             alt="사진"
-            onClick={() => detailMove(List.id)}
+            onClick={() => detailMove(List?._source.id)}
             style={{ cursor: "pointer" }}
           />
           <RecommentText>
             <RecommentTitle>
               <div
-                onClick={() => detailMove(List.id)}
+                onClick={() => detailMove(List?._source.id)}
                 style={{ cursor: "pointer" }}
               >
-                {List.title}
+                {List?._source.title}
               </div>
               {/* <Img wd="3rem" src={more} onClick={moreClick} /> */}
             </RecommentTitle>
-            <RecommentTag
-              onClick={() => {
-                $openModal({
-                  type: "alert",
-                  props: {
-                    message: "해당 기능은 곧 준비될 예정입니다 !",
-                    type: "confirm",
-                  },
-                });
-              }}
-            >
-              {List?.tagList?.map((re, index) => (
-                // <StLink to={`/tag/${re}`}>
-                <StLink key={index}>
-                  <div>{re}</div>
-                </StLink>
-              ))}
-            </RecommentTag>
             <RecommentImgViewLike>
-              <RecommentProfile>
-                {List.mainProfileList.map((imgurl, index) => {
-                  if (index < 3) {
-                    return (
-                      <img
-                        key={index}
-                        className={"img" + index}
-                        src={imgurl.profileImg}
-                        alt=""
-                      />
-                    );
-                  } else if (index < 4) {
-                    return <div key={index}>+</div>;
-                  }
-                })}
-              </RecommentProfile>
+              <div>{List?._source.nickname}</div>
               <div>
                 <Img wd="1.3rem" src={view} style={{ marginRight: "5px" }} />
-                <span>{List.viewCount}</span>
+                <span>{List?._source.view_count}</span>
               </div>
               <div>
                 <Img wd="1rem" src={like} style={{ marginRight: "5px" }} />
-                <span>{List.likeCount}</span>
+                <span>{List?._source.like_count}</span>
               </div>
             </RecommentImgViewLike>
           </RecommentText>
