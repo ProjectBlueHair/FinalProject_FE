@@ -17,7 +17,7 @@ import { uploadFiles } from "../../dataManager/imageS3";
 import useTypeModal from "../../modal/hooks/useTypeModal";
 import { __getUserInfo } from "../../redux/slice/detailSlice";
 import { __getGeneralUserInfo } from "../../redux/slice/userSlice";
-import { reissuance } from "../../util/Reissuance";
+import { onIssued, reissuance } from "../../util/Reissuance";
 import Img from "../elem/Img";
 
 const SetTotal = () => {
@@ -253,20 +253,7 @@ const SetTotal = () => {
         res &&
           reissuance()
             .then((data) => {
-              const { accesstoken, refreshtoken } = data.headers;
-              if (!accesstoken || !refreshtoken) {
-                removeCookies("accesstoken", { path: "/" });
-                removeCookies("refreshtoken", { path: "/" });
-                throw new Error(
-                  "로그인이 만료되었습니다. 다시 로그인 해주세요"
-                );
-              }
-              setCookie("accesstoken", accesstoken, {
-                path: "/",
-              });
-              setCookie("refreshtoken", refreshtoken, {
-                path: "/",
-              });
+              onIssued(data)
               $openModal({
                 type: "alert",
                 props: {
@@ -289,20 +276,7 @@ const SetTotal = () => {
           res &&
             reissuance()
               .then((data) => {
-                const { accesstoken, refreshtoken } = data.headers;
-                if (!accesstoken || !refreshtoken) {
-                  removeCookies("accesstoken", { path: "/" });
-                  removeCookies("refreshtoken", { path: "/" });
-                  throw new Error(
-                    "로그인이 만료되었습니다. 다시 로그인 해주세요"
-                  );
-                }
-                setCookie("accesstoken", accesstoken, {
-                  path: "/",
-                });
-                setCookie("refreshtoken", refreshtoken, {
-                  path: "/",
-                });
+                onIssued(data)
                 $openModal({
                   type: "alert",
                   props: {
