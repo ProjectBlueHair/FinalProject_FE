@@ -2,49 +2,47 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { like, view } from "../../asset/pic";
-import { searchAxios, searchURL } from "../../dataManager/apiConfig";
-import useTypeModal from "../../modal/hooks/useTypeModal";
+import { searchAxios } from "../../dataManager/apiConfig";
 import Img from "../elem/Img";
-import StLink from "../elem/Link";
 
-const DetailRecomment = ({ detail }) => {
+const DetailRecomment = ({ detail, paramsID }) => {
+  const contentss = detail?.contents;
   const Title = detail?.title;
   const [ReList, setReList] = useState();
-  const { $openModal } = useTypeModal();
   const navigate = useNavigate();
-
+  const a = {
+    query: {
+      more_like_this: {
+        fields: ["title", "contents"],
+        like: [contentss, Title],
+        min_term_freq: 1,
+        max_query_terms: 10,
+        min_doc_freq: 1,
+      },
+    },
+    _source: {
+      include: [
+        "title",
+        "nickname",
+        "post_img",
+        "like_count",
+        "view_count",
+        "contents",
+        "id",
+      ],
+    },
+    sort: {
+      view_count: "desc",
+    },
+    size: 5,
+  };
   const detailReCom = async () => {
-    const a = {
-      query: {
-        more_like_this: {
-          fields: ["title", "contents"],
-          like: Title,
-          min_term_freq: 1,
-          max_query_terms: 10,
-          min_doc_freq: 1,
-        },
-      },
-      _source: {
-        include: [
-          "title",
-          "nickname",
-          "post_img",
-          "like_count",
-          "view_count",
-          "id",
-        ],
-      },
-      sort: {
-        view_count: "desc",
-      },
-      size: 5,
-    };
     try {
       const {
         data: {
           hits: { hits },
         },
-      } = await searchAxios.post(`${searchURL}`, a);
+      } = await searchAxios.post(`post/_search?`, a);
       setReList(hits);
     } catch (error) {
       console.log(error);
@@ -52,71 +50,65 @@ const DetailRecomment = ({ detail }) => {
   };
 
   useEffect(() => {
-    detailReCom();
-  }, [Title]);
+    if (contentss || Title) {
+      detailReCom();
+    }
+  }, [contentss, Title]);
 
   const detailMove = (id) => {
     navigate(`/detail/${id}`);
     window.location.reload();
   };
+
   console.log(ReList);
   return (
     <DetailReComCol>
       <h1>추천 음악</h1>
-      {ReList?.length === 1 ? (
-        <div
-          style={{ width: "100%", display: "flex", justifyContent: "center" }}
-        >
-          <SearchList>추천 음악이 없습니다!</SearchList>
-        </div>
-      ) : (
-        <>
-          {ReList?.map((List, index) =>
-            List?._source.title === Title ? (
-              ""
-            ) : (
-              <DetailRightLine key={index}>
-                <RecommentImg
-                  src={List?._source.post_img}
-                  alt="사진"
-                  onClick={() => detailMove(List?._source.id)}
-                  style={{ cursor: "pointer" }}
-                />
-                <RecommentText>
-                  <RecommentTitle>
-                    <div
-                      onClick={() => detailMove(List?._source.id)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      {List?._source.title}
-                    </div>
-                    {/* <Img wd="3rem" src={more} onClick={moreClick} /> */}
-                  </RecommentTitle>
-                  <RecommentImgViewLike>
-                    <div>{List?._source.nickname}</div>
-                    <div>
-                      <Img
-                        wd="1.3rem"
-                        src={view}
-                        style={{ marginRight: "5px" }}
-                      />
-                      <span>{List?._source.view_count}</span>
-                    </div>
-                    <div>
-                      <Img
-                        wd="1rem"
-                        src={like}
-                        style={{ marginRight: "5px" }}
-                      />
-                      <span>{List?._source.like_count}</span>
-                    </div>
-                  </RecommentImgViewLike>
-                </RecommentText>
-              </DetailRightLine>
-            )
-          )}
-        </>
-      )}
+      {ReList?.map((List, index) => {
+        if (ReList.length < 2) {
+          return <SearchList>추천 음악 목록이 없습니다!</SearchList>;
+        }
+        if (List?._source.id === Number(paramsID)) {
+          return;
+        } else {
+          return (
+            <DetailRightLine key={index}>
+              <RecommentImg
+                src={List?._source.post_img}
+                alt="사진"
+                onClick={() => detailMove(List?._source.id)}
+                style={{ cursor: "pointer" }}
+              />
+              <RecommentText>
+                <RecommentTitle>
+                  <div
+                    onClick={() => detailMove(List?._source.id)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    {List?._source.title}
+                  </div>
+                  {/* <Img wd="3rem" src={more} onClick={moreClick} /> */}
+                </RecommentTitle>
+                <RecommentImgViewLike>
+                  <div>{List?._source.nickname}</div>
+                  <div>
+                    <Img
+                      wd="1.3rem"
+                      src={view}
+                      style={{ marginRight: "5px" }}
+                    />
+                    <span>{List?._source.view_count}</span>
+                  </div>
+                  <div>
+                    <Img wd="1rem" src={like} style={{ marginRight: "5px" }} />
+                    <span>{List?._source.like_count}</span>
+                  </div>
+                </RecommentImgViewLike>
+              </RecommentText>
+            </DetailRightLine>
+          );
+        }
+      })}
     </DetailReComCol>
   );
 };

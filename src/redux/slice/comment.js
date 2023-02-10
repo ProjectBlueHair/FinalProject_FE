@@ -1,8 +1,9 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import { instanceAxios } from "../../dataManager/apiConfig";
 
 const initialState = {
   comment: [],
+  error: "",
 };
 // 댓글 조회
 export const __getComment = createAsyncThunk(
@@ -26,6 +27,7 @@ export const __postComment = createAsyncThunk(
       await instanceAxios.post(`comment/${payload.id}`, {
         contents: payload.mainContent,
       });
+      return thunkAPI.fulfillWithValue(payload);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -37,6 +39,7 @@ export const __deleteComment = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       await instanceAxios.delete(`comment/${payload}`);
+      return thunkAPI.fulfillWithValue(payload);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -50,6 +53,7 @@ export const __putComment = createAsyncThunk(
       await instanceAxios.put(`comment/${payload.comID}`, {
         contents: payload.comUpdateInput,
       });
+      return thunkAPI.fulfillWithValue(payload);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -75,8 +79,10 @@ export const __postCommentSub = createAsyncThunk(
 export const __likeComment = createAsyncThunk(
   "like/Comment",
   async (payload, thunkAPI) => {
+    console.log(payload);
     try {
-      await instanceAxios.post(`comment/like/${payload}`);
+      const { data } = await instanceAxios.post(`comment/like/${payload}`);
+      return thunkAPI.fulfillWithValue({ payload, data });
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -86,10 +92,83 @@ export const __likeComment = createAsyncThunk(
 export const commentSlice = createSlice({
   name: "comment",
   initialState,
-  extraReducers: {
-    [__getComment.fulfilled]: (state, action) => {
-      state.comment = action.payload;
-    },
+  extraReducers: (builder) => {
+    builder
+      .addCase(__getComment.pending, (_state) => {})
+      .addCase(__getComment.fulfilled, (state, action) => {
+        state.comment = action.payload;
+      })
+      .addCase(__getComment.rejected, (state, action) => {
+        state.error = action.payload;
+      })
+      .addCase(__deleteComment.pending, (_state) => {})
+      .addCase(__deleteComment.fulfilled, (state, action) => {
+        console.log(current(state.comment));
+        console.log(action.payload);
+        state.comment = state.comment.filter((com) => {
+          com.replyList = com.replyList.filter((subCom) => {
+            if (subCom.id !== action.payload) {
+              return subCom;
+            }
+          });
+          if (com.id !== action.payload) {
+            return com;
+          } else {
+            return;
+          }
+        });
+      })
+      .addCase(__deleteComment.rejected, (state, action) => {
+        state.error = action.payload;
+      })
+      .addCase(__putComment.pending, (_state) => {})
+      .addCase(__putComment.fulfilled, (state, action) => {
+        state.comment = state.comment.filter((com) => {
+          com.replyList = com.replyList.filter((subCom) => {
+            if (subCom.id === action.payload.comID) {
+              return (subCom.contents = action.payload.comUpdateInput);
+            } else {
+              return com;
+            }
+          });
+          if (com.id === action.payload.comID) {
+            return (com.contents = action.payload.comUpdateInput);
+          } else {
+            return com;
+          }
+        });
+      })
+      .addCase(__putComment.rejected, (state, action) => {
+        state.error = action.payload;
+      })
+      .addCase(__likeComment.pending, (_state) => {})
+      .addCase(__likeComment.fulfilled, (state, action) => {
+        state.comment.map((com) => {
+          com.replyList.map((subCom) => {
+            if (subCom.id === action.payload.payload) {
+              if (action.payload.data.message === "댓글 좋아요 취소 성공") {
+                subCom.isLiked = false;
+                subCom.likeCount = subCom.likeCount - 1;
+              } else {
+                subCom.isLiked = true;
+                subCom.likeCount = subCom.likeCount + 1;
+              }
+            }
+          });
+          if (com.id === action.payload.payload) {
+            if (action.payload.data.message === "댓글 좋아요 취소 성공") {
+              com.liked = false;
+              com.likeCount = com.likeCount - 1;
+            } else {
+              com.liked = true;
+              com.likeCount = com.likeCount + 1;
+            }
+          }
+        });
+      })
+      .addCase(__likeComment.rejected, (state, action) => {
+        state.error = action.payload;
+      });
   },
 });
 
