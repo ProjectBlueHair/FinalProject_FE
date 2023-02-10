@@ -125,7 +125,7 @@ export const postingSlice = createSlice({
       ].part = payload.part;
 
       const hasEmpty = state.collaboRequestData.audios
-        .map((audio) => audio.part)
+        .map((audio) => audio.part.trim())
         .indexOf("");
       state.collaboRequestData.isValid = hasEmpty === -1;
     },
