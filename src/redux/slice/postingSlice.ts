@@ -68,6 +68,10 @@ const initialState = {
   isLoading: false,
   error: null,
 } as PostingState;
+const isMusicPartValid = (audios: CollaboAudio[]) => {
+  const hasEmpty = audios.map((audio) => audio.part.trim()).indexOf("");
+  return hasEmpty === -1 && audios.length > 0;
+};
 export const postingSlice = createSlice({
   name: "posting",
   initialState,
@@ -86,6 +90,9 @@ export const postingSlice = createSlice({
         });
         state.collaboRequestData.audios.push({ src: musicFile.url, part: "" });
       });
+      state.collaboRequestData.isValid = isMusicPartValid(
+        state.collaboRequestData.audios
+      );
       const audiosCopy = [...state.audios];
       audiosCopy.sort((a, b) => {
         return b.duration - a.duration;
@@ -104,6 +111,9 @@ export const postingSlice = createSlice({
         state.audios.length - state.collaboRequestData.audios.length;
       state.audios.splice(payload, 1);
       state.collaboRequestData.audios.splice(payload - originalAudiosLength, 1);
+      state.collaboRequestData.isValid = isMusicPartValid(
+        state.collaboRequestData.audios
+      );
       state.progressControl.src =
         state.audios.length > 0
           ? state.audios[0].audioData.musicFile
@@ -123,11 +133,9 @@ export const postingSlice = createSlice({
       state.collaboRequestData.audios[
         payload.index - originalAudiosLength
       ].part = payload.part;
-
-      const hasEmpty = state.collaboRequestData.audios
-        .map((audio) => audio.part.trim())
-        .indexOf("");
-      state.collaboRequestData.isValid = hasEmpty === -1;
+      state.collaboRequestData.isValid = isMusicPartValid(
+        state.collaboRequestData.audios
+      );
     },
     __togglePlay: (state, { payload }) => {
       state.progressControl.isPlaying = payload;

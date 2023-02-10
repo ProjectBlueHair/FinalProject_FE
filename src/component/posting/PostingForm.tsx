@@ -41,6 +41,7 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
 
   const { $openModal, $closeModal } = useTypeModal();
 
+  console.log("collaboRequestData", collaboRequestData.isValid);
   useEffect(() => {
     return () => {
       dispatch(__cleanUp());
