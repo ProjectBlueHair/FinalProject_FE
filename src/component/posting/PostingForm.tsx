@@ -56,7 +56,10 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
     if (!collaboRequestData.isValid) {
       $openModal({
         type: "alert",
-        props: { message: "각 음원의 파트를 입력해 주세요 :)", type: "info" },
+        props: {
+          message: "각 음원의 파트(닉네임 좌측)를 입력해 주세요 :)",
+          type: "info",
+        },
       });
       return;
     }
@@ -106,6 +109,8 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
             type: "alert",
             props: {
               message: "게시글이 작성되었습니다!",
+              submessage:
+                "게시글이 반영되는데에 약간의 시간이 소요될 수 있습니다.",
               type: "confirm",
               to: "/",
             },

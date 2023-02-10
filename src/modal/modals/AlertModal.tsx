@@ -24,9 +24,12 @@ export const underlineStyle = {
   fontWeight: "400",
 };
 
-const AlertModal: React.FC<{ message?: string; type?: string; to?: string }> = (
-  props
-) => {
+const AlertModal: React.FC<{
+  message?: string;
+  submessage?: string;
+  type?: string;
+  to?: string;
+}> = (props) => {
   const { $closeModal, $openModal } = useTypeModal();
   const navigate = useNavigate();
   const isError = props.type === "error";
@@ -57,10 +60,14 @@ const AlertModal: React.FC<{ message?: string; type?: string; to?: string }> = (
             <Div fs="4rem" fw="700" mg="-2rem 0 0">
               👏
             </Div>
-
             <Div fs="1.8rem" fc="var(--ec-main-color)">
               {props.message}
             </Div>
+            {props.submessage ? (
+              <Div fs="1.4rem" fc={theme.color.primaryText}>
+                {props.submessage}
+              </Div>
+            ) : null}
           </>
         )}
         <Flex
