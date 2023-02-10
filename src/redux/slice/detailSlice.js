@@ -132,14 +132,6 @@ export const detailSlice = createSlice({
       .addCase(__putDetailFollow, (state, action) => {
         state.error = action.payload;
       });
-    // .addCase(__postLike.pending, (_state) => {})
-    // .addCase(__postLike.fulfilled, (state, action) => {
-    //   console.log(current(state));
-    //   console.log(action.payload);
-    // })
-    // .addCase(__postLike.rejected, (state, action) => {
-    //   state.error = action.payload;
-    // });
   },
 });
 

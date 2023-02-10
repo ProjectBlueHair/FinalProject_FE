@@ -24,9 +24,8 @@ const DetailDeleteAndUpdate = ({ mcv }) => {
 
   useToggleOutSideClick(moreRef, setContentOpen);
   // 삭제
-  const onComDelete = async (comId) => {
-    await dispatch(__deleteComment(comId));
-    dispatch(__getComment(id));
+  const onComDelete = (comId) => {
+    dispatch(__deleteComment(comId));
   };
   // 유저 정보
   useEffect(() => {
@@ -43,9 +42,8 @@ const DetailDeleteAndUpdate = ({ mcv }) => {
     setcomUpdate(true);
     setContentOpen(false);
   };
-  const onComUpdateYes = async (comID) => {
-    await dispatch(__putComment({ comID, comUpdateInput }));
-    dispatch(__getComment(id));
+  const onComUpdateYes = (comID) => {
+    dispatch(__putComment({ comID, comUpdateInput }));
     setcomUpdate(false);
   };
   const MypageMove = (name) => {

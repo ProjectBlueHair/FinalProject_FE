@@ -34,9 +34,8 @@ const DetailCommentSubDeleteUpdate = ({ re }) => {
     setComUpdateInput(a);
   };
   // 대댓글 삭제
-  const onSubCommentDelete = async (comSubId) => {
-    await dispatch(__deleteComment(comSubId));
-    dispatch(__getComment(id));
+  const onSubCommentDelete = (comSubId) => {
+    dispatch(__deleteComment(comSubId));
   };
   // 수정/ 수정 확인 교체
   const onSubUp = () => {
@@ -44,9 +43,8 @@ const DetailCommentSubDeleteUpdate = ({ re }) => {
     setContentSubOpen(false);
   };
   // 수정 완료
-  const onUpdateSubCom = async (comID) => {
-    await dispatch(__putComment({ comID, comUpdateInput }));
-    dispatch(__getComment(id));
+  const onUpdateSubCom = (comID) => {
+    dispatch(__putComment({ comID, comUpdateInput }));
     setSubUPDEL(false);
   };
   const MypageMove = (name) => {
