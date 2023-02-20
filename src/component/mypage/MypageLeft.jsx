@@ -19,7 +19,7 @@ import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
 import useTypeModal from "../../modal/hooks/useTypeModal";
 import { __putDetailFollow } from "../../redux/slice/detailSlice";
 import { PATH } from "../../Router";
-import { __directMessage } from "../chat/chatSlice";
+import { __directMessage } from "../../redux/slice/chatSlice";
 import Img from "../elem/Img";
 export const kakaoJS = process.env.REACT_APP_KaKaoJSKey;
 

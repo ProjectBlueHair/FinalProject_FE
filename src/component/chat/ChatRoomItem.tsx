@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/config";
 import { isEmptyObj } from "../../util/funcs";
 import Flex, { StFlex } from "../elem/Flex";
 import Img, { ImgType } from "../elem/Img";
-import { currentRoomIdSelector, __selectChatRoom } from "./chatSlice";
+import { currentRoomIdSelector, __selectChatRoom } from "../../redux/slice/chatSlice";
 
 const ChatRoomItem: React.FC<ChatRoom> = (props) => {
   const dispatch = useAppDispatch();

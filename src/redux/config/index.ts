@@ -10,7 +10,7 @@ import posting from "../slice/postingSlice";
 import { typeModalSlice } from "../../modal/typeModalSlice";
 import { collaboSlice } from "../slice/collaboSlice";
 import { userSlice } from "../slice/userSlice";
-import { chatSlice } from "../../component/chat/chatSlice";
+import { chatSlice } from "../slice/chatSlice";
 
 const rootReducer = combineReducers({
   modal: modalSlice.reducer,

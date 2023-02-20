@@ -3,11 +3,11 @@ import styled from "styled-components";
 import { useStomp } from "../../hook/useStomp";
 import useTextArea from "../../hook/useTextArea";
 import { useAppSelector } from "../../redux/config";
+import { currentRoomIdSelector } from "../../redux/slice/chatSlice";
 import { userSelector } from "../../redux/slice/userSlice";
 import Button from "../elem/Button";
 import Flex from "../elem/Flex";
 import { StTextarea } from "../elem/Textarea";
-import { currentRoomIdSelector } from "./chatSlice";
 
 const ChatForm = () => {
   const user = useAppSelector(userSelector);

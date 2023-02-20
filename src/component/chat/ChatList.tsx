@@ -16,7 +16,7 @@ import {
   __clearChat,
   __getChat,
   __updateChat,
-} from "./chatSlice";
+} from "../../redux/slice/chatSlice";
 const ChatList = () => {
   const user = useAppSelector(userSelector);
   const currentRoomId = useAppSelector(currentRoomIdSelector);
