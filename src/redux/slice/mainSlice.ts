@@ -8,7 +8,7 @@ export interface MainState {
   nextPage: number;
   currentMusic: CurrentMusic;
   alarmCount: number;
-  tag : string;
+  tag: string;
   isLoading: boolean;
   error: unknown;
 }
@@ -17,7 +17,7 @@ const initialState = {
   nextPage: 0,
   currentMusic: { post: {}, isPlayingMain: false, isPlayingPlayer: false },
   alarmCount: 0,
-  tag : '',
+  tag: "",
   isLoading: false,
   error: null,
 } as MainState;
@@ -77,6 +77,17 @@ export const mainSlice = createSlice({
     __clearAlarmCount: (state) => {
       state.alarmCount = 0;
     },
+    __getPostsQuery: (state, { payload }) => {
+      if (state.nextPage === 0) {
+        state.currentMusic = {
+          ...state.currentMusic,
+          post: payload[0],
+        };
+      }
+      state.posts =
+        state.nextPage === 0 ? payload : state.posts.concat(payload);
+      state.nextPage = state.nextPage + 1;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -84,7 +95,7 @@ export const mainSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(__getPostList.fulfilled, (state, { payload }) => {
-        console.log('__getPostList fulfilled payload : ', payload);
+        console.log("__getPostList fulfilled payload : ", payload);
         state.isLoading = false;
         if (state.nextPage === 0) {
           state.currentMusic = {
@@ -181,5 +192,6 @@ export const {
   __playNext,
   __mainCleanUp,
   __clearAlarmCount,
+  __getPostsQuery,
 } = mainSlice.actions;
 export default mainSlice.reducer;

@@ -24,7 +24,7 @@ const DetailTop = () => {
   const { $openModal } = useTypeModal();
   useEffect(() => {
     dispatch(__getDetail(id));
-    dispatch(__getAudios(id));
+    // dispatch(__getAudios(id));
     return () => {
       dispatch(__cleanUp());
     };

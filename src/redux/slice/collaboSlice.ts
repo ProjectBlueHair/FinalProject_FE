@@ -4,7 +4,7 @@ export const __getCollaboList = createAsyncThunk(
   "__getCollaboList",
   async (payload: number, thunkAPI) => {
     try {
-      // const { data } = await axios.get(`/post?page=${Number(payload)}`);
+
       const {data} = await instanceAxios.get(`/post?page=${Number(payload)}`);
       return data.data;
     } catch (error) {

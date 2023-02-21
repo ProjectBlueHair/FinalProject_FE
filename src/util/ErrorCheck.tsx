@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import useTypeModal from "../modal/hooks/useTypeModal";
 import { ALERT_TYPE } from "../modal/modals/AlertModal";
 import { useAppSelector } from "../redux/config";
@@ -11,16 +11,22 @@ const ErrorCheck = () => {
   const postingError = useAppSelector(postingErrorSelector);
   const mainError = useAppSelector(mainErrorSelector);
   const needRedirect = ("" + postingError)?.includes("4041");
-  if (postingError || mainError) {
-    $openModal({
-      type: "alert",
-      props: {
-        message: "" + postingError || mainError,
-        type: ALERT_TYPE.error,
-        to: needRedirect ? PATH.main : null,
-      },
-    });
-  }
+
+  useEffect(() => {
+    if (postingError || mainError) {
+      console.log("postingerror", postingError);
+      console.log("mainError", mainError);
+
+      $openModal({
+        type: "alert",
+        props: {
+          message: "" + postingError || mainError,
+          type: ALERT_TYPE.error,
+          to: needRedirect ? PATH.main : null,
+        },
+      });
+    }
+  }, [postingError, mainError]);
 
   return <Fragment></Fragment>;
 };

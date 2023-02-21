@@ -12,7 +12,7 @@ import {
   ProgressControl,
 } from "../../model/PostingModel";
 import { Response } from "../../model/ResponseModel";
-import { audiosApi } from "../../service/audios";
+import { api } from "../../service/audios";
 import { AppState } from "../config";
 
 export const formSelector = {
@@ -174,6 +174,17 @@ export const postingSlice = createSlice({
     __cleanUp: () => {
       return initialState;
     },
+    __getAudiosQuery: (state, { payload }: { payload: AudioData[] }) => {
+      state.isLoading = false;
+      payload.forEach((audio) => {
+        state.audios = state.audios.concat({
+          ...state.audio,
+          isNewAudio: false,
+          audioData: audio,
+        });
+      });
+      state.progressControl.src = payload[0].musicFile;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -235,21 +246,21 @@ export const postingSlice = createSlice({
 
         state.error = payload;
       })
-      .addMatcher(
-        audiosApi.endpoints.getAudios.matchFulfilled,
-        (state, { payload }: { payload: AudioData[] }) => {
-          console.log("audioData ...", payload);
-          state.isLoading = false;
-          payload.forEach((audio) => {
-            state.audios = state.audios.concat({
-              ...state.audio,
-              isNewAudio: false,
-              audioData: audio,
-            });
-          });
-          state.progressControl.src = payload[0].musicFile;
-        }
-      );
+      // .addMatcher(
+      //   api.endpoints.getAudios.matchFulfilled,
+      //   (state, { payload }: { payload: AudioData[] }) => {
+      //     console.log("match fulfilled .. audioData ...", payload);
+      //     state.isLoading = false;
+      //     payload.forEach((audio) => {
+      //       state.audios = state.audios.concat({
+      //         ...state.audio,
+      //         isNewAudio: false,
+      //         audioData: audio,
+      //       });
+      //     });
+      //     state.progressControl.src = payload[0].musicFile;
+      //   }
+      // );
   },
 });
 export const __getAudios = createAsyncThunk(
@@ -282,6 +293,11 @@ export const __getCollaboRequested = createAsyncThunk(
       const { data }: { data: Response } = await instanceAxios.get(
         `/collabo/${payload}`
       );
+      console.log("__getCollaboRequested ...data.data", data.data);
+      if (data.data.approval === true) {
+        throw Error("이미 승인된 콜라보 요청입니다.");
+      }
+
       return data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -315,5 +331,6 @@ export const {
   __form,
   __endPlay,
   __removeAudio,
+  __getAudiosQuery
 } = postingSlice.actions;
 export default postingSlice.reducer;

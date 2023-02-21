@@ -27,8 +27,6 @@ import { useGetAudiosQuery } from "../../service/audios";
 
 const PostingFormCollabo = () => {
   const { id } = useParams();
-  // const { data, error, isLoading } = useGetAudiosQuery(Number(id));
-
   const dispatch = useAppDispatch();
   const { $openModal, $closeModal } = useTypeModal();
 

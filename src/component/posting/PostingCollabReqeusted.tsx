@@ -28,7 +28,9 @@ const PostingCollaboRequested = () => {
       dispatch(__getPostInfo(Number(postId)));
       dispatch(__getAudios(Number(postId)))
         .then((data) => {
-          if (data.type.split("/")[1]) {
+          console.log('collaborequested... data',data);
+          
+          if (data.type.split("/")[1]==='fulfilled') {
             dispatch(__getCollaboRequested(Number(id)));
           }
         })

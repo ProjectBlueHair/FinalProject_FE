@@ -16,7 +16,7 @@ import { typeModalSlice } from "../../modal/typeModalSlice";
 import { collaboSlice } from "../slice/collaboSlice";
 import { userSlice } from "../slice/userSlice";
 import { chatSlice } from "../../component/chat/chatSlice";
-import { audiosApi } from "../../service/audios";
+import { api } from "../../service/audios";
 
 const rootReducer = combineReducers({
   modal: modalSlice.reducer,
@@ -28,12 +28,12 @@ const rootReducer = combineReducers({
   collabo: collaboSlice.reducer,
   user: userSlice.reducer,
   chat: chatSlice.reducer,
-  [audiosApi.reducerPath]: audiosApi.reducer,
+  [api.reducerPath]: api.reducer,
 });
 const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(audiosApi.middleware),
+    getDefaultMiddleware().concat(api.middleware),
 });
 
 type TypedDispatch<T> = ThunkDispatch<T, any, AnyAction>;

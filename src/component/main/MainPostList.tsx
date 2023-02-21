@@ -4,18 +4,24 @@ import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
   MainState,
-  __getPostList
+  __getPostList,
+  __getPostsQuery,
 } from "../../redux/slice/mainSlice";
+import { useGetPostsQuery } from "../../service/audios";
 import MainPost from "./MainPost";
 const MainPostList = () => {
   const { tag } = useParams();
   const target = useRef<HTMLDivElement>(null);
+  const [page, setPage] = useState(0);
   const scrollArea = useRef(null);
   const [trigger, setTrigger] = useState(false);
   const dispatch = useAppDispatch();
-  const { posts, nextPage, isLoading } = useAppSelector<MainState>(
-    (state) => state.main
-  );
+  const { posts, nextPage } = useAppSelector<MainState>((state) => state.main);
+  const { data, isLoading } = useGetPostsQuery(nextPage);
+  const [isLastPage, setIsLastPage] = useState(false);
+  console.log("main post data", data);
+  console.log("main post isLoading", isLoading);
+  console.log("main post page", page);
 
   let options = {
     root: scrollArea.current,
@@ -25,18 +31,20 @@ const MainPostList = () => {
 
   useEffect(() => {
     if (!isLoading) {
-      dispatch(__getPostList(nextPage));
+      dispatch(__getPostsQuery(data));
     }
-    return ()=>{
-      console.log('unmount')
-    }
-  }, [trigger]);
+    if (data && data?.length === 0) setIsLastPage(true)
+    return () => {
+      console.log("unmount");
+    };
+  }, [page, isLoading]);
 
   const callback: IntersectionObserverCallback = (entries, io) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        console.log("triggered....");
-        setTrigger((prev) => !prev);
+        console.log("triggered....isLastPage", isLastPage);
+        // setTrigger((prev) => !prev);
+        if (!isLastPage) setPage((prev) => prev + 1);
       }
     });
   };
