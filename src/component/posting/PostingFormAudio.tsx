@@ -114,6 +114,7 @@ const PostingFormAudio: React.FC<{ isCollabo: boolean }> = (props) => {
         setText(defaultText());
       }}
     >
+      <div data-testid='testdiv'></div>
       <Flex
         type="audioBar"
         isNewAudio={false}

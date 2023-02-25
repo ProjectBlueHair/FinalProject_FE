@@ -13,7 +13,6 @@ const PostingAudioBar: React.FC<Audio & { index: number }> = (props) => {
   const formWaveSurferOptions = (ref: HTMLDivElement) => ({
     // 재생 속도
     audioRate: 1,
-
     // 바 가로 길이
     barWidth: 3,
     // 웨이브 높이
@@ -50,7 +49,6 @@ const PostingAudioBar: React.FC<Audio & { index: number }> = (props) => {
       waveformRef.current as HTMLDivElement
     );
     wavesurfer.current = WaveSurfer.create(options);
-    console.log('audio file', props.audioData.musicFile)
     wavesurfer.current.load(props.audioData.musicFile);
     wavesurfer.current.on("ready", function () {
       if (wavesurfer.current) {
