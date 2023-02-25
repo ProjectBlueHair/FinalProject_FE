@@ -1,15 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { instanceAxios } from "../../dataManager/apiConfig";
 import {
-  Audio,
-  AudioData,
+  AudioInfo,
   CollaboAudio,
-  CollaboReqeustedForm,
   CollaboRequestData,
-  CollaboRequested,
-  Form,
-  NewAudio,
-  ProgressControl,
+  CollaboRequestedDto, H5player, PostingFormData, Wavesurfer
 } from "../../model/PostingModel";
 import { Response } from "../../model/ResponseModel";
 import { AppState } from "../config";
@@ -21,42 +16,46 @@ export const formSelector = {
   contents: (state: AppState) => state.posting.form.contents,
   form: (state: AppState) => state.posting.form,
 };
-export const audioControlSelector = (state: AppState) =>
-  state.posting.progressControl;
-export const totalPlayHandleSelector = (state: AppState) =>
-  state.posting.progressControl.totalPlayHandle;
-export const audiosSelector = (state: AppState) => state.posting.audios;
-export const postingErrorSelector = (state: AppState) => state.posting.error;
+export const h5PlayerSelector = (state: AppState) => state.posting.H5player;
+export const wavesurferSelector = (state: AppState) =>
+  state.posting.wavesurfers;
 export const collaboRequestDataSelector = (state: AppState) =>
   state.posting.collaboRequestData;
+
 export const CollaboRequestedFormSelector = (state: AppState) =>
   state.posting.collaboRequestedForm;
+
 export const loadingSelector = (state: AppState) => state.posting.isLoading;
+export const postingErrorSelector = (state: AppState) => state.posting.error;
+
 export interface PostingState {
-  form: Form; // postingForm component
-  collaboRequestedForm: CollaboReqeustedForm; // 콜라보 승인 컴포넌트
-  progressControl: ProgressControl; // total play 컴포넌트
-  audios: Audio[]; // audio bars 컴포넌트
-  audio: Audio; // form audio 컴포넌트
-  collaboRequestData: CollaboRequestData; // form collabo 컴포넌트
-  isLoading: boolean; // 공통
-  error: any; // 공통
+  form: PostingFormData;
+  collaboRequestedForm: { title: string; explain: string };
+
+  H5player: H5player;
+  wavesurfers: Wavesurfer[];
+  wavesurfer: Wavesurfer;
+  collaboRequestData: CollaboRequestData;
+
+  isLoading: boolean;
+  error: any;
 }
 
 const initialState = {
   form: { contents: "", collaboNotice: "", postImg: "", title: "" },
-  audios: [] as Audio[],
   collaboRequestedForm: { title: "", explain: "" },
+
   collaboRequestData: { isValid: false, audios: [] as CollaboAudio[] },
-  progressControl: {
+  wavesurfers: [] as Wavesurfer[],
+  H5player: {
     isPlaying: false,
     seekTo: 0,
     src: undefined,
-    onLoad: false,
-    totalPlayHandle: { play: false, seekTo: 0 },
+    ready: false,
+    init: false,
   },
-  audio: {
-    audioData: { musicFile: "" } as AudioData,
+  wavesurfer: {
+    audioInfo: { musicFile: "" } as AudioInfo,
     isMute: false,
     isNewAudio: false,
     volume: 0.5,
@@ -64,7 +63,8 @@ const initialState = {
     isSolo: false,
     isLoaded: false,
     duration: 0,
-  } as Audio,
+  } as Wavesurfer,
+
   isLoading: false,
   error: null,
 } as PostingState;
@@ -79,57 +79,65 @@ export const postingSlice = createSlice({
     __form: (state, { payload }) => {
       state.form = { ...state.form, ...payload };
     },
-    __addNewAudio: (state, { payload }) => {
+
+    __addNewAudio: (
+      state,
+      { payload }: { payload: { url: string; duration: number }[] }
+    ) => {
       console.log("__addNewAudio");
-      payload.forEach((musicFile: NewAudio) => {
-        state.audios.push({
-          ...state.audio,
+      payload.forEach((musicFile) => {
+        state.wavesurfers.push({
+          ...state.wavesurfer,
           isNewAudio: true,
           duration: musicFile.duration,
-          audioData: { ...state.audio.audioData, musicFile: musicFile.url },
+          audioInfo: {
+            ...state.wavesurfer.audioInfo,
+            musicFile: musicFile.url,
+          },
         });
         state.collaboRequestData.audios.push({ src: musicFile.url, part: "" });
       });
       state.collaboRequestData.isValid = isMusicPartValid(
         state.collaboRequestData.audios
       );
-      const audiosCopy = [...state.audios];
+      const audiosCopy = [...state.wavesurfers];
       audiosCopy.sort((a, b) => {
         return b.duration - a.duration;
       });
-      state.progressControl = {
-        ...state.progressControl,
-        src: audiosCopy[0].audioData.musicFile,
+      state.H5player = {
+        ...state.H5player,
+        src: audiosCopy[0].audioInfo.musicFile,
         seekTo: 0,
-        onLoad: false,
+        ready: false,
         isPlaying: false,
+        init: !state.H5player.init,
       };
-      state.progressControl.totalPlayHandle = { play: false, seekTo: 0 };
+      // state.progressControl.totalPlayHandle = { play: false, seekTo: 0 };
     },
     __removeAudio: (state, { payload }) => {
       const originalAudiosLength =
-        state.audios.length - state.collaboRequestData.audios.length;
-      state.audios.splice(payload, 1);
+        state.wavesurfers.length - state.collaboRequestData.audios.length;
+      state.wavesurfers.splice(payload, 1);
       state.collaboRequestData.audios.splice(payload - originalAudiosLength, 1);
       state.collaboRequestData.isValid = isMusicPartValid(
         state.collaboRequestData.audios
       );
-      state.progressControl.src =
-        state.audios.length > 0
-          ? state.audios[0].audioData.musicFile
+      state.H5player.src =
+        state.wavesurfers.length > 0
+          ? state.wavesurfers[0].audioInfo.musicFile
           : undefined;
     },
     __audioOnLoaded: (state, { payload }) => {
-      state.audios[payload].isLoaded = true;
-      const fullyLoaded = state.audios
+      state.wavesurfers[payload].isLoaded = true;
+      const fullyLoaded = state.wavesurfers
         .map((audio) => audio.isLoaded)
         .indexOf(false);
-      state.progressControl.onLoad = fullyLoaded === -1;
+      state.H5player.ready = fullyLoaded === -1;
     },
-    __setCollaboPart: (state, { payload }) => {
-      state.audios[payload.index].audioData.musicPart = payload.part;
+    __setPartForCollaboAudio: (state, { payload }) => {
+      state.wavesurfers[payload.index].audioInfo.musicPart = payload.part;
       const originalAudiosLength =
-        state.audios.length - state.collaboRequestData.audios.length;
+        state.wavesurfers.length - state.collaboRequestData.audios.length;
       state.collaboRequestData.audios[
         payload.index - originalAudiosLength
       ].part = payload.part;
@@ -138,45 +146,45 @@ export const postingSlice = createSlice({
       );
     },
     __togglePlay: (state, { payload }) => {
-      state.progressControl.isPlaying = payload;
+      state.H5player.isPlaying = payload;
     },
     __seekTo: (state, { payload }) => {
-      state.progressControl.seekTo = payload;
+      state.H5player.seekTo = payload;
     },
     __endPlay: (state) => {
-      state.progressControl = {
-        ...state.progressControl,
+      state.H5player = {
+        ...state.H5player,
         isPlaying: false,
         seekTo: 0,
       };
     },
     __setMute: (state, { payload }) => {
-      state.audios[payload].volume = state.audios[payload].isMute
+      state.wavesurfers[payload].volume = state.wavesurfers[payload].isMute
         ? 0.5
         : 0.00001;
-      state.audios[payload].isMute = !state.audios[payload].isMute;
+      state.wavesurfers[payload].isMute = !state.wavesurfers[payload].isMute;
     },
     __setSolo: (state, { payload }) => {
       const soloIndex = payload;
       //start solo
-      if (!state.audios[payload].isSolo) {
-        state.audios.forEach((audio, index) => {
-          state.audios[index].volume = index === soloIndex ? 0.5 : 0.00001;
-          state.audios[index].isSolo = index === soloIndex ? true : false;
+      if (!state.wavesurfers[payload].isSolo) {
+        state.wavesurfers.forEach((audio, index) => {
+          state.wavesurfers[index].volume = index === soloIndex ? 0.5 : 0.00001;
+          state.wavesurfers[index].isSolo = index === soloIndex ? true : false;
         });
       }
       //cancel solo
       else {
-        state.audios.forEach((audio, index) => {
-          state.audios[index].volume = 0.5;
-          state.audios[index].isSolo = false;
+        state.wavesurfers.forEach((audio, index) => {
+          state.wavesurfers[index].volume = 0.5;
+          state.wavesurfers[index].isSolo = false;
         });
       }
     },
     __setVolume: (state, { payload }) => {
-      state.audios[payload.index].isMute =
+      state.wavesurfers[payload.index].isMute =
         payload.volume === 0.00001 ? true : false;
-      state.audios[payload.index].volume = payload.volume;
+      state.wavesurfers[payload.index].volume = payload.volume;
     },
     __cleanUp: () => {
       return initialState;
@@ -184,6 +192,7 @@ export const postingSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+
       .addCase(__getPostInfo.rejected, (state, { payload }) => {
         state.error = payload;
       })
@@ -197,41 +206,40 @@ export const postingSlice = createSlice({
       })
       .addCase(
         __getAudios.fulfilled,
-        (state, { payload }: { payload: AudioData[] }) => {
+        (state, { payload }: { payload: AudioInfo[] }) => {
           state.isLoading = false;
           payload.forEach((audio) => {
-            state.audios = state.audios.concat({
-              ...state.audio,
+            state.wavesurfers = state.wavesurfers.concat({
+              ...state.wavesurfer,
               isNewAudio: false,
-              audioData: audio,
+              audioInfo: audio,
             });
           });
-          state.progressControl.src = payload[0].musicFile;
+          state.H5player.src = payload[0].musicFile;
         }
       )
       .addCase(__getAudios.rejected, (state, { payload }) => {
         state.error = payload;
       })
-
       .addCase(__getCollaboRequested.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(
         __getCollaboRequested.fulfilled,
-        (state, { payload }: { payload: CollaboRequested }) => {
+        (state, { payload }: { payload: CollaboRequestedDto }) => {
           state.collaboRequestedForm = {
             ...state.collaboRequestedForm,
             title: payload.nickname + "님의 콜라보 요청 메세지",
             explain: payload.contents,
           };
-          state.progressControl.src =
-            state.progressControl.src || payload.musicList[0]?.musicFile;
-          payload.musicList.forEach((audio: AudioData) => {
-            state.audios = state.audios.concat({
-              ...state.audio,
+          state.H5player.src =
+            state.H5player.src || payload.musicList[0]?.musicFile;
+          payload.musicList.forEach((audio: AudioInfo) => {
+            state.wavesurfers = state.wavesurfers.concat({
+              ...state.wavesurfer,
               isCollaboRequested: true,
               isNewAudio: true,
-              audioData: audio,
+              audioInfo: audio,
             });
           });
         }
@@ -281,15 +289,11 @@ export const __getCollaboRequested = createAsyncThunk(
   }
 );
 
-const config = { headers: { "Content-Type": "multipart/form-data" } };
-export const uploadPost = async (data: Form) => {
-  return await instanceAxios.post(`/post`, data);
-};
 export const uploadNewPost = async (data: FormData) => {
   return await instanceAxios.post(`/post/new`, data);
 };
 export const collaboRequest = async (data: any, postId: string | number) => {
-  return await instanceAxios.post(`/post/${postId}/collabo`, data, config);
+  return await instanceAxios.post(`/post/${postId}/collabo`, data);
 };
 export const collaboApprove = async (collaboId: string | number) => {
   return await instanceAxios.post(`/collabo/${collaboId}`);
@@ -302,7 +306,7 @@ export const {
   __setSolo,
   __setVolume,
   __cleanUp,
-  __setCollaboPart,
+  __setPartForCollaboAudio,
   __audioOnLoaded,
   __form,
   __endPlay,

@@ -3,40 +3,36 @@ import AudioPlayer, { RHAP_UI } from "react-h5-audio-player";
 import { pause, playPrimary } from "../../asset/pic";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
-  audioControlSelector,
-  totalPlayHandleSelector,
+  h5PlayerSelector,
   __endPlay,
   __seekTo,
   __togglePlay,
 } from "../../redux/slice/postingSlice";
 import { iconSize } from "../../styles/GlobalStyle";
 import Img from "../elem/Img";
-
 import styled from "styled-components";
 import PlayLoading from "../elem/PlayLoading";
 
 const PostingTotalPlay = () => {
   const audioPlayer = useRef<AudioPlayer>(null);
   const dispatch = useAppDispatch();
-  const progressConrol = useAppSelector(audioControlSelector);
-  const totalPlayHandle = useAppSelector(totalPlayHandleSelector);
+  const progressConrol = useAppSelector(h5PlayerSelector);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!progressConrol.onLoad && !isLoading) {
+    if (!progressConrol.ready && !isLoading) {
       setIsLoading(true);
     } else {
       setIsLoading(false);
     }
-  }, [progressConrol.onLoad]);
-  
+  }, [progressConrol.ready]);
+
   useEffect(() => {
     if (audioPlayer.current && audioPlayer.current.audio.current) {
-      console.log("checking 2");
       audioPlayer.current.audio.current.currentTime = 0;
       audioPlayer.current.audio.current.pause();
     }
-  }, [totalPlayHandle]);
+  }, [progressConrol.init]);
 
   const handlePlay = () => {
     dispatch(__togglePlay(true));
@@ -80,7 +76,6 @@ const PostingTotalPlay = () => {
             customProgressBarSection={[
               RHAP_UI.MAIN_CONTROLS,
               RHAP_UI.CURRENT_TIME,
-              // <span>0:00</span>,
               RHAP_UI.PROGRESS_BAR,
               RHAP_UI.DURATION,
             ]}
@@ -148,7 +143,6 @@ const ProgressWrapper = styled.div`
   .rhap_progress-section {
     display: flex;
     height: 100%;
-    /* flex: 3 1 auto; */
     align-items: center;
     flex-direction: row;
     justify-content: center;
@@ -238,12 +232,6 @@ const ProgressWrapper = styled.div`
   }
 
   .rhap_volume-button {
-    /*   flex: 0 0 26px;
-  font-size: 26px;
-  width: 26px;
-  height: 26px;
-  color: #868686;
-  margin-right: 6px; */
     flex: 1 0 40px;
   }
 
@@ -287,7 +275,6 @@ const ProgressWrapper = styled.div`
     background: #000;
     opacity: 0.9;
     border-radius: 50px;
-    /*   box-shadow: rgba(134, 134, 134, 0.5) 0 0 3px; */
     cursor: pointer;
   }
   .rhap_volume-indicator:hover {
@@ -309,11 +296,7 @@ const ProgressWrapper = styled.div`
     padding: 0;
     margin: 0;
     line-height: 0;
-    /* height: 100%; */
-    /* align-content: center; */
 
-    /* overflow: hidden; */
-    /*   cursor: pointer; */
   }
   .rhap_button-clear:hover {
     opacity: 0.9;

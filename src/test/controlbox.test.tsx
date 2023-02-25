@@ -1,7 +1,7 @@
 import App from "../App";
-import PostingAudioBars from "../component/posting/PostingAudioBars";
-import PostingAudioControlBox from "../component/posting/PostingAudioControlBox";
-import PostingFormAudio from "../component/posting/PostingFormAudio";
+import PostingAudioBars from "../component/posting/AudioWaveSurferList";
+import PostingAudioControlBox from "../component/posting/AudioControlBox";
+import PostingFormAudio from "../component/posting/AudioFileAdd";
 import PostingPage from "../page/PostingPage";
 import { render } from "./render";
 

@@ -13,7 +13,7 @@ import TextArea from "../elem/Textarea";
 import TextButton from "../elem/Button";
 import { formStyle } from "./PostingForm";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
-import { CollaboForm } from "../../model/PostingModel";
+import { collaboFormData } from "../../model/PostingModel";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { batch } from "react-redux";
@@ -49,7 +49,7 @@ const PostingFormCollabo = () => {
 
     const formData = new FormData();
 
-    const collaboForm: CollaboForm = {
+    const collaboForm: collaboFormData = {
       contents: descriptionInput.value,
       musicPartList: collaboRequestData.audios.map((audio) => audio.part),
     };

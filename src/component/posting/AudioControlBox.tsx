@@ -7,11 +7,11 @@ import {
   soloButton,
   unMuteButton
 } from "../../asset/pic";
-import { Audio } from "../../model/PostingModel";
+import { Wavesurfer } from "../../model/PostingModel";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
   __removeAudio,
-  __setCollaboPart,
+  __setPartForCollaboAudio,
   __setMute,
   __setSolo,
   __setVolume
@@ -22,7 +22,7 @@ import Flex from "../elem/Flex";
 import Img from "../elem/Img";
 import { StInput } from "../elem/Input";
 import Span from "../elem/Span";
-import { AUDIO_BAR_RADIUS } from "./PostingAudioBars";
+import { AUDIO_BAR_RADIUS } from "./AudioWaveSurferList";
 export interface Props {
   fs: string;
   wd: string;
@@ -37,7 +37,7 @@ export const partStyle: Props = {
 };
 
 const PostingAudioControlBox: React.FC<
-  Audio & {
+  Wavesurfer & {
     index?: number;
   }
 > = (props) => {
@@ -76,16 +76,16 @@ const PostingAudioControlBox: React.FC<
         {props.isNewAudio && !props.isCollaboRequested ? (
           <PartInput
             {...partStyle}
-            value={props.audioData.musicPart}
+            value={props.audioInfo.musicPart}
             onChange={(e) => {
               dispatch(
-                __setCollaboPart({ part: e.target.value, index: props.index })
+                __setPartForCollaboAudio({ part: e.target.value, index: props.index })
               );
             }}
             placeholder="Part"
           />
         ) : (
-          <PartDiv {...partStyle}>{props.audioData.musicPart}</PartDiv>
+          <PartDiv {...partStyle}>{props.audioInfo.musicPart}</PartDiv>
         )}
         <Span
           style={{ flex: 1, overflow: "hidden" }}
@@ -93,7 +93,7 @@ const PostingAudioControlBox: React.FC<
           fc="white"
           fs={BOX_NICK_FS}
         >
-          {props.audioData.nickname || user.nickname}
+          {props.audioInfo.nickname || user.nickname}
         </Span>
         {props.isNewAudio && !props.isCollaboRequested ? (
           <Cancel
@@ -127,7 +127,6 @@ const PostingAudioControlBox: React.FC<
           max="0.985"
           step=".025"
           onChange={onVolumeChange}
-          // defaultValue={volume}
           value={volume}
         />
       </Flex>

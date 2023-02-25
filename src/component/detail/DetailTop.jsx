@@ -9,8 +9,8 @@ import { __getDetail, __postLike } from "../../redux/slice/detailSlice";
 import { __cleanUp, __getAudios } from "../../redux/slice/postingSlice";
 import { __getGeneralUserInfo } from "../../redux/slice/userSlice";
 import Img from "../elem/Img";
-import PostingAudioBars from "../posting/PostingAudioBars";
-import PostingTotalPlay from "../posting/PostingTotalPlay";
+import PostingAudioBars from "../posting/AudioWaveSurferList";
+import PostingTotalPlay from "../posting/AudioH5player";
 import DetailDayAndFollow from "./DetailDayAndFollow";
 import DetailRecomment from "./DetailRecomment";
 

@@ -1,13 +1,13 @@
-export interface ProgressControl {
+export interface H5player {
   isPlaying: boolean;
   seekTo: number;
   src: string | undefined;
-  onLoad: boolean;
-  totalPlayHandle: { play: boolean; seekTo: number };
+  ready: boolean;
+  init: boolean;
 }
-export interface Audio {
+export interface Wavesurfer {
   // audio control model
-  audioData: AudioData;
+  audioInfo: AudioInfo;
   isMute: boolean;
   isNewAudio: boolean;
   isCollaboRequested?: boolean;
@@ -16,51 +16,41 @@ export interface Audio {
   isLoaded: boolean;
   duration: number;
 }
-export interface AudioData {
+export interface AudioInfo {
   //__getAudios response DTO model
   musicFile: string;
   musicPart: string;
   nickname: string;
 }
-export interface NewAudio {
-  url: string;
-  duration: number;
-}
-export interface Form {
+
+export interface PostingFormData {
   contents: string;
   collaboNotice: string;
   postImg: string;
   title: string;
 }
-export interface NewPostForm {
-  requestCollaboRequestDto: CollaboForm;
-  requestPostDto: Form;
+export interface NewPostDto {
+  collaboFormData: collaboFormData;
+  postingFormData: PostingFormData;
 }
-export interface CollaboForm {
+export interface collaboFormData {
   contents: string;
   musicPartList: string[];
 }
-export interface CollaboAudio {
-  src: string;
-  part: string;
-}
-export interface CollaboRequested {
+export interface CollaboRequestedDto {
   activated: boolean;
   approval: boolean;
   contents: string;
   createdAt: string;
   modifiedAt: string;
-  musicList: AudioData[];
   nickname: string;
+  musicList: AudioInfo[];
+
 }
-export interface CollaboReqeustedAudioData {
-  musicFile: string;
-  musicPart: string;
-  nickname: string;
-}
-export interface CollaboReqeustedForm {
-  title: string;
-  explain: string;
+
+export interface CollaboAudio {
+  src: string;
+  part: string;
 }
 export interface CollaboRequestData {
   audios: CollaboAudio[];

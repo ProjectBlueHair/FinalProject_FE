@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { uploadFiles } from "../../dataManager/imageS3";
 import useInput from "../../hook/useInput";
 import useTypeModal from "../../modal/hooks/useTypeModal";
-import { CollaboForm, Form, NewPostForm } from "../../model/PostingModel";
+import { collaboFormData, PostingFormData, NewPostDto } from "../../model/PostingModel";
 import { Response } from "../../model/ResponseModel";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
@@ -65,13 +65,13 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
       return;
     }
     $openModal({ type: "loading", props: "" });
-    const form: Form = {
+    const form: PostingFormData = {
       contents: descriptionInput.value,
       collaboNotice: collaboInput.value,
       title: postForm.title,
       postImg: "",
     };
-    const collaboForm: CollaboForm = {
+    const collaboForm: collaboFormData = {
       contents: "원곡자",
       musicPartList: collaboRequestData.audios.map((audio) => audio.part),
     };
@@ -91,9 +91,9 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
 
     const submitPost = async () => {
       const imgData = await uploadFiles(imgBlob);
-      const newPostForm: NewPostForm = {
-        requestCollaboRequestDto: collaboForm,
-        requestPostDto: { ...form, postImg: imgData ? imgData.Location : null },
+      const newPostForm: NewPostDto = {
+        collaboFormData: collaboForm,
+        postingFormData: { ...form, postImg: imgData ? imgData.Location : null },
       };
       formData.append(
         "jsonData",

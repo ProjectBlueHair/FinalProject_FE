@@ -1,27 +1,27 @@
 import React, { useEffect, useRef } from "react";
 import WaveSurfer from "wavesurfer.js";
 import { WaveSurferParams } from "wavesurfer.js/types/params";
-import { Audio } from "../../model/PostingModel";
+import { Wavesurfer } from "../../model/PostingModel";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
-  audioControlSelector,
+  h5PlayerSelector,
   __audioOnLoaded,
 } from "../../redux/slice/postingSlice";
 import theme from "../../styles/theme";
 import Flex from "../elem/Flex";
-import { AUDIO_BAR_HEIGHT } from "./PostingAudioBars";
+import { AUDIO_BAR_HEIGHT } from "./AudioWaveSurferList";
 
-const PostingAudioBar: React.FC<Audio & { index: number }> = (props) => {
+const PostingAudioBar: React.FC<Wavesurfer & { index: number }> = (props) => {
   const wavesurfer = useRef<WaveSurfer | null>(null);
   const waveformRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
-  const progressControl = useAppSelector(audioControlSelector);
+  const progressControl = useAppSelector(h5PlayerSelector);
 
   useEffect(() => {
     wavesurfer.current = WaveSurfer.create(
       waveSurferOptions(waveformRef.current as HTMLDivElement)
     );
-    wavesurfer.current.load(props.audioData.musicFile);
+    wavesurfer.current.load(props.audioInfo.musicFile);
     wavesurfer.current.on("ready", function () {
       if (wavesurfer.current) {
         dispatch(__audioOnLoaded(props.index));
@@ -32,7 +32,7 @@ const PostingAudioBar: React.FC<Audio & { index: number }> = (props) => {
       wavesurfer.current?.play(0);
     });
     return () => wavesurfer.current?.destroy();
-  }, [props.audioData.musicFile]);
+  }, [props.audioInfo.musicFile]);
 
   useEffect(() => {
     wavesurfer.current?.setVolume(props.volume);

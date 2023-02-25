@@ -1,17 +1,17 @@
 import { AUDIO_BAR_GAP } from "../../page/PostingPage";
 import { useAppSelector } from "../../redux/config";
-import { audiosSelector } from "../../redux/slice/postingSlice";
+import { wavesurferSelector } from "../../redux/slice/postingSlice";
 import Flex from "../elem/Flex";
-import PostingAudioBar from "./PostingAudioBar";
-import PostingAudioControlBox from "./PostingAudioControlBox";
+import PostingAudioBar from "./AudioWaveSurfer";
+import PostingAudioControlBox from "./AudioControlBox";
 export const AUDIO_BAR_RADIUS = "4rem";
 export const AUDIO_BAR_HEIGHT = 67;
 
 const PostingAudioBars = () => {
-  const audios = useAppSelector(audiosSelector);
+  const audios = useAppSelector(wavesurferSelector);
   return (
     <Flex direction="column" gap={AUDIO_BAR_GAP}>
-      <div data-testid='testdiv'></div>
+      <div data-testid="testdiv"></div>
       {audios.map((audio, index) => (
         <Flex
           key={index}
