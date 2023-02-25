@@ -11,6 +11,7 @@ const PostingAudioBars = () => {
   const audios = useAppSelector(audiosSelector);
   return (
     <Flex direction="column" gap={AUDIO_BAR_GAP}>
+      <div data-testid='testdiv'></div>
       {audios.map((audio, index) => (
         <Flex
           key={index}
