@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
 import useTypeModal from "../../modal/hooks/useTypeModal";
 import { useAppDispatch } from "../../redux/config";
-import { __addNewAudio } from "../../redux/slice/postingSlice";
+import { __addNewAudio } from "../../redux/slice/h5surferSlice";
 import theme from "../../styles/theme";
 import Div from "../elem/Div";
 import Flex, { StFlex } from "../elem/Flex";
@@ -12,11 +12,11 @@ interface NewAudio {
   url: string;
   duration: number;
 }
-const PostingFormAudio: React.FC<{ isCollabo: boolean }> = (props) => {
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [text, setText] = useState(defaultText());
+const AudioFileAdd: React.FC<{ isCollabo?: boolean }> = (props) => {
   const dispatch = useAppDispatch();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { $openModal } = useTypeModal();
+  const [text, setText] = useState(defaultText());
 
   const handleDrop = useCallback(
     async (event: React.DragEvent<HTMLDivElement>) => {
@@ -132,5 +132,7 @@ const PostingFormAudio: React.FC<{ isCollabo: boolean }> = (props) => {
   }
 };
 
-export default PostingFormAudio;
-const AudioDragForm = styled(StFlex)``;
+export default AudioFileAdd;
+const AudioDragForm = styled(StFlex)`
+  margin: 1.5rem 0;
+`;

@@ -9,6 +9,7 @@ import ChatPage from "./page/ChatPage";
 import FeedBackForAdmin from "./page/FeedBackForAdmin";
 import MyPage from "./page/MyPage";
 import SetPage from "./page/SetPage";
+import H5SurferTest from "./component/h5wavesurferPlayer/H5SurferTest";
 
 
 export const PATH = {
@@ -45,6 +46,9 @@ const Router = () => {
           <Route path={`${PATH.chat}`} element={<ChatPage />} />
           <Route path={`${PATH.feedback}`} element={<FeedBackForAdmin />} />
           <Route path="/login/kakao" element={<KakaoLoginHandler />} />
+          <Route path="/audioplay/:id/:postId" element={<H5SurferTest />} />
+          <Route path="/audioplay/:id" element={<H5SurferTest />} />
+          <Route path="/audioplay" element={<H5SurferTest />} />
           <Route
             path={`${PATH.collaboRequested}/:id/:postId`}
             element={<PostingPage />}

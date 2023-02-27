@@ -15,7 +15,7 @@ import {
   __setMute,
   __setSolo,
   __setVolume
-} from "../../redux/slice/postingSlice";
+} from "../../redux/slice/h5surferSlice";
 import { userSelector } from "../../redux/slice/userSlice";
 import theme from "../../styles/theme";
 import Flex from "../elem/Flex";
@@ -36,7 +36,7 @@ export const partStyle: Props = {
   radius: "10px",
 };
 
-const PostingAudioControlBox: React.FC<
+const AudioControlBox: React.FC<
   Wavesurfer & {
     index?: number;
   }
@@ -76,7 +76,7 @@ const PostingAudioControlBox: React.FC<
         {props.isNewAudio && !props.isCollaboRequested ? (
           <PartInput
             {...partStyle}
-            value={props.audioInfo.musicPart}
+            value={props.audioSrcInfo.musicPart}
             onChange={(e) => {
               dispatch(
                 __setPartForCollaboAudio({ part: e.target.value, index: props.index })
@@ -85,7 +85,7 @@ const PostingAudioControlBox: React.FC<
             placeholder="Part"
           />
         ) : (
-          <PartDiv {...partStyle}>{props.audioInfo.musicPart}</PartDiv>
+          <PartDiv {...partStyle}>{props.audioSrcInfo.musicPart}</PartDiv>
         )}
         <Span
           style={{ flex: 1, overflow: "hidden" }}
@@ -93,7 +93,7 @@ const PostingAudioControlBox: React.FC<
           fc="white"
           fs={BOX_NICK_FS}
         >
-          {props.audioInfo.nickname || user.nickname}
+          {props.audioSrcInfo.nickname || user.nickname}
         </Span>
         {props.isNewAudio && !props.isCollaboRequested ? (
           <Cancel
@@ -134,7 +134,11 @@ const PostingAudioControlBox: React.FC<
   );
 };
 
-export default PostingAudioControlBox;
+export default AudioControlBox;
+// fs: "1.2rem",
+// wd: "5.5rem",
+// hg: "2rem",
+// radius: "10px",
 const PartInput = styled(StInput).attrs({ maxLength: 6 })<Props>`
   border: 1px dashed white;
   text-align: center;

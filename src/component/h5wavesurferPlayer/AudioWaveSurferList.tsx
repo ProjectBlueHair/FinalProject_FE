@@ -1,13 +1,13 @@
-import { AUDIO_BAR_GAP } from "../../page/PostingPage";
 import { useAppSelector } from "../../redux/config";
-import { wavesurferSelector } from "../../redux/slice/postingSlice";
+import { wavesurferSelector } from "../../redux/slice/h5surferSlice";
 import Flex from "../elem/Flex";
-import PostingAudioBar from "./AudioWaveSurfer";
-import PostingAudioControlBox from "./AudioControlBox";
+import AudioWaveSurfer from "./AudioWaveSurfer";
+import AudioControlBox from "./AudioControlBox";
 export const AUDIO_BAR_RADIUS = "4rem";
 export const AUDIO_BAR_HEIGHT = 67;
+export const AUDIO_BAR_GAP = "1.5rem";
 
-const PostingAudioBars = () => {
+const AudioWaveSurferList = () => {
   const audios = useAppSelector(wavesurferSelector);
   return (
     <Flex direction="column" gap={AUDIO_BAR_GAP}>
@@ -20,9 +20,9 @@ const PostingAudioBars = () => {
           hg={`${AUDIO_BAR_HEIGHT}px`}
           radius={AUDIO_BAR_RADIUS}
         >
-          <PostingAudioControlBox index={index} {...audio} />
+          <AudioControlBox index={index} {...audio} />
           <Flex type="audioBarRight">
-            <PostingAudioBar {...audio} index={index} />
+            <AudioWaveSurfer {...audio} index={index} />
           </Flex>
         </Flex>
       ))}
@@ -30,4 +30,4 @@ const PostingAudioBars = () => {
   );
 };
 
-export default PostingAudioBars;
+export default AudioWaveSurferList;

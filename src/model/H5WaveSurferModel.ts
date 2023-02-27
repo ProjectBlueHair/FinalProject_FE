@@ -7,7 +7,7 @@ export interface H5player {
 }
 export interface Wavesurfer {
   // audio control model
-  audioSrcInfo: AudioDto;
+  audioSrcInfo: AudioResponseDto;
   isMute: boolean;
   isNewAudio: boolean;
   isCollaboRequested?: boolean;
@@ -16,7 +16,7 @@ export interface Wavesurfer {
   isLoaded: boolean;
   duration: number;
 }
-export interface AudioDto {
+export interface AudioResponseDto {
   musicFile: string;
   musicPart: string;
   nickname: string;
@@ -28,31 +28,4 @@ export interface AddedAudio {
 export interface AddedAudiosState {
   addedAudios: AddedAudio[];
   partsAllValid: boolean;
-}
-
-export interface PostingFormDto {
-  contents: string;
-  collaboNotice: string;
-  postImg: string;
-  title: string;
-}
-export interface DtoForPostingNew {
-  newAudiosDto: CollaboForm;
-  postingFormData: PostingFormDto;
-}
-export interface CollaboForm {
-  contents: string;
-  audioPartList: string[];
-}
-
-
-
-export interface CollaboRequestedDto {
-  activated: boolean;
-  approval: boolean;
-  contents: string;
-  createdAt: string;
-  modifiedAt: string;
-  nickname: string;
-  musicList: AudioDto[];
 }

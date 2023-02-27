@@ -7,32 +7,35 @@ import {
   __endPlay,
   __seekTo,
   __togglePlay,
-} from "../../redux/slice/postingSlice";
+} from "../../redux/slice/h5surferSlice";
 import { iconSize } from "../../styles/GlobalStyle";
 import Img from "../elem/Img";
 import styled from "styled-components";
 import PlayLoading from "../elem/PlayLoading";
 
-const PostingTotalPlay = () => {
+const AudioH5Player = () => {
   const audioPlayer = useRef<AudioPlayer>(null);
   const dispatch = useAppDispatch();
-  const progressConrol = useAppSelector(h5PlayerSelector);
+  const playControl = useAppSelector(h5PlayerSelector);
   const [isLoading, setIsLoading] = useState(false);
+  console.log('playControl.ready',playControl.ready);
+  
+
 
   useEffect(() => {
-    if (!progressConrol.ready && !isLoading) {
+    if (!playControl.ready && !isLoading) {
       setIsLoading(true);
     } else {
       setIsLoading(false);
     }
-  }, [progressConrol.ready]);
+  }, [playControl.ready]);
 
   useEffect(() => {
     if (audioPlayer.current && audioPlayer.current.audio.current) {
       audioPlayer.current.audio.current.currentTime = 0;
       audioPlayer.current.audio.current.pause();
     }
-  }, [progressConrol.init]);
+  }, [playControl.init]);
 
   const handlePlay = () => {
     dispatch(__togglePlay(true));
@@ -55,13 +58,13 @@ const PostingTotalPlay = () => {
   };
   return (
     <Fragment>
-      {progressConrol.src ? (
+      {playControl.src ? (
         <ProgressWrapper
           style={isLoading ? { pointerEvents: "none", cursor: "default" } : {}}
         >
           <AudioPlayer
             autoPlayAfterSrcChange={false}
-            src={progressConrol.src}
+            src={playControl.src}
             muted={true}
             onEnded={handleEnded}
             // onPlay={handlePlay} // safari에서 유저 interaction으로 인식 안해서 재생 안됨. 따라서 이미지에다가 onClick이벤트에 핸들러를 넣어줌
@@ -114,7 +117,7 @@ const PostingTotalPlay = () => {
   );
 };
 
-export default PostingTotalPlay;
+export default AudioH5Player;
 const ProgressWrapper = styled.div`
   display: flex;
   flex-direction: row;
