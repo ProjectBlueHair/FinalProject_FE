@@ -1,68 +1,31 @@
-export interface ProgressControl {
-  isPlaying: boolean;
-  seekTo: number;
-  src: string | undefined;
-  onLoad: boolean;
-  totalPlayHandle: { play: boolean; seekTo: number };
-}
-export interface Audio {
-  // audio control model
-  audioData: AudioData;
-  isMute: boolean;
-  isNewAudio: boolean;
-  isCollaboRequested?: boolean;
-  isSolo: boolean;
-  volume: number;
-  isLoaded: boolean;
-  duration: number;
-}
-export interface AudioData {
-  //__getAudios response DTO model
+export interface AudioDto {
   musicFile: string;
   musicPart: string;
   nickname: string;
 }
-export interface NewAudio {
-  url: string;
-  duration: number;
-}
-export interface Form {
+
+
+export interface PostingFormDto {
   contents: string;
   collaboNotice: string;
   postImg: string;
   title: string;
 }
-export interface NewPostForm {
-  requestCollaboRequestDto: CollaboForm;
-  requestPostDto: Form;
+export interface DtoForPostingNew {
+  newAudiosDto: CollaboForm;
+  postingFormData: PostingFormDto;
 }
 export interface CollaboForm {
   contents: string;
-  musicPartList: string[];
+  audioPartList: string[];
 }
-export interface CollaboAudio {
-  src: string;
-  part: string;
-}
-export interface CollaboRequested {
+
+export interface CollaboRequestedInfo {
   activated: boolean;
   approval: boolean;
   contents: string;
   createdAt: string;
   modifiedAt: string;
-  musicList: AudioData[];
   nickname: string;
-}
-export interface CollaboReqeustedAudioData {
-  musicFile: string;
-  musicPart: string;
-  nickname: string;
-}
-export interface CollaboReqeustedForm {
-  title: string;
-  explain: string;
-}
-export interface CollaboRequestData {
-  audios: CollaboAudio[];
-  isValid: boolean;
+  // musicList: AudioDto[]; //todo: 백엔드에서 같이 보내주는 중.. 나중에 바꿀 수 있으면 Api 분리할것
 }

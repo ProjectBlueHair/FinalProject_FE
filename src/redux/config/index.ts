@@ -11,12 +11,13 @@ import { typeModalSlice } from "../../modal/typeModalSlice";
 import { collaboSlice } from "../slice/collaboSlice";
 import { userSlice } from "../slice/userSlice";
 import { chatSlice } from "../../component/chat/chatSlice";
-
+import h5surfer from "../slice/h5surferSlice";
 const rootReducer = combineReducers({
   modal: modalSlice.reducer,
   posting,
   main,
   detail,
+  h5surfer,
   comment,
   typeModal: typeModalSlice.reducer,
   collabo: collaboSlice.reducer,

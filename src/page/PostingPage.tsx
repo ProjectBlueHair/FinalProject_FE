@@ -2,15 +2,13 @@ import { Fragment } from "react";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Flex, { StFlex } from "../component/elem/Flex";
+import H5SurferPlayer from "../component/h5surferPlayer/H5SurferPlayer";
 import Header from "../component/header/Header";
-import PostingAudioBars from "../component/posting/PostingAudioBars";
 import PostingCollaboRequested from "../component/posting/PostingCollabReqeusted";
 import PostingForm from "../component/posting/PostingForm";
-import PostingFormAudio from "../component/posting/PostingFormAudio";
 import PostingFormCollabo from "../component/posting/PostingFormCollabo";
 import PostingFormImage from "../component/posting/PostingFormImage";
 import PostingTitle from "../component/posting/PostingTitle";
-import PostingTotalPlay from "../component/posting/PostingTotalPlay";
 import { PATH } from "../Router";
 import ErrorCheck from "../util/ErrorCheck";
 import UserCheck from "../util/UserCheck";
@@ -23,7 +21,6 @@ const PostingPage = () => {
   const EDITPAGE = PATH.edit.split("/")[1] === CURRENT_PATH;
   const COLLABOPAGE = PATH.collabo.split("/")[1] === CURRENT_PATH;
   const COLLABOREQUESTED = PATH.collaboRequested.split("/")[1] === CURRENT_PATH;
-
 
   return (
     <Fragment>
@@ -41,11 +38,20 @@ const PostingPage = () => {
             </Flex>
           </PostingImageAndTitle>
           <PostingAudioSection>
-            <PostingTotalPlay />
-            <PostingAudioBars />
+            <H5SurferPlayer
+              page={
+                POSTPAGE
+                  ? "posting"
+                  : COLLABOPAGE
+                  ? "collabo"
+                  : "collaboApprove"
+              }
+            />
+            {/* <AudioH5Player />
+            <AudioWaveSurferList />
             {COLLABOREQUESTED ? null : (
-              <PostingFormAudio isCollabo={COLLABOPAGE} />
-            )}
+              <AudioFileAdd isCollabo={COLLABOPAGE} />
+            )} */}
           </PostingAudioSection>
         </Flex>
         {POSTPAGE && <PostingForm isEdit={EDITPAGE} />}

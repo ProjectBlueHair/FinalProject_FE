@@ -4,7 +4,7 @@ import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { instanceAxios } from "../../dataManager/apiConfig";
-import { __getCollaboRequested } from "../../redux/slice/postingSlice";
+import { __getCollaboRequestedInfo } from "../../redux/slice/postingSlice";
 import { __getGeneralUserInfo } from "../../redux/slice/userSlice";
 import MypagePlayList from "./MypagePlayList";
 import MypagePlayList2 from "./MypagePlayList2";

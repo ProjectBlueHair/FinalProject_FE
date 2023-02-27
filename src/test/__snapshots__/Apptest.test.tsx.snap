@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Apptest /> test matches snapshopt 1`] = `
+<div>
+  <div>
+    <h2>
+      Hello. Jest!!
+    </h2>
+    <h4>
+      number: 
+      0
+    </h4>
+    <button>
+      증가
+    </button>
+    <button>
+      감소
+    </button>
+  </div>
+</div>
+`;

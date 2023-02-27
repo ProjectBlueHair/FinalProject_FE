@@ -1,24 +1,23 @@
 import React, { useEffect } from "react";
+import { batch } from "react-redux";
+import { useParams } from "react-router-dom";
+import useTypeModal from "../../modal/hooks/useTypeModal";
+import { Response } from "../../model/ResponseModel";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
   collaboApprove,
   CollaboRequestedFormSelector,
   __cleanUp,
-  __getAudios,
-  __getCollaboRequested,
+  __getCollaboRequestedInfo,
   __getPostInfo,
 } from "../../redux/slice/postingSlice";
-import Flex from "../elem/Flex";
-import { formStyle } from "./PostingForm";
-import { batch } from "react-redux";
-import { useParams } from "react-router-dom";
-import useTypeModal from "../../modal/hooks/useTypeModal";
-import { Response } from "../../model/ResponseModel";
 import { PATH } from "../../Router";
 import theme from "../../styles/theme";
 import Button from "../elem/Button";
 import Div from "../elem/Div";
+import Flex from "../elem/Flex";
 import Span from "../elem/Span";
+import { formStyle } from "./PostingForm";
 
 const PostingCollaboRequested = () => {
   const { id, postId } = useParams();
@@ -26,13 +25,15 @@ const PostingCollaboRequested = () => {
   useEffect(() => {
     batch(() => {
       dispatch(__getPostInfo(Number(postId)));
-      dispatch(__getAudios(Number(postId)))
-        .then((data) => {
-          if (data.type.split("/")[1]) {
-            dispatch(__getCollaboRequested(Number(id)));
-          }
-        })
-        .catch((err) => alert(err));
+      dispatch(__getCollaboRequestedInfo(Number(id)));
+
+      // dispatch(__getAudios(Number(postId)))
+      //   .then((data) => {
+      //     if (data.type.split("/")[1]) {
+      //       dispatch(__getCollaboRequested(Number(id)));
+      //     }
+      //   })
+      //   .catch((err) => alert(err));
     });
 
     return () => {
