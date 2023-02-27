@@ -6,11 +6,9 @@ import { like, redLike, view } from "../../asset/pic";
 import { getCookies } from "../../dataManager/cookie";
 import useTypeModal from "../../modal/hooks/useTypeModal";
 import { __getDetail, __postLike } from "../../redux/slice/detailSlice";
-import { __cleanUp, __getAudios } from "../../redux/slice/postingSlice";
-import { __getGeneralUserInfo } from "../../redux/slice/userSlice";
+import { __cleanUp } from "../../redux/slice/postingSlice";
 import Img from "../elem/Img";
-import PostingAudioBars from "../posting/PostingAudioBars";
-import PostingTotalPlay from "../posting/PostingTotalPlay";
+import H5SurferPlayer from "../h5surferPlayer/H5SurferPlayer";
 import DetailDayAndFollow from "./DetailDayAndFollow";
 import DetailRecomment from "./DetailRecomment";
 
@@ -24,7 +22,7 @@ const DetailTop = () => {
   const { $openModal } = useTypeModal();
   useEffect(() => {
     dispatch(__getDetail(id));
-    dispatch(__getAudios(id));
+    // dispatch(__getAudios(id));
     return () => {
       dispatch(__cleanUp());
     };
@@ -110,9 +108,10 @@ const DetailTop = () => {
           </DetailTopDown>
         </DetailTopLeft>
         <DetailTopRight>
-          <PostingTotalPlay />
+          <H5SurferPlayer page="detail"/>
+          {/* <AudioH5Player />
           <br />
-          <PostingAudioBars />
+          <AudioWaveSurferList /> */}
         </DetailTopRight>
       </DetailTopView>
       <DetailBottom>

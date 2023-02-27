@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import styled from "styled-components";
 import Cancel from "../../asset/icon/Cancel";
 import {
@@ -7,38 +7,25 @@ import {
   soloButton,
   unMuteButton,
 } from "../../asset/pic";
-import { Audio } from "../../model/PostingModel";
+import { Wavesurfer } from "../../model/H5SurferModel";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
   __removeAudio,
-  __setCollaboPart,
+  __setPartForCollaboAudio,
   __setMute,
   __setSolo,
   __setVolume,
-} from "../../redux/slice/postingSlice";
+} from "../../redux/slice/h5surferSlice";
 import { userSelector } from "../../redux/slice/userSlice";
 import theme from "../../styles/theme";
-import Div from "../elem/Div";
 import Flex from "../elem/Flex";
 import Img from "../elem/Img";
 import { StInput } from "../elem/Input";
 import Span from "../elem/Span";
-import { AUDIO_BAR_RADIUS } from "./PostingAudioBars";
-export interface Props {
-  fs: string;
-  wd: string;
-  hg: string;
-  radius: string;
-}
-export const partStyle: Props = {
-  fs: "1.2rem",
-  wd: "5.5rem",
-  hg: "2rem",
-  radius: "10px",
-};
+import { AUDIO_BAR_RADIUS } from "./AudioWaveSurferList";
 
-const PostingAudioControlBox: React.FC<
-  Audio & {
+const AudioControlBox: React.FC<
+  Wavesurfer & {
     index?: number;
   }
 > = (props) => {
@@ -74,19 +61,21 @@ const PostingAudioControlBox: React.FC<
       overFlow="hidden"
     >
       <Flex gap="1rem" justify="flex-start">
-        {props.isNewAudio && !props.isCollaboRequested ? (
+        {props.isAddedAudio ? (
           <PartInput
-            {...partStyle}
-            value={props.audioData.musicPart}
+            value={props.audioSrcInfo.musicPart}
             onChange={(e) => {
               dispatch(
-                __setCollaboPart({ part: e.target.value, index: props.index })
+                __setPartForCollaboAudio({
+                  part: e.target.value,
+                  index: props.index,
+                })
               );
             }}
             placeholder="Part"
           />
         ) : (
-          <PartDiv {...partStyle}>{props.audioData.musicPart}</PartDiv>
+          <PartDiv>{props.audioSrcInfo.musicPart}</PartDiv>
         )}
         <Span
           style={{ flex: 1, overflow: "hidden" }}
@@ -94,9 +83,9 @@ const PostingAudioControlBox: React.FC<
           fc="white"
           fs={BOX_NICK_FS}
         >
-          {props.audioData.nickname || user.nickname}
+          {props.audioSrcInfo.nickname || user.nickname}
         </Span>
-        {props.isNewAudio && !props.isCollaboRequested ? (
+        {props.isAddedAudio ? (
           <Cancel
             onClick={() => dispatch(__removeAudio(props.index))}
             wd="1.4rem"
@@ -128,7 +117,6 @@ const PostingAudioControlBox: React.FC<
           max="0.985"
           step=".025"
           onChange={onVolumeChange}
-          // defaultValue={volume}
           value={volume}
         />
       </Flex>
@@ -136,27 +124,30 @@ const PostingAudioControlBox: React.FC<
   );
 };
 
-export default PostingAudioControlBox;
-const PartInput = styled(StInput).attrs({ maxLength: 6 })<Props>`
-  border: 1px dashed white;
+
+export default AudioControlBox;
+
+const PartInput = styled(StInput).attrs({ maxLength: 6 })`
+  border-radius: 10px;
+  font-size: 1.2rem;
+  width: 5.5rem;
+  height: 2rem;
+
   text-align: center;
+  border: 1px dashed white;
   color: white;
-  border-radius: ${({ radius }) => radius};
-  height: ${({ hg }) => hg};
-  max-width: ${({ wd }) => wd};
-  font-size: ${({ fs }) => fs};
+  max-width: 5.5rem;
   &::placeholder {
     color: #fff;
     font-weight: 300;
-    font-size: ${({ fs }) => fs};
   }
 `;
-const PartDiv = styled(Flex)<Props>`
+const PartDiv = styled(Flex)`
   background-color: white;
-  border-radius: ${({ radius }) => radius};
-  height: ${({ hg }) => hg};
-  width: ${({ wd }) => wd};
-  font-size: ${({ fs }) => fs};
+  border-radius: 10px;
+  font-size: 1.2rem;
+  width: 5.5rem;
+  height: 2rem;
   color: var(--ec-main-color);
   box-sizing: border-box;
   line-height: none;

@@ -3,11 +3,15 @@ import React, { useEffect } from "react";
 import { uploadFiles } from "../../dataManager/imageS3";
 import useInput from "../../hook/useInput";
 import useTypeModal from "../../modal/hooks/useTypeModal";
-import { CollaboForm, Form, NewPostForm } from "../../model/PostingModel";
+import {
+  CollaboForm,
+  PostingFormDto,
+  DtoForPostingNew,
+} from "../../model/PostingModel";
 import { Response } from "../../model/ResponseModel";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
+import { addedAudiosStateSelector } from "../../redux/slice/h5surferSlice";
 import {
-  collaboRequestDataSelector,
   formSelector,
   uploadNewPost,
   __cleanUp,
@@ -35,12 +39,13 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
   const descriptionInput = useInput("");
   const collaboInput = useInput("");
 
-  const collaboRequestData = useAppSelector(collaboRequestDataSelector);
+  const addedAudiosState = useAppSelector(addedAudiosStateSelector);
   const dispatch = useAppDispatch();
   const postForm = useAppSelector(formSelector.form);
 
   const { $openModal, $closeModal } = useTypeModal();
 
+  console.log("collaboRequestData", addedAudiosState.partsAllValid);
   useEffect(() => {
     return () => {
       dispatch(__cleanUp());
@@ -53,15 +58,18 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
   }
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!collaboRequestData.isValid) {
+    if (!addedAudiosState.partsAllValid) {
       $openModal({
         type: "alert",
-        props: { message: "각 음원의 파트를 입력해 주세요 :)", type: "info" },
+        props: {
+          message: "각 음원의 파트(닉네임 좌측)를 입력해 주세요 :)",
+          type: "info",
+        },
       });
       return;
     }
     $openModal({ type: "loading", props: "" });
-    const form: Form = {
+    const form: PostingFormDto = {
       contents: descriptionInput.value,
       collaboNotice: collaboInput.value,
       title: postForm.title,
@@ -69,11 +77,11 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
     };
     const collaboForm: CollaboForm = {
       contents: "원곡자",
-      musicPartList: collaboRequestData.audios.map((audio) => audio.part),
+      audioPartList: addedAudiosState.addedAudios.map((audio) => audio.part),
     };
     const formData = new FormData();
     const blobs = await Promise.all(
-      collaboRequestData.audios.map(async (collabo) => {
+      addedAudiosState.addedAudios.map(async (collabo) => {
         const response = await axios.get(collabo.src, {
           responseType: "blob",
         });
@@ -87,9 +95,12 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
 
     const submitPost = async () => {
       const imgData = await uploadFiles(imgBlob);
-      const newPostForm: NewPostForm = {
-        requestCollaboRequestDto: collaboForm,
-        requestPostDto: { ...form, postImg: imgData ? imgData.Location : null },
+      const newPostForm: DtoForPostingNew = {
+        newAudiosDto: collaboForm,
+        postingFormData: {
+          ...form,
+          postImg: imgData ? imgData.Location : null,
+        },
       };
       formData.append(
         "jsonData",
@@ -106,6 +117,8 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
             type: "alert",
             props: {
               message: "게시글이 작성되었습니다!",
+              submessage:
+                "게시글이 반영되는데에 약간의 시간이 소요될 수 있습니다.",
               type: "confirm",
               to: "/",
             },
@@ -165,7 +178,7 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
           <Button
             btnType="basic"
             disabled={
-              postForm.title === "" || !collaboRequestData.audios.length
+              postForm.title === "" || !addedAudiosState.addedAudios.length
                 ? true
                 : false
             }

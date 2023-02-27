@@ -1,27 +1,24 @@
+import axios from "axios";
 import React, { useEffect } from "react";
+import { batch } from "react-redux";
+import { useParams } from "react-router-dom";
 import useInput from "../../hook/useInput";
+import useTypeModal from "../../modal/hooks/useTypeModal";
+import { CollaboForm } from "../../model/PostingModel";
+import { useAppDispatch, useAppSelector } from "../../redux/config";
+import { addedAudiosStateSelector } from "../../redux/slice/h5surferSlice";
 import {
-  collaboRequestDataSelector,
   collaboRequest,
-  postingErrorSelector,
   __cleanUp,
-  __getAudios,
   __getPostInfo,
 } from "../../redux/slice/postingSlice";
-import Flex from "../elem/Flex";
-import TextArea from "../elem/Textarea";
-import TextButton from "../elem/Button";
-import { formStyle } from "./PostingForm";
-import { useAppDispatch, useAppSelector } from "../../redux/config";
-import { CollaboForm } from "../../model/PostingModel";
-import axios from "axios";
-import { useParams } from "react-router-dom";
-import { batch } from "react-redux";
-import Span from "../elem/Span";
-import useTypeModal from "../../modal/hooks/useTypeModal";
-import Button from "../elem/Button";
 import theme from "../../styles/theme";
+import Button from "../elem/Button";
 import Div from "../elem/Div";
+import Flex from "../elem/Flex";
+import Span from "../elem/Span";
+import TextArea from "../elem/Textarea";
+import { formStyle } from "./PostingForm";
 import SupportLinks from "./SupportLinks";
 
 const PostingFormCollabo = () => {
@@ -31,7 +28,7 @@ const PostingFormCollabo = () => {
 
   useEffect(() => {
     batch(() => {
-      dispatch(__getAudios(Number(id)));
+      // dispatch(__getAudios(Number(id)));
       dispatch(__getPostInfo(Number(id)));
     });
 
@@ -40,7 +37,7 @@ const PostingFormCollabo = () => {
     };
   }, [id]);
 
-  const collaboRequestData = useAppSelector(collaboRequestDataSelector);
+  const AddedAudiosState = useAppSelector(addedAudiosStateSelector);
   const descriptionInput = useInput("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -51,7 +48,7 @@ const PostingFormCollabo = () => {
 
     const collaboForm: CollaboForm = {
       contents: descriptionInput.value,
-      musicPartList: collaboRequestData.audios.map((audio) => audio.part),
+      audioPartList: AddedAudiosState.addedAudios.map((audio) => audio.part),
     };
 
     formData.append(
@@ -60,7 +57,7 @@ const PostingFormCollabo = () => {
     );
 
     const blobs = await Promise.all(
-      collaboRequestData.audios.map(async (collabo) => {
+      AddedAudiosState.addedAudios.map(async (collabo) => {
         const response = await axios.get(collabo.src, { responseType: "blob" });
         return response.data;
       })
@@ -122,7 +119,7 @@ const PostingFormCollabo = () => {
           <Button
             btnType="basic"
             disabled={
-              descriptionInput.value === "" || !collaboRequestData.isValid
+              descriptionInput.value === "" || !AddedAudiosState.partsAllValid
                 ? true
                 : false
             }
