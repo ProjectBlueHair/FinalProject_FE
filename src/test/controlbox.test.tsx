@@ -1,5 +1,5 @@
 
-import AudioWaveSurferList from "../component/h5wavesurferPlayer/AudioWaveSurferList";
+import AudioWaveSurferList from "../component/h5surferPlayer/AudioWaveSurferList";
 import { render } from "./render";
 
 describe("<Controlbox/> test", () => {

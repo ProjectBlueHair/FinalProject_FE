@@ -16,7 +16,7 @@ const AudioWaveSurferList = () => {
         <Flex
           key={index}
           type="audioBar"
-          isNewAudio={audio.isNewAudio}
+          isNewAudio={audio.isAddedAudio || audio.isCollaboRequested}
           hg={`${AUDIO_BAR_HEIGHT}px`}
           radius={AUDIO_BAR_RADIUS}
         >

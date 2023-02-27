@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Flex, { StFlex } from "../component/elem/Flex";
-import H5SurferPlayer from "../component/h5wavesurferPlayer/H5SurferPlayer";
+import H5SurferPlayer from "../component/h5surferPlayer/H5SurferPlayer";
 import Header from "../component/header/Header";
 import PostingCollaboRequested from "../component/posting/PostingCollabReqeusted";
 import PostingForm from "../component/posting/PostingForm";

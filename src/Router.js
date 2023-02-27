@@ -1,16 +1,14 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import KakaoLoginHandler from "./component/sign/KakaoLoginHandler";
 import Tag from "./component/tag/Tag";
 import TypeModalContainer from "./modal/TypeModalContainer";
-import Detail from "./page/Detail";
-import MainPage from "./page/MainPage";
-import PostingPage from "./page/PostingPage";
-import KakaoLoginHandler from "./component/sign/KakaoLoginHandler";
 import ChatPage from "./page/ChatPage";
+import Detail from "./page/Detail";
 import FeedBackForAdmin from "./page/FeedBackForAdmin";
+import MainPage from "./page/MainPage";
 import MyPage from "./page/MyPage";
+import PostingPage from "./page/PostingPage";
 import SetPage from "./page/SetPage";
-import H5SurferTest from "./component/h5wavesurferPlayer/H5SurferTest";
-
 
 export const PATH = {
   main: "/",
@@ -46,9 +44,6 @@ const Router = () => {
           <Route path={`${PATH.chat}`} element={<ChatPage />} />
           <Route path={`${PATH.feedback}`} element={<FeedBackForAdmin />} />
           <Route path="/login/kakao" element={<KakaoLoginHandler />} />
-          <Route path="/audioplay/:id/:postId" element={<H5SurferTest />} />
-          <Route path="/audioplay/:id" element={<H5SurferTest />} />
-          <Route path="/audioplay" element={<H5SurferTest />} />
           <Route
             path={`${PATH.collaboRequested}/:id/:postId`}
             element={<PostingPage />}

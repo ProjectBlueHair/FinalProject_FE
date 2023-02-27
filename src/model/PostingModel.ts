@@ -1,34 +1,9 @@
-export interface H5player {
-  isPlaying: boolean;
-  seekTo: number;
-  src: string | undefined;
-  ready: boolean;
-  init: boolean;
-}
-export interface Wavesurfer {
-  // audio control model
-  audioSrcInfo: AudioDto;
-  isMute: boolean;
-  isNewAudio: boolean;
-  isCollaboRequested?: boolean;
-  isSolo: boolean;
-  volume: number;
-  isLoaded: boolean;
-  duration: number;
-}
 export interface AudioDto {
   musicFile: string;
   musicPart: string;
   nickname: string;
 }
-export interface AddedAudio {
-  src: string;
-  part: string;
-}
-export interface AddedAudiosState {
-  addedAudios: AddedAudio[];
-  partsAllValid: boolean;
-}
+
 
 export interface PostingFormDto {
   contents: string;
@@ -45,14 +20,12 @@ export interface CollaboForm {
   audioPartList: string[];
 }
 
-
-
-export interface CollaboRequestedDto {
+export interface CollaboRequestedInfo {
   activated: boolean;
   approval: boolean;
   contents: string;
   createdAt: string;
   modifiedAt: string;
   nickname: string;
-  musicList: AudioDto[];
+  // musicList: AudioDto[]; //todo: 백엔드에서 같이 보내주는 중.. 나중에 바꿀 수 있으면 Api 분리할것
 }
