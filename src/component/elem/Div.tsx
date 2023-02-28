@@ -1,5 +1,5 @@
 import styled, { StyledComponent } from "styled-components";
-import { DivProps } from "../../model/StyleModel";
+import { DivProps } from "./StyleModel.types";
 
 
 interface DivContainer {

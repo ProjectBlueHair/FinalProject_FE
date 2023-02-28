@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { instanceAxios } from "../../dataManager/apiConfig";
-import { CollaboRequestedInfo, PostingFormDto } from "../../model/PostingModel";
-import { Response } from "../../model/ResponseModel";
+import { CollaboRequestedInfo, PostingFormDto } from "../../component/posting/PostingModel.types";
+import { Response } from "../../dataManager/ResponseModel.types";
 import { AppState } from "../config";
 
 export const formSelector = {

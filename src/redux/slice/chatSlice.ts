@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { instanceAxios } from "../../dataManager/apiConfig";
-import { Chat, ChatRoom, ChatState } from "../../model/ChatModel";
-import { AppState } from "../../redux/config";
+import { Chat, ChatRoom, ChatState } from "../../component/chat/ChatModel.types";
+import { AppState } from "../config";
 
 export const chatSelector = (state: AppState) => state.chat.chat;
 export const chatRoomsSelector = (state: AppState) => state.chat.chatRooms;

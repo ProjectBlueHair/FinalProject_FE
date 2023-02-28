@@ -15,7 +15,7 @@ import {
   __MainTogglePlay,
   __mainPostLike,
 } from "../../redux/slice/mainSlice";
-import { CurrentMusic, Post } from "../../model/MainModel";
+import { CurrentMusic, Post } from "./MainModel.types";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import { useNavigate } from "react-router-dom";
 import useTypeModal from "../../modal/hooks/useTypeModal";

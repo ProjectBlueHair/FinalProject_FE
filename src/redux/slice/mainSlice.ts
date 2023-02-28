@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { instanceAxios } from "../../dataManager/apiConfig";
 import { AppState } from "../config";
-import { CurrentMusic, LikeModel, Post } from "../../model/MainModel";
+import { CurrentMusic, LikeModel, Post } from "../../component/main/MainModel.types";
 
 export interface MainState {
   posts: Post[];
@@ -122,15 +122,10 @@ export const mainSlice = createSlice({
       .addCase(__getAlarm.fulfilled, (state, { payload }) => {
         state.alarmCount = payload.unreadNotificationCount;
       })
-      .addCase(__getAlarm.rejected, (state, { payload }) => {
-        state.error = payload;
-      })
       .addCase(__readAlarm.fulfilled, (state, { payload }) => {
         state.alarmCount = payload.unreadNotificationCount;
       })
-      .addCase(__readAlarm.rejected, (state, { payload }) => {
-        state.error = payload;
-      });
+
   },
 });
 export const __getPostList = createAsyncThunk(

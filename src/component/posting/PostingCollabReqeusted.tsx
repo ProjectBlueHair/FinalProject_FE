@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { batch } from "react-redux";
 import { useParams } from "react-router-dom";
 import useTypeModal from "../../modal/hooks/useTypeModal";
-import { Response } from "../../model/ResponseModel";
+import { Response } from "../../dataManager/ResponseModel.types";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
   collaboApprove,

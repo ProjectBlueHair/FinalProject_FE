@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { ChangeEvent, Fragment, useEffect, useState } from "react";
 import styled from "styled-components";
 import Cancel from "../../asset/icon/Cancel";
 import {
@@ -7,7 +7,7 @@ import {
   soloButton,
   unMuteButton,
 } from "../../asset/pic";
-import { Wavesurfer } from "../../model/H5SurferModel";
+import { Wavesurfer } from "./H5SurferModel.types";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
   __removeAudio,
@@ -64,7 +64,7 @@ const AudioControlBox: React.FC<
         {props.isAddedAudio ? (
           <PartInput
             value={props.audioSrcInfo.musicPart}
-            onChange={(e) => {
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
               dispatch(
                 __setPartForCollaboAudio({
                   part: e.target.value,
@@ -124,7 +124,6 @@ const AudioControlBox: React.FC<
   );
 };
 
-
 export default AudioControlBox;
 
 const PartInput = styled(StInput).attrs({ maxLength: 6 })`
@@ -132,7 +131,6 @@ const PartInput = styled(StInput).attrs({ maxLength: 6 })`
   font-size: 1.2rem;
   width: 5.5rem;
   height: 2rem;
-
   text-align: center;
   border: 1px dashed white;
   color: white;

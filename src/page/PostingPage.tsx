@@ -47,11 +47,6 @@ const PostingPage = () => {
                   : "collaboApprove"
               }
             />
-            {/* <AudioH5Player />
-            <AudioWaveSurferList />
-            {COLLABOREQUESTED ? null : (
-              <AudioFileAdd isCollabo={COLLABOPAGE} />
-            )} */}
           </PostingAudioSection>
         </Flex>
         {POSTPAGE && <PostingForm isEdit={EDITPAGE} />}

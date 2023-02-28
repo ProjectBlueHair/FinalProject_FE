@@ -1,6 +1,6 @@
 import React from "react";
 import styled, {  StyledComponent } from "styled-components";
-import { SpanProps } from "../../model/StyleModel";
+import { SpanProps } from "./StyleModel.types";
 
 
 interface SpanContainer {

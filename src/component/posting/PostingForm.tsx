@@ -7,8 +7,8 @@ import {
   CollaboForm,
   PostingFormDto,
   DtoForPostingNew,
-} from "../../model/PostingModel";
-import { Response } from "../../model/ResponseModel";
+} from "./PostingModel.types";
+import { Response } from "../../dataManager/ResponseModel.types";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import { addedAudiosStateSelector } from "../../redux/slice/h5surferSlice";
 import {
