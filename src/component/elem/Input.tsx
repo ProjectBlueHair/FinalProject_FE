@@ -1,40 +1,38 @@
-import React, { ChangeEvent, CSSProperties } from "react";
+import React, { ChangeEvent, CSSProperties, HTMLAttributes } from "react";
 import styled, { StyledComponent } from "styled-components";
 
-interface InputProps {
-  wd?: string;
-  placeholder?: string;
+interface Props extends HTMLAttributes<HTMLInputElement> {
   type?: string;
-  value?: string;
-  onChange?: CallableFunction;
-  style?: CSSProperties
-  
 }
 interface InputContainer {
-  [key: string]: StyledComponent<"input", any, InputProps, never>;
+  [key: string]: StyledComponent<
+    "input",
+    any,
+    HTMLAttributes<HTMLInputElement>,
+    never
+  >;
 }
-const Input: React.FC<InputProps> = (props) => {
+const Input: React.FC<Props> = (props) => {
   const INPUT: InputContainer = {
-    postFormInput : PostFormInput, 
   };
-  if(props.type && !INPUT[props.type]){
-    console.log(`wrong type : ${props.type}`);
+  if (props.type && !INPUT[props.type]) {
   }
   const Input = props.type ? INPUT[props.type] : StInput;
 
-  const onChangeHandler = (e: ChangeEvent) => {
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     props.onChange && props.onChange(e);
   };
   return <Input {...props} onChange={onChangeHandler} />;
 };
 
 export default Input;
-export const StInput = styled.input<InputProps>`
+export const StInput = styled.input<Props>`
   border: none;
-  width: ${({ wd }) => wd || "100%"};
   background-color: transparent;
+
+  width: ${({ width }) => width || "100%"};
   font-size: 1.5rem;
-  color: var(--ec-primary-text);
+  color: ${props=>props.theme.color.primaryText};
   &:focus {
     outline: none;
   }
@@ -43,12 +41,4 @@ export const StInput = styled.input<InputProps>`
     color: var(--ec-secondary-text);
   }
 `;
-const PostFormInput = styled(StInput)`
-  width: 100%;
-  border: 1px solid rgba(0,0,0,0.1);
-  border-radius: 15px;
-  width: 50rem;
-  font-size: 1.4rem;
-  padding: 6px 12px;
-  margin-top: 1rem;
-`
+

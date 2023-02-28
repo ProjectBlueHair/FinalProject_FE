@@ -1,10 +1,10 @@
 import { Client, Stomp, StompConfig, StompSubscription } from "@stomp/stompjs";
 import { useCallback, useEffect } from "react";
 import SockJS from "sockjs-client";
-import { __stompConnected } from "../component/chat/chatSlice";
+import { __stompConnected } from "../redux/slice/chatSlice";
 import { socketURL } from "../dataManager/apiConfig";
 import { getCookies } from "../dataManager/cookie";
-import { Chat } from "../model/ChatModel";
+import { Chat } from "../component/chat/ChatModel.types";
 import { useAppDispatch } from "../redux/config";
 
 interface ObjectType {

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import WaveSurfer from "wavesurfer.js";
 import { WaveSurferParams } from "wavesurfer.js/types/params";
-import { Wavesurfer } from "../../model/H5SurferModel";
+import { Wavesurfer } from "./H5SurferModel.types";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
   h5PlayerSelector,

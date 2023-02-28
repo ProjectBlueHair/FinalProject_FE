@@ -1,6 +1,6 @@
 import nextId from "react-id-generator";
 import { mockText, mockAudios } from "./MockResource";
-import { Member, Post } from "../model/MainModel";
+import { Member, Post } from "../component/main/MainModel.types";
 function rand(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }

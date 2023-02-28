@@ -3,10 +3,11 @@ import { instanceAxios } from "../../dataManager/apiConfig";
 import {
   AddedAudio,
   AddedAudiosState,
-  AudioDto, H5player,
-  Wavesurfer
-} from "../../model/H5SurferModel";
-import { Response } from "../../model/ResponseModel";
+  AudioDto,
+  H5player,
+  Wavesurfer,
+} from "../../component/h5surferPlayer/H5SurferModel.types";
+import { Response } from "../../dataManager/ResponseModel.types";
 import { AppState } from "../config";
 
 export const h5PlayerSelector = (state: AppState) => state.h5surfer.H5player;
@@ -198,8 +199,7 @@ export const h5surferSlice = createSlice({
       .addCase(
         __getCollaboRequestedAudios.fulfilled,
         (state, { payload }: { payload: AudioDto[] }) => {
-          state.H5player.src =
-            state.H5player.src || payload[0]?.musicFile;
+          state.H5player.src = state.H5player.src || payload[0]?.musicFile;
           payload.forEach((audio: AudioDto) => {
             state.wavesurfers = state.wavesurfers.concat({
               ...state.wavesurfer,

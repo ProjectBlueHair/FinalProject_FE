@@ -7,7 +7,7 @@ import { userSelector } from "../../redux/slice/userSlice";
 import Button from "../elem/Button";
 import Flex from "../elem/Flex";
 import { StTextarea } from "../elem/Textarea";
-import { currentRoomIdSelector } from "./chatSlice";
+import { currentRoomIdSelector } from "../../redux/slice/chatSlice";
 
 const ChatForm = () => {
   const user = useAppSelector(userSelector);
@@ -23,12 +23,11 @@ const ChatForm = () => {
       time: "",
       date: "",
     });
-    messageInput.setValue('')
+    messageInput.setValue("");
   };
   const keyDownHandler = (event: React.KeyboardEvent<Element>) => {
-
     if (event.key === "Enter") {
-      event.preventDefault()
+      event.preventDefault();
       handleSubmit();
     }
   };

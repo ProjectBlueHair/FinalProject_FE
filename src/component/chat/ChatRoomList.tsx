@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import Flex, { StFlex } from "../elem/Flex";
 import ChatRoomItem from "./ChatRoomItem";
-import { chatRoomsSelector, __getChatRooms } from "./chatSlice";
+import { chatRoomsSelector, __getChatRooms } from "../../redux/slice/chatSlice";
 
 const ChatRoomList = () => {
   const dispatch = useAppDispatch();

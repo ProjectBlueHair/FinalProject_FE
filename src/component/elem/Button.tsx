@@ -1,6 +1,6 @@
 import React from "react";
 import styled, { StyledComponent } from "styled-components";
-import { ButtonProps } from "../../model/StyleModel";
+import { ButtonProps } from "./StyleModel.types";
 import theme from "../../styles/theme";
 
 interface ButtonType {

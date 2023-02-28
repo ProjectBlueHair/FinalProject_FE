@@ -41,16 +41,16 @@ const AlertModal: React.FC<{
         <Img wd="85%" src={props.type === "error" ? alertError : alertInfo} />
         {props.type === "error" ? (
           <>
-            <Div fs="3rem" fw="700">
+            {/* <Div fs="3rem" fw="700">
               ...어?
-            </Div>
+            </Div> */}
             <Div fc="var(--ec-secondary-text)">{props.message}</Div>
           </>
         ) : props.type === "info" ? (
           <>
-            <Div fs="3.2rem" fw="700">
+            {/* <Div fs="3.2rem" fw="700">
               목표 발견 !
-            </Div>
+            </Div> */}
             <Div fs="1.8rem" fc="var(--ec-main-color)">
               {props.message}
             </Div>

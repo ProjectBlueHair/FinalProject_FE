@@ -1,6 +1,6 @@
 import React from "react";
 import styled, { StyledComponent } from "styled-components";
-import { ImgProps } from "../../model/StyleModel";
+import { ImgProps } from "./StyleModel.types";
 
 interface ImgWrapper {
   [key: string]: StyledComponent<"img", any, ImgProps, never> | StyledComponent<"div", any, ImgProps, never> ;
