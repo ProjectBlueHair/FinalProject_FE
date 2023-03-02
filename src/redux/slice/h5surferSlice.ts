@@ -167,7 +167,7 @@ export const h5surferSlice = createSlice({
         payload.volume === 0.00001 ? true : false;
       state.wavesurfers[payload.index].volume = payload.volume;
     },
-    __cleanUp: () => {
+    __cleanUpAudios: () => {
       return initialState;
     },
   },
@@ -247,7 +247,7 @@ export const {
   __setMute,
   __setSolo,
   __setVolume,
-  __cleanUp,
+  __cleanUpAudios,
   __setPartForCollaboAudio,
   __audioOnLoaded,
   __endPlay,

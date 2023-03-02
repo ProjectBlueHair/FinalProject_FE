@@ -14,7 +14,7 @@ import { addedAudiosStateSelector } from "../../redux/slice/h5surferSlice";
 import {
   formSelector,
   uploadNewPost,
-  __cleanUp,
+  __cleanUpPost,
 } from "../../redux/slice/postingSlice";
 import theme from "../../styles/theme";
 import Button from "../elem/Button";
@@ -48,7 +48,7 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
   console.log("collaboRequestData", addedAudiosState.partsAllValid);
   useEffect(() => {
     return () => {
-      dispatch(__cleanUp());
+      dispatch(__cleanUpPost());
     };
   }, []);
 

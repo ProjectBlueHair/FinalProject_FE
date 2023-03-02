@@ -6,7 +6,7 @@ import { like, redLike, view } from "../../asset/pic";
 import { getCookies } from "../../dataManager/cookie";
 import useTypeModal from "../../modal/hooks/useTypeModal";
 import { __getDetail, __postLike } from "../../redux/slice/detailSlice";
-import { __cleanUp } from "../../redux/slice/postingSlice";
+import { __cleanUpPost } from "../../redux/slice/postingSlice";
 import Img from "../elem/Img";
 import H5SurferPlayer from "../h5surferPlayer/H5SurferPlayer";
 import DetailDayAndFollow from "./DetailDayAndFollow";
@@ -24,7 +24,7 @@ const DetailTop = () => {
     dispatch(__getDetail(id));
     // dispatch(__getAudios(id));
     return () => {
-      dispatch(__cleanUp());
+      dispatch(__cleanUpPost());
     };
   }, [id]);
   // 뷰숫자, 좋아요 숫자, 제목, 내용, 배경이미지파일 (+ 작성일 추가)

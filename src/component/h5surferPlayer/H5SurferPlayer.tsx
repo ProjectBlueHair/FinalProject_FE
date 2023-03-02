@@ -2,10 +2,11 @@ import React, { Fragment, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useAppDispatch } from "../../redux/config";
 import {
-  __cleanUp,
+  __cleanUpAudios,
   __getAudios,
   __getCollaboRequestedAudios,
 } from "../../redux/slice/h5surferSlice";
+import { __cleanUpPost } from "../../redux/slice/postingSlice";
 import AudioFileAdd from "./AudioFileAdd";
 import AudioH5Player from "./AudioH5player";
 import AudioWaveSurferList from "./AudioWaveSurferList";
@@ -34,9 +35,10 @@ const H5SurferPlayer: React.FC<{
         })
         .catch((err) => alert(err));
     }
-    return ()=>{
-      dispatch(__cleanUp())
-    }
+    return () => {
+      dispatch(__cleanUpAudios());
+      dispatch(__cleanUpPost());
+    };
   }, [id, postId, dispatch]);
   return (
     <Fragment>

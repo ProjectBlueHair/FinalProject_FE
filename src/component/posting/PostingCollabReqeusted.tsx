@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
   collaboApprove,
   CollaboRequestedFormSelector,
-  __cleanUp,
+  __cleanUpPost,
   __getCollaboRequestedInfo,
   __getPostInfo,
 } from "../../redux/slice/postingSlice";
@@ -37,7 +37,7 @@ const PostingCollaboRequested = () => {
     });
 
     return () => {
-      dispatch(__cleanUp());
+      dispatch(__cleanUpPost());
     };
   }, [id]);
   const collaboRequestedForm = useAppSelector(CollaboRequestedFormSelector);

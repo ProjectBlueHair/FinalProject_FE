@@ -38,7 +38,7 @@ export const postingSlice = createSlice({
     __form: (state, { payload }) => {
       state.form = { ...state.form, ...payload };
     },
-    __cleanUp: () => {
+    __cleanUpPost: () => {
       return initialState;
     },
   },
@@ -105,7 +105,7 @@ export const collaboApprove = async (collaboId: string | number) => {
   return await instanceAxios.post(`/collabo/${collaboId}`);
 };
 export const {
-  __cleanUp,
+  __cleanUpPost,
   __form,
 } = postingSlice.actions;
 export default postingSlice.reducer;

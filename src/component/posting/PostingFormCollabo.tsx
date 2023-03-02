@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/config";
 import { addedAudiosStateSelector } from "../../redux/slice/h5surferSlice";
 import {
   collaboRequest,
-  __cleanUp,
+  __cleanUpPost,
   __getPostInfo,
 } from "../../redux/slice/postingSlice";
 import theme from "../../styles/theme";
@@ -33,7 +33,7 @@ const PostingFormCollabo = () => {
     });
 
     return () => {
-      dispatch(__cleanUp());
+      dispatch(__cleanUpPost());
     };
   }, [id]);
 
