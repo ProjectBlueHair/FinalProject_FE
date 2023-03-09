@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import useModal from "../modal/useModal";
 import styled from "styled-components";
 import { setCookie } from "../../dataManager/cookie";
-import { instanceAxios } from "../../dataManager/apiConfig";
+import { apiClient } from "../../dataManager/interceptors";
 import Img from "../elem/Img";
 import { mainLogo, log, kakaoIcon, googleIcon } from "../../asset/pic";
 import { useAppDispatch } from "../../redux/config";
@@ -35,7 +35,7 @@ const SignInModal = ({ onClose }) => {
 
   const postSignIn = async (post) => {
     try {
-      const data = await instanceAxios.post("member/login", post);
+      const data = await apiClient.post("member/login", post);
       if (data.status === 200) {
         return data;
       } else {

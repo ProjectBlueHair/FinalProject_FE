@@ -2,7 +2,7 @@ import { Client, Stomp, StompConfig, StompSubscription } from "@stomp/stompjs";
 import { useCallback, useEffect } from "react";
 import SockJS from "sockjs-client";
 import { __stompConnected } from "../redux/slice/chatSlice";
-import { socketURL } from "../dataManager/apiConfig";
+import { URL_SOCKET } from "../constants/ApiConstants";
 import { getCookies } from "../dataManager/cookie";
 import { Chat } from "../component/chat/ChatModel.types";
 import { useAppDispatch } from "../redux/config";
@@ -19,7 +19,7 @@ export const useStomp = (config?: StompConfig, callback?: () => void) => {
   const dispatch = useAppDispatch();
   const connect = useCallback(() => {
     if (!stompClient) {
-      const socket = new SockJS(`${socketURL}/ws/chat`);
+      const socket = new SockJS(`${URL_SOCKET}/ws/chat`);
       stompClient = Stomp.over(() => {
         return socket;
       });

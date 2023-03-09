@@ -9,7 +9,7 @@ import {
 } from "../../redux/slice/h5surferSlice";
 import theme from "../../styles/theme";
 import Flex from "../elem/Flex";
-import { AUDIO_BAR_HEIGHT } from "./AudioWaveSurferList";
+import { AUDIO_BAR_HEIGHT } from "./AUDIO_BAR_GAP";
 
 const AudioWaveSurfer: React.FC<Wavesurfer & { index: number }> = (props) => {
   const wavesurfer = useRef<WaveSurfer | null>(null);

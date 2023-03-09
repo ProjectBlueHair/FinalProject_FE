@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { instanceAxios } from "../../dataManager/apiConfig";
+import { apiClient } from "../../dataManager/interceptors";
 import {
   AddedAudio,
   AddedAudiosState,
@@ -220,7 +220,7 @@ export const __getAudios = createAsyncThunk(
   "__getAudios",
   async (payload: number, thunkAPI) => {
     try {
-      const { data } = await instanceAxios.get(`/post/${payload}/music`);
+      const { data } = await apiClient.get(`/post/${payload}/music`);
       return data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -231,7 +231,7 @@ export const __getCollaboRequestedAudios = createAsyncThunk(
   "__getCollaboRequestedAudios",
   async (payload: number, thunkAPI) => {
     try {
-      const { data }: { data: Response } = await instanceAxios.get(
+      const { data }: { data: Response } = await apiClient.get(
         `/collabo/${payload}`
       );
       return data.data.musicList;

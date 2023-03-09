@@ -1,10 +1,10 @@
-import { instanceAxios } from "../dataManager/apiConfig";
+import { apiClient } from "../dataManager/interceptors";
 import { getCookies, removeCookies, setCookie } from "../dataManager/cookie";
 
 export const reissuance = () => {
   const RefreshToken = getCookies("refreshtoken");
   const AccessToken = getCookies("accesstoken");
-  return instanceAxios.post(
+  return apiClient.post(
     "member/reissuance",
     {},
     {

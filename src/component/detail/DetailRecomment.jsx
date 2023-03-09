@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { like, view } from "../../asset/pic";
-import { searchAxios } from "../../dataManager/apiConfig";
+import { searchClient } from "../../dataManager/interceptors";
 import Img from "../elem/Img";
 
 const DetailRecomment = ({ detail, paramsID }) => {
@@ -42,7 +42,7 @@ const DetailRecomment = ({ detail, paramsID }) => {
         data: {
           hits: { hits },
         },
-      } = await searchAxios.post(`post/_search?`, a);
+      } = await searchClient.post(`post/_search?`, a);
       setReList(hits);
     } catch (error) {
       console.log(error);

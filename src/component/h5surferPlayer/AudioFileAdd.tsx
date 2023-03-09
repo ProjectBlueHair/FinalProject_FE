@@ -7,7 +7,7 @@ import theme from "../../styles/theme";
 import Div from "../elem/Div";
 import Flex, { StFlex } from "../elem/Flex";
 import Span from "../elem/Span";
-import { AUDIO_BAR_HEIGHT, AUDIO_BAR_RADIUS } from "./AudioWaveSurferList";
+import { AUDIO_BAR_HEIGHT, AUDIO_BAR_RADIUS } from "./AUDIO_BAR_GAP";
 interface NewAudio {
   url: string;
   duration: number;
@@ -27,22 +27,32 @@ const AudioFileAdd: React.FC<{ isCollabo?: boolean }> = (props) => {
     },
     []
   );
-  const handleFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const files = event.target.files;
-    files && dispatchAudios(files);
-  };
+  const handleFileChange = useCallback(
+    async (event: React.ChangeEvent<HTMLInputElement>) => {
+      const files = event.target.files;
+      files && dispatchAudios(files);
+    },
+    []
+  );
+
+  const handleDragOver = useCallback(
+    (event: React.DragEvent<HTMLDivElement>) => {
+      event.preventDefault();
+      setText(alertText());
+    },
+    []
+  );
+  const handleDragLeave = useCallback(
+    (event: React.DragEvent<HTMLDivElement>) => {
+      setText(defaultText());
+    },
+    []
+  );
   return (
     <AudioDragForm
       onDrop={handleDrop}
-      onDragOver={(event: React.DragEvent<HTMLDivElement>) => {
-        event.preventDefault();
-        setText(alertText());
-      }}
-      onDragLeave={(event: React.DragEvent<HTMLDivElement>) => {
-        setText(defaultText());
-      }}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
     >
       <Flex
         type="audioBar"

@@ -7,7 +7,7 @@ import Div from "../../component/elem/Div";
 import Flex, { StFlex } from "../../component/elem/Flex";
 import Img from "../../component/elem/Img";
 import Span from "../../component/elem/Span";
-import { instanceAxios } from "../../dataManager/apiConfig";
+import { apiClient } from "../../dataManager/interceptors";
 import { useAppDispatch } from "../../redux/config";
 import { __readAlarm } from "../../redux/slice/mainSlice";
 import useTypeModal from "../hooks/useTypeModal";
@@ -35,7 +35,7 @@ const AlarmModal = () => {
   const { $closeModal, $openModal } = useTypeModal();
 
   useEffect(() => {
-    instanceAxios
+    apiClient
       .get("/notifications")
       .then(({ data }) => {
         setAlarmState(data.data);

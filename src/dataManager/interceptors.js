@@ -1,22 +1,18 @@
 import axios from "axios";
 import { reissuance } from "../util/Reissuance";
 import { getCookies, removeCookies, setCookie } from "./cookie";
+import { URL_SERVER, URL_SEARCH, KEY_SEARCH } from "../constants/ApiConstants";
+import { Response } from "./ResponseModel.types";
+export const apiClient = axios.create({ baseURL: URL_SERVER });
+export const searchClient = axios.create({ baseURL: URL_SEARCH });
 
-export const serverURL = process.env.REACT_APP_SERVER;
-export const socketURL = process.env.REACT_APP_SOCKET_SERVER;
-export const searchKEY = process.env.REACT_APP_SEARCH_KEY;
-export const searchURL = process.env.REACT_APP_SEARCH_URL;
-
-export const instanceAxios = axios.create({ baseURL: serverURL });
-export const searchAxios = axios.create({ baseURL: searchURL });
-
-searchAxios.interceptors.request.use((config) => {
+searchClient.interceptors.request.use((config) => {
   if (config === undefined) return;
-  config.headers["Authorization"] = searchKEY;
+  config.headers["Authorization"] = KEY_SEARCH;
   return config;
 });
 
-instanceAxios.interceptors.request.use((config) => {
+apiClient.interceptors.request.use((config) => {
   if (config === undefined) return;
   const acc = getCookies("accesstoken");
   config.headers["AccessToken"] = `${acc}`;
@@ -34,7 +30,7 @@ const addRefreshSubscriber = (callback) => {
   refreshSubscribers.push(callback);
 };
 
-instanceAxios.interceptors.response.use(
+apiClient.interceptors.response.use(
   (res) => {
     const { data, config } = res;
     switch (data.customHttpStatus) {
@@ -84,7 +80,7 @@ instanceAxios.interceptors.response.use(
           addRefreshSubscriber((accesstoken, refreshtoken) => {
             config.headers.AccessToken = accesstoken;
             config.headers.RefreshToken = refreshtoken;
-            resolve(instanceAxios.request(config));
+            resolve(apiClient.request(config));
           });
         });
         return retryOriginalRequest;

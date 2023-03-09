@@ -8,7 +8,7 @@ import {
 } from "../../redux/slice/mainSlice";
 import MainPost from "./MainPost";
 const MainPostList = () => {
-  const { tag } = useParams();
+  // const { tag } = useParams();
   const target = useRef<HTMLDivElement>(null);
   const scrollArea = useRef(null);
   const [trigger, setTrigger] = useState(false);

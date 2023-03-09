@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { instanceAxios } from "../../dataManager/apiConfig";
+import { apiClient } from "../../dataManager/interceptors";
 import { AppState } from "../config";
 import { CurrentMusic, LikeModel, Post } from "../../component/main/MainModel.types";
 
@@ -133,7 +133,7 @@ export const __getPostList = createAsyncThunk(
   async (payload: number, thunkAPI) => {
     try {
       console.log("payload,,,", payload);
-      const { data } = await instanceAxios.get(
+      const { data } = await apiClient.get(
         `/post?page=${Number(payload)}&size=15`
       );
       return data.data;
@@ -146,7 +146,7 @@ export const __mainPostLike = createAsyncThunk(
   "__mainPostLike",
   async (payload: { postId: string | number; index: number }, thunkAPI) => {
     try {
-      const { data } = await instanceAxios.post(`/post/like/${payload.postId}`);
+      const { data } = await apiClient.post(`/post/like/${payload.postId}`);
       const resData: LikeModel = { ...data.data, index: payload.index };
       return resData;
     } catch (error) {
@@ -159,7 +159,7 @@ export const __getAlarm = createAsyncThunk(
   "__getAlarm",
   async (payload, thunkAPI) => {
     try {
-      const { data } = await instanceAxios.get(`/notification/count`);
+      const { data } = await apiClient.get(`/notification/count`);
       return data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -170,7 +170,7 @@ export const __readAlarm = createAsyncThunk(
   "__readAlarm",
   async (payload: string | number, thunkAPI) => {
     try {
-      const { data } = await instanceAxios.post(`/notification/${payload}`);
+      const { data } = await apiClient.post(`/notification/${payload}`);
       return data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);

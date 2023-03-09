@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { more, pause, playButtonSecond, view } from "../../asset/pic";
-import { instanceAxios } from "../../dataManager/apiConfig";
+import { apiClient } from "../../dataManager/interceptors";
 import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
 import useTypeModal from "../../modal/hooks/useTypeModal";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
@@ -38,7 +38,7 @@ const MypagePlayList = ({ L, getArchive }) => {
   // };
   const archiveDelete = async (nick) => {
     try {
-      const { data } = await instanceAxios.delete(`post/archive/${nick}`);
+      const { data } = await apiClient.delete(`post/archive/${nick}`);
       if (data.customHttpStatus === 2000) {
         $openModal({
           type: "alert",

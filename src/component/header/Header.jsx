@@ -12,7 +12,7 @@ import {
   searchMain,
   upload,
 } from "../../asset/pic";
-import { serverURL } from "../../dataManager/apiConfig";
+import { URL_SERVER } from "../../constants/ApiConstants";
 import { getCookies, removeCookies } from "../../dataManager/cookie";
 import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
 import useTypeModal from "../../modal/hooks/useTypeModal";
@@ -82,7 +82,7 @@ const Header = () => {
     if (readyState === null) readyState = 2;
     const isConnecting = Number(readyState) === 1 || Number(readyState) === 0;
     if (AccessToken && user.nickname && !isConnecting) {
-      eventSource = new EventSource(`${serverURL}/subscribe/${user.nickname}`, {
+      eventSource = new EventSource(`${URL_SERVER}/subscribe/${user.nickname}`, {
         withCredentials: true,
         connection: "keep-alive",
       });
@@ -97,7 +97,7 @@ const Header = () => {
       eventSource.onerror = (e) => {
         eventSource.close();
         eventSource = new EventSource(
-          `${serverURL}/subscribe/${user.nickname}`,
+          `${URL_SERVER}/subscribe/${user.nickname}`,
           {
             withCredentials: true,
             connection: "keep-alive",

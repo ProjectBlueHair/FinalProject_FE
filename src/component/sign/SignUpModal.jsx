@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import Modal from "../modal/Modal";
 import styled from "styled-components";
 import useModal from "../modal/useModal";
-import { instanceAxios } from "../../dataManager/apiConfig";
+import { apiClient } from "../../dataManager/interceptors";
 import Img from "../elem/Img";
 import { log } from "../../asset/pic";
 import { uploadFiles } from "../../dataManager/imageS3";
@@ -194,7 +194,7 @@ const SignUpModal = ({ onClose }) => {
 
   const NicknameCheck = async (post) => {
     try {
-      const { data } = await instanceAxios.post(
+      const { data } = await apiClient.post(
         "member/validate/nickname",
         post
       );
@@ -254,7 +254,7 @@ const SignUpModal = ({ onClose }) => {
 
   const emailCheck = async (post) => {
     try {
-      const { data } = await instanceAxios.post("member/validate/email", post);
+      const { data } = await apiClient.post("member/validate/email", post);
       if (data.customHttpStatus === 4091) {
         setOnCheckEmail(false);
         $openModal({
@@ -299,7 +299,7 @@ const SignUpModal = ({ onClose }) => {
   // 회원가입 버튼 클릭시 실행
   const postSignUp = async (post) => {
     try {
-      const { data } = await instanceAxios.post("member/signup", post);
+      const { data } = await apiClient.post("member/signup", post);
       if (data.customHttpStatus === 2000) {
         return data;
       }
