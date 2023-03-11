@@ -3,10 +3,12 @@ import { wavesurferSelector } from "../../redux/slice/h5surferSlice";
 import Flex from "../elem/Flex";
 import AudioWaveSurfer from "./AudioWaveSurfer";
 import AudioControlBox from "./AudioControlBox";
-import { AUDIO_BAR_GAP, AUDIO_BAR_HEIGHT, AUDIO_BAR_RADIUS } from "./AUDIO_BAR_GAP";
+import { AUDIO_BAR_GAP, AUDIO_BAR_HEIGHT, AUDIO_BAR_RADIUS } from "./AudioStyleConstants";
 
 const AudioWaveSurferList = () => {
+
   const audios = useAppSelector(wavesurferSelector);
+  
   return (
     <Flex direction="column" gap={AUDIO_BAR_GAP}>
       <div data-testid="testdiv"></div>

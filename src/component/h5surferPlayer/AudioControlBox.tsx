@@ -5,12 +5,15 @@ import {
   collaboButton,
   muteButton,
   soloButton,
-  unMuteButton
+  unMuteButton,
 } from "../../asset/pic";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
-  __removeAudio, __setMute, __setPartForCollaboAudio, __setSolo,
-  __setVolume
+  __removeAudio,
+  __setMute,
+  __setPartForCollaboAudio,
+  __setSolo,
+  __setVolume,
 } from "../../redux/slice/h5surferSlice";
 import { userSelector } from "../../redux/slice/userSlice";
 import theme from "../../styles/theme";
@@ -18,7 +21,7 @@ import Flex from "../elem/Flex";
 import Img from "../elem/Img";
 import { StInput } from "../elem/Input";
 import Span from "../elem/Span";
-import { AUDIO_BAR_RADIUS } from "./AUDIO_BAR_GAP";
+import { AUDIO_BAR_RADIUS } from "./AudioStyleConstants";
 import { Wavesurfer } from "./H5SurferModel.types";
 
 const AudioControlBox: React.FC<
@@ -26,9 +29,10 @@ const AudioControlBox: React.FC<
     index?: number;
   }
 > = (props) => {
+  
+  const [volume, setVolume] = useState(0.5);
 
   const dispatch = useAppDispatch();
-  const [volume, setVolume] = useState(0.5);
 
   const user = useAppSelector(userSelector);
 

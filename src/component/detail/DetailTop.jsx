@@ -8,7 +8,7 @@ import useTypeModal from "../../modal/hooks/useTypeModal";
 import { __getDetail, __postLike } from "../../redux/slice/detailSlice";
 import { __cleanUpPost } from "../../redux/slice/postingSlice";
 import Img from "../elem/Img";
-import H5SurferPlayer from "../h5surferPlayer/H5SurferPlayer";
+import H5SurferPlayerContainer from "../../container/H5SurferPlayerContainer";
 import DetailDayAndFollow from "./DetailDayAndFollow";
 import DetailRecomment from "./DetailRecomment";
 
@@ -108,7 +108,7 @@ const DetailTop = () => {
           </DetailTopDown>
         </DetailTopLeft>
         <DetailTopRight>
-          <H5SurferPlayer page="detail"/>
+          <H5SurferPlayerContainer page="detail"/>
           {/* <AudioH5Player />
           <br />
           <AudioWaveSurferList /> */}

@@ -7,16 +7,21 @@ import theme from "../../styles/theme";
 import Div from "../elem/Div";
 import Flex, { StFlex } from "../elem/Flex";
 import Span from "../elem/Span";
-import { AUDIO_BAR_HEIGHT, AUDIO_BAR_RADIUS } from "./AUDIO_BAR_GAP";
+import { AUDIO_BAR_HEIGHT, AUDIO_BAR_RADIUS } from "./AudioStyleConstants";
 interface NewAudio {
   url: string;
   duration: number;
 }
 const AudioFileAdd: React.FC<{ isCollabo?: boolean }> = (props) => {
+
   const dispatch = useAppDispatch();
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const { $openModal } = useTypeModal();
+
   const [text, setText] = useState(defaultText());
+  
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const { $openModal } = useTypeModal();
+  
 
   const handleDrop = useCallback(
     async (event: React.DragEvent<HTMLDivElement>) => {
