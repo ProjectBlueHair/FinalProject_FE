@@ -11,7 +11,7 @@ import {
   linkedIn,
   twitter,
 } from "../../asset/pic";
-import { instanceAxios } from "../../dataManager/apiConfig";
+import { apiClient } from "../../dataManager/interceptors";
 import { removeCookies, setCookie } from "../../dataManager/cookie";
 import { uploadFiles } from "../../dataManager/imageS3";
 import useTypeModal from "../../modal/hooks/useTypeModal";
@@ -28,7 +28,7 @@ const SetTotal = () => {
     try {
       const {
         data: { data },
-      } = await instanceAxios.get("member/setting");
+      } = await apiClient.get("member/setting");
       updateEvent({ aboutMe: data.aboutMe });
       updateEvent({ likeNotify: data.likeNotify });
       updateEvent({ commentNotify: data.commentNotify });
@@ -196,7 +196,7 @@ const SetTotal = () => {
 
   const usernameChecking = async (post) => {
     try {
-      const { data } = await instanceAxios.post("member/validate/nickname", {
+      const { data } = await apiClient.post("member/validate/nickname", {
         nickname: post,
       });
       if (data.customHttpStatus === 2000) {
@@ -307,7 +307,7 @@ const SetTotal = () => {
           },
         });
       } else {
-        const { data } = await instanceAxios.put("member/setting", put);
+        const { data } = await apiClient.put("member/setting", put);
         if (data.customHttpStatus === 2000) {
           return data;
         } else {

@@ -12,7 +12,7 @@ import {
 } from "react-share";
 import styled from "styled-components";
 import { facebook, insta, kakaoIcon, linkedIn, twitter } from "../../asset/pic";
-import { instanceAxios } from "../../dataManager/apiConfig";
+import { apiClient } from "../../dataManager/interceptors";
 import { getCookies } from "../../dataManager/cookie";
 import { useShare } from "../../hook/useShare";
 import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
@@ -36,7 +36,7 @@ const MypageLeft = () => {
     try {
       const {
         data: { data },
-      } = await instanceAxios.get(encodeURI(`member/mypage/${nickname}`));
+      } = await apiClient.get(encodeURI(`member/mypage/${nickname}`));
       setInformation(data);
     } catch (error) {
       console.log(error);

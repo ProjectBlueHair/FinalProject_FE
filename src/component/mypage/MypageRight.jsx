@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { instanceAxios } from "../../dataManager/apiConfig";
+import { apiClient } from "../../dataManager/interceptors";
 import { __getCollaboRequestedInfo } from "../../redux/slice/postingSlice";
 import { __getGeneralUserInfo } from "../../redux/slice/userSlice";
 import MypagePlayList from "./MypagePlayList";
@@ -19,7 +19,7 @@ const MypageRight = () => {
     try {
       const {
         data: { data },
-      } = await instanceAxios.get(`post/archive/${name}?page=${page}&size=4`);
+      } = await apiClient.get(`post/archive/${name}?page=${page}&size=4`);
       setArchiveList(data);
     } catch (error) {
       console.log(error);
@@ -30,7 +30,7 @@ const MypageRight = () => {
     try {
       const {
         data: { data },
-      } = await instanceAxios.get(
+      } = await apiClient.get(
         `post/my-post/${name}?page=${pageTwo}&size=4`
       );
       setArchiveList2(data);

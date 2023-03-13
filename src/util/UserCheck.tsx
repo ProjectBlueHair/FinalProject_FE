@@ -1,14 +1,11 @@
-import useTypeModal from "../modal/hooks/useTypeModal";
+import { Fragment } from "react";
 import { getCookies } from "../dataManager/cookie";
+import useTypeModal from "../modal/hooks/useTypeModal";
 import { ALERT_TYPE } from "../modal/modals/AlertModal";
 import { PATH } from "../Router";
-import { Fragment } from "react";
-import { useAppSelector } from "../redux/config";
-import { userSelector } from "../redux/slice/userSlice";
 
 const UserCheck = () => {
   const { $openModal } = useTypeModal();
-  const user = useAppSelector(userSelector);
 
   if (!getCookies("accesstoken")) {
     $openModal({

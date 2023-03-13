@@ -8,7 +8,7 @@ interface InputContainer {
   [key: string]: StyledComponent<
     "input",
     any,
-    HTMLAttributes<HTMLInputElement>,
+    Props,
     never
   >;
 }

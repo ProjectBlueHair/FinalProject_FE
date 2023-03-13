@@ -15,12 +15,12 @@ import PlayLoading from "../elem/PlayLoading";
 
 const AudioH5Player = () => {
   const audioPlayer = useRef<AudioPlayer>(null);
-  const dispatch = useAppDispatch();
-  const playControl = useAppSelector(h5PlayerSelector);
-  const [isLoading, setIsLoading] = useState(false);
-  console.log('playControl.ready',playControl.ready);
-  
 
+  const dispatch = useAppDispatch();
+
+  const playControl = useAppSelector(h5PlayerSelector);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!playControl.ready && !isLoading) {
@@ -37,25 +37,6 @@ const AudioH5Player = () => {
     }
   }, [playControl.init]);
 
-  const handlePlay = () => {
-    dispatch(__togglePlay(true));
-  };
-  const handlePause = () => {
-    dispatch(__togglePlay(false));
-  };
-  const handleEnded = () => {
-    // time out 안해주면 왼쪽 현재 시간만 00:00으로 바뀌고 프로그레스바 UI 까지는 업데이트가 안됨
-    setTimeout(() => {
-      if (audioPlayer.current && audioPlayer.current.audio.current) {
-        console.log("checking 2");
-        audioPlayer.current.audio.current.currentTime = 0;
-      }
-    }, 50);
-    dispatch(__endPlay());
-  };
-  const handleSeeking = () => {
-    dispatch(__seekTo(audioPlayer.current?.audio.current?.currentTime));
-  };
   return (
     <Fragment>
       {playControl.src ? (
@@ -115,9 +96,32 @@ const AudioH5Player = () => {
       ) : null}
     </Fragment>
   );
+  function handlePlay() {
+    dispatch(__togglePlay(true));
+  }
+
+  function handlePause() {
+    dispatch(__togglePlay(false));
+  }
+
+  function handleEnded() {
+    // time out 안해주면 왼쪽 현재 시간만 00:00으로 바뀌고 프로그레스바 UI 까지는 업데이트가 안됨
+    setTimeout(() => {
+      if (audioPlayer.current && audioPlayer.current.audio.current) {
+        console.log("checking 2");
+        audioPlayer.current.audio.current.currentTime = 0;
+      }
+    }, 50);
+    dispatch(__endPlay());
+  }
+
+  function handleSeeking() {
+    dispatch(__seekTo(audioPlayer.current?.audio.current?.currentTime));
+  }
 };
 
 export default AudioH5Player;
+
 const ProgressWrapper = styled.div`
   display: flex;
   flex-direction: row;
@@ -299,7 +303,6 @@ const ProgressWrapper = styled.div`
     padding: 0;
     margin: 0;
     line-height: 0;
-
   }
   .rhap_button-clear:hover {
     opacity: 0.9;

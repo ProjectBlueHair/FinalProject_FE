@@ -9,12 +9,16 @@ import {
 } from "../../redux/slice/h5surferSlice";
 import theme from "../../styles/theme";
 import Flex from "../elem/Flex";
-import { AUDIO_BAR_HEIGHT } from "./AudioWaveSurferList";
+import { AUDIO_BAR_HEIGHT } from "./AudioStyleConstants";
 
 const AudioWaveSurfer: React.FC<Wavesurfer & { index: number }> = (props) => {
+
   const wavesurfer = useRef<WaveSurfer | null>(null);
+
   const waveformRef = useRef<HTMLDivElement>(null);
+
   const dispatch = useAppDispatch();
+  
   const progressControl = useAppSelector(h5PlayerSelector);
 
   useEffect(() => {
@@ -22,13 +26,13 @@ const AudioWaveSurfer: React.FC<Wavesurfer & { index: number }> = (props) => {
       waveSurferOptions(waveformRef.current as HTMLDivElement)
     );
     wavesurfer.current.load(props.audioSrcInfo.musicFile);
-    wavesurfer.current.on("ready", function () {
+    wavesurfer.current.on("ready", () => {
       if (wavesurfer.current) {
         dispatch(__audioOnLoaded(props.index));
         wavesurfer.current.setVolume(props.volume);
       }
     });
-    wavesurfer.current.on("finish", function () {
+    wavesurfer.current.on("finish", () => {
       wavesurfer.current?.play(0);
     });
     return () => wavesurfer.current?.destroy();
@@ -66,7 +70,9 @@ const AudioWaveSurfer: React.FC<Wavesurfer & { index: number }> = (props) => {
   );
   function waveSurferOptions(ref: HTMLDivElement) {
     const params: WaveSurferParams = {
+
       audioRate: 1,
+
       barWidth: 3,
       // 웨이브 높이
       height: AUDIO_BAR_HEIGHT - 5,

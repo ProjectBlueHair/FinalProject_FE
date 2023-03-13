@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Fragment, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import styled from "styled-components";
 import Cancel from "../../asset/icon/Cancel";
 import {
@@ -7,12 +7,11 @@ import {
   soloButton,
   unMuteButton,
 } from "../../asset/pic";
-import { Wavesurfer } from "./H5SurferModel.types";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import {
   __removeAudio,
-  __setPartForCollaboAudio,
   __setMute,
+  __setPartForCollaboAudio,
   __setSolo,
   __setVolume,
 } from "../../redux/slice/h5surferSlice";
@@ -22,17 +21,18 @@ import Flex from "../elem/Flex";
 import Img from "../elem/Img";
 import { StInput } from "../elem/Input";
 import Span from "../elem/Span";
-import { AUDIO_BAR_RADIUS } from "./AudioWaveSurferList";
+import { AUDIO_BAR_RADIUS } from "./AudioStyleConstants";
+import { Wavesurfer } from "./H5SurferModel.types";
 
 const AudioControlBox: React.FC<
   Wavesurfer & {
     index?: number;
   }
 > = (props) => {
-  const BOX_NICK_FS = "1.4rem";
-  const BOX_ICON_WD = "2.2rem";
-  const dispatch = useAppDispatch();
+  
   const [volume, setVolume] = useState(0.5);
+
+  const dispatch = useAppDispatch();
 
   const user = useAppSelector(userSelector);
 
@@ -81,7 +81,7 @@ const AudioControlBox: React.FC<
           style={{ flex: 1, overflow: "hidden" }}
           fw="300"
           fc="white"
-          fs={BOX_NICK_FS}
+          fs={"1.4rem"}
         >
           {props.audioSrcInfo.nickname || user.nickname}
         </Span>
@@ -98,12 +98,12 @@ const AudioControlBox: React.FC<
       <Flex align="center" gap="1rem" justify="flex-start">
         <Img
           onClick={() => dispatch(__setMute(props.index))}
-          wd={BOX_ICON_WD}
+          wd={"2.2rem"}
           src={props.isMute ? muteButton : unMuteButton}
         />
         <Img
           onClick={() => dispatch(__setSolo(props.index))}
-          wd={BOX_ICON_WD}
+          wd={"2.2rem"}
           src={props.isSolo ? soloButton : collaboButton}
         />
         <input

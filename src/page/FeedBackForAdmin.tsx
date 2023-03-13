@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Div from "../component/elem/Div";
 import Flex, { StFlex } from "../component/elem/Flex";
 import Header from "../component/header/Header";
-import { instanceAxios } from "../dataManager/apiConfig";
+import { apiClient } from "../dataManager/interceptors";
 import theme from "../styles/theme";
 interface FeedBack {
   contents: string;
@@ -11,7 +11,7 @@ interface FeedBack {
   nickname: string;
 }
 const getFeedbacks = () => {
-  return instanceAxios.get(`bugreport`);
+  return apiClient.get(`bugreport`);
 };
 
 const FeedBackForAdmin = () => {

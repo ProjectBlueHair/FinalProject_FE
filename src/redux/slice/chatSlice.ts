@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { instanceAxios } from "../../dataManager/apiConfig";
+import { apiClient } from "../../dataManager/interceptors";
 import { Chat, ChatRoom, ChatState } from "../../component/chat/ChatModel.types";
 import { AppState } from "../config";
 
@@ -55,7 +55,7 @@ export const __directMessage = createAsyncThunk(
   "__directMessage",
   async (payload: string, thunkAPI) => {
     try {
-      const { data } = await instanceAxios.post(`/chat/room/${payload}`);
+      const { data } = await apiClient.post(`/chat/room/${payload}`);
       return data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -66,7 +66,7 @@ export const __getChatRooms = createAsyncThunk(
   "__getChatRooms",
   async (_, thunkAPI) => {
     try {
-      const { data } = await instanceAxios.get("/chat/rooms");
+      const { data } = await apiClient.get("/chat/rooms");
       return data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -77,7 +77,7 @@ export const __getChat = createAsyncThunk(
   "__getChat",
   async (payload: string | number, thunkAPI) => {
     try {
-      const { data } = await instanceAxios.get(`/chat/room/${payload}`);
+      const { data } = await apiClient.get(`/chat/room/${payload}`);
       console.log("__getChat thunk ...", data);
 
       return data.data;

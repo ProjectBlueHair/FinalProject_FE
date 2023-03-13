@@ -12,7 +12,7 @@ import {
 } from "react-share";
 import styled from "styled-components";
 import { collaboPlus, kakaoIcon, report, save, share } from "../../asset/pic";
-import { instanceAxios } from "../../dataManager/apiConfig";
+import { apiClient } from "../../dataManager/interceptors";
 import { getCookies } from "../../dataManager/cookie";
 import { useShare } from "../../hook/useShare";
 import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
@@ -97,7 +97,7 @@ const DetailDayAndFollow = ({ detail }) => {
 
   const onArchive = async () => {
     try {
-      const { data } = await instanceAxios.post(`post/archive/${id}`);
+      const { data } = await apiClient.post(`post/archive/${id}`);
       if (data.customHttpStatus === 2000) {
         $openModal({
           type: "alert",
