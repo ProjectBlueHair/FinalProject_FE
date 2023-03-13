@@ -37,7 +37,6 @@ const Router = () => {
           <Route path={`${PATH.mypage}/:nickname`} element={<MyPage />} />
           <Route path="/setpage" element={<SetPage />} />
           <Route path={`${PATH.tag}/:tag`} element={<Tag />} />
-          <Route path={"/posttest"} element={<PostingPage />} />
           <Route path={PATH.post} element={<PostingPage />} />
           <Route path={`${PATH.edit}/:id`} element={<PostingPage />} />
           <Route path={`${PATH.collabo}/:id`} element={<PostingPage />} />

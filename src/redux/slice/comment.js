@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
-import { instanceAxios } from "../../dataManager/apiConfig";
+import { apiClient } from "../../dataManager/interceptors";
 
 const initialState = {
   comment: [],
@@ -12,7 +12,7 @@ export const __getComment = createAsyncThunk(
     try {
       const {
         data: { data },
-      } = await instanceAxios.get(`post/${payload}/comment`);
+      } = await apiClient.get(`post/${payload}/comment`);
       return thunkAPI.fulfillWithValue(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -24,7 +24,7 @@ export const __postComment = createAsyncThunk(
   "post/Comment",
   async (payload, thunkAPI) => {
     try {
-      await instanceAxios.post(`comment/${payload.id}`, {
+      await apiClient.post(`comment/${payload.id}`, {
         contents: payload.mainContent,
       });
       return thunkAPI.fulfillWithValue(payload);
@@ -38,7 +38,7 @@ export const __deleteComment = createAsyncThunk(
   "delete/Comment",
   async (payload, thunkAPI) => {
     try {
-      await instanceAxios.delete(`comment/${payload}`);
+      await apiClient.delete(`comment/${payload}`);
       return thunkAPI.fulfillWithValue(payload);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -50,7 +50,7 @@ export const __putComment = createAsyncThunk(
   "put/Comment",
   async (payload, thunkAPI) => {
     try {
-      await instanceAxios.put(`comment/${payload.comID}`, {
+      await apiClient.put(`comment/${payload.comID}`, {
         contents: payload.comUpdateInput,
       });
       return thunkAPI.fulfillWithValue(payload);
@@ -64,7 +64,7 @@ export const __postCommentSub = createAsyncThunk(
   "post/Comment",
   async (payload, thunkAPI) => {
     try {
-      await instanceAxios.post(
+      await apiClient.post(
         `comment/${Number(payload.id)}/${payload.detailId}`,
         {
           contents: payload.comSubV,
@@ -81,7 +81,7 @@ export const __likeComment = createAsyncThunk(
   async (payload, thunkAPI) => {
     console.log(payload);
     try {
-      const { data } = await instanceAxios.post(`comment/like/${payload}`);
+      const { data } = await apiClient.post(`comment/like/${payload}`);
       return thunkAPI.fulfillWithValue({ payload, data });
     } catch (error) {
       return thunkAPI.rejectWithValue(error);

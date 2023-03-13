@@ -1,12 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { instanceAxios } from "../../dataManager/apiConfig";
+import { apiClient } from "../../dataManager/interceptors";
 import {
   AddedAudio,
   AddedAudiosState,
-  AudioDto, H5player,
-  Wavesurfer
-} from "../../model/H5SurferModel";
-import { Response } from "../../model/ResponseModel";
+  AudioDto,
+  H5player,
+  Wavesurfer,
+} from "../../component/h5surferPlayer/H5SurferModel.types";
+import { Response } from "../../dataManager/ResponseModel.types";
 import { AppState } from "../config";
 
 export const h5PlayerSelector = (state: AppState) => state.h5surfer.H5player;
@@ -166,7 +167,7 @@ export const h5surferSlice = createSlice({
         payload.volume === 0.00001 ? true : false;
       state.wavesurfers[payload.index].volume = payload.volume;
     },
-    __cleanUp: () => {
+    __cleanUpAudios: () => {
       return initialState;
     },
   },
@@ -198,8 +199,7 @@ export const h5surferSlice = createSlice({
       .addCase(
         __getCollaboRequestedAudios.fulfilled,
         (state, { payload }: { payload: AudioDto[] }) => {
-          state.H5player.src =
-            state.H5player.src || payload[0]?.musicFile;
+          state.H5player.src = state.H5player.src || payload[0]?.musicFile;
           payload.forEach((audio: AudioDto) => {
             state.wavesurfers = state.wavesurfers.concat({
               ...state.wavesurfer,
@@ -220,7 +220,7 @@ export const __getAudios = createAsyncThunk(
   "__getAudios",
   async (payload: number, thunkAPI) => {
     try {
-      const { data } = await instanceAxios.get(`/post/${payload}/music`);
+      const { data } = await apiClient.get(`/post/${payload}/music`);
       return data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -231,7 +231,7 @@ export const __getCollaboRequestedAudios = createAsyncThunk(
   "__getCollaboRequestedAudios",
   async (payload: number, thunkAPI) => {
     try {
-      const { data }: { data: Response } = await instanceAxios.get(
+      const { data }: { data: Response } = await apiClient.get(
         `/collabo/${payload}`
       );
       return data.data.musicList;
@@ -247,7 +247,7 @@ export const {
   __setMute,
   __setSolo,
   __setVolume,
-  __cleanUp,
+  __cleanUpAudios,
   __setPartForCollaboAudio,
   __audioOnLoaded,
   __endPlay,

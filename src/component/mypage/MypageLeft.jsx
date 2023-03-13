@@ -12,14 +12,14 @@ import {
 } from "react-share";
 import styled from "styled-components";
 import { facebook, insta, kakaoIcon, linkedIn, twitter } from "../../asset/pic";
-import { instanceAxios } from "../../dataManager/apiConfig";
+import { apiClient } from "../../dataManager/interceptors";
 import { getCookies } from "../../dataManager/cookie";
 import { useShare } from "../../hook/useShare";
 import useToggleOutSideClick from "../../modal/hooks/useToggleOutSideClick";
 import useTypeModal from "../../modal/hooks/useTypeModal";
 import { __putDetailFollow } from "../../redux/slice/detailSlice";
 import { PATH } from "../../Router";
-import { __directMessage } from "../chat/chatSlice";
+import { __directMessage } from "../../redux/slice/chatSlice";
 import Img from "../elem/Img";
 export const kakaoJS = process.env.REACT_APP_KaKaoJSKey;
 
@@ -36,7 +36,7 @@ const MypageLeft = () => {
     try {
       const {
         data: { data },
-      } = await instanceAxios.get(encodeURI(`member/mypage/${nickname}`));
+      } = await apiClient.get(encodeURI(`member/mypage/${nickname}`));
       setInformation(data);
     } catch (error) {
       console.log(error);

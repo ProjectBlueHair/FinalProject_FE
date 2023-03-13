@@ -1,7 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { instanceAxios } from "../../dataManager/apiConfig";
-import { CollaboRequestedInfo, PostingFormDto } from "../../model/PostingModel";
-import { Response } from "../../model/ResponseModel";
+import { apiClient } from "../../dataManager/interceptors";
+import {
+  CollaboRequestedInfo,
+  PostingFormDto,
+} from "../../component/posting/PostingModel.types";
 import { AppState } from "../config";
 
 export const formSelector = {
@@ -38,7 +40,7 @@ export const postingSlice = createSlice({
     __form: (state, { payload }) => {
       state.form = { ...state.form, ...payload };
     },
-    __cleanUp: () => {
+    __cleanUpPost: () => {
       return initialState;
     },
   },
@@ -72,7 +74,7 @@ export const __getPostInfo = createAsyncThunk(
   "__getPostInfo",
   async (payload: number, thunkAPI) => {
     try {
-      const { data } = await instanceAxios.get(`/post/details/${payload}`);
+      const { data } = await apiClient.get(`/post/details/${payload}`);
       console.log("postinfo(detail)", data);
 
       return data.data;
@@ -85,9 +87,7 @@ export const __getCollaboRequestedInfo = createAsyncThunk(
   "__getCollaboRequestedInfo",
   async (payload: number, thunkAPI) => {
     try {
-      const { data }: { data: Response } = await instanceAxios.get(
-        `/collabo/${payload}`
-      );
+      const { data } = await apiClient.get(`/collabo/${payload}`);
       return data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -96,16 +96,13 @@ export const __getCollaboRequestedInfo = createAsyncThunk(
 );
 
 export const uploadNewPost = async (data: FormData) => {
-  return await instanceAxios.post(`/post/new`, data);
+  return await apiClient.post(`/post/new`, data);
 };
 export const collaboRequest = async (data: any, postId: string | number) => {
-  return await instanceAxios.post(`/post/${postId}/collabo`, data);
+  return await apiClient.post(`/post/${postId}/collabo`, data);
 };
 export const collaboApprove = async (collaboId: string | number) => {
-  return await instanceAxios.post(`/collabo/${collaboId}`);
+  return await apiClient.post(`/collabo/${collaboId}`);
 };
-export const {
-  __cleanUp,
-  __form,
-} = postingSlice.actions;
+export const { __cleanUpPost, __form } = postingSlice.actions;
 export default postingSlice.reducer;

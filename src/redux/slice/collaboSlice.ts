@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { instanceAxios } from "../../dataManager/apiConfig";
+import { apiClient } from "../../dataManager/interceptors";
 export const __getCollaboList = createAsyncThunk(
   "__getCollaboList",
   async (payload: number, thunkAPI) => {
     try {
       // const { data } = await axios.get(`/post?page=${Number(payload)}`);
-      const {data} = await instanceAxios.get(`/post?page=${Number(payload)}`);
+      const {data} = await apiClient.get(`/post?page=${Number(payload)}`);
       return data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);

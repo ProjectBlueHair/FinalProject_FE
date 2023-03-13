@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Flex, { StFlex } from "../component/elem/Flex";
-import H5SurferPlayer from "../component/h5surferPlayer/H5SurferPlayer";
+import H5SurferPlayerContainer from "../container/H5SurferPlayerContainer";
 import Header from "../component/header/Header";
 import PostingCollaboRequested from "../component/posting/PostingCollabReqeusted";
 import PostingForm from "../component/posting/PostingForm";
@@ -38,7 +38,7 @@ const PostingPage = () => {
             </Flex>
           </PostingImageAndTitle>
           <PostingAudioSection>
-            <H5SurferPlayer
+            <H5SurferPlayerContainer
               page={
                 POSTPAGE
                   ? "posting"
@@ -47,11 +47,6 @@ const PostingPage = () => {
                   : "collaboApprove"
               }
             />
-            {/* <AudioH5Player />
-            <AudioWaveSurferList />
-            {COLLABOREQUESTED ? null : (
-              <AudioFileAdd isCollabo={COLLABOPAGE} />
-            )} */}
           </PostingAudioSection>
         </Flex>
         {POSTPAGE && <PostingForm isEdit={EDITPAGE} />}

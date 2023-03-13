@@ -7,14 +7,14 @@ import {
   CollaboForm,
   PostingFormDto,
   DtoForPostingNew,
-} from "../../model/PostingModel";
-import { Response } from "../../model/ResponseModel";
+} from "./PostingModel.types";
+import { Response } from "../../dataManager/ResponseModel.types";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import { addedAudiosStateSelector } from "../../redux/slice/h5surferSlice";
 import {
   formSelector,
   uploadNewPost,
-  __cleanUp,
+  __cleanUpPost,
 } from "../../redux/slice/postingSlice";
 import theme from "../../styles/theme";
 import Button from "../elem/Button";
@@ -40,6 +40,8 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
   const collaboInput = useInput("");
 
   const addedAudiosState = useAppSelector(addedAudiosStateSelector);
+  console.log("addedAudiosState", addedAudiosState);
+
   const dispatch = useAppDispatch();
   const postForm = useAppSelector(formSelector.form);
 
@@ -48,7 +50,7 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
   console.log("collaboRequestData", addedAudiosState.partsAllValid);
   useEffect(() => {
     return () => {
-      dispatch(__cleanUp());
+      dispatch(__cleanUpPost());
     };
   }, []);
 
@@ -102,11 +104,17 @@ const PostingForm: React.FC<{ isEdit: boolean }> = (props) => {
           postImg: imgData ? imgData.Location : null,
         },
       };
+      console.log("newPostForm", newPostForm);
+
       formData.append(
         "jsonData",
         new Blob([JSON.stringify(newPostForm)], { type: "application/json" })
       );
+      console.log("formData", formData);
+
       const postData = await uploadNewPost(formData);
+      console.log("postData", postData);
+
       return postData;
     };
     submitPost()

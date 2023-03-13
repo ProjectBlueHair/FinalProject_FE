@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useStomp } from "../../hook/useStomp";
-import { Chat } from "../../model/ChatModel";
+import { Chat } from "./ChatModel.types";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import { userSelector } from "../../redux/slice/userSlice";
 import { PATH } from "../../Router";
@@ -16,12 +16,11 @@ import {
   __clearChat,
   __getChat,
   __updateChat,
-} from "./chatSlice";
+} from "../../redux/slice/chatSlice";
 const ChatList = () => {
   const user = useAppSelector(userSelector);
   const currentRoomId = useAppSelector(currentRoomIdSelector);
   const connected = useAppSelector(connectionSelector);
-  console.log("roomid ... ", currentRoomId);
 
   const dispatch = useAppDispatch();
   const { subscribe, unsubscribe, subscriptions } = useStomp();
@@ -34,7 +33,6 @@ const ChatList = () => {
       subscribe(
         { path: "/topic/chat/room", roomId: currentRoomId },
         (body: Chat) => {
-          console.log("subscribe callback ... body", body);
           dispatch(__updateChat(body));
         }
       );
@@ -43,7 +41,6 @@ const ChatList = () => {
         unsubscribe("/topic/chat/room");
       }
       if (chat.length > 0) {
-        console.log("chatlist ... clear chat ... ");
         dispatch(__clearChat());
       }
     };

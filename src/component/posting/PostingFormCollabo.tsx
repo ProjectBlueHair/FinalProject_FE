@@ -4,12 +4,12 @@ import { batch } from "react-redux";
 import { useParams } from "react-router-dom";
 import useInput from "../../hook/useInput";
 import useTypeModal from "../../modal/hooks/useTypeModal";
-import { CollaboForm } from "../../model/PostingModel";
+import { CollaboForm } from "./PostingModel.types";
 import { useAppDispatch, useAppSelector } from "../../redux/config";
 import { addedAudiosStateSelector } from "../../redux/slice/h5surferSlice";
 import {
   collaboRequest,
-  __cleanUp,
+  __cleanUpPost,
   __getPostInfo,
 } from "../../redux/slice/postingSlice";
 import theme from "../../styles/theme";
@@ -33,7 +33,7 @@ const PostingFormCollabo = () => {
     });
 
     return () => {
-      dispatch(__cleanUp());
+      dispatch(__cleanUpPost());
     };
   }, [id]);
 

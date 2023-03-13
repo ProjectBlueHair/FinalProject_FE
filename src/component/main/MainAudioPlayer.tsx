@@ -8,7 +8,7 @@ import {
   skipPrev,
   volume
 } from "../../asset/pic";
-import { CurrentMusic } from "../../model/MainModel";
+import { CurrentMusic } from "./MainModel.types";
 import {
   __PlayerTogglePlay,
   __playNext,

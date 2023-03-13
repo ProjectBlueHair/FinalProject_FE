@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
-import { instanceAxios } from "../../dataManager/apiConfig";
+import { apiClient } from "../../dataManager/interceptors";
 
 const initialState = {
   detail: [],
@@ -13,7 +13,7 @@ export const __getDetail = createAsyncThunk(
   "get/Detail",
   async (payload, thunkAPI) => {
     try {
-      const { data } = await instanceAxios.get(`post/details/${payload}`);
+      const { data } = await apiClient.get(`post/details/${payload}`);
       return thunkAPI.fulfillWithValue(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -25,7 +25,7 @@ export const __getDetailCollabo = createAsyncThunk(
   "get/DetailCollabo",
   async (payload, thunkAPI) => {
     try {
-      const { data } = await instanceAxios.get(`post/${payload}/collabo`);
+      const { data } = await apiClient.get(`post/${payload}/collabo`);
       return thunkAPI.fulfillWithValue(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -37,7 +37,7 @@ export const __getDetailMusic = createAsyncThunk(
   "get/DetailMusic",
   async (payload, thunkAPI) => {
     try {
-      const { data } = await instanceAxios.get(`post/${payload}/music`);
+      const { data } = await apiClient.get(`post/${payload}/music`);
       return thunkAPI.fulfillWithValue(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -49,7 +49,7 @@ export const __getUserInfo = createAsyncThunk(
   "get/UserInfo",
   async (payload, thunkAPI) => {
     try {
-      const { data } = await instanceAxios.get(`member/info`);
+      const { data } = await apiClient.get(`member/info`);
       return thunkAPI.fulfillWithValue(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -61,7 +61,7 @@ export const __putDetailFollow = createAsyncThunk(
   "put/DetailFollow",
   async (payload, thunkAPI) => {
     try {
-      await instanceAxios.put("member/follow", payload);
+      await apiClient.put("member/follow", payload);
       return thunkAPI.fulfillWithValue(payload);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -73,7 +73,7 @@ export const __postLike = createAsyncThunk(
   "post/DetailPostLike",
   async (payload, thunkAPI) => {
     try {
-      await instanceAxios.post(`post/like/${payload}`);
+      await apiClient.post(`post/like/${payload}`);
       return thunkAPI.fulfillWithValue(payload);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);

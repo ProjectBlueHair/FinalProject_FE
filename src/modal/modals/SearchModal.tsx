@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Div from "../../component/elem/Div";
 import Flex, { StFlex } from "../../component/elem/Flex";
 import Img from "../../component/elem/Img";
-import { searchAxios } from "../../dataManager/apiConfig";
+import { searchClient } from "../../dataManager/interceptors";
 import { useAppSelector } from "../../redux/config";
 import { searchSelector } from "../../redux/slice/mainSlice";
 import theme from "../../styles/theme";
@@ -59,7 +59,7 @@ const SearchModal = () => {
           view_count: "desc",
         },
       };
-      searchAxios
+      searchClient
         .post(`post/_search?`, queryObj)
         .then(({ data }) => {
           const searchSource = data.hits.hits.map((data: any) => data._source);
